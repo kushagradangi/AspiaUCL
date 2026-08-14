@@ -7,396 +7,339 @@
 @section('content')
 
 <style>
-    .module-page {
-        width: 100%;
-    }
 
-    .page-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-end;
-        gap: 20px;
-        margin-bottom: 25px;
-    }
+.domain-page {
+    width: 100%;
+}
 
-    .page-header h1 {
-        margin: 0 0 8px;
-        font-size: 32px;
-        font-weight: 500;
-        color: #fff;
-    }
+.domain-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    gap: 20px;
+}
 
-    .page-header p {
-        margin: 0;
-        color: #8f9db5;
-        font-size: 14px;
-    }
+.domain-header h1 {
+    margin: 0 0 8px;
+    font-size: 30px;
+    font-weight: 500;
+}
 
-    .header-actions {
-        display: flex;
-        gap: 10px;
-        flex-wrap: wrap;
-    }
+.domain-header p {
+    margin: 0;
+    color: #8f9db5;
+    font-size: 14px;
+}
 
-    .btn-aspia {
-        border: none;
-        border-radius: 8px;
-        padding: 11px 18px;
-        font-size: 13px;
-        font-weight: 600;
-        cursor: pointer;
-        text-decoration: none;
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-    }
+.domain-actions {
+    display: flex;
+    gap: 10px;
+}
 
-    .btn-primary {
-        background: #10bce8;
-        color: #07152e;
-    }
+.aspia-btn {
+    border: none;
+    border-radius: 8px;
+    padding: 11px 17px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+}
 
-    .btn-primary:hover {
-        background: #20c9f2;
-    }
+.btn-primary {
+    background: #10bce8;
+    color: #07152e;
+}
 
-    .btn-secondary {
-        background: #162544;
-        color: #fff;
-        border: 1px solid #1c4266;
-    }
+.btn-secondary {
+    background: #162544;
+    border: 1px solid #1c4266;
+    color: white;
+}
 
-    .btn-secondary:hover {
-        background: #1c3155;
-    }
+.domain-panel {
+    background: #162544;
+    border: 1px solid #1c4266;
+    border-radius: 15px;
+    overflow: hidden;
+    margin-bottom: 25px;
+}
 
-    .btn-danger {
-        background: rgba(239,68,68,.12);
-        color: #ff7070;
-        border: 1px solid rgba(239,68,68,.2);
-    }
+.panel-header {
+    padding: 20px;
+    border-bottom: 1px solid rgba(255,255,255,.06);
 
-    .panel {
-        background: #162544;
-        border: 1px solid #1c4266;
-        border-radius: 14px;
-        overflow: hidden;
-        margin-bottom: 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+}
+
+.panel-header h2 {
+    margin: 0;
+    font-size: 17px;
+    font-weight: 500;
+}
+
+.search-form {
+    display: flex;
+    gap: 8px;
+}
+
+.search-input {
+    width: 280px;
+    background: #0e1836;
+    border: 1px solid #27496b;
+    border-radius: 8px;
+    color: white;
+    padding: 10px 13px;
+    outline: none;
+}
+
+.table-wrapper {
+    overflow-x: auto;
+}
+
+.domain-table {
+    width: 100%;
+    min-width: 1500px;
+    border-collapse: collapse;
+}
+
+.domain-table th {
+    padding: 14px;
+    text-align: left;
+    color: #71829f;
+    font-size: 11px;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.domain-table td {
+    padding: 15px;
+    border-top: 1px solid rgba(255,255,255,.05);
+    color: #b9c5d8;
+    font-size: 13px;
+    white-space: nowrap;
+}
+
+.domain-id {
+    color: #10bce8;
+    font-weight: 600;
+}
+
+.domain-name {
+    color: white;
+    font-weight: 500;
+}
+
+.actions {
+    display: flex;
+    gap: 7px;
+}
+
+.action-btn {
+    border: 1px solid #27496b;
+    background: #101d3b;
+    color: #aebbd0;
+    border-radius: 7px;
+    padding: 7px 11px;
+    cursor: pointer;
+}
+
+.delete-btn {
+    color: #ff7777;
+}
+
+.empty {
+    text-align: center;
+    padding: 40px !important;
+    color: #71829f !important;
+}
+
+.modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.75);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    padding: 25px;
+}
+
+.modal.show {
+    display: flex;
+}
+
+.modal-box {
+    width: 100%;
+    max-width: 950px;
+    max-height: 90vh;
+    overflow-y: auto;
+    background: #162544;
+    border: 1px solid #1c4266;
+    border-radius: 15px;
+}
+
+.modal-header {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+
+    background: #162544;
+
+    padding: 20px;
+
+    border-bottom: 1px solid rgba(255,255,255,.06);
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-header h2 {
+    margin: 0;
+    font-size: 19px;
+    font-weight: 500;
+}
+
+.close {
+    background: none;
+    border: none;
+    color: #8291aa;
+    font-size: 28px;
+    cursor: pointer;
+}
+
+.modal-body {
+    padding: 22px;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+}
+
+.form-group.full {
+    grid-column: 1 / -1;
+}
+
+.form-label {
+    display: block;
+    color: #b9c5d8;
+    font-size: 13px;
+    margin-bottom: 7px;
+}
+
+.form-control {
+    width: 100%;
+    box-sizing: border-box;
+
+    background: #0e1836;
+    border: 1px solid #27496b;
+    border-radius: 8px;
+
+    color: white;
+    padding: 11px 13px;
+    outline: none;
+}
+
+.form-control:focus {
+    border-color: #10bce8;
+}
+
+textarea.form-control {
+    min-height: 100px;
+    resize: vertical;
+}
+
+.modal-footer {
+    position: sticky;
+    bottom: 0;
+
+    background: #162544;
+
+    padding: 16px 22px;
+
+    border-top: 1px solid rgba(255,255,255,.06);
+
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.success {
+    background: rgba(34,197,94,.1);
+    border: 1px solid rgba(34,197,94,.2);
+    color: #6ee7a0;
+    padding: 13px;
+    border-radius: 9px;
+    margin-bottom: 20px;
+}
+
+@media(max-width:800px) {
+
+    .domain-header {
+        flex-direction: column;
+        align-items: flex-start;
     }
 
     .panel-header {
-        padding: 20px 22px;
-        border-bottom: 1px solid rgba(255,255,255,.07);
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 15px;
-        flex-wrap: wrap;
+        flex-direction: column;
+        align-items: flex-start;
     }
 
-    .panel-header h2 {
-        margin: 0;
-        color: #fff;
-        font-size: 17px;
-        font-weight: 500;
+    .form-grid {
+        grid-template-columns: 1fr;
     }
 
-    .search-form {
-        display: flex;
-        gap: 8px;
+    .form-group.full {
+        grid-column: auto;
     }
+}
 
-    .search-input {
-        width: 260px;
-        background: #0e1836;
-        border: 1px solid #27496b;
-        color: #fff;
-        border-radius: 8px;
-        padding: 10px 13px;
-        outline: none;
-    }
-
-    .search-input:focus {
-        border-color: #10bce8;
-    }
-
-    .search-input::placeholder {
-        color: #687993;
-    }
-
-    .table-wrapper {
-        overflow-x: auto;
-    }
-
-    .module-table {
-        width: 100%;
-        border-collapse: collapse;
-    }
-
-    .module-table th {
-        text-align: left;
-        padding: 14px 20px;
-        color: #71829f;
-        font-size: 11px;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        background: rgba(14,24,54,.35);
-    }
-
-    .module-table td {
-        padding: 17px 20px;
-        border-top: 1px solid rgba(255,255,255,.06);
-        color: #b9c5d8;
-        font-size: 14px;
-        vertical-align: middle;
-    }
-
-    .module-name {
-        color: #fff;
-        font-weight: 500;
-    }
-
-    .description {
-        color: #8291aa;
-        max-width: 400px;
-    }
-
-    .badge {
-        display: inline-block;
-        padding: 5px 9px;
-        border-radius: 6px;
-        background: rgba(16,188,232,.10);
-        color: #10bce8;
-        font-size: 12px;
-    }
-
-    .actions {
-        display: flex;
-        gap: 7px;
-        white-space: nowrap;
-    }
-
-    .action-btn {
-        border-radius: 7px;
-        padding: 7px 11px;
-        font-size: 12px;
-        cursor: pointer;
-        border: 1px solid #27496b;
-        background: #101d3b;
-        color: #aebbd0;
-    }
-
-    .action-btn:hover {
-        color: #fff;
-        border-color: #10bce8;
-    }
-
-    .empty-state {
-        text-align: center;
-        padding: 50px 20px !important;
-        color: #71829f !important;
-    }
-
-    .activity-list {
-        padding: 5px 20px;
-    }
-
-    .activity-item {
-        display: flex;
-        align-items: center;
-        gap: 13px;
-        padding: 15px 0;
-        border-bottom: 1px solid rgba(255,255,255,.06);
-    }
-
-    .activity-item:last-child {
-        border-bottom: none;
-    }
-
-    .activity-icon {
-        width: 34px;
-        height: 34px;
-        border-radius: 50%;
-        background: rgba(16,188,232,.12);
-        color: #10bce8;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-shrink: 0;
-    }
-
-    .activity-text {
-        color: #b9c5d8;
-        font-size: 13px;
-    }
-
-    .activity-time {
-        color: #63728c;
-        font-size: 11px;
-        margin-top: 3px;
-    }
-
-    .alert-success,
-    .alert-error {
-        padding: 13px 16px;
-        border-radius: 9px;
-        margin-bottom: 20px;
-        font-size: 13px;
-    }
-
-    .alert-success {
-        background: rgba(34,197,94,.10);
-        border: 1px solid rgba(34,197,94,.2);
-        color: #6ee7a0;
-    }
-
-    .alert-error {
-        background: rgba(239,68,68,.10);
-        border: 1px solid rgba(239,68,68,.2);
-        color: #ff8585;
-    }
-
-    .modal-overlay {
-        position: fixed;
-        inset: 0;
-        background: rgba(0,0,0,.65);
-        display: none;
-        align-items: center;
-        justify-content: center;
-        z-index: 9999;
-        padding: 20px;
-    }
-
-    .modal-overlay.show {
-        display: flex;
-    }
-
-    .modal-box {
-        width: 100%;
-        max-width: 520px;
-        background: #162544;
-        border: 1px solid #1c4266;
-        border-radius: 14px;
-    }
-
-    .modal-header {
-        padding: 20px 22px;
-        border-bottom: 1px solid rgba(255,255,255,.07);
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-
-    .modal-header h2 {
-        margin: 0;
-        color: #fff;
-        font-size: 18px;
-        font-weight: 500;
-    }
-
-    .close-modal {
-        background: none;
-        border: none;
-        color: #8291aa;
-        font-size: 24px;
-        cursor: pointer;
-    }
-
-    .modal-body {
-        padding: 22px;
-    }
-
-    .form-group {
-        margin-bottom: 18px;
-    }
-
-    .form-label {
-        display: block;
-        color: #b9c5d8;
-        font-size: 13px;
-        margin-bottom: 8px;
-    }
-
-    .form-control {
-        width: 100%;
-        box-sizing: border-box;
-        background: #0e1836;
-        border: 1px solid #27496b;
-        border-radius: 8px;
-        padding: 11px 13px;
-        color: #fff;
-        outline: none;
-    }
-
-    .form-control:focus {
-        border-color: #10bce8;
-    }
-
-    textarea.form-control {
-        min-height: 110px;
-        resize: vertical;
-    }
-
-    .modal-footer {
-        padding: 16px 22px;
-        border-top: 1px solid rgba(255,255,255,.07);
-        display: flex;
-        justify-content: flex-end;
-        gap: 10px;
-    }
-
-    .import-info {
-        color: #8291aa;
-        font-size: 12px;
-        margin-top: 10px;
-    }
 </style>
 
 
-<div class="module-page">
+@if(session('success'))
 
-    @if(session('success'))
-        <div class="alert-success">
-            {{ session('success') }}
-        </div>
-    @endif
+    <div class="success">
+        {{ session('success') }}
+    </div>
 
-    @if($errors->any())
-        <div class="alert-error">
-            <strong>Please fix the following:</strong>
-
-            <ul style="margin:8px 0 0 18px;">
-                @foreach($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
+@endif
 
 
-    <div class="page-header">
+<div class="domain-page">
+
+    {{-- HEADER --}}
+
+    <div class="domain-header">
 
         <div>
+
             <h1>Domains</h1>
 
             <p>
-                Manage governance domains under your frameworks.
+                Manage governance and compliance domains.
             </p>
+
         </div>
 
-        <div class="header-actions">
+
+        <div class="domain-actions">
 
             <button
-                type="button"
-                class="btn-aspia btn-secondary"
+                class="aspia-btn btn-secondary"
                 onclick="openModal('importModal')"
             >
                 ↑ Import XLSX
             </button>
 
             <button
-                type="button"
-                class="btn-aspia btn-primary"
+                class="aspia-btn btn-primary"
                 onclick="openModal('addModal')"
             >
                 + Add Domain
@@ -407,29 +350,34 @@
     </div>
 
 
-    <div class="panel">
+    {{-- TABLE --}}
+
+    <div class="domain-panel">
 
         <div class="panel-header">
 
-            <h2>Domain Management</h2>
+            <h2>
+                Domain Management
+            </h2>
+
 
             <form
-                action="{{ route('domains.index') }}"
                 method="GET"
+                action="{{ route('domains.index') }}"
                 class="search-form"
             >
 
                 <input
                     type="text"
                     name="search"
+                    value="{{ request('search') }}"
                     class="search-input"
                     placeholder="Search domains..."
-                    value="{{ request('search') }}"
                 >
 
                 <button
                     type="submit"
-                    class="btn-aspia btn-secondary"
+                    class="aspia-btn btn-secondary"
                 >
                     Search
                 </button>
@@ -441,17 +389,27 @@
 
         <div class="table-wrapper">
 
-            <table class="module-table">
+            <table class="domain-table">
 
                 <thead>
+
                     <tr>
-                        <th>Name</th>
-                        <th>Framework</th>
-                        <th>Description</th>
-                        <th>Created</th>
+
+                        <th>Domain ID</th>
+                        <th>Domain Code</th>
+                        <th>Domain Name</th>
+                        <th>Status</th>
+                        <th>Version</th>
+                        <th>Business Owner</th>
+                        <th>Industry</th>
+                        <th>Technology</th>
+                        <th>Display Order</th>
                         <th>Actions</th>
+
                     </tr>
+
                 </thead>
+
 
                 <tbody>
 
@@ -459,26 +417,40 @@
 
                         <tr>
 
-                            <td>
-                                <span class="module-name">
-                                    {{ $domain->name }}
-                                </span>
+                            <td class="domain-id">
+                                {{ $domain->domain_id }}
                             </td>
 
                             <td>
-                                <span class="badge">
-                                    {{ $domain->framework?->name ?? 'N/A' }}
-                                </span>
+                                {{ $domain->domain_code ?: '—' }}
+                            </td>
+
+                            <td class="domain-name">
+                                {{ $domain->name }}
                             </td>
 
                             <td>
-                                <span class="description">
-                                    {{ $domain->description ?: 'No description' }}
-                                </span>
+                                {{ $domain->status }}
                             </td>
 
                             <td>
-                                {{ $domain->created_at?->format('d M Y') }}
+                                {{ $domain->version ?: '—' }}
+                            </td>
+
+                            <td>
+                                {{ $domain->business_owner ?: '—' }}
+                            </td>
+
+                            <td>
+                                {{ $domain->applicable_industries ?: '—' }}
+                            </td>
+
+                            <td>
+                                {{ $domain->applicable_technologies ?: '—' }}
+                            </td>
+
+                            <td>
+                                {{ $domain->display_order }}
                             </td>
 
                             <td>
@@ -486,21 +458,19 @@
                                 <div class="actions">
 
                                     <button
-                                        type="button"
                                         class="action-btn"
-                                        onclick="openEditModal(
+                                        onclick="editDomain(
                                             {{ $domain->id }},
-                                            {{ $domain->framework_id }},
-                                            @js($domain->name),
-                                            @js($domain->description)
+                                            @js($domain)
                                         )"
                                     >
                                         Edit
                                     </button>
 
+
                                     <form
-                                        action="{{ route('domains.destroy', $domain) }}"
                                         method="POST"
+                                        action="{{ route('domains.destroy', $domain) }}"
                                         onsubmit="return confirm('Are you sure you want to delete this domain?')"
                                     >
 
@@ -508,8 +478,8 @@
                                         @method('DELETE')
 
                                         <button
+                                            class="action-btn delete-btn"
                                             type="submit"
-                                            class="action-btn btn-danger"
                                         >
                                             Delete
                                         </button>
@@ -525,9 +495,14 @@
                     @empty
 
                         <tr>
-                            <td colspan="5" class="empty-state">
+
+                            <td
+                                colspan="10"
+                                class="empty"
+                            >
                                 No domains found.
                             </td>
+
                         </tr>
 
                     @endforelse
@@ -539,53 +514,9 @@
         </div>
 
 
-        @if($domains->hasPages())
-            <div style="padding:18px 20px;">
-                {{ $domains->links() }}
-            </div>
-        @endif
+        <div style="padding:20px;">
 
-    </div>
-
-
-    <div class="panel">
-
-        <div class="panel-header">
-            <h2>Recent Activity</h2>
-        </div>
-
-        <div class="activity-list">
-
-            @forelse($activities as $activity)
-
-                <div class="activity-item">
-
-                    <div class="activity-icon">✓</div>
-
-                    <div>
-
-                        <div class="activity-text">
-                            {{ $activity->description }}
-                        </div>
-
-                        <div class="activity-time">
-                            {{ $activity->created_at?->diffForHumans() }}
-                        </div>
-
-                    </div>
-
-                </div>
-
-            @empty
-
-                <div class="activity-item">
-                    <div class="activity-icon">—</div>
-                    <div class="activity-text">
-                        No recent activity.
-                    </div>
-                </div>
-
-            @endforelse
+            {{ $domains->links() }}
 
         </div>
 
@@ -594,9 +525,15 @@
 </div>
 
 
-{{-- ADD MODAL --}}
+{{-- =====================================================
+     ADD MODAL
+===================================================== --}}
 
-<div id="addModal" class="modal-overlay">
+<div
+    id="addModal"
+    class="modal"
+    onclick="outsideClose(event, 'addModal')"
+>
 
     <div class="modal-box">
 
@@ -605,9 +542,9 @@
             <h2>Add Domain</h2>
 
             <button
-                type="button"
-                class="close-modal"
+                class="close"
                 onclick="closeModal('addModal')"
+                type="button"
             >
                 ×
             </button>
@@ -615,69 +552,18 @@
         </div>
 
 
-        <form action="{{ route('domains.store') }}" method="POST">
+        <form
+            method="POST"
+            action="{{ route('domains.store') }}"
+        >
 
             @csrf
 
             <div class="modal-body">
 
-                <div class="form-group">
+                <div class="form-grid">
 
-                    <label class="form-label">
-                        Framework
-                    </label>
-
-                    <select
-                        name="framework_id"
-                        class="form-control"
-                        required
-                    >
-
-                        <option value="">
-                            Select Framework
-                        </option>
-
-                        @foreach($frameworks as $framework)
-
-                            <option value="{{ $framework->id }}">
-                                {{ $framework->name }}
-                            </option>
-
-                        @endforeach
-
-                    </select>
-
-                </div>
-
-
-                <div class="form-group">
-
-                    <label class="form-label">
-                        Domain Name
-                    </label>
-
-                    <input
-                        type="text"
-                        name="name"
-                        class="form-control"
-                        placeholder="Enter domain name"
-                        required
-                    >
-
-                </div>
-
-
-                <div class="form-group">
-
-                    <label class="form-label">
-                        Description
-                    </label>
-
-                    <textarea
-                        name="description"
-                        class="form-control"
-                        placeholder="Enter description"
-                    ></textarea>
+                    @include('aspiaUcl.domains.form')
 
                 </div>
 
@@ -688,7 +574,7 @@
 
                 <button
                     type="button"
-                    class="btn-aspia btn-secondary"
+                    class="aspia-btn btn-secondary"
                     onclick="closeModal('addModal')"
                 >
                     Cancel
@@ -696,7 +582,7 @@
 
                 <button
                     type="submit"
-                    class="btn-aspia btn-primary"
+                    class="aspia-btn btn-primary"
                 >
                     Add Domain
                 </button>
@@ -710,9 +596,15 @@
 </div>
 
 
-{{-- EDIT MODAL --}}
+{{-- =====================================================
+     EDIT MODAL
+===================================================== --}}
 
-<div id="editModal" class="modal-overlay">
+<div
+    id="editModal"
+    class="modal"
+    onclick="outsideClose(event, 'editModal')"
+>
 
     <div class="modal-box">
 
@@ -721,9 +613,9 @@
             <h2>Edit Domain</h2>
 
             <button
-                type="button"
-                class="close-modal"
+                class="close"
                 onclick="closeModal('editModal')"
+                type="button"
             >
                 ×
             </button>
@@ -731,67 +623,23 @@
         </div>
 
 
-        <form id="editForm" method="POST">
+        <form
+            id="editForm"
+            method="POST"
+        >
 
             @csrf
             @method('PUT')
 
+
             <div class="modal-body">
 
-                <div class="form-group">
+                <div class="form-grid">
 
-                    <label class="form-label">
-                        Framework
-                    </label>
-
-                    <select
-                        id="editFramework"
-                        name="framework_id"
-                        class="form-control"
-                        required
-                    >
-
-                        @foreach($frameworks as $framework)
-
-                            <option value="{{ $framework->id }}">
-                                {{ $framework->name }}
-                            </option>
-
-                        @endforeach
-
-                    </select>
-
-                </div>
-
-
-                <div class="form-group">
-
-                    <label class="form-label">
-                        Domain Name
-                    </label>
-
-                    <input
-                        type="text"
-                        id="editName"
-                        name="name"
-                        class="form-control"
-                        required
-                    >
-
-                </div>
-
-
-                <div class="form-group">
-
-                    <label class="form-label">
-                        Description
-                    </label>
-
-                    <textarea
-                        id="editDescription"
-                        name="description"
-                        class="form-control"
-                    ></textarea>
+                    @include(
+                        'aspiaUcl.domains.form',
+                        ['edit' => true]
+                    )
 
                 </div>
 
@@ -802,7 +650,7 @@
 
                 <button
                     type="button"
-                    class="btn-aspia btn-secondary"
+                    class="aspia-btn btn-secondary"
                     onclick="closeModal('editModal')"
                 >
                     Cancel
@@ -810,7 +658,7 @@
 
                 <button
                     type="submit"
-                    class="btn-aspia btn-primary"
+                    class="aspia-btn btn-primary"
                 >
                     Save Changes
                 </button>
@@ -824,9 +672,15 @@
 </div>
 
 
-{{-- IMPORT MODAL --}}
+{{-- =====================================================
+     IMPORT MODAL
+===================================================== --}}
 
-<div id="importModal" class="modal-overlay">
+<div
+    id="importModal"
+    class="modal"
+    onclick="outsideClose(event, 'importModal')"
+>
 
     <div class="modal-box">
 
@@ -835,9 +689,9 @@
             <h2>Import Domains</h2>
 
             <button
-                type="button"
-                class="close-modal"
+                class="close"
                 onclick="closeModal('importModal')"
+                type="button"
             >
                 ×
             </button>
@@ -846,34 +700,27 @@
 
 
         <form
-            action="{{ route('domains.import') }}"
             method="POST"
+            action="{{ route('domains.import') }}"
             enctype="multipart/form-data"
         >
 
             @csrf
 
+
             <div class="modal-body">
 
-                <div class="form-group">
+                <label class="form-label">
+                    XLSX File
+                </label>
 
-                    <label class="form-label">
-                        Select XLSX File
-                    </label>
-
-                    <input
-                        type="file"
-                        name="file"
-                        class="form-control"
-                        accept=".xlsx"
-                        required
-                    >
-
-                    <div class="import-info">
-                        Only .xlsx files are supported.
-                    </div>
-
-                </div>
+                <input
+                    type="file"
+                    name="file"
+                    accept=".xlsx"
+                    class="form-control"
+                    required
+                >
 
             </div>
 
@@ -882,7 +729,7 @@
 
                 <button
                     type="button"
-                    class="btn-aspia btn-secondary"
+                    class="aspia-btn btn-secondary"
                     onclick="closeModal('importModal')"
                 >
                     Cancel
@@ -890,7 +737,7 @@
 
                 <button
                     type="submit"
-                    class="btn-aspia btn-primary"
+                    class="aspia-btn btn-primary"
                 >
                     Import XLSX
                 </button>
@@ -906,44 +753,81 @@
 
 <script>
 
-function openModal(id) {
-    document.getElementById(id).classList.add('show');
+function openModal(id)
+{
+    document
+        .getElementById(id)
+        .classList.add('show');
+
+    document.body.style.overflow = 'hidden';
 }
 
-function closeModal(id) {
-    document.getElementById(id).classList.remove('show');
+
+function closeModal(id)
+{
+    document
+        .getElementById(id)
+        .classList.remove('show');
+
+    document.body.style.overflow = '';
 }
 
-function openEditModal(id, frameworkId, name, description) {
 
-    document.getElementById('editForm').action =
-        `/domains/${id}`;
+function outsideClose(event, id)
+{
+    if (event.target.id === id) {
+        closeModal(id);
+    }
+}
 
-    document.getElementById('editFramework').value =
-        frameworkId;
 
-    document.getElementById('editName').value =
-        name || '';
+function editDomain(id, domain)
+{
+    const form = document.getElementById('editForm');
 
-    document.getElementById('editDescription').value =
-        description || '';
+    form.action = `/domains/${id}`;
+
+    const fields = [
+        'domain_id',
+        'domain_code',
+        'name',
+        'slug',
+        'purpose',
+        'scope',
+        'business_owner',
+        'applicable_industries',
+        'applicable_technologies',
+        'description',
+        'display_order',
+        'status',
+        'version',
+        'short_overview',
+        'business_objectives',
+        'business_risks',
+        'key_capabilities',
+        'typical_stakeholders',
+        'keywords',
+        'tags',
+        'why_domain_matters',
+        'common_challenges',
+        'related_domains',
+        'related_frameworks'
+    ];
+
+    fields.forEach(function(field) {
+
+        const input = document.getElementById(
+            'edit_' + field
+        );
+
+        if (input) {
+            input.value = domain[field] ?? '';
+        }
+
+    });
 
     openModal('editModal');
 }
-
-document.addEventListener('keydown', function(event) {
-
-    if (event.key === 'Escape') {
-
-        document
-            .querySelectorAll('.modal-overlay')
-            .forEach(function(modal) {
-                modal.classList.remove('show');
-            });
-
-    }
-
-});
 
 </script>
 

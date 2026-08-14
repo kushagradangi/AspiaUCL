@@ -122,6 +122,7 @@
     .module-table {
         width: 100%;
         border-collapse: collapse;
+        min-width: 1100px;
     }
 
     .module-table th {
@@ -132,6 +133,7 @@
         text-transform: uppercase;
         letter-spacing: 1px;
         background: rgba(14,24,54,.35);
+        white-space: nowrap;
     }
 
     .module-table td {
@@ -139,6 +141,7 @@
         border-top: 1px solid rgba(255,255,255,.06);
         color: #b9c5d8;
         font-size: 14px;
+        vertical-align: middle;
     }
 
     .module-name {
@@ -152,10 +155,20 @@
         background: rgba(16,188,232,.10);
         color: #10bce8;
         font-size: 12px;
+        white-space: nowrap;
+    }
+
+    .status-badge {
+        padding: 5px 9px;
+        border-radius: 6px;
+        background: rgba(34,197,94,.10);
+        color: #6ee7a0;
+        font-size: 12px;
     }
 
     .description {
         color: #8291aa;
+        max-width: 280px;
     }
 
     .actions {
@@ -178,39 +191,6 @@
         text-align: center;
         padding: 50px 20px !important;
         color: #71829f !important;
-    }
-
-    .activity-list {
-        padding: 5px 20px;
-    }
-
-    .activity-item {
-        display: flex;
-        align-items: center;
-        gap: 13px;
-        padding: 15px 0;
-        border-bottom: 1px solid rgba(255,255,255,.06);
-    }
-
-    .activity-icon {
-        width: 34px;
-        height: 34px;
-        border-radius: 50%;
-        background: rgba(16,188,232,.12);
-        color: #10bce8;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .activity-text {
-        color: #b9c5d8;
-        font-size: 13px;
-    }
-
-    .activity-time {
-        color: #63728c;
-        font-size: 11px;
     }
 
     .alert-success,
@@ -248,7 +228,9 @@
 
     .modal-box {
         width: 100%;
-        max-width: 520px;
+        max-width: 750px;
+        max-height: 90vh;
+        overflow-y: auto;
         background: #162544;
         border: 1px solid #1c4266;
         border-radius: 14px;
@@ -259,6 +241,11 @@
         border-bottom: 1px solid rgba(255,255,255,.07);
         display: flex;
         justify-content: space-between;
+        align-items: center;
+        position: sticky;
+        top: 0;
+        background: #162544;
+        z-index: 2;
     }
 
     .modal-header h2 {
@@ -277,10 +264,17 @@
 
     .modal-body {
         padding: 22px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 18px;
     }
 
     .form-group {
-        margin-bottom: 18px;
+        margin-bottom: 0;
+    }
+
+    .form-group.full {
+        grid-column: 1 / -1;
     }
 
     .form-label {
@@ -305,6 +299,9 @@
         display: flex;
         justify-content: flex-end;
         gap: 10px;
+        position: sticky;
+        bottom: 0;
+        background: #162544;
     }
 
     .import-info {
@@ -312,39 +309,83 @@
         font-size: 12px;
         margin-top: 10px;
     }
+
+    @media (max-width: 700px) {
+
+        .page-header {
+            align-items: flex-start;
+            flex-direction: column;
+        }
+
+        .search-form {
+            width: 100%;
+        }
+
+        .search-input {
+            width: 100%;
+        }
+
+        .modal-body {
+            grid-template-columns: 1fr;
+        }
+
+        .form-group.full {
+            grid-column: auto;
+        }
+
+    }
 </style>
 
 
 <div class="module-page">
 
+    {{-- SUCCESS MESSAGE --}}
     @if(session('success'))
+
         <div class="alert-success">
             {{ session('success') }}
         </div>
+
     @endif
 
+
+    {{-- VALIDATION ERRORS --}}
     @if($errors->any())
+
         <div class="alert-error">
+
             <strong>Please fix the following:</strong>
 
             <ul>
+
                 @foreach($errors->all() as $error)
+
                     <li>{{ $error }}</li>
+
                 @endforeach
+
             </ul>
+
         </div>
+
     @endif
 
 
+    {{-- PAGE HEADER --}}
     <div class="page-header">
 
         <div>
-            <h1>Controls</h1>
+
+            <h1>
+                Controls
+            </h1>
 
             <p>
                 Manage governance controls under your domains.
             </p>
+
         </div>
+
 
         <div class="header-actions">
 
@@ -355,6 +396,7 @@
             >
                 ↑ Import XLSX
             </button>
+
 
             <button
                 type="button"
@@ -369,11 +411,15 @@
     </div>
 
 
+    {{-- CONTROL MANAGEMENT --}}
     <div class="panel">
 
         <div class="panel-header">
 
-            <h2>Control Management</h2>
+            <h2>
+                Control Management
+            </h2>
+
 
             <form
                 action="{{ route('controls.index') }}"
@@ -388,6 +434,7 @@
                     placeholder="Search controls..."
                     value="{{ request('search') }}"
                 >
+
 
                 <button
                     type="submit"
@@ -406,14 +453,33 @@
             <table class="module-table">
 
                 <thead>
+
                     <tr>
-                        <th>Name</th>
+
+                        <th>Control ID</th>
+
                         <th>Domain</th>
-                        <th>Description</th>
+
+                        <th>Control Name</th>
+
+                        <th>Category</th>
+
+                        <th>Criticality</th>
+
+                        <th>Status</th>
+
+                        <th>Version</th>
+
+                        <th>Control Type</th>
+
                         <th>Created</th>
+
                         <th>Actions</th>
+
                     </tr>
+
                 </thead>
+
 
                 <tbody>
 
@@ -421,28 +487,79 @@
 
                         <tr>
 
+                            {{-- Control ID --}}
                             <td>
+
+                                <span class="badge">
+                                    {{ $control->control_id }}
+                                </span>
+
+                            </td>
+
+
+                            {{-- Domain --}}
+                            <td>
+
+                                <span class="badge">
+
+                                    {{ $control->domain?->name ?? 'N/A' }}
+
+                                </span>
+
+                            </td>
+
+
+                            {{-- Control Name --}}
+                            <td>
+
                                 <span class="module-name">
                                     {{ $control->name }}
                                 </span>
+
                             </td>
 
+
+                            {{-- Category --}}
                             <td>
-                                <span class="badge">
-                                    {{ $control->domain?->name ?? 'N/A' }}
-                                </span>
+                                {{ $control->control_category ?: 'N/A' }}
                             </td>
 
+
+                            {{-- Criticality --}}
                             <td>
-                                <span class="description">
-                                    {{ $control->description ?: 'No description' }}
-                                </span>
+                                {{ $control->criticality ?: 'N/A' }}
                             </td>
 
+
+                            {{-- Status --}}
+                            <td>
+
+                                <span class="status-badge">
+                                    {{ $control->status }}
+                                </span>
+
+                            </td>
+
+
+                            {{-- Version --}}
+                            <td>
+                                {{ $control->version ?: 'N/A' }}
+                            </td>
+
+
+                            {{-- Control Type --}}
+                            <td>
+                                {{ $control->control_type ?: 'N/A' }}
+                            </td>
+
+
+                            {{-- Created --}}
                             <td>
                                 {{ $control->created_at?->format('d M Y') }}
                             </td>
 
+
+                            {{-- Actions --}}
                             <td>
 
                                 <div class="actions">
@@ -453,12 +570,28 @@
                                         onclick="openEditModal(
                                             {{ $control->id }},
                                             {{ $control->domain_id }},
+                                            @js($control->control_id),
+                                            @js($control->domain_code),
                                             @js($control->name),
-                                            @js($control->description)
+                                            @js($control->business_description),
+                                            @js($control->business_objective),
+                                            @js($control->business_owner),
+                                            @js($control->control_category),
+                                            @js($control->criticality),
+                                            @js($control->applicable_industries),
+                                            @js($control->applicable_technologies),
+                                            @js($control->status),
+                                            @js($control->version),
+                                            @js($control->control_summary),
+                                            @js($control->business_benefits),
+                                            @js($control->business_risks_if_missing),
+                                            @js($control->primary_stakeholders),
+                                            @js($control->control_type)
                                         )"
                                     >
                                         Edit
                                     </button>
+
 
                                     <form
                                         action="{{ route('controls.destroy', $control) }}"
@@ -467,7 +600,9 @@
                                     >
 
                                         @csrf
+
                                         @method('DELETE')
+
 
                                         <button
                                             type="submit"
@@ -487,9 +622,14 @@
                     @empty
 
                         <tr>
-                            <td colspan="5" class="empty-state">
+
+                            <td
+                                colspan="10"
+                                class="empty-state"
+                            >
                                 No controls found.
                             </td>
+
                         </tr>
 
                     @endforelse
@@ -502,64 +642,24 @@
 
 
         @if($controls->hasPages())
+
             <div style="padding:18px 20px;">
+
                 {{ $controls->links() }}
+
             </div>
+
         @endif
-
-    </div>
-
-
-    <div class="panel">
-
-        <div class="panel-header">
-            <h2>Recent Activity</h2>
-        </div>
-
-        <div class="activity-list">
-
-            @forelse($activities as $activity)
-
-                <div class="activity-item">
-
-                    <div class="activity-icon">✓</div>
-
-                    <div>
-
-                        <div class="activity-text">
-                            {{ $activity->description }}
-                        </div>
-
-                        <div class="activity-time">
-                            {{ $activity->created_at?->diffForHumans() }}
-                        </div>
-
-                    </div>
-
-                </div>
-
-            @empty
-
-                <div class="activity-item">
-
-                    <div class="activity-icon">—</div>
-
-                    <div class="activity-text">
-                        No recent activity.
-                    </div>
-
-                </div>
-
-            @endforelse
-
-        </div>
 
     </div>
 
 </div>
 
 
+
+{{-- ========================================================= --}}
 {{-- ADD CONTROL --}}
+{{-- ========================================================= --}}
 
 <div id="addModal" class="modal-overlay">
 
@@ -567,7 +667,10 @@
 
         <div class="modal-header">
 
-            <h2>Add Control</h2>
+            <h2>
+                Add Control
+            </h2>
+
 
             <button
                 type="button"
@@ -580,17 +683,24 @@
         </div>
 
 
-        <form action="{{ route('controls.store') }}" method="POST">
+        <form
+            action="{{ route('controls.store') }}"
+            method="POST"
+        >
 
             @csrf
 
+
             <div class="modal-body">
 
-                <div class="form-group">
+                {{-- Domain Relationship --}}
+
+                <div class="form-group full">
 
                     <label class="form-label">
-                        Domain
+                        Domain *
                     </label>
+
 
                     <select
                         name="domain_id"
@@ -602,10 +712,18 @@
                             Select Domain
                         </option>
 
+
                         @foreach($domains as $domain)
 
-                            <option value="{{ $domain->id }}">
+                            <option
+                                value="{{ $domain->id }}"
+                                {{ old('domain_id') == $domain->id ? 'selected' : '' }}
+                            >
+
+                                {{ $domain->domain_code }}
+                                -
                                 {{ $domain->name }}
+
                             </option>
 
                         @endforeach
@@ -615,34 +733,339 @@
                 </div>
 
 
+                {{-- 1. Control ID --}}
+
                 <div class="form-group">
 
                     <label class="form-label">
-                        Control Name
+                        Control ID *
                     </label>
+
 
                     <input
                         type="text"
-                        name="name"
+                        name="control_id"
                         class="form-control"
-                        placeholder="Enter control name"
+                        placeholder="Enter Control ID"
+                        value="{{ old('control_id') }}"
                         required
                     >
 
                 </div>
 
 
+                {{-- 2. Domain Code --}}
+
                 <div class="form-group">
 
                     <label class="form-label">
-                        Description
+                        Domain Code
                     </label>
 
-                    <textarea
-                        name="description"
+
+                    <input
+                        type="text"
+                        name="domain_code"
                         class="form-control"
-                        placeholder="Enter description"
-                    ></textarea>
+                        placeholder="Enter Domain Code"
+                        value="{{ old('domain_code') }}"
+                    >
+
+                </div>
+
+
+                {{-- 3. Control Name --}}
+
+                <div class="form-group full">
+
+                    <label class="form-label">
+                        Control Name *
+                    </label>
+
+
+                    <input
+                        type="text"
+                        name="name"
+                        class="form-control"
+                        placeholder="Enter Control Name"
+                        value="{{ old('name') }}"
+                        required
+                    >
+
+                </div>
+
+
+                {{-- 4. Business Description --}}
+
+                <div class="form-group full">
+
+                    <label class="form-label">
+                        Business Description
+                    </label>
+
+
+                    <textarea
+                        name="business_description"
+                        class="form-control"
+                        placeholder="Enter Business Description"
+                    >{{ old('business_description') }}</textarea>
+
+                </div>
+
+
+                {{-- 5. Business Objective --}}
+
+                <div class="form-group full">
+
+                    <label class="form-label">
+                        Business Objective
+                    </label>
+
+
+                    <textarea
+                        name="business_objective"
+                        class="form-control"
+                        placeholder="Enter Business Objective"
+                    >{{ old('business_objective') }}</textarea>
+
+                </div>
+
+
+                {{-- 6. Business Owner --}}
+
+                <div class="form-group">
+
+                    <label class="form-label">
+                        Business Owner
+                    </label>
+
+
+                    <input
+                        type="text"
+                        name="business_owner"
+                        class="form-control"
+                        placeholder="Enter Business Owner"
+                        value="{{ old('business_owner') }}"
+                    >
+
+                </div>
+
+
+                {{-- 7. Control Category --}}
+
+                <div class="form-group">
+
+                    <label class="form-label">
+                        Control Category
+                    </label>
+
+
+                    <input
+                        type="text"
+                        name="control_category"
+                        class="form-control"
+                        placeholder="Enter Control Category"
+                        value="{{ old('control_category') }}"
+                    >
+
+                </div>
+
+
+                {{-- 8. Criticality --}}
+
+                <div class="form-group">
+
+                    <label class="form-label">
+                        Criticality
+                    </label>
+
+
+                    <input
+                        type="text"
+                        name="criticality"
+                        class="form-control"
+                        placeholder="Enter Criticality"
+                        value="{{ old('criticality') }}"
+                    >
+
+                </div>
+
+
+                {{-- 9. Applicable Industries --}}
+
+                <div class="form-group">
+
+                    <label class="form-label">
+                        Applicable Industries
+                    </label>
+
+
+                    <textarea
+                        name="applicable_industries"
+                        class="form-control"
+                        placeholder="Enter Applicable Industries"
+                    >{{ old('applicable_industries') }}</textarea>
+
+                </div>
+
+
+                {{-- 10. Applicable Technologies --}}
+
+                <div class="form-group">
+
+                    <label class="form-label">
+                        Applicable Technologies
+                    </label>
+
+
+                    <textarea
+                        name="applicable_technologies"
+                        class="form-control"
+                        placeholder="Enter Applicable Technologies"
+                    >{{ old('applicable_technologies') }}</textarea>
+
+                </div>
+
+
+                {{-- 11. Status --}}
+
+                <div class="form-group">
+
+                    <label class="form-label">
+                        Status
+                    </label>
+
+
+                    <select
+                        name="status"
+                        class="form-control"
+                    >
+
+                        <option value="Active">
+                            Active
+                        </option>
+
+                        <option value="Inactive">
+                            Inactive
+                        </option>
+
+                        <option value="Draft">
+                            Draft
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                {{-- 12. Version --}}
+
+                <div class="form-group">
+
+                    <label class="form-label">
+                        Version
+                    </label>
+
+
+                    <input
+                        type="text"
+                        name="version"
+                        class="form-control"
+                        placeholder="Enter Version"
+                        value="{{ old('version') }}"
+                    >
+
+                </div>
+
+
+                {{-- 13. Control Summary --}}
+
+                <div class="form-group full">
+
+                    <label class="form-label">
+                        Control Summary
+                    </label>
+
+
+                    <textarea
+                        name="control_summary"
+                        class="form-control"
+                        placeholder="Enter Control Summary"
+                    >{{ old('control_summary') }}</textarea>
+
+                </div>
+
+
+                {{-- 14. Business Benefits --}}
+
+                <div class="form-group full">
+
+                    <label class="form-label">
+                        Business Benefits
+                    </label>
+
+
+                    <textarea
+                        name="business_benefits"
+                        class="form-control"
+                        placeholder="Enter Business Benefits"
+                    >{{ old('business_benefits') }}</textarea>
+
+                </div>
+
+
+                {{-- 15. Business Risks if Missing --}}
+
+                <div class="form-group full">
+
+                    <label class="form-label">
+                        Business Risks if Missing
+                    </label>
+
+
+                    <textarea
+                        name="business_risks_if_missing"
+                        class="form-control"
+                        placeholder="Enter Business Risks if Missing"
+                    >{{ old('business_risks_if_missing') }}</textarea>
+
+                </div>
+
+
+                {{-- 16. Primary Stakeholders --}}
+
+                <div class="form-group full">
+
+                    <label class="form-label">
+                        Primary Stakeholders
+                    </label>
+
+
+                    <textarea
+                        name="primary_stakeholders"
+                        class="form-control"
+                        placeholder="Enter Primary Stakeholders"
+                    >{{ old('primary_stakeholders') }}</textarea>
+
+                </div>
+
+
+                {{-- 17. Control Type --}}
+
+                <div class="form-group">
+
+                    <label class="form-label">
+                        Control Type
+                    </label>
+
+
+                    <input
+                        type="text"
+                        name="control_type"
+                        class="form-control"
+                        placeholder="Enter Control Type"
+                        value="{{ old('control_type') }}"
+                    >
 
                 </div>
 
@@ -658,6 +1081,7 @@
                 >
                     Cancel
                 </button>
+
 
                 <button
                     type="submit"
@@ -675,7 +1099,10 @@
 </div>
 
 
+
+{{-- ========================================================= --}}
 {{-- EDIT CONTROL --}}
+{{-- ========================================================= --}}
 
 <div id="editModal" class="modal-overlay">
 
@@ -683,7 +1110,10 @@
 
         <div class="modal-header">
 
-            <h2>Edit Control</h2>
+            <h2>
+                Edit Control
+            </h2>
+
 
             <button
                 type="button"
@@ -696,18 +1126,26 @@
         </div>
 
 
-        <form id="editForm" method="POST">
+        <form
+            id="editForm"
+            method="POST"
+        >
 
             @csrf
+
             @method('PUT')
+
 
             <div class="modal-body">
 
-                <div class="form-group">
+                {{-- Domain --}}
+
+                <div class="form-group full">
 
                     <label class="form-label">
-                        Domain
+                        Domain *
                     </label>
+
 
                     <select
                         id="editDomain"
@@ -719,7 +1157,11 @@
                         @foreach($domains as $domain)
 
                             <option value="{{ $domain->id }}">
+
+                                {{ $domain->domain_code }}
+                                -
                                 {{ $domain->name }}
+
                             </option>
 
                         @endforeach
@@ -729,11 +1171,53 @@
                 </div>
 
 
+                {{-- 1. Control ID --}}
+
                 <div class="form-group">
 
                     <label class="form-label">
-                        Control Name
+                        Control ID *
                     </label>
+
+
+                    <input
+                        type="text"
+                        id="editControlId"
+                        name="control_id"
+                        class="form-control"
+                        required
+                    >
+
+                </div>
+
+
+                {{-- 2. Domain Code --}}
+
+                <div class="form-group">
+
+                    <label class="form-label">
+                        Domain Code
+                    </label>
+
+
+                    <input
+                        type="text"
+                        id="editDomainCode"
+                        name="domain_code"
+                        class="form-control"
+                    >
+
+                </div>
+
+
+                {{-- 3. Control Name --}}
+
+                <div class="form-group full">
+
+                    <label class="form-label">
+                        Control Name *
+                    </label>
+
 
                     <input
                         type="text"
@@ -746,17 +1230,273 @@
                 </div>
 
 
+                {{-- 4. Business Description --}}
+
+                <div class="form-group full">
+
+                    <label class="form-label">
+                        Business Description
+                    </label>
+
+
+                    <textarea
+                        id="editBusinessDescription"
+                        name="business_description"
+                        class="form-control"
+                    ></textarea>
+
+                </div>
+
+
+                {{-- 5. Business Objective --}}
+
+                <div class="form-group full">
+
+                    <label class="form-label">
+                        Business Objective
+                    </label>
+
+
+                    <textarea
+                        id="editBusinessObjective"
+                        name="business_objective"
+                        class="form-control"
+                    ></textarea>
+
+                </div>
+
+
+                {{-- 6. Business Owner --}}
+
                 <div class="form-group">
 
                     <label class="form-label">
-                        Description
+                        Business Owner
                     </label>
 
+
+                    <input
+                        type="text"
+                        id="editBusinessOwner"
+                        name="business_owner"
+                        class="form-control"
+                    >
+
+                </div>
+
+
+                {{-- 7. Control Category --}}
+
+                <div class="form-group">
+
+                    <label class="form-label">
+                        Control Category
+                    </label>
+
+
+                    <input
+                        type="text"
+                        id="editControlCategory"
+                        name="control_category"
+                        class="form-control"
+                    >
+
+                </div>
+
+
+                {{-- 8. Criticality --}}
+
+                <div class="form-group">
+
+                    <label class="form-label">
+                        Criticality
+                    </label>
+
+
+                    <input
+                        type="text"
+                        id="editCriticality"
+                        name="criticality"
+                        class="form-control"
+                    >
+
+                </div>
+
+
+                {{-- 9. Applicable Industries --}}
+
+                <div class="form-group">
+
+                    <label class="form-label">
+                        Applicable Industries
+                    </label>
+
+
                     <textarea
-                        id="editDescription"
-                        name="description"
+                        id="editApplicableIndustries"
+                        name="applicable_industries"
                         class="form-control"
                     ></textarea>
+
+                </div>
+
+
+                {{-- 10. Applicable Technologies --}}
+
+                <div class="form-group">
+
+                    <label class="form-label">
+                        Applicable Technologies
+                    </label>
+
+
+                    <textarea
+                        id="editApplicableTechnologies"
+                        name="applicable_technologies"
+                        class="form-control"
+                    ></textarea>
+
+                </div>
+
+
+                {{-- 11. Status --}}
+
+                <div class="form-group">
+
+                    <label class="form-label">
+                        Status
+                    </label>
+
+
+                    <select
+                        id="editStatus"
+                        name="status"
+                        class="form-control"
+                    >
+
+                        <option value="Active">
+                            Active
+                        </option>
+
+                        <option value="Inactive">
+                            Inactive
+                        </option>
+
+                        <option value="Draft">
+                            Draft
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                {{-- 12. Version --}}
+
+                <div class="form-group">
+
+                    <label class="form-label">
+                        Version
+                    </label>
+
+
+                    <input
+                        type="text"
+                        id="editVersion"
+                        name="version"
+                        class="form-control"
+                    >
+
+                </div>
+
+
+                {{-- 13. Control Summary --}}
+
+                <div class="form-group full">
+
+                    <label class="form-label">
+                        Control Summary
+                    </label>
+
+
+                    <textarea
+                        id="editControlSummary"
+                        name="control_summary"
+                        class="form-control"
+                    ></textarea>
+
+                </div>
+
+
+                {{-- 14. Business Benefits --}}
+
+                <div class="form-group full">
+
+                    <label class="form-label">
+                        Business Benefits
+                    </label>
+
+
+                    <textarea
+                        id="editBusinessBenefits"
+                        name="business_benefits"
+                        class="form-control"
+                    ></textarea>
+
+                </div>
+
+
+                {{-- 15. Business Risks if Missing --}}
+
+                <div class="form-group full">
+
+                    <label class="form-label">
+                        Business Risks if Missing
+                    </label>
+
+
+                    <textarea
+                        id="editBusinessRisksIfMissing"
+                        name="business_risks_if_missing"
+                        class="form-control"
+                    ></textarea>
+
+                </div>
+
+
+                {{-- 16. Primary Stakeholders --}}
+
+                <div class="form-group full">
+
+                    <label class="form-label">
+                        Primary Stakeholders
+                    </label>
+
+
+                    <textarea
+                        id="editPrimaryStakeholders"
+                        name="primary_stakeholders"
+                        class="form-control"
+                    ></textarea>
+
+                </div>
+
+
+                {{-- 17. Control Type --}}
+
+                <div class="form-group">
+
+                    <label class="form-label">
+                        Control Type
+                    </label>
+
+
+                    <input
+                        type="text"
+                        id="editControlType"
+                        name="control_type"
+                        class="form-control"
+                    >
 
                 </div>
 
@@ -772,6 +1512,7 @@
                 >
                     Cancel
                 </button>
+
 
                 <button
                     type="submit"
@@ -789,7 +1530,10 @@
 </div>
 
 
+
+{{-- ========================================================= --}}
 {{-- IMPORT CONTROL --}}
+{{-- ========================================================= --}}
 
 <div id="importModal" class="modal-overlay">
 
@@ -797,7 +1541,10 @@
 
         <div class="modal-header">
 
-            <h2>Import Controls</h2>
+            <h2>
+                Import Controls
+            </h2>
+
 
             <button
                 type="button"
@@ -818,22 +1565,29 @@
 
             @csrf
 
+
             <div class="modal-body">
 
-                <label class="form-label">
-                    Select XLSX File
-                </label>
+                <div class="form-group full">
 
-                <input
-                    type="file"
-                    name="file"
-                    class="form-control"
-                    accept=".xlsx"
-                    required
-                >
+                    <label class="form-label">
+                        Select XLSX File
+                    </label>
 
-                <div class="import-info">
-                    Only .xlsx files are supported.
+
+                    <input
+                        type="file"
+                        name="file"
+                        class="form-control"
+                        accept=".xlsx"
+                        required
+                    >
+
+
+                    <div class="import-info">
+                        Only .xlsx files are supported.
+                    </div>
+
                 </div>
 
             </div>
@@ -848,6 +1602,7 @@
                 >
                     Cancel
                 </button>
+
 
                 <button
                     type="submit"
@@ -865,47 +1620,319 @@
 </div>
 
 
+
 <script>
 
-function openModal(id) {
-    document.getElementById(id).classList.add('show');
-}
+    /*
+    |--------------------------------------------------------------------------
+    | Open Modal
+    |--------------------------------------------------------------------------
+    */
 
-function closeModal(id) {
-    document.getElementById(id).classList.remove('show');
-}
-
-function openEditModal(id, domainId, name, description) {
-
-    document.getElementById('editForm').action =
-        `/controls/${id}`;
-
-    document.getElementById('editDomain').value =
-        domainId;
-
-    document.getElementById('editName').value =
-        name || '';
-
-    document.getElementById('editDescription').value =
-        description || '';
-
-    openModal('editModal');
-}
-
-document.addEventListener('keydown', function(event) {
-
-    if (event.key === 'Escape') {
-
+    function openModal(id)
+    {
         document
-            .querySelectorAll('.modal-overlay')
-            .forEach(function(modal) {
-                modal.classList.remove('show');
-            });
-
+            .getElementById(id)
+            .classList
+            .add('show');
     }
 
-});
+
+    /*
+    |--------------------------------------------------------------------------
+    | Close Modal
+    |--------------------------------------------------------------------------
+    */
+
+    function closeModal(id)
+    {
+        document
+            .getElementById(id)
+            .classList
+            .remove('show');
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Edit Control
+    |--------------------------------------------------------------------------
+    */
+
+    function openEditModal(
+        id,
+        domainId,
+        controlId,
+        domainCode,
+        name,
+        businessDescription,
+        businessObjective,
+        businessOwner,
+        controlCategory,
+        criticality,
+        applicableIndustries,
+        applicableTechnologies,
+        status,
+        version,
+        controlSummary,
+        businessBenefits,
+        businessRisksIfMissing,
+        primaryStakeholders,
+        controlType
+    ) {
+
+        /*
+        |--------------------------------------------------------------------------
+        | Form Action
+        |--------------------------------------------------------------------------
+        */
+
+        document.getElementById('editForm').action =
+            `/controls/${id}`;
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Domain
+        |--------------------------------------------------------------------------
+        */
+
+        document.getElementById('editDomain').value =
+            domainId ?? '';
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Control ID
+        |--------------------------------------------------------------------------
+        */
+
+        document.getElementById('editControlId').value =
+            controlId ?? '';
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Domain Code
+        |--------------------------------------------------------------------------
+        */
+
+        document.getElementById('editDomainCode').value =
+            domainCode ?? '';
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Control Name
+        |--------------------------------------------------------------------------
+        */
+
+        document.getElementById('editName').value =
+            name ?? '';
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Business Description
+        |--------------------------------------------------------------------------
+        */
+
+        document.getElementById('editBusinessDescription').value =
+            businessDescription ?? '';
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Business Objective
+        |--------------------------------------------------------------------------
+        */
+
+        document.getElementById('editBusinessObjective').value =
+            businessObjective ?? '';
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Business Owner
+        |--------------------------------------------------------------------------
+        */
+
+        document.getElementById('editBusinessOwner').value =
+            businessOwner ?? '';
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Control Category
+        |--------------------------------------------------------------------------
+        */
+
+        document.getElementById('editControlCategory').value =
+            controlCategory ?? '';
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Criticality
+        |--------------------------------------------------------------------------
+        */
+
+        document.getElementById('editCriticality').value =
+            criticality ?? '';
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Applicable Industries
+        |--------------------------------------------------------------------------
+        */
+
+        document.getElementById('editApplicableIndustries').value =
+            applicableIndustries ?? '';
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Applicable Technologies
+        |--------------------------------------------------------------------------
+        */
+
+        document.getElementById('editApplicableTechnologies').value =
+            applicableTechnologies ?? '';
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Status
+        |--------------------------------------------------------------------------
+        */
+
+        document.getElementById('editStatus').value =
+            status ?? 'Active';
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Version
+        |--------------------------------------------------------------------------
+        */
+
+        document.getElementById('editVersion').value =
+            version ?? '';
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Control Summary
+        |--------------------------------------------------------------------------
+        */
+
+        document.getElementById('editControlSummary').value =
+            controlSummary ?? '';
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Business Benefits
+        |--------------------------------------------------------------------------
+        */
+
+        document.getElementById('editBusinessBenefits').value =
+            businessBenefits ?? '';
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Business Risks if Missing
+        |--------------------------------------------------------------------------
+        */
+
+        document.getElementById('editBusinessRisksIfMissing').value =
+            businessRisksIfMissing ?? '';
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Primary Stakeholders
+        |--------------------------------------------------------------------------
+        */
+
+        document.getElementById('editPrimaryStakeholders').value =
+            primaryStakeholders ?? '';
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Control Type
+        |--------------------------------------------------------------------------
+        */
+
+        document.getElementById('editControlType').value =
+            controlType ?? '';
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Show Modal
+        |--------------------------------------------------------------------------
+        */
+
+        openModal('editModal');
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Escape Key
+    |--------------------------------------------------------------------------
+    */
+
+    document.addEventListener(
+        'keydown',
+        function(event)
+        {
+
+            if (event.key === 'Escape') {
+
+                document
+                    .querySelectorAll('.modal-overlay')
+                    .forEach(function(modal) {
+
+                        modal.classList.remove('show');
+
+                    });
+
+            }
+
+        }
+    );
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Click Outside Modal
+    |--------------------------------------------------------------------------
+    */
+
+    document.addEventListener(
+        'click',
+        function(event)
+        {
+
+            if (
+                event.target.classList.contains(
+                    'modal-overlay'
+                )
+            ) {
+
+                event.target.classList.remove('show');
+
+            }
+
+        }
+    );
 
 </script>
+
 
 @endsection

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Imports\FrameworkImport;
-use App\Models\Activity;
 use App\Models\Framework;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
@@ -36,17 +35,9 @@ class FrameworkController extends Controller
             ->paginate(10)
             ->withQueryString();
 
-        $activities = Activity::where('module', 'framework')
-            ->latest()
-            ->take(10)
-            ->get();
-
         return view(
             'aspiaUcl.frameworks.index',
-            compact(
-                'frameworks',
-                'activities'
-            )
+            compact('frameworks')
         );
     }
 
@@ -119,15 +110,6 @@ class FrameworkController extends Controller
         ]);
 
         $framework = Framework::create($validated);
-
-        Activity::create([
-            'user_id' => auth()->id(),
-            'module' => 'framework',
-            'action' => 'Created',
-            'description' =>
-                'Created framework: ' .
-                $framework->name,
-        ]);
 
         return redirect()
             ->route('frameworks.index')
@@ -209,15 +191,6 @@ class FrameworkController extends Controller
 
         $framework->update($validated);
 
-        Activity::create([
-            'user_id' => auth()->id(),
-            'module' => 'framework',
-            'action' => 'Updated',
-            'description' =>
-                'Updated framework: ' .
-                $framework->name,
-        ]);
-
         return redirect()
             ->route('frameworks.index')
             ->with(
@@ -232,14 +205,6 @@ class FrameworkController extends Controller
         $name = $framework->name;
 
         $framework->delete();
-
-        Activity::create([
-            'user_id' => auth()->id(),
-            'module' => 'framework',
-            'action' => 'Deleted',
-            'description' =>
-                'Deleted framework: ' . $name,
-        ]);
 
         return redirect()
             ->route('frameworks.index')
@@ -264,14 +229,6 @@ class FrameworkController extends Controller
             new FrameworkImport(),
             $request->file('file')
         );
-
-        Activity::create([
-            'user_id' => auth()->id(),
-            'module' => 'framework',
-            'action' => 'Imported',
-            'description' =>
-                'Imported frameworks from XLSX file.',
-        ]);
 
         return redirect()
             ->route('frameworks.index')

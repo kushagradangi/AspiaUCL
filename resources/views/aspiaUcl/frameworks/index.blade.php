@@ -1082,7 +1082,7 @@
 
                                             @js($framework->framework_type),
 
-                                            @js($framework->description)
+                                                @js($framework->framework_type)
 
                                         )"
                                     >
@@ -1165,103 +1165,16 @@
 
         @if($frameworks->hasPages())
 
-            <div class="pagination-area">
+                <div class="pagination-area">
 
-                {{ $frameworks->links() }}
-
-            </div>
-
-        @endif
-
-
-    </div>
-
-
-    {{-- =====================================================
-         RECENT ACTIVITY
-    ====================================================== --}}
-
-    <div class="framework-panel">
-
-
-        <div class="panel-header">
-
-            <h2>
-                Recent Activity
-            </h2>
-
-        </div>
-
-
-        <div class="activity-list">
-
-
-            @forelse($activities as $activity)
-
-
-                <div class="activity-item">
-
-
-                    <div class="activity-icon">
-
-                        ✓
-
-                    </div>
-
-
-                    <div>
-
-                        <div class="activity-text">
-
-                            {{ $activity->description }}
-
-                        </div>
-
-
-                        <div class="activity-time">
-
-                            {{ $activity->created_at?->diffForHumans() }}
-
-                        </div>
-
-                    </div>
-
+                    {{ $frameworks->links() }}
 
                 </div>
 
-
-            @empty
-
-
-                <div class="activity-item">
-
-
-                    <div class="activity-icon">
-
-                        —
-
-                    </div>
-
-
-                    <div class="activity-text">
-
-                        No recent activity.
-
-                    </div>
-
-
-                </div>
-
-
-            @endforelse
+            @endif
 
 
         </div>
-
-    </div>
-
-
-</div>
 
 
 
@@ -1509,19 +1422,6 @@
 
                     {{-- DESCRIPTION --}}
 
-                    <div class="form-group full-width">
-
-                        <label class="form-label">
-                            Description
-                        </label>
-
-                        <textarea
-                            name="description"
-                            class="form-control-aspia"
-                            placeholder="Enter framework description"
-                        ></textarea>
-
-                    </div>
 
 
                 </div>
@@ -1810,21 +1710,7 @@
                     </div>
 
 
-                    {{-- DESCRIPTION --}}
 
-                    <div class="form-group full-width">
-
-                        <label class="form-label">
-                            Description
-                        </label>
-
-                        <textarea
-                            id="editDescription"
-                            name="description"
-                            class="form-control-aspia"
-                        ></textarea>
-
-                    </div>
 
 
                 </div>
@@ -2083,9 +1969,7 @@
 
         industry,
 
-        frameworkType,
-
-        description
+        frameworkType
 
     ) {
 
@@ -2167,13 +2051,7 @@
             .value = frameworkType || '';
 
 
-        /* DESCRIPTION */
-
-        document
-            .getElementById('editDescription')
-            .value = description || '';
-
-
+        
         /* SHOW MODAL */
 
         openModal('editModal');

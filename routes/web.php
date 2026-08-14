@@ -8,19 +8,39 @@ use App\Http\Controllers\RequirementController;
 use Illuminate\Support\Facades\Route;
 
 
+/*
+|--------------------------------------------------------------------------
+| Public Routes
+|--------------------------------------------------------------------------
+*/
+
+// Website root → Login page
 Route::get('/', function () {
     return redirect()->route('login');
 });
 
 
+/*
+|--------------------------------------------------------------------------
+| Dashboard
+|--------------------------------------------------------------------------
+*/
+
 Route::get('/dashboard', function () {
     return view('dashboard');
 })
-->middleware(['auth', 'verified'])
-->name('dashboard');
+    ->middleware(['auth', 'verified'])
+    ->name('dashboard');
 
+
+/*
+|--------------------------------------------------------------------------
+| Authenticated Routes
+|--------------------------------------------------------------------------
+*/
 
 Route::middleware('auth')->group(function () {
+
 
     /*
     |--------------------------------------------------------------------------
@@ -174,4 +194,10 @@ Route::middleware('auth')->group(function () {
 });
 
 
-require __DIR__.'/auth.php';
+/*
+|--------------------------------------------------------------------------
+| Authentication Routes
+|--------------------------------------------------------------------------
+*/
+
+require __DIR__ . '/auth.php';

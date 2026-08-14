@@ -7,6 +7,7 @@
 @section('content')
 
 <style>
+
     .module-page {
         width: 100%;
     }
@@ -106,7 +107,7 @@
     }
 
     .search-input {
-        width: 260px;
+        width: 280px;
     }
 
     .search-input:focus,
@@ -121,6 +122,7 @@
     .module-table {
         width: 100%;
         border-collapse: collapse;
+        min-width: 1200px;
     }
 
     .module-table th {
@@ -131,6 +133,7 @@
         text-transform: uppercase;
         letter-spacing: 1px;
         background: rgba(14,24,54,.35);
+        white-space: nowrap;
     }
 
     .module-table td {
@@ -138,6 +141,7 @@
         border-top: 1px solid rgba(255,255,255,.06);
         color: #b9c5d8;
         font-size: 14px;
+        vertical-align: middle;
     }
 
     .module-name {
@@ -151,10 +155,12 @@
         background: rgba(16,188,232,.10);
         color: #10bce8;
         font-size: 12px;
+        white-space: nowrap;
     }
 
     .description {
         color: #8291aa;
+        max-width: 320px;
     }
 
     .actions {
@@ -177,39 +183,6 @@
         text-align: center;
         padding: 50px 20px !important;
         color: #71829f !important;
-    }
-
-    .activity-list {
-        padding: 5px 20px;
-    }
-
-    .activity-item {
-        display: flex;
-        align-items: center;
-        gap: 13px;
-        padding: 15px 0;
-        border-bottom: 1px solid rgba(255,255,255,.06);
-    }
-
-    .activity-icon {
-        width: 34px;
-        height: 34px;
-        border-radius: 50%;
-        background: rgba(16,188,232,.12);
-        color: #10bce8;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .activity-text {
-        color: #b9c5d8;
-        font-size: 13px;
-    }
-
-    .activity-time {
-        color: #63728c;
-        font-size: 11px;
     }
 
     .alert-success,
@@ -247,7 +220,9 @@
 
     .modal-box {
         width: 100%;
-        max-width: 520px;
+        max-width: 850px;
+        max-height: 90vh;
+        overflow-y: auto;
         background: #162544;
         border: 1px solid #1c4266;
         border-radius: 14px;
@@ -258,6 +233,11 @@
         border-bottom: 1px solid rgba(255,255,255,.07);
         display: flex;
         justify-content: space-between;
+        align-items: center;
+        position: sticky;
+        top: 0;
+        background: #162544;
+        z-index: 2;
     }
 
     .modal-header h2 {
@@ -276,10 +256,17 @@
 
     .modal-body {
         padding: 22px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 18px;
     }
 
     .form-group {
-        margin-bottom: 18px;
+        margin-bottom: 0;
+    }
+
+    .form-group.full {
+        grid-column: 1 / -1;
     }
 
     .form-label {
@@ -304,6 +291,9 @@
         display: flex;
         justify-content: flex-end;
         gap: 10px;
+        position: sticky;
+        bottom: 0;
+        background: #162544;
     }
 
     .import-info {
@@ -311,31 +301,73 @@
         font-size: 12px;
         margin-top: 10px;
     }
+
+    @media (max-width: 700px) {
+
+        .page-header {
+            align-items: flex-start;
+            flex-direction: column;
+        }
+
+        .search-form {
+            width: 100%;
+        }
+
+        .search-input {
+            width: 100%;
+        }
+
+        .modal-body {
+            grid-template-columns: 1fr;
+        }
+
+        .form-group.full {
+            grid-column: auto;
+        }
+
+    }
+
 </style>
 
 
 <div class="module-page">
 
+
+    {{-- SUCCESS MESSAGE --}}
+
     @if(session('success'))
+
         <div class="alert-success">
             {{ session('success') }}
         </div>
+
     @endif
 
+
+    {{-- VALIDATION ERRORS --}}
+
     @if($errors->any())
+
         <div class="alert-error">
 
             <strong>Please fix the following:</strong>
 
             <ul>
+
                 @foreach($errors->all() as $error)
+
                     <li>{{ $error }}</li>
+
                 @endforeach
+
             </ul>
 
         </div>
+
     @endif
 
+
+    {{-- PAGE HEADER --}}
 
     <div class="page-header">
 
@@ -362,6 +394,7 @@
                 ↑ Import XLSX
             </button>
 
+
             <button
                 type="button"
                 class="btn-aspia btn-primary"
@@ -374,6 +407,8 @@
 
     </div>
 
+
+    {{-- REQUIREMENT MANAGEMENT --}}
 
     <div class="panel">
 
@@ -398,6 +433,7 @@
                     value="{{ request('search') }}"
                 >
 
+
                 <button
                     type="submit"
                     class="btn-aspia btn-secondary"
@@ -417,11 +453,19 @@
                 <thead>
 
                     <tr>
-                        <th>Name</th>
+
+                        <th>Requirement ID</th>
+
                         <th>Control</th>
-                        <th>Description</th>
-                        <th>Created</th>
+
+                        <th>Requirement Title</th>
+
+                        <th>Requirement</th>
+
+                        <th>Typical Owner</th>
+
                         <th>Actions</th>
+
                     </tr>
 
                 </thead>
@@ -433,37 +477,65 @@
 
                         <tr>
 
-                            <td>
-
-                                <span class="module-name">
-                                    {{ $requirement->name }}
-                                </span>
-
-                            </td>
-
+                            {{-- Requirement ID --}}
 
                             <td>
 
                                 <span class="badge">
-                                    {{ $requirement->control?->name ?? 'N/A' }}
+                                    {{ $requirement->requirement_id }}
                                 </span>
 
                             </td>
 
+
+                            {{-- Control --}}
+
+                            <td>
+
+                                <span class="badge">
+
+                                    {{ $requirement->control?->control_id ?? 'N/A' }}
+
+                                </span>
+
+                            </td>
+
+
+                            {{-- Requirement Title --}}
+
+                            <td>
+
+                                <span class="module-name">
+                                    {{ $requirement->requirement_title }}
+                                </span>
+
+                            </td>
+
+
+                            {{-- Requirement --}}
 
                             <td>
 
                                 <span class="description">
-                                    {{ $requirement->description ?: 'No description' }}
+
+                                    {{ \Illuminate\Support\Str::limit(
+                                        $requirement->requirement,
+                                        120
+                                    ) }}
+
                                 </span>
 
                             </td>
 
 
+                            {{-- Typical Owner --}}
+
                             <td>
-                                {{ $requirement->created_at?->format('d M Y') }}
+                                {{ $requirement->typical_owner ?: 'N/A' }}
                             </td>
 
+
+                            {{-- Actions --}}
 
                             <td>
 
@@ -475,8 +547,16 @@
                                         onclick="openEditModal(
                                             {{ $requirement->id }},
                                             {{ $requirement->control_id }},
-                                            @js($requirement->name),
-                                            @js($requirement->description)
+                                            @js($requirement->requirement_id),
+                                            @js($requirement->requirement_title),
+                                            @js($requirement->requirement),
+                                            @js($requirement->why_requirement_exists),
+                                            @js($requirement->implementation_guidance),
+                                            @js($requirement->common_audit_findings),
+                                            @js($requirement->common_mistakes),
+                                            @js($requirement->best_practices),
+                                            @js($requirement->business_examples),
+                                            @js($requirement->typical_owner)
                                         )"
                                     >
                                         Edit
@@ -490,7 +570,9 @@
                                     >
 
                                         @csrf
+
                                         @method('DELETE')
+
 
                                         <button
                                             type="submit"
@@ -512,7 +594,7 @@
                         <tr>
 
                             <td
-                                colspan="5"
+                                colspan="6"
                                 class="empty-state"
                             >
                                 No requirements found.
@@ -532,83 +614,34 @@
         @if($requirements->hasPages())
 
             <div style="padding:18px 20px;">
+
                 {{ $requirements->links() }}
+
             </div>
 
         @endif
 
     </div>
 
-
-    <div class="panel">
-
-        <div class="panel-header">
-
-            <h2>
-                Recent Activity
-            </h2>
-
-        </div>
-
-
-        <div class="activity-list">
-
-            @forelse($activities as $activity)
-
-                <div class="activity-item">
-
-                    <div class="activity-icon">
-                        ✓
-                    </div>
-
-                    <div>
-
-                        <div class="activity-text">
-                            {{ $activity->description }}
-                        </div>
-
-                        <div class="activity-time">
-                            {{ $activity->created_at?->diffForHumans() }}
-                        </div>
-
-                    </div>
-
-                </div>
-
-            @empty
-
-                <div class="activity-item">
-
-                    <div class="activity-icon">
-                        —
-                    </div>
-
-                    <div class="activity-text">
-                        No recent activity.
-                    </div>
-
-                </div>
-
-            @endforelse
-
-        </div>
-
-    </div>
-
 </div>
 
 
+
+{{-- ========================================================= --}}
 {{-- ADD REQUIREMENT --}}
+{{-- ========================================================= --}}
 
 <div id="addModal" class="modal-overlay">
 
     <div class="modal-box">
+
 
         <div class="modal-header">
 
             <h2>
                 Add Requirement
             </h2>
+
 
             <button
                 type="button"
@@ -628,13 +661,18 @@
 
             @csrf
 
+
             <div class="modal-body">
 
-                <div class="form-group">
+
+                {{-- Control --}}
+
+                <div class="form-group full">
 
                     <label class="form-label">
-                        Control
+                        Control *
                     </label>
+
 
                     <select
                         name="control_id"
@@ -646,10 +684,18 @@
                             Select Control
                         </option>
 
+
                         @foreach($controls as $control)
 
-                            <option value="{{ $control->id }}">
+                            <option
+                                value="{{ $control->id }}"
+                                {{ old('control_id') == $control->id ? 'selected' : '' }}
+                            >
+
+                                {{ $control->control_id }}
+                                -
                                 {{ $control->name }}
+
                             </option>
 
                         @endforeach
@@ -659,36 +705,194 @@
                 </div>
 
 
+                {{-- Requirement ID --}}
+
                 <div class="form-group">
 
                     <label class="form-label">
-                        Requirement Name
+                        Requirement ID *
                     </label>
+
 
                     <input
                         type="text"
-                        name="name"
+                        name="requirement_id"
                         class="form-control"
-                        placeholder="Enter requirement name"
+                        placeholder="Enter Requirement ID"
+                        value="{{ old('requirement_id') }}"
                         required
                     >
 
                 </div>
 
 
+                {{-- Requirement Title --}}
+
                 <div class="form-group">
 
                     <label class="form-label">
-                        Description
+                        Requirement Title *
                     </label>
 
-                    <textarea
-                        name="description"
+
+                    <input
+                        type="text"
+                        name="requirement_title"
                         class="form-control"
-                        placeholder="Enter description"
-                    ></textarea>
+                        placeholder="Enter Requirement Title"
+                        value="{{ old('requirement_title') }}"
+                        required
+                    >
 
                 </div>
+
+
+                {{-- Requirement --}}
+
+                <div class="form-group full">
+
+                    <label class="form-label">
+                        Requirement *
+                    </label>
+
+
+                    <textarea
+                        name="requirement"
+                        class="form-control"
+                        placeholder="Enter Requirement"
+                        required
+                    >{{ old('requirement') }}</textarea>
+
+                </div>
+
+
+                {{-- Why this Requirement Exists --}}
+
+                <div class="form-group full">
+
+                    <label class="form-label">
+                        Why this Requirement Exists
+                    </label>
+
+
+                    <textarea
+                        name="why_requirement_exists"
+                        class="form-control"
+                        placeholder="Enter why this requirement exists"
+                    >{{ old('why_requirement_exists') }}</textarea>
+
+                </div>
+
+
+                {{-- Implementation Guidance --}}
+
+                <div class="form-group full">
+
+                    <label class="form-label">
+                        Implementation Guidance
+                    </label>
+
+
+                    <textarea
+                        name="implementation_guidance"
+                        class="form-control"
+                        placeholder="Enter Implementation Guidance"
+                    >{{ old('implementation_guidance') }}</textarea>
+
+                </div>
+
+
+                {{-- Common Audit Findings --}}
+
+                <div class="form-group full">
+
+                    <label class="form-label">
+                        Common Audit Findings
+                    </label>
+
+
+                    <textarea
+                        name="common_audit_findings"
+                        class="form-control"
+                        placeholder="Enter Common Audit Findings"
+                    >{{ old('common_audit_findings') }}</textarea>
+
+                </div>
+
+
+                {{-- Common Mistakes --}}
+
+                <div class="form-group full">
+
+                    <label class="form-label">
+                        Common Mistakes
+                    </label>
+
+
+                    <textarea
+                        name="common_mistakes"
+                        class="form-control"
+                        placeholder="Enter Common Mistakes"
+                    >{{ old('common_mistakes') }}</textarea>
+
+                </div>
+
+
+                {{-- Best Practices --}}
+
+                <div class="form-group full">
+
+                    <label class="form-label">
+                        Best Practices
+                    </label>
+
+
+                    <textarea
+                        name="best_practices"
+                        class="form-control"
+                        placeholder="Enter Best Practices"
+                    >{{ old('best_practices') }}</textarea>
+
+                </div>
+
+
+                {{-- Business Examples --}}
+
+                <div class="form-group full">
+
+                    <label class="form-label">
+                        Business Examples
+                    </label>
+
+
+                    <textarea
+                        name="business_examples"
+                        class="form-control"
+                        placeholder="Enter Business Examples"
+                    >{{ old('business_examples') }}</textarea>
+
+                </div>
+
+
+                {{-- Typical Owner --}}
+
+                <div class="form-group">
+
+                    <label class="form-label">
+                        Typical Owner
+                    </label>
+
+
+                    <input
+                        type="text"
+                        name="typical_owner"
+                        class="form-control"
+                        placeholder="Enter Typical Owner"
+                        value="{{ old('typical_owner') }}"
+                    >
+
+                </div>
+
 
             </div>
 
@@ -702,6 +906,7 @@
                 >
                     Cancel
                 </button>
+
 
                 <button
                     type="submit"
@@ -719,17 +924,22 @@
 </div>
 
 
+
+{{-- ========================================================= --}}
 {{-- EDIT REQUIREMENT --}}
+{{-- ========================================================= --}}
 
 <div id="editModal" class="modal-overlay">
 
     <div class="modal-box">
+
 
         <div class="modal-header">
 
             <h2>
                 Edit Requirement
             </h2>
+
 
             <button
                 type="button"
@@ -748,16 +958,21 @@
         >
 
             @csrf
+
             @method('PUT')
 
 
             <div class="modal-body">
 
-                <div class="form-group">
+
+                {{-- Control --}}
+
+                <div class="form-group full">
 
                     <label class="form-label">
-                        Control
+                        Control *
                     </label>
+
 
                     <select
                         id="editControl"
@@ -769,7 +984,11 @@
                         @foreach($controls as $control)
 
                             <option value="{{ $control->id }}">
+
+                                {{ $control->control_id }}
+                                -
                                 {{ $control->name }}
+
                             </option>
 
                         @endforeach
@@ -779,16 +998,19 @@
                 </div>
 
 
+                {{-- Requirement ID --}}
+
                 <div class="form-group">
 
                     <label class="form-label">
-                        Requirement Name
+                        Requirement ID *
                     </label>
+
 
                     <input
                         type="text"
-                        id="editName"
-                        name="name"
+                        id="editRequirementId"
+                        name="requirement_id"
                         class="form-control"
                         required
                     >
@@ -796,19 +1018,171 @@
                 </div>
 
 
+                {{-- Requirement Title --}}
+
                 <div class="form-group">
 
                     <label class="form-label">
-                        Description
+                        Requirement Title *
                     </label>
 
+
+                    <input
+                        type="text"
+                        id="editRequirementTitle"
+                        name="requirement_title"
+                        class="form-control"
+                        required
+                    >
+
+                </div>
+
+
+                {{-- Requirement --}}
+
+                <div class="form-group full">
+
+                    <label class="form-label">
+                        Requirement *
+                    </label>
+
+
                     <textarea
-                        id="editDescription"
-                        name="description"
+                        id="editRequirement"
+                        name="requirement"
+                        class="form-control"
+                        required
+                    ></textarea>
+
+                </div>
+
+
+                {{-- Why this Requirement Exists --}}
+
+                <div class="form-group full">
+
+                    <label class="form-label">
+                        Why this Requirement Exists
+                    </label>
+
+
+                    <textarea
+                        id="editWhyRequirementExists"
+                        name="why_requirement_exists"
                         class="form-control"
                     ></textarea>
 
                 </div>
+
+
+                {{-- Implementation Guidance --}}
+
+                <div class="form-group full">
+
+                    <label class="form-label">
+                        Implementation Guidance
+                    </label>
+
+
+                    <textarea
+                        id="editImplementationGuidance"
+                        name="implementation_guidance"
+                        class="form-control"
+                    ></textarea>
+
+                </div>
+
+
+                {{-- Common Audit Findings --}}
+
+                <div class="form-group full">
+
+                    <label class="form-label">
+                        Common Audit Findings
+                    </label>
+
+
+                    <textarea
+                        id="editCommonAuditFindings"
+                        name="common_audit_findings"
+                        class="form-control"
+                    ></textarea>
+
+                </div>
+
+
+                {{-- Common Mistakes --}}
+
+                <div class="form-group full">
+
+                    <label class="form-label">
+                        Common Mistakes
+                    </label>
+
+
+                    <textarea
+                        id="editCommonMistakes"
+                        name="common_mistakes"
+                        class="form-control"
+                    ></textarea>
+
+                </div>
+
+
+                {{-- Best Practices --}}
+
+                <div class="form-group full">
+
+                    <label class="form-label">
+                        Best Practices
+                    </label>
+
+
+                    <textarea
+                        id="editBestPractices"
+                        name="best_practices"
+                        class="form-control"
+                    ></textarea>
+
+                </div>
+
+
+                {{-- Business Examples --}}
+
+                <div class="form-group full">
+
+                    <label class="form-label">
+                        Business Examples
+                    </label>
+
+
+                    <textarea
+                        id="editBusinessExamples"
+                        name="business_examples"
+                        class="form-control"
+                    ></textarea>
+
+                </div>
+
+
+                {{-- Typical Owner --}}
+
+                <div class="form-group">
+
+                    <label class="form-label">
+                        Typical Owner
+                    </label>
+
+
+                    <input
+                        type="text"
+                        id="editTypicalOwner"
+                        name="typical_owner"
+                        class="form-control"
+                    >
+
+                </div>
+
 
             </div>
 
@@ -822,6 +1196,7 @@
                 >
                     Cancel
                 </button>
+
 
                 <button
                     type="submit"
@@ -839,17 +1214,22 @@
 </div>
 
 
+
+{{-- ========================================================= --}}
 {{-- IMPORT REQUIREMENTS --}}
+{{-- ========================================================= --}}
 
 <div id="importModal" class="modal-overlay">
 
     <div class="modal-box">
+
 
         <div class="modal-header">
 
             <h2>
                 Import Requirements
             </h2>
+
 
             <button
                 type="button"
@@ -870,22 +1250,29 @@
 
             @csrf
 
+
             <div class="modal-body">
 
-                <label class="form-label">
-                    Select XLSX File
-                </label>
+                <div class="form-group full">
 
-                <input
-                    type="file"
-                    name="file"
-                    class="form-control"
-                    accept=".xlsx"
-                    required
-                >
+                    <label class="form-label">
+                        Select XLSX File
+                    </label>
 
-                <div class="import-info">
-                    Only .xlsx files are supported.
+
+                    <input
+                        type="file"
+                        name="file"
+                        class="form-control"
+                        accept=".xlsx"
+                        required
+                    >
+
+
+                    <div class="import-info">
+                        Only .xlsx files are supported.
+                    </div>
+
                 </div>
 
             </div>
@@ -900,6 +1287,7 @@
                 >
                     Cancel
                 </button>
+
 
                 <button
                     type="submit"
@@ -917,47 +1305,242 @@
 </div>
 
 
+
 <script>
 
-function openModal(id) {
-    document.getElementById(id).classList.add('show');
-}
+    /*
+    |--------------------------------------------------------------------------
+    | Open Modal
+    |--------------------------------------------------------------------------
+    */
 
-function closeModal(id) {
-    document.getElementById(id).classList.remove('show');
-}
-
-function openEditModal(id, controlId, name, description) {
-
-    document.getElementById('editForm').action =
-        `/requirements/${id}`;
-
-    document.getElementById('editControl').value =
-        controlId;
-
-    document.getElementById('editName').value =
-        name || '';
-
-    document.getElementById('editDescription').value =
-        description || '';
-
-    openModal('editModal');
-}
-
-document.addEventListener('keydown', function(event) {
-
-    if (event.key === 'Escape') {
-
+    function openModal(id)
+    {
         document
-            .querySelectorAll('.modal-overlay')
-            .forEach(function(modal) {
-                modal.classList.remove('show');
-            });
-
+            .getElementById(id)
+            .classList
+            .add('show');
     }
 
-});
+
+    /*
+    |--------------------------------------------------------------------------
+    | Close Modal
+    |--------------------------------------------------------------------------
+    */
+
+    function closeModal(id)
+    {
+        document
+            .getElementById(id)
+            .classList
+            .remove('show');
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Edit Requirement
+    |--------------------------------------------------------------------------
+    */
+
+    function openEditModal(
+        id,
+        controlId,
+        requirementId,
+        requirementTitle,
+        requirement,
+        whyRequirementExists,
+        implementationGuidance,
+        commonAuditFindings,
+        commonMistakes,
+        bestPractices,
+        businessExamples,
+        typicalOwner
+    ) {
+
+        /*
+        |--------------------------------------------------------------------------
+        | Form Action
+        |--------------------------------------------------------------------------
+        */
+
+        document.getElementById('editForm').action =
+            `/requirements/${id}`;
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Control
+        |--------------------------------------------------------------------------
+        */
+
+        document.getElementById('editControl').value =
+            controlId ?? '';
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Requirement ID
+        |--------------------------------------------------------------------------
+        */
+
+        document.getElementById('editRequirementId').value =
+            requirementId ?? '';
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Requirement Title
+        |--------------------------------------------------------------------------
+        */
+
+        document.getElementById('editRequirementTitle').value =
+            requirementTitle ?? '';
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Requirement
+        |--------------------------------------------------------------------------
+        */
+
+        document.getElementById('editRequirement').value =
+            requirement ?? '';
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Why Requirement Exists
+        |--------------------------------------------------------------------------
+        */
+
+        document.getElementById('editWhyRequirementExists').value =
+            whyRequirementExists ?? '';
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Implementation Guidance
+        |--------------------------------------------------------------------------
+        */
+
+        document.getElementById('editImplementationGuidance').value =
+            implementationGuidance ?? '';
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Common Audit Findings
+        |--------------------------------------------------------------------------
+        */
+
+        document.getElementById('editCommonAuditFindings').value =
+            commonAuditFindings ?? '';
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Common Mistakes
+        |--------------------------------------------------------------------------
+        */
+
+        document.getElementById('editCommonMistakes').value =
+            commonMistakes ?? '';
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Best Practices
+        |--------------------------------------------------------------------------
+        */
+
+        document.getElementById('editBestPractices').value =
+            bestPractices ?? '';
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Business Examples
+        |--------------------------------------------------------------------------
+        */
+
+        document.getElementById('editBusinessExamples').value =
+            businessExamples ?? '';
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Typical Owner
+        |--------------------------------------------------------------------------
+        */
+
+        document.getElementById('editTypicalOwner').value =
+            typicalOwner ?? '';
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Show Modal
+        |--------------------------------------------------------------------------
+        */
+
+        openModal('editModal');
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Escape Key
+    |--------------------------------------------------------------------------
+    */
+
+    document.addEventListener(
+        'keydown',
+        function(event)
+        {
+
+            if (event.key === 'Escape') {
+
+                document
+                    .querySelectorAll('.modal-overlay')
+                    .forEach(function(modal) {
+
+                        modal.classList.remove('show');
+
+                    });
+
+            }
+
+        }
+    );
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Click Outside Modal
+    |--------------------------------------------------------------------------
+    */
+
+    document.addEventListener(
+        'click',
+        function(event)
+        {
+
+            if (
+                event.target.classList.contains(
+                    'modal-overlay'
+                )
+            ) {
+
+                event.target.classList.remove('show');
+
+            }
+
+        }
+    );
 
 </script>
+
 
 @endsection
