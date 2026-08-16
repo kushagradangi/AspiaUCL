@@ -22,44 +22,83 @@ class ControlController extends Controller
         $search = $request->search;
 
         $controls = Control::with('domain')
-
             ->when($search, function ($query) use ($search) {
 
                 $query->where(function ($q) use ($search) {
 
-                    $q->where('control_id', 'like', "%{$search}%")
-                        ->orWhere('domain_code', 'like', "%{$search}%")
-                        ->orWhere('name', 'like', "%{$search}%")
-                        ->orWhere('business_owner', 'like', "%{$search}%")
-                        ->orWhere('control_category', 'like', "%{$search}%")
-                        ->orWhere('criticality', 'like', "%{$search}%")
-                        ->orWhere('status', 'like', "%{$search}%")
-                        ->orWhere('version', 'like', "%{$search}%")
-                        ->orWhere('control_type', 'like', "%{$search}%");
+                    $q->where(
+                        'control_id',
+                        'like',
+                        "%{$search}%"
+                    )
+
+                    ->orWhere(
+                        'domain_code',
+                        'like',
+                        "%{$search}%"
+                    )
+
+                    ->orWhere(
+                        'name',
+                        'like',
+                        "%{$search}%"
+                    )
+
+                    ->orWhere(
+                        'business_owner',
+                        'like',
+                        "%{$search}%"
+                    )
+
+                    ->orWhere(
+                        'control_category',
+                        'like',
+                        "%{$search}%"
+                    )
+
+                    ->orWhere(
+                        'criticality',
+                        'like',
+                        "%{$search}%"
+                    )
+
+                    ->orWhere(
+                        'status',
+                        'like',
+                        "%{$search}%"
+                    )
+
+                    ->orWhere(
+                        'version',
+                        'like',
+                        "%{$search}%"
+                    )
+
+                    ->orWhere(
+                        'control_type',
+                        'like',
+                        "%{$search}%"
+                    );
 
                 });
 
             })
-
             ->latest()
             ->paginate(10)
             ->withQueryString();
 
-
-        $domains = Domain::orderBy('name')->get();
-
-
-        $activities = Activity::where('module', 'control')
+        $activities = Activity::where(
+            'module',
+            'control'
+        )
             ->latest()
             ->take(10)
             ->get();
-
 
         return view(
             'aspiaUcl.controls.index',
             compact(
                 'controls',
-                'domains',
                 'activities'
             )
         );
@@ -72,80 +111,65 @@ class ControlController extends Controller
     |--------------------------------------------------------------------------
     */
 
-    private function validationRules($controlId = null): array
-    {
+    private function validationRules(
+        $controlId = null
+    ): array {
+
         return [
 
-            // Relationship
-            'domain_id' =>
-                'required|exists:domains,id',
-
-            // 1. Control ID
             'control_id' =>
                 'required|string|max:255|unique:controls,control_id'
-                . ($controlId ? ',' . $controlId : ''),
+                . (
+                    $controlId
+                        ? ',' . $controlId
+                        : ''
+                ),
 
-            // 2. Domain Code
             'domain_code' =>
-                'nullable|string|max:255',
+                'required|string|max:255|exists:domains,domain_code',
 
-            // 3. Control Name
             'name' =>
                 'required|string|max:255',
 
-            // 4. Business Description
             'business_description' =>
                 'nullable|string',
 
-            // 5. Business Objective
             'business_objective' =>
                 'nullable|string',
 
-            // 6. Business Owner
             'business_owner' =>
                 'nullable|string|max:255',
 
-            // 7. Control Category
             'control_category' =>
                 'nullable|string|max:255',
 
-            // 8. Criticality
             'criticality' =>
                 'nullable|string|max:255',
 
-            // 9. Applicable Industries
             'applicable_industries' =>
                 'nullable|string',
 
-            // 10. Applicable Technologies
             'applicable_technologies' =>
                 'nullable|string',
 
-            // 11. Status
             'status' =>
                 'required|string|max:50',
 
-            // 12. Version
             'version' =>
                 'nullable|string|max:255',
 
-            // 13. Control Summary
             'control_summary' =>
                 'nullable|string',
 
-            // 14. Business Benefits
             'business_benefits' =>
                 'nullable|string',
 
-            // 15. Business Risks if Missing
             'business_risks_if_missing' =>
                 'nullable|string',
 
-            // 16. Primary Stakeholders
             'primary_stakeholders' =>
                 'nullable|string',
 
-            // 17. Control Type
             'control_type' =>
                 'nullable|string|max:255',
         ];
@@ -165,13 +189,65 @@ class ControlController extends Controller
         );
 
 
-        $control = Control::create($validated);
+        /*
+        |--------------------------------------------------------------------------
+        | Find Domain using Domain Code
+        |--------------------------------------------------------------------------
+        */
 
+        $domain = Domain::where(
+            'domain_code',
+            $validated['domain_code']
+        )->first();
+
+
+        if (!$domain) {
+
+            return back()
+                ->withErrors([
+                    'domain_code' =>
+                        'The entered Domain Code does not exist.'
+                ])
+                ->withInput();
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Automatically assign domain_id
+        |--------------------------------------------------------------------------
+        */
+
+        $validated['domain_id'] = $domain->id;
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Create Control
+        |--------------------------------------------------------------------------
+        */
+
+        $control = Control::create(
+            $validated
+        );
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Activity
+        |--------------------------------------------------------------------------
+        */
 
         Activity::create([
-            'user_id' => auth()->id(),
-            'module' => 'control',
-            'action' => 'Created',
+            'user_id' =>
+                auth()->id(),
+
+            'module' =>
+                'control',
+
+            'action' =>
+                'Created',
+
             'description' =>
                 'Created control: ' .
                 $control->name,
@@ -199,17 +275,71 @@ class ControlController extends Controller
     ) {
 
         $validated = $request->validate(
-            $this->validationRules($control->id)
+            $this->validationRules(
+                $control->id
+            )
         );
 
 
-        $control->update($validated);
+        /*
+        |--------------------------------------------------------------------------
+        | Find Domain using Domain Code
+        |--------------------------------------------------------------------------
+        */
 
+        $domain = Domain::where(
+            'domain_code',
+            $validated['domain_code']
+        )->first();
+
+
+        if (!$domain) {
+
+            return back()
+                ->withErrors([
+                    'domain_code' =>
+                        'The entered Domain Code does not exist.'
+                ])
+                ->withInput();
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Automatically assign domain_id
+        |--------------------------------------------------------------------------
+        */
+
+        $validated['domain_id'] = $domain->id;
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Update Control
+        |--------------------------------------------------------------------------
+        */
+
+        $control->update(
+            $validated
+        );
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Activity
+        |--------------------------------------------------------------------------
+        */
 
         Activity::create([
-            'user_id' => auth()->id(),
-            'module' => 'control',
-            'action' => 'Updated',
+            'user_id' =>
+                auth()->id(),
+
+            'module' =>
+                'control',
+
+            'action' =>
+                'Updated',
+
             'description' =>
                 'Updated control: ' .
                 $control->name,
@@ -231,18 +361,32 @@ class ControlController extends Controller
     |--------------------------------------------------------------------------
     */
 
-    public function destroy(Control $control)
-    {
+    public function destroy(
+        Control $control
+    ) {
+
         $name = $control->name;
 
 
         $control->delete();
 
 
+        /*
+        |--------------------------------------------------------------------------
+        | Activity
+        |--------------------------------------------------------------------------
+        */
+
         Activity::create([
-            'user_id' => auth()->id(),
-            'module' => 'control',
-            'action' => 'Deleted',
+            'user_id' =>
+                auth()->id(),
+
+            'module' =>
+                'control',
+
+            'action' =>
+                'Deleted',
+
             'description' =>
                 'Deleted control: ' .
                 $name,
@@ -260,12 +404,14 @@ class ControlController extends Controller
 
     /*
     |--------------------------------------------------------------------------
-    | Import XLSX
+    | Import Controls from XLSX
     |--------------------------------------------------------------------------
     */
 
-    public function import(Request $request)
-    {
+    public function import(
+        Request $request
+    ) {
+
         $request->validate([
             'file' => [
                 'required',
@@ -275,16 +421,34 @@ class ControlController extends Controller
         ]);
 
 
+        /*
+        |--------------------------------------------------------------------------
+        | Import Excel
+        |--------------------------------------------------------------------------
+        */
+
         Excel::import(
             new ControlImport(),
             $request->file('file')
         );
 
 
+        /*
+        |--------------------------------------------------------------------------
+        | Activity
+        |--------------------------------------------------------------------------
+        */
+
         Activity::create([
-            'user_id' => auth()->id(),
-            'module' => 'control',
-            'action' => 'Imported',
+            'user_id' =>
+                auth()->id(),
+
+            'module' =>
+                'control',
+
+            'action' =>
+                'Imported',
+
             'description' =>
                 'Imported controls from XLSX file.',
         ]);

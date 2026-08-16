@@ -14,22 +14,28 @@ return new class extends Migration
 
             /*
             |--------------------------------------------------------------------------
-            | Control Relationship
-            |--------------------------------------------------------------------------
-            */
-
-            $table->foreignId('control_id')
-                ->constrained('controls')
-                ->cascadeOnDelete();
-
-
-            /*
-            |--------------------------------------------------------------------------
             | Requirement ID
             |--------------------------------------------------------------------------
             */
 
             $table->string('requirement_id')->unique();
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | Control ID
+            |--------------------------------------------------------------------------
+            |
+            | This stores the Control ID from the Excel file.
+            |
+            | Example:
+            | GOV-001
+            |
+            | It is a normal string field, not a foreign key.
+            |
+            */
+
+            $table->string('control_id');
 
 
             /*
@@ -56,7 +62,8 @@ return new class extends Migration
             |--------------------------------------------------------------------------
             */
 
-            $table->longText('why_requirement_exists')->nullable();
+            $table->longText('why_requirement_exists')
+                ->nullable();
 
 
             /*
@@ -65,7 +72,8 @@ return new class extends Migration
             |--------------------------------------------------------------------------
             */
 
-            $table->longText('implementation_guidance')->nullable();
+            $table->longText('implementation_guidance')
+                ->nullable();
 
 
             /*
@@ -74,7 +82,8 @@ return new class extends Migration
             |--------------------------------------------------------------------------
             */
 
-            $table->longText('common_audit_findings')->nullable();
+            $table->longText('common_audit_findings')
+                ->nullable();
 
 
             /*
@@ -83,7 +92,8 @@ return new class extends Migration
             |--------------------------------------------------------------------------
             */
 
-            $table->longText('common_mistakes')->nullable();
+            $table->longText('common_mistakes')
+                ->nullable();
 
 
             /*
@@ -92,7 +102,8 @@ return new class extends Migration
             |--------------------------------------------------------------------------
             */
 
-            $table->longText('best_practices')->nullable();
+            $table->longText('best_practices')
+                ->nullable();
 
 
             /*
@@ -101,7 +112,8 @@ return new class extends Migration
             |--------------------------------------------------------------------------
             */
 
-            $table->longText('business_examples')->nullable();
+            $table->longText('business_examples')
+                ->nullable();
 
 
             /*
@@ -110,12 +122,20 @@ return new class extends Migration
             |--------------------------------------------------------------------------
             */
 
-            $table->string('typical_owner')->nullable();
+            $table->string('typical_owner')
+                ->nullable();
 
+
+            /*
+            |--------------------------------------------------------------------------
+            | Timestamps
+            |--------------------------------------------------------------------------
+            */
 
             $table->timestamps();
         });
     }
+
 
     public function down(): void
     {

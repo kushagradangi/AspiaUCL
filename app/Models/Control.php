@@ -3,10 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Control extends Model
 {
     protected $fillable = [
+
+        // Relationship
+        'domain_id',
 
         // 1. Control ID
         'control_id',
@@ -59,4 +63,19 @@ class Control extends Model
         // 17. Control Type
         'control_type',
     ];
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Control belongs to Domain
+    |--------------------------------------------------------------------------
+    */
+
+    public function domain(): BelongsTo
+    {
+        return $this->belongsTo(
+            Domain::class,
+            'domain_id'
+        );
+    }
 }

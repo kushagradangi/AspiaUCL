@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Imports\RequirementImport;
-use App\Models\Control;
+use App\Models\Activity;
 use App\Models\Requirement;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
@@ -20,13 +20,20 @@ class RequirementController extends Controller
     {
         $search = $request->search;
 
-        $requirements = Requirement::with('control')
+        $requirements = Requirement::query()
+
             ->when($search, function ($query) use ($search) {
 
                 $query->where(function ($q) use ($search) {
 
                     $q->where(
                         'requirement_id',
+                        'like',
+                        "%{$search}%"
+                    )
+
+                    ->orWhere(
+                        'control_id',
                         'like',
                         "%{$search}%"
                     )
@@ -58,6 +65,7 @@ class RequirementController extends Controller
                 });
 
             })
+
             ->latest()
             ->paginate(10)
             ->withQueryString();
@@ -65,18 +73,24 @@ class RequirementController extends Controller
 
         /*
         |--------------------------------------------------------------------------
-        | Controls for Requirement Relationship
+        | Recent Activity
         |--------------------------------------------------------------------------
         */
 
-        $controls = Control::orderBy('name')->get();
+        $activities = Activity::where(
+            'module',
+            'requirement'
+        )
+            ->latest()
+            ->take(10)
+            ->get();
 
 
         return view(
             'aspiaUcl.requirements.index',
             compact(
                 'requirements',
-                'controls'
+                'activities'
             )
         );
     }
@@ -94,22 +108,22 @@ class RequirementController extends Controller
 
             /*
             |--------------------------------------------------------------------------
-            | Relationship
-            |--------------------------------------------------------------------------
-            */
-
-            'control_id' =>
-                'required|exists:controls,id',
-
-
-            /*
-            |--------------------------------------------------------------------------
             | Requirement ID
             |--------------------------------------------------------------------------
             */
 
             'requirement_id' =>
                 'required|string|max:255|unique:requirements,requirement_id',
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | Control ID
+            |--------------------------------------------------------------------------
+            */
+
+            'control_id' =>
+                'required|string|max:255',
 
 
             /*
@@ -204,7 +218,39 @@ class RequirementController extends Controller
         ]);
 
 
-        Requirement::create($validated);
+        /*
+        |--------------------------------------------------------------------------
+        | Create Requirement
+        |--------------------------------------------------------------------------
+        */
+
+        $requirement = Requirement::create(
+            $validated
+        );
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Activity
+        |--------------------------------------------------------------------------
+        */
+
+        Activity::create([
+
+            'user_id' =>
+                auth()->id(),
+
+            'module' =>
+                'requirement',
+
+            'action' =>
+                'Created',
+
+            'description' =>
+                'Created requirement: ' .
+                $requirement->requirement_title,
+
+        ]);
 
 
         return redirect()
@@ -231,16 +277,6 @@ class RequirementController extends Controller
 
             /*
             |--------------------------------------------------------------------------
-            | Relationship
-            |--------------------------------------------------------------------------
-            */
-
-            'control_id' =>
-                'required|exists:controls,id',
-
-
-            /*
-            |--------------------------------------------------------------------------
             | Requirement ID
             |--------------------------------------------------------------------------
             */
@@ -248,6 +284,16 @@ class RequirementController extends Controller
             'requirement_id' =>
                 'required|string|max:255|unique:requirements,requirement_id,' .
                 $requirement->id,
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | Control ID
+            |--------------------------------------------------------------------------
+            */
+
+            'control_id' =>
+                'required|string|max:255',
 
 
             /*
@@ -342,7 +388,39 @@ class RequirementController extends Controller
         ]);
 
 
-        $requirement->update($validated);
+        /*
+        |--------------------------------------------------------------------------
+        | Update Requirement
+        |--------------------------------------------------------------------------
+        */
+
+        $requirement->update(
+            $validated
+        );
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Activity
+        |--------------------------------------------------------------------------
+        */
+
+        Activity::create([
+
+            'user_id' =>
+                auth()->id(),
+
+            'module' =>
+                'requirement',
+
+            'action' =>
+                'Updated',
+
+            'description' =>
+                'Updated requirement: ' .
+                $requirement->requirement_title,
+
+        ]);
 
 
         return redirect()
@@ -360,9 +438,39 @@ class RequirementController extends Controller
     |--------------------------------------------------------------------------
     */
 
-    public function destroy(Requirement $requirement)
-    {
+    public function destroy(
+        Requirement $requirement
+    ) {
+
+        $name =
+            $requirement->requirement_title;
+
+
         $requirement->delete();
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Activity
+        |--------------------------------------------------------------------------
+        */
+
+        Activity::create([
+
+            'user_id' =>
+                auth()->id(),
+
+            'module' =>
+                'requirement',
+
+            'action' =>
+                'Deleted',
+
+            'description' =>
+                'Deleted requirement: ' .
+                $name,
+
+        ]);
 
 
         return redirect()
@@ -380,14 +488,18 @@ class RequirementController extends Controller
     |--------------------------------------------------------------------------
     */
 
-    public function import(Request $request)
-    {
+    public function import(
+        Request $request
+    ) {
+
         $request->validate([
 
             'file' => [
+
                 'required',
                 'file',
                 'mimes:xlsx',
+
             ],
 
         ]);
@@ -397,6 +509,29 @@ class RequirementController extends Controller
             new RequirementImport(),
             $request->file('file')
         );
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Activity
+        |--------------------------------------------------------------------------
+        */
+
+        Activity::create([
+
+            'user_id' =>
+                auth()->id(),
+
+            'module' =>
+                'requirement',
+
+            'action' =>
+                'Imported',
+
+            'description' =>
+                'Imported requirements from XLSX file.',
+
+        ]);
 
 
         return redirect()

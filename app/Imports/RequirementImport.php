@@ -2,7 +2,6 @@
 
 namespace App\Imports;
 
-use App\Models\Control;
 use App\Models\Requirement;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
@@ -29,52 +28,23 @@ class RequirementImport implements ToModel, WithHeadingRow
 
         /*
         |--------------------------------------------------------------------------
-        | Find Control
+        | Create Requirement
         |--------------------------------------------------------------------------
         |
-        | Excel contains the Control ID, for example:
+        | Control ID is stored directly as a string.
+        |
+        | Example:
         |
         | GOV-001
         |
-        | But requirements.control_id stores the actual
-        | database ID of the Control.
-        |
-        */
-
-        $control = Control::where(
-            'control_id',
-            $row['control_id']
-        )->first();
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | If Control does not exist, skip this row
-        |--------------------------------------------------------------------------
-        */
-
-        if (!$control) {
-            return null;
-        }
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | Create Requirement
-        |--------------------------------------------------------------------------
         */
 
         return new Requirement([
 
             /*
-            | Database relationship
-            */
-
-            'control_id' => $control->id,
-
-
-            /*
+            |--------------------------------------------------------------------------
             | Requirement ID
+            |--------------------------------------------------------------------------
             */
 
             'requirement_id' =>
@@ -82,7 +52,19 @@ class RequirementImport implements ToModel, WithHeadingRow
 
 
             /*
+            |--------------------------------------------------------------------------
+            | Control ID
+            |--------------------------------------------------------------------------
+            */
+
+            'control_id' =>
+                $row['control_id'] ?? null,
+
+
+            /*
+            |--------------------------------------------------------------------------
             | Requirement Title
+            |--------------------------------------------------------------------------
             */
 
             'requirement_title' =>
@@ -90,7 +72,9 @@ class RequirementImport implements ToModel, WithHeadingRow
 
 
             /*
+            |--------------------------------------------------------------------------
             | Requirement
+            |--------------------------------------------------------------------------
             */
 
             'requirement' =>
@@ -98,59 +82,81 @@ class RequirementImport implements ToModel, WithHeadingRow
 
 
             /*
+            |--------------------------------------------------------------------------
             | Why this Requirement Exists
+            |--------------------------------------------------------------------------
             */
 
             'why_requirement_exists' =>
-                $row['why_this_requirement_exists'] ?? null,
+                $row['why_this_requirement_exists']
+                ?? $row['why_requirement_exists']
+                ?? null,
 
 
             /*
+            |--------------------------------------------------------------------------
             | Implementation Guidance
+            |--------------------------------------------------------------------------
             */
 
             'implementation_guidance' =>
-                $row['implementation_guidance'] ?? null,
+                $row['implementation_guidance']
+                ?? null,
 
 
             /*
+            |--------------------------------------------------------------------------
             | Common Audit Findings
+            |--------------------------------------------------------------------------
             */
 
             'common_audit_findings' =>
-                $row['common_audit_findings'] ?? null,
+                $row['common_audit_findings']
+                ?? null,
 
 
             /*
+            |--------------------------------------------------------------------------
             | Common Mistakes
+            |--------------------------------------------------------------------------
             */
 
             'common_mistakes' =>
-                $row['common_mistakes'] ?? null,
+                $row['common_mistakes']
+                ?? null,
 
 
             /*
+            |--------------------------------------------------------------------------
             | Best Practices
+            |--------------------------------------------------------------------------
             */
 
             'best_practices' =>
-                $row['best_practices'] ?? null,
+                $row['best_practices']
+                ?? null,
 
 
             /*
+            |--------------------------------------------------------------------------
             | Business Examples
+            |--------------------------------------------------------------------------
             */
 
             'business_examples' =>
-                $row['business_examples'] ?? null,
+                $row['business_examples']
+                ?? null,
 
 
             /*
+            |--------------------------------------------------------------------------
             | Typical Owner
+            |--------------------------------------------------------------------------
             */
 
             'typical_owner' =>
-                $row['typical_owner'] ?? null,
+                $row['typical_owner']
+                ?? null,
 
         ]);
     }

@@ -332,7 +332,6 @@
         .form-group.full {
             grid-column: auto;
         }
-
     }
 </style>
 
@@ -357,13 +356,9 @@
             <strong>Please fix the following:</strong>
 
             <ul>
-
                 @foreach($errors->all() as $error)
-
                     <li>{{ $error }}</li>
-
                 @endforeach
-
             </ul>
 
         </div>
@@ -435,7 +430,6 @@
                     value="{{ request('search') }}"
                 >
 
-
                 <button
                     type="submit"
                     class="btn-aspia btn-secondary"
@@ -457,23 +451,14 @@
                     <tr>
 
                         <th>Control ID</th>
-
-                        <th>Domain</th>
-
+                        <th>Domain Code</th>
                         <th>Control Name</th>
-
                         <th>Category</th>
-
                         <th>Criticality</th>
-
                         <th>Status</th>
-
                         <th>Version</th>
-
                         <th>Control Type</th>
-
                         <th>Created</th>
-
                         <th>Actions</th>
 
                     </tr>
@@ -497,13 +482,11 @@
                             </td>
 
 
-                            {{-- Domain --}}
+                            {{-- Domain Code --}}
                             <td>
 
                                 <span class="badge">
-
-                                    {{ $control->domain?->name ?? 'N/A' }}
-
+                                    {{ $control->domain_code ?: 'N/A' }}
                                 </span>
 
                             </td>
@@ -569,7 +552,6 @@
                                         class="action-btn"
                                         onclick="openEditModal(
                                             {{ $control->id }},
-                                            {{ $control->domain_id }},
                                             @js($control->control_id),
                                             @js($control->domain_code),
                                             @js($control->name),
@@ -602,7 +584,6 @@
                                         @csrf
 
                                         @method('DELETE')
-
 
                                         <button
                                             type="submit"
@@ -644,9 +625,7 @@
         @if($controls->hasPages())
 
             <div style="padding:18px 20px;">
-
                 {{ $controls->links() }}
-
             </div>
 
         @endif
@@ -671,7 +650,6 @@
                 Add Control
             </h2>
 
-
             <button
                 type="button"
                 class="close-modal"
@@ -693,54 +671,13 @@
 
             <div class="modal-body">
 
-                {{-- Domain Relationship --}}
-
-                <div class="form-group full">
-
-                    <label class="form-label">
-                        Domain *
-                    </label>
-
-
-                    <select
-                        name="domain_id"
-                        class="form-control"
-                        required
-                    >
-
-                        <option value="">
-                            Select Domain
-                        </option>
-
-
-                        @foreach($domains as $domain)
-
-                            <option
-                                value="{{ $domain->id }}"
-                                {{ old('domain_id') == $domain->id ? 'selected' : '' }}
-                            >
-
-                                {{ $domain->domain_code }}
-                                -
-                                {{ $domain->name }}
-
-                            </option>
-
-                        @endforeach
-
-                    </select>
-
-                </div>
-
 
                 {{-- 1. Control ID --}}
-
                 <div class="form-group">
 
                     <label class="form-label">
                         Control ID *
                     </label>
-
 
                     <input
                         type="text"
@@ -755,13 +692,11 @@
 
 
                 {{-- 2. Domain Code --}}
-
                 <div class="form-group">
 
                     <label class="form-label">
-                        Domain Code
+                        Domain Code *
                     </label>
-
 
                     <input
                         type="text"
@@ -769,19 +704,18 @@
                         class="form-control"
                         placeholder="Enter Domain Code"
                         value="{{ old('domain_code') }}"
+                        required
                     >
 
                 </div>
 
 
                 {{-- 3. Control Name --}}
-
                 <div class="form-group full">
 
                     <label class="form-label">
                         Control Name *
                     </label>
-
 
                     <input
                         type="text"
@@ -796,13 +730,11 @@
 
 
                 {{-- 4. Business Description --}}
-
                 <div class="form-group full">
 
                     <label class="form-label">
                         Business Description
                     </label>
-
 
                     <textarea
                         name="business_description"
@@ -814,13 +746,11 @@
 
 
                 {{-- 5. Business Objective --}}
-
                 <div class="form-group full">
 
                     <label class="form-label">
                         Business Objective
                     </label>
-
 
                     <textarea
                         name="business_objective"
@@ -832,13 +762,11 @@
 
 
                 {{-- 6. Business Owner --}}
-
                 <div class="form-group">
 
                     <label class="form-label">
                         Business Owner
                     </label>
-
 
                     <input
                         type="text"
@@ -852,13 +780,11 @@
 
 
                 {{-- 7. Control Category --}}
-
                 <div class="form-group">
 
                     <label class="form-label">
                         Control Category
                     </label>
-
 
                     <input
                         type="text"
@@ -872,13 +798,11 @@
 
 
                 {{-- 8. Criticality --}}
-
                 <div class="form-group">
 
                     <label class="form-label">
                         Criticality
                     </label>
-
 
                     <input
                         type="text"
@@ -892,13 +816,11 @@
 
 
                 {{-- 9. Applicable Industries --}}
-
                 <div class="form-group">
 
                     <label class="form-label">
                         Applicable Industries
                     </label>
-
 
                     <textarea
                         name="applicable_industries"
@@ -910,13 +832,11 @@
 
 
                 {{-- 10. Applicable Technologies --}}
-
                 <div class="form-group">
 
                     <label class="form-label">
                         Applicable Technologies
                     </label>
-
 
                     <textarea
                         name="applicable_technologies"
@@ -928,13 +848,11 @@
 
 
                 {{-- 11. Status --}}
-
                 <div class="form-group">
 
                     <label class="form-label">
                         Status
                     </label>
-
 
                     <select
                         name="status"
@@ -959,13 +877,11 @@
 
 
                 {{-- 12. Version --}}
-
                 <div class="form-group">
 
                     <label class="form-label">
                         Version
                     </label>
-
 
                     <input
                         type="text"
@@ -979,13 +895,11 @@
 
 
                 {{-- 13. Control Summary --}}
-
                 <div class="form-group full">
 
                     <label class="form-label">
                         Control Summary
                     </label>
-
 
                     <textarea
                         name="control_summary"
@@ -997,13 +911,11 @@
 
 
                 {{-- 14. Business Benefits --}}
-
                 <div class="form-group full">
 
                     <label class="form-label">
                         Business Benefits
                     </label>
-
 
                     <textarea
                         name="business_benefits"
@@ -1015,13 +927,11 @@
 
 
                 {{-- 15. Business Risks if Missing --}}
-
                 <div class="form-group full">
 
                     <label class="form-label">
                         Business Risks if Missing
                     </label>
-
 
                     <textarea
                         name="business_risks_if_missing"
@@ -1033,13 +943,11 @@
 
 
                 {{-- 16. Primary Stakeholders --}}
-
                 <div class="form-group full">
 
                     <label class="form-label">
                         Primary Stakeholders
                     </label>
-
 
                     <textarea
                         name="primary_stakeholders"
@@ -1051,13 +959,11 @@
 
 
                 {{-- 17. Control Type --}}
-
                 <div class="form-group">
 
                     <label class="form-label">
                         Control Type
                     </label>
-
 
                     <input
                         type="text"
@@ -1114,7 +1020,6 @@
                 Edit Control
             </h2>
 
-
             <button
                 type="button"
                 class="close-modal"
@@ -1138,47 +1043,13 @@
 
             <div class="modal-body">
 
-                {{-- Domain --}}
-
-                <div class="form-group full">
-
-                    <label class="form-label">
-                        Domain *
-                    </label>
-
-
-                    <select
-                        id="editDomain"
-                        name="domain_id"
-                        class="form-control"
-                        required
-                    >
-
-                        @foreach($domains as $domain)
-
-                            <option value="{{ $domain->id }}">
-
-                                {{ $domain->domain_code }}
-                                -
-                                {{ $domain->name }}
-
-                            </option>
-
-                        @endforeach
-
-                    </select>
-
-                </div>
-
 
                 {{-- 1. Control ID --}}
-
                 <div class="form-group">
 
                     <label class="form-label">
                         Control ID *
                     </label>
-
 
                     <input
                         type="text"
@@ -1192,32 +1063,29 @@
 
 
                 {{-- 2. Domain Code --}}
-
                 <div class="form-group">
 
                     <label class="form-label">
-                        Domain Code
+                        Domain Code *
                     </label>
-
 
                     <input
                         type="text"
                         id="editDomainCode"
                         name="domain_code"
                         class="form-control"
+                        required
                     >
 
                 </div>
 
 
                 {{-- 3. Control Name --}}
-
                 <div class="form-group full">
 
                     <label class="form-label">
                         Control Name *
                     </label>
-
 
                     <input
                         type="text"
@@ -1231,13 +1099,11 @@
 
 
                 {{-- 4. Business Description --}}
-
                 <div class="form-group full">
 
                     <label class="form-label">
                         Business Description
                     </label>
-
 
                     <textarea
                         id="editBusinessDescription"
@@ -1249,13 +1115,11 @@
 
 
                 {{-- 5. Business Objective --}}
-
                 <div class="form-group full">
 
                     <label class="form-label">
                         Business Objective
                     </label>
-
 
                     <textarea
                         id="editBusinessObjective"
@@ -1267,13 +1131,11 @@
 
 
                 {{-- 6. Business Owner --}}
-
                 <div class="form-group">
 
                     <label class="form-label">
                         Business Owner
                     </label>
-
 
                     <input
                         type="text"
@@ -1286,13 +1148,11 @@
 
 
                 {{-- 7. Control Category --}}
-
                 <div class="form-group">
 
                     <label class="form-label">
                         Control Category
                     </label>
-
 
                     <input
                         type="text"
@@ -1305,13 +1165,11 @@
 
 
                 {{-- 8. Criticality --}}
-
                 <div class="form-group">
 
                     <label class="form-label">
                         Criticality
                     </label>
-
 
                     <input
                         type="text"
@@ -1324,13 +1182,11 @@
 
 
                 {{-- 9. Applicable Industries --}}
-
                 <div class="form-group">
 
                     <label class="form-label">
                         Applicable Industries
                     </label>
-
 
                     <textarea
                         id="editApplicableIndustries"
@@ -1342,13 +1198,11 @@
 
 
                 {{-- 10. Applicable Technologies --}}
-
                 <div class="form-group">
 
                     <label class="form-label">
                         Applicable Technologies
                     </label>
-
 
                     <textarea
                         id="editApplicableTechnologies"
@@ -1360,13 +1214,11 @@
 
 
                 {{-- 11. Status --}}
-
                 <div class="form-group">
 
                     <label class="form-label">
                         Status
                     </label>
-
 
                     <select
                         id="editStatus"
@@ -1392,13 +1244,11 @@
 
 
                 {{-- 12. Version --}}
-
                 <div class="form-group">
 
                     <label class="form-label">
                         Version
                     </label>
-
 
                     <input
                         type="text"
@@ -1411,13 +1261,11 @@
 
 
                 {{-- 13. Control Summary --}}
-
                 <div class="form-group full">
 
                     <label class="form-label">
                         Control Summary
                     </label>
-
 
                     <textarea
                         id="editControlSummary"
@@ -1429,13 +1277,11 @@
 
 
                 {{-- 14. Business Benefits --}}
-
                 <div class="form-group full">
 
                     <label class="form-label">
                         Business Benefits
                     </label>
-
 
                     <textarea
                         id="editBusinessBenefits"
@@ -1447,13 +1293,11 @@
 
 
                 {{-- 15. Business Risks if Missing --}}
-
                 <div class="form-group full">
 
                     <label class="form-label">
                         Business Risks if Missing
                     </label>
-
 
                     <textarea
                         id="editBusinessRisksIfMissing"
@@ -1465,13 +1309,11 @@
 
 
                 {{-- 16. Primary Stakeholders --}}
-
                 <div class="form-group full">
 
                     <label class="form-label">
                         Primary Stakeholders
                     </label>
-
 
                     <textarea
                         id="editPrimaryStakeholders"
@@ -1483,13 +1325,11 @@
 
 
                 {{-- 17. Control Type --}}
-
                 <div class="form-group">
 
                     <label class="form-label">
                         Control Type
                     </label>
-
 
                     <input
                         type="text"
@@ -1545,7 +1385,6 @@
                 Import Controls
             </h2>
 
-
             <button
                 type="button"
                 class="close-modal"
@@ -1574,7 +1413,6 @@
                         Select XLSX File
                     </label>
 
-
                     <input
                         type="file"
                         name="file"
@@ -1582,7 +1420,6 @@
                         accept=".xlsx"
                         required
                     >
-
 
                     <div class="import-info">
                         Only .xlsx files are supported.
@@ -1661,7 +1498,6 @@
 
     function openEditModal(
         id,
-        domainId,
         controlId,
         domainCode,
         name,
@@ -1689,16 +1525,6 @@
 
         document.getElementById('editForm').action =
             `/controls/${id}`;
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | Domain
-        |--------------------------------------------------------------------------
-        */
-
-        document.getElementById('editDomain').value =
-            domainId ?? '';
 
 
         /*

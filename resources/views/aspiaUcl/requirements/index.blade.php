@@ -158,9 +158,19 @@
         white-space: nowrap;
     }
 
+    .control-badge {
+        padding: 5px 9px;
+        border-radius: 6px;
+        background: rgba(139,92,246,.10);
+        color: #a78bfa;
+        font-size: 12px;
+        white-space: nowrap;
+    }
+
     .description {
         color: #8291aa;
-        max-width: 320px;
+        max-width: 450px;
+        display: inline-block;
     }
 
     .actions {
@@ -332,9 +342,7 @@
 
 <div class="module-page">
 
-
     {{-- SUCCESS MESSAGE --}}
-
     @if(session('success'))
 
         <div class="alert-success">
@@ -345,7 +353,6 @@
 
 
     {{-- VALIDATION ERRORS --}}
-
     @if($errors->any())
 
         <div class="alert-error">
@@ -356,7 +363,9 @@
 
                 @foreach($errors->all() as $error)
 
-                    <li>{{ $error }}</li>
+                    <li>
+                        {{ $error }}
+                    </li>
 
                 @endforeach
 
@@ -368,7 +377,6 @@
 
 
     {{-- PAGE HEADER --}}
-
     <div class="page-header">
 
         <div>
@@ -378,7 +386,7 @@
             </h1>
 
             <p>
-                Manage governance requirements under your controls.
+                Manage governance requirements.
             </p>
 
         </div>
@@ -409,7 +417,6 @@
 
 
     {{-- REQUIREMENT MANAGEMENT --}}
-
     <div class="panel">
 
         <div class="panel-header">
@@ -454,17 +461,29 @@
 
                     <tr>
 
-                        <th>Requirement ID</th>
+                        <th>
+                            Requirement ID
+                        </th>
 
-                        <th>Control</th>
+                        <th>
+                            Control ID
+                        </th>
 
-                        <th>Requirement Title</th>
+                        <th>
+                            Requirement Title
+                        </th>
 
-                        <th>Requirement</th>
+                        <th>
+                            Requirement
+                        </th>
 
-                        <th>Typical Owner</th>
+                        <th>
+                            Typical Owner
+                        </th>
 
-                        <th>Actions</th>
+                        <th>
+                            Actions
+                        </th>
 
                     </tr>
 
@@ -488,14 +507,12 @@
                             </td>
 
 
-                            {{-- Control --}}
+                            {{-- Control ID --}}
 
                             <td>
 
-                                <span class="badge">
-
-                                    {{ $requirement->control?->control_id ?? 'N/A' }}
-
+                                <span class="control-badge">
+                                    {{ $requirement->control_id }}
                                 </span>
 
                             </td>
@@ -546,8 +563,8 @@
                                         class="action-btn"
                                         onclick="openEditModal(
                                             {{ $requirement->id }},
-                                            {{ $requirement->control_id }},
                                             @js($requirement->requirement_id),
+                                            @js($requirement->control_id),
                                             @js($requirement->requirement_title),
                                             @js($requirement->requirement),
                                             @js($requirement->why_requirement_exists),
@@ -635,7 +652,6 @@
 
     <div class="modal-box">
 
-
         <div class="modal-header">
 
             <h2>
@@ -664,47 +680,6 @@
 
             <div class="modal-body">
 
-
-                {{-- Control --}}
-
-                <div class="form-group full">
-
-                    <label class="form-label">
-                        Control *
-                    </label>
-
-
-                    <select
-                        name="control_id"
-                        class="form-control"
-                        required
-                    >
-
-                        <option value="">
-                            Select Control
-                        </option>
-
-
-                        @foreach($controls as $control)
-
-                            <option
-                                value="{{ $control->id }}"
-                                {{ old('control_id') == $control->id ? 'selected' : '' }}
-                            >
-
-                                {{ $control->control_id }}
-                                -
-                                {{ $control->name }}
-
-                            </option>
-
-                        @endforeach
-
-                    </select>
-
-                </div>
-
-
                 {{-- Requirement ID --}}
 
                 <div class="form-group">
@@ -726,9 +701,30 @@
                 </div>
 
 
-                {{-- Requirement Title --}}
+                {{-- Control ID --}}
 
                 <div class="form-group">
+
+                    <label class="form-label">
+                        Control ID *
+                    </label>
+
+
+                    <input
+                        type="text"
+                        name="control_id"
+                        class="form-control"
+                        placeholder="Enter Control ID"
+                        value="{{ old('control_id') }}"
+                        required
+                    >
+
+                </div>
+
+
+                {{-- Requirement Title --}}
+
+                <div class="form-group full">
 
                     <label class="form-label">
                         Requirement Title *
@@ -893,7 +889,6 @@
 
                 </div>
 
-
             </div>
 
 
@@ -933,7 +928,6 @@
 
     <div class="modal-box">
 
-
         <div class="modal-header">
 
             <h2>
@@ -964,40 +958,6 @@
 
             <div class="modal-body">
 
-
-                {{-- Control --}}
-
-                <div class="form-group full">
-
-                    <label class="form-label">
-                        Control *
-                    </label>
-
-
-                    <select
-                        id="editControl"
-                        name="control_id"
-                        class="form-control"
-                        required
-                    >
-
-                        @foreach($controls as $control)
-
-                            <option value="{{ $control->id }}">
-
-                                {{ $control->control_id }}
-                                -
-                                {{ $control->name }}
-
-                            </option>
-
-                        @endforeach
-
-                    </select>
-
-                </div>
-
-
                 {{-- Requirement ID --}}
 
                 <div class="form-group">
@@ -1018,9 +978,30 @@
                 </div>
 
 
-                {{-- Requirement Title --}}
+                {{-- Control ID --}}
 
                 <div class="form-group">
+
+                    <label class="form-label">
+                        Control ID *
+                    </label>
+
+
+                    <input
+                        type="text"
+                        id="editControlId"
+                        name="control_id"
+                        class="form-control"
+                        placeholder="Enter Control ID"
+                        required
+                    >
+
+                </div>
+
+
+                {{-- Requirement Title --}}
+
+                <div class="form-group full">
 
                     <label class="form-label">
                         Requirement Title *
@@ -1183,7 +1164,6 @@
 
                 </div>
 
-
             </div>
 
 
@@ -1222,7 +1202,6 @@
 <div id="importModal" class="modal-overlay">
 
     <div class="modal-box">
-
 
         <div class="modal-header">
 
@@ -1346,8 +1325,8 @@
 
     function openEditModal(
         id,
-        controlId,
         requirementId,
+        controlId,
         requirementTitle,
         requirement,
         whyRequirementExists,
@@ -1371,22 +1350,22 @@
 
         /*
         |--------------------------------------------------------------------------
-        | Control
-        |--------------------------------------------------------------------------
-        */
-
-        document.getElementById('editControl').value =
-            controlId ?? '';
-
-
-        /*
-        |--------------------------------------------------------------------------
         | Requirement ID
         |--------------------------------------------------------------------------
         */
 
         document.getElementById('editRequirementId').value =
             requirementId ?? '';
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Control ID
+        |--------------------------------------------------------------------------
+        */
+
+        document.getElementById('editControlId').value =
+            controlId ?? '';
 
 
         /*
