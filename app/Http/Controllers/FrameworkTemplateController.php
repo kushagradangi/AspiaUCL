@@ -3,25 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Framework;
+use App\Models\FrameworkTemplate;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\File;
 
 class FrameworkTemplateController extends Controller
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Template File
-    |--------------------------------------------------------------------------
-    */
-
-    private function templatePath(): string
-    {
-        return storage_path(
-            'app/framework-template.html'
-        );
-    }
-
-
     /*
     |--------------------------------------------------------------------------
     | Store Framework Template
@@ -31,50 +17,21 @@ class FrameworkTemplateController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-
             'html_content' => [
                 'required',
                 'string',
             ],
-
         ]);
 
-
-        /*
-        |--------------------------------------------------------------------------
-        | Make sure storage/app exists
-        |--------------------------------------------------------------------------
-        */
-
-        $directory = storage_path('app');
-
-        if (!File::exists($directory)) {
-
-            File::makeDirectory(
-                $directory,
-                0755,
-                true
-            );
-        }
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | Save HTML Template
-        |--------------------------------------------------------------------------
-        */
-
-        File::put(
-            $this->templatePath(),
-            $validated['html_content']
+        FrameworkTemplate::updateOrCreate(
+            [
+                'id' => 1,
+            ],
+            [
+                'name' => 'Default Framework Template',
+                'html_content' => $validated['html_content'],
+            ]
         );
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | Redirect
-        |--------------------------------------------------------------------------
-        */
 
         return redirect()
             ->route('frameworks.index')
@@ -93,12 +50,6 @@ class FrameworkTemplateController extends Controller
 
     public function show(string $slug)
     {
-        /*
-        |--------------------------------------------------------------------------
-        | Find Framework using slug
-        |--------------------------------------------------------------------------
-        */
-
         $framework = Framework::where(
             'slug',
             $slug
@@ -107,11 +58,14 @@ class FrameworkTemplateController extends Controller
 
         /*
         |--------------------------------------------------------------------------
-        | Check Template
+        | Get Template From DATABASE
         |--------------------------------------------------------------------------
         */
 
-        if (!File::exists($this->templatePath())) {
+        $template = FrameworkTemplate::first();
+
+
+        if (!$template) {
 
             return redirect()
                 ->route('frameworks.index')
@@ -124,18 +78,16 @@ class FrameworkTemplateController extends Controller
 
         /*
         |--------------------------------------------------------------------------
-        | Get HTML Template
+        | Get HTML
         |--------------------------------------------------------------------------
         */
 
-        $html = File::get(
-            $this->templatePath()
-        );
+        $html = $template->html_content;
 
 
         /*
         |--------------------------------------------------------------------------
-        | Replace Framework Placeholders
+        | Framework Placeholders
         |--------------------------------------------------------------------------
         */
 
@@ -176,7 +128,7 @@ class FrameworkTemplateController extends Controller
 
         /*
         |--------------------------------------------------------------------------
-        | Replace Null Values with Empty String
+        | Replace Null Values
         |--------------------------------------------------------------------------
         */
 
