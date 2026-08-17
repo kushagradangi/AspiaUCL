@@ -24,6 +24,7 @@
             box-sizing: border-box;
         }
 
+
         body {
             font-family: Arial, Helvetica, sans-serif;
             background: #0e1836;
@@ -51,15 +52,18 @@
 
             display: flex;
             flex-direction: column;
+
+            z-index: 900;
         }
 
+
+        /* ================= BRAND ================= */
 
         .brand {
 
             display: flex;
             align-items: center;
-
-            gap: 10px;
+            justify-content: center;
 
             padding: 5px 10px 30px;
 
@@ -67,43 +71,15 @@
         }
 
 
-        .brand-icon {
+        .brand-logo {
 
-            width: 42px;
-            height: 42px;
+            display: block;
 
-            border: 2px solid #10bce8;
+            width: 205px;
+            max-width: 100%;
+            height: auto;
 
-            border-radius: 50%;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            color: #10bce8;
-
-            font-weight: bold;
-            font-size: 20px;
-        }
-
-
-        .brand-name {
-
-            color: #10bce8;
-
-            font-size: 25px;
-
-            font-weight: 600;
-        }
-
-
-        .ucl-name {
-
-            color: #8494ad;
-
-            font-size: 11px;
-
-            letter-spacing: 1px;
+            object-fit: contain;
         }
 
 
@@ -255,13 +231,19 @@
         }
 
 
-        .page-title {
+        /* ================= TOP MODULE TITLE ================= */
 
-            font-size: 20px;
+        .topbar-module-title {
+
+            font-size: 24px;
 
             font-weight: 500;
+
+            color: #ffffff;
         }
 
+
+        /* ================= ADMIN ================= */
 
         .admin {
 
@@ -451,14 +433,22 @@
                 width: 220px;
             }
 
+
             .main-content {
 
                 margin-left: 220px;
             }
 
+
             .cards {
 
                 grid-template-columns: 1fr;
+            }
+
+
+            .topbar-module-title {
+
+                font-size: 22px;
             }
 
         }
@@ -475,20 +465,30 @@
                 height: auto;
             }
 
+
             .main-content {
 
                 margin-left: 0;
             }
+
 
             .sidebar-bottom {
 
                 margin-top: 20px;
             }
 
+
             .topbar {
 
                 padding: 0 20px;
             }
+
+
+            .topbar-module-title {
+
+                font-size: 20px;
+            }
+
 
             .content {
 
@@ -510,119 +510,121 @@
 <aside class="sidebar">
 
 
+    <!-- ASPIA UCL LOGO -->
+
     <div class="brand">
 
-        <div class="brand-icon">
-            A
-        </div>
+        <a
+            href="{{ route('dashboard') }}"
+            style="display:flex;align-items:center;justify-content:center;width:100%;"
+        >
 
-        <div>
+            <img
+                src="{{ asset('images/aspiaucl.png') }}"
+                alt="ASPIA aspiaUCL"
+                class="brand-logo"
+            >
 
-            <div class="brand-name">
-                ASPIA
-            </div>
-
-            <div class="ucl-name">
-                aspiaUCL
-            </div>
-
-        </div>
+        </a>
 
     </div>
 
 
     <nav class="menu">
 
-    <div class="menu-title">
-        Management
-    </div>
+        <div class="menu-title">
+            Management
+        </div>
 
 
-    <!-- DASHBOARD -->
+        <!-- DASHBOARD -->
 
-    <a
-        href="{{ route('dashboard') }}"
-        class="menu-link {{ request()->routeIs('dashboard') ? 'active' : '' }}"
-    >
+        <a
+            href="{{ route('dashboard') }}"
+            class="menu-link {{ request()->routeIs('dashboard') ? 'active' : '' }}"
+        >
 
-        <span class="menu-icon">
-            ▣
-        </span>
+            <span class="menu-icon">
+                ▣
+            </span>
 
-        Dashboard
+            Dashboard
 
-    </a>
-
-
-    <!-- FRAMEWORKS -->
-
-    <a
-        href="{{ route('frameworks.index') }}"
-        class="menu-link {{ request()->routeIs('frameworks.*') ? 'active' : '' }}"
-    >
-
-        <span class="menu-icon">
-            ◇
-        </span>
-
-        Frameworks
-
-    </a>
+        </a>
 
 
-    <!-- DOMAINS -->
+        <!-- FRAMEWORKS -->
 
-    <a
-        href="{{ route('domains.index') }}"
-        class="menu-link {{ request()->routeIs('domains.*') ? 'active' : '' }}"
-    >
+        <a
+            href="{{ route('frameworks.index') }}"
+            class="menu-link {{ request()->routeIs('frameworks.*') ? 'active' : '' }}"
+        >
 
-        <span class="menu-icon">
-            ◈
-        </span>
+            <span class="menu-icon">
+                ◇
+            </span>
 
-        Domains
+            Frameworks
 
-    </a>
-
-
-    <!-- CONTROLS -->
-
-    <a
-        href="{{ route('controls.index') }}"
-        class="menu-link {{ request()->routeIs('controls.*') ? 'active' : '' }}"
-    >
-
-        <span class="menu-icon">
-            ◉
-        </span>
-
-        Controls
-
-    </a>
+        </a>
 
 
-    <!-- REQUIREMENTS -->
+        <!-- DOMAINS -->
 
-    <a
-        href="{{ route('requirements.index') }}"
-        class="menu-link {{ request()->routeIs('requirements.*') ? 'active' : '' }}"
-    >
+        <a
+            href="{{ route('domains.index') }}"
+            class="menu-link {{ request()->routeIs('domains.*') ? 'active' : '' }}"
+        >
 
-        <span class="menu-icon">
-            ◆
-        </span>
+            <span class="menu-icon">
+                ◈
+            </span>
 
-        Requirements
+            Domains
 
-    </a>
+        </a>
 
-</nav>
+
+        <!-- CONTROLS -->
+
+        <a
+            href="{{ route('controls.index') }}"
+            class="menu-link {{ request()->routeIs('controls.*') ? 'active' : '' }}"
+        >
+
+            <span class="menu-icon">
+                ◉
+            </span>
+
+            Controls
+
+        </a>
+
+
+        <!-- REQUIREMENTS -->
+
+        <a
+            href="{{ route('requirements.index') }}"
+            class="menu-link {{ request()->routeIs('requirements.*') ? 'active' : '' }}"
+        >
+
+            <span class="menu-icon">
+                ◆
+            </span>
+
+            Requirements
+
+        </a>
+
+    </nav>
 
 
     <div class="sidebar-bottom">
 
-        <form method="POST" action="{{ route('logout') }}">
+        <form
+            method="POST"
+            action="{{ route('logout') }}"
+        >
 
             @csrf
 
@@ -631,7 +633,9 @@
                 class="logout-button"
             >
 
-                <span>⇥</span>
+                <span>
+                    ⇥
+                </span>
 
                 Logout
 
@@ -645,6 +649,7 @@
 </aside>
 
 
+
 <!-- ================= MAIN ================= -->
 
 <div class="main-content">
@@ -652,12 +657,20 @@
 
     <header class="topbar">
 
-        <div class="page-title">
 
-            @yield('page-title', 'Dashboard')
+        <!-- MODULE TITLE -->
+
+        <div class="topbar-module-title">
+
+            @yield(
+                'page-title',
+                'Dashboard'
+            )
 
         </div>
 
+
+        <!-- ADMIN -->
 
         <div class="admin">
 
@@ -671,11 +684,15 @@
             <div class="admin-info">
 
                 <strong>
+
                     {{ auth()->user()->name }}
+
                 </strong>
 
                 <span>
+
                     Super Admin
+
                 </span>
 
             </div>

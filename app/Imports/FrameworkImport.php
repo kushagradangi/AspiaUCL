@@ -3,6 +3,7 @@
 namespace App\Imports;
 
 use App\Models\Framework;
+use Illuminate\Support\Str;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
@@ -10,27 +11,97 @@ class FrameworkImport implements ToModel, WithHeadingRow
 {
     public function model(array $row)
     {
+        /*
+        |--------------------------------------------------------------------------
+        | Framework Name
+        |--------------------------------------------------------------------------
+        */
+
+        $name = $row['framework_name'] ?? null;
+
+        /*
+        |--------------------------------------------------------------------------
+        | Skip empty rows
+        |--------------------------------------------------------------------------
+        */
+
+        if (empty($row['framework_id']) || empty($name)) {
+            return null;
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Generate Base Slug
+        |--------------------------------------------------------------------------
+        */
+
+        $baseSlug = Str::slug($name);
+
+        $slug = $baseSlug;
+
+        $counter = 1;
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Make Slug Unique
+        |--------------------------------------------------------------------------
+        */
+
+        while (
+            Framework::where('slug', $slug)->exists()
+        ) {
+
+            $slug =
+                $baseSlug .
+                '-' .
+                $counter;
+
+            $counter++;
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Create Framework
+        |--------------------------------------------------------------------------
+        */
+
         return new Framework([
 
-            'framework_id' => $row['framework_id'] ?? null,
+            'framework_id' =>
+                $row['framework_id'] ?? null,
 
-            'framework_code' => $row['framework_code'] ?? null,
+            'framework_code' =>
+                $row['framework_code'] ?? null,
 
-            'name' => $row['framework_name'] ?? null,
+            'name' =>
+                $name,
 
-            'version' => $row['version'] ?? null,
+            'slug' =>
+                $slug,
 
-            'framework_family' => $row['framework_family'] ?? null,
+            'version' =>
+                $row['version'] ?? null,
 
-            'category' => $row['category'] ?? null,
+            'framework_family' =>
+                $row['framework_family'] ?? null,
 
-            'publisher' => $row['publisher'] ?? null,
+            'category' =>
+                $row['category'] ?? null,
 
-            'region' => $row['region'] ?? null,
+            'publisher' =>
+                $row['publisher'] ?? null,
 
-            'industry' => $row['industry'] ?? null,
+            'region' =>
+                $row['region'] ?? null,
 
-            'framework_type' => $row['framework_type'] ?? null,
+            'industry' =>
+                $row['industry'] ?? null,
+
+            'framework_type' =>
+                $row['framework_type'] ?? null,
 
         ]);
     }

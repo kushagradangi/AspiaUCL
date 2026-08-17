@@ -70,7 +70,6 @@
         transition: .2s;
     }
 
-
     .btn-primary-aspia {
         background: #10bce8;
         color: #07152e;
@@ -81,7 +80,6 @@
         color: #07152e;
     }
 
-
     .btn-secondary-aspia {
         background: #162544;
         color: #ffffff;
@@ -91,7 +89,6 @@
     .btn-secondary-aspia:hover {
         background: #1c3155;
     }
-
 
     .btn-danger-aspia {
         background: rgba(239, 68, 68, .12);
@@ -120,7 +117,6 @@
 
         font-size: 13px;
     }
-
 
     .alert-error {
         background: rgba(239,68,68,.10);
@@ -297,6 +293,16 @@
         font-weight: 500;
     }
 
+    .framework-name-link {
+        color: #ffffff;
+        text-decoration: none;
+        font-weight: 500;
+    }
+
+    .framework-name-link:hover {
+        color: #10bce8;
+    }
+
 
     .table-muted {
         color: #63728c;
@@ -368,8 +374,64 @@
 
     .pagination-area {
         padding: 18px 20px;
-
         border-top: 1px solid rgba(255,255,255,.06);
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    /* =========================================================
+       CUSTOM PAGINATION
+    ========================================================= */
+
+    .custom-pagination {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        flex-wrap: wrap;
+    }
+
+    .custom-pagination a,
+    .custom-pagination span {
+        min-width: 36px;
+        height: 36px;
+        padding: 0 11px;
+        box-sizing: border-box;
+        border-radius: 7px;
+        border: 1px solid #27496b;
+        background: #101d3b;
+        color: #aebbd0;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    .custom-pagination a:hover {
+        color: #ffffff;
+        border-color: #10bce8;
+        background: #162544;
+    }
+
+    .custom-pagination .active-page {
+        background: #10bce8;
+        border-color: #10bce8;
+        color: #07152e;
+    }
+
+    .custom-pagination .disabled-page {
+        opacity: .45;
+        cursor: not-allowed;
+    }
+
+    .custom-pagination .pagination-info {
+        min-width: auto;
+        border: none;
+        background: transparent;
+        padding: 0 8px;
+        color: #71829f;
+        font-weight: 400;
     }
 
 
@@ -621,6 +683,116 @@
 
 
     /* =========================================================
+       FRAMEWORK TEMPLATE
+    ========================================================= */
+
+    .template-editor {
+        width: 100%;
+        min-height: 430px;
+        box-sizing: border-box;
+
+        background: #0e1836;
+
+        border: 1px solid #27496b;
+
+        border-radius: 8px;
+
+        padding: 13px;
+
+        color: #ffffff;
+
+        outline: none;
+
+        resize: vertical;
+
+        font-family: Consolas, Monaco, 'Courier New', monospace;
+
+        font-size: 13px;
+
+        line-height: 1.6;
+
+        tab-size: 4;
+    }
+
+
+    .template-editor:focus {
+        border-color: #10bce8;
+
+        box-shadow: 0 0 0 2px rgba(16,188,232,.08);
+    }
+
+
+    .template-help {
+        margin-top: 12px;
+
+        padding: 14px;
+
+        background: #0e1836;
+
+        border: 1px solid #27496b;
+
+        border-radius: 8px;
+    }
+
+
+    .template-help-title {
+        color: #ffffff;
+
+        font-size: 13px;
+
+        font-weight: 600;
+
+        margin-bottom: 9px;
+    }
+
+
+    .template-help-text {
+        color: #8291aa;
+
+        font-size: 12px;
+
+        line-height: 1.6;
+
+        margin-bottom: 10px;
+    }
+
+
+    .placeholder-list {
+        display: flex;
+
+        flex-wrap: wrap;
+
+        gap: 7px;
+    }
+
+
+    .placeholder-btn {
+        border: 1px solid rgba(16,188,232,.25);
+
+        background: rgba(16,188,232,.08);
+
+        color: #10bce8;
+
+        border-radius: 6px;
+
+        padding: 6px 9px;
+
+        font-family: Consolas, Monaco, 'Courier New', monospace;
+
+        font-size: 11px;
+
+        cursor: pointer;
+    }
+
+
+    .placeholder-btn:hover {
+        background: rgba(16,188,232,.16);
+
+        border-color: #10bce8;
+    }
+
+
+    /* =========================================================
        MODAL FOOTER
     ========================================================= */
 
@@ -783,7 +955,24 @@
         <div class="header-actions">
 
 
-            {{-- IMPORT XLSX --}}
+            {{-- =================================================
+                 ADD FRAMEWORK TEMPLATE
+            ================================================== --}}
+
+            <button
+                type="button"
+                class="btn-aspia btn-secondary-aspia"
+                onclick="openModal('templateModal')"
+            >
+
+                + Add Framework Template
+
+            </button>
+
+
+            {{-- =================================================
+                 IMPORT XLSX
+            ================================================== --}}
 
             <button
                 type="button"
@@ -796,7 +985,9 @@
             </button>
 
 
-            {{-- ADD FRAMEWORK --}}
+            {{-- =================================================
+                 ADD FRAMEWORK
+            ================================================== --}}
 
             <button
                 type="button"
@@ -964,11 +1155,17 @@
 
                             <td>
 
-                                <span class="framework-name">
+                                <a
+                                    href="{{ route(
+                                        'frameworks.show',
+                                        ['slug' => $framework->slug]
+                                    ) }}"
+                                    class="framework-name-link"
+                                >
 
                                     {{ $framework->name }}
 
-                                </span>
+                                </a>
 
                             </td>
 
@@ -1080,9 +1277,7 @@
 
                                             @js($framework->industry),
 
-                                            @js($framework->framework_type),
-
-                                                @js($framework->framework_type)
+                                            @js($framework->framework_type)
 
                                         )"
                                     >
@@ -1165,16 +1360,333 @@
 
         @if($frameworks->hasPages())
 
-                <div class="pagination-area">
+            <div class="pagination-area">
 
-                    {{ $frameworks->links() }}
+                <div class="custom-pagination">
+
+                    {{-- Previous --}}
+                    @if($frameworks->onFirstPage())
+                        <span class="disabled-page">Previous</span>
+                    @else
+                        <a href="{{ $frameworks->previousPageUrl() }}">
+                            Previous
+                        </a>
+                    @endif
+
+                    {{-- Page numbers --}}
+                    @foreach(range(1, $frameworks->lastPage()) as $page)
+
+                        @if(
+                            $page == 1 ||
+                            $page == $frameworks->lastPage() ||
+                            abs($page - $frameworks->currentPage()) <= 2
+                        )
+
+                            @if($page == $frameworks->currentPage())
+
+                                <span class="active-page">
+                                    {{ $page }}
+                                </span>
+
+                            @else
+
+                                <a href="{{ $frameworks->url($page) }}">
+                                    {{ $page }}
+                                </a>
+
+                            @endif
+
+                        @elseif(
+                            $page == 2 ||
+                            $page == $frameworks->lastPage() - 1
+                        )
+
+                            <span class="pagination-info">...</span>
+
+                        @endif
+
+                    @endforeach
+
+                    {{-- Next --}}
+                    @if($frameworks->hasMorePages())
+                        <a href="{{ $frameworks->nextPageUrl() }}">
+                            Next
+                        </a>
+                    @else
+                        <span class="disabled-page">Next</span>
+                    @endif
 
                 </div>
 
-            @endif
+            </div>
 
+        @endif
+
+
+    </div>
+
+
+</div>
+
+
+
+{{-- =========================================================
+     ADD FRAMEWORK TEMPLATE MODAL
+========================================================= --}}
+
+<div
+    id="templateModal"
+    class="modal-overlay"
+    onclick="closeModalOutside(event, 'templateModal')"
+>
+
+
+    <div class="modal-box">
+
+
+        <div class="modal-header">
+
+            <h2>
+                Add Framework Template
+            </h2>
+
+
+            <button
+                type="button"
+                class="close-modal"
+                onclick="closeModal('templateModal')"
+            >
+
+                ×
+
+            </button>
 
         </div>
+
+
+        <form
+            action="{{ route('frameworks.template.store') }}"
+            method="POST"
+        >
+
+            @csrf
+
+
+            <div class="modal-body">
+
+
+                <div class="form-group">
+
+
+                    <label class="form-label">
+
+                        HTML Template
+
+                        <span class="required-star">
+                            *
+                        </span>
+
+                    </label>
+
+
+                    <textarea
+                        name="html_content"
+                        id="frameworkTemplate"
+                        class="template-editor"
+                        placeholder="Write your HTML template here..."
+                        required
+                    >{{ old('html_content') }}</textarea>
+
+
+                    <div class="template-help">
+
+
+                        <div class="template-help-title">
+
+                            Available Framework Placeholders
+
+                        </div>
+
+
+                        <div class="template-help-text">
+
+                            Use these placeholders inside your HTML.
+                            When a Framework record is opened,
+                            the placeholders will be replaced with
+                            the actual Framework values.
+
+                        </div>
+
+
+                        <div class="placeholder-list">
+
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="&#123;&#123;framework_id&#125;&#125;"
+                                onclick="insertFrameworkPlaceholder(this.dataset.placeholder)"
+                            >
+
+                                &#123;&#123;framework_id&#125;&#125;
+
+                            </button>
+
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="&#123;&#123;framework_code&#125;&#125;"
+                                onclick="insertFrameworkPlaceholder(this.dataset.placeholder)"
+                            >
+
+                                &#123;&#123;framework_code&#125;&#125;
+
+                            </button>
+
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="&#123;&#123;framework_name&#125;&#125;"
+                                onclick="insertFrameworkPlaceholder(this.dataset.placeholder)"
+                            >
+
+                                &#123;&#123;framework_name&#125;&#125;
+
+                            </button>
+
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="&#123;&#123;version&#125;&#125;"
+                                onclick="insertFrameworkPlaceholder(this.dataset.placeholder)"
+                            >
+
+                                &#123;&#123;version&#125;&#125;
+
+                            </button>
+
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="&#123;&#123;framework_family&#125;&#125;"
+                                onclick="insertFrameworkPlaceholder(this.dataset.placeholder)"
+                            >
+
+                                &#123;&#123;framework_family&#125;&#125;
+
+                            </button>
+
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="&#123;&#123;category&#125;&#125;"
+                                onclick="insertFrameworkPlaceholder(this.dataset.placeholder)"
+                            >
+
+                                &#123;&#123;category&#125;&#125;
+
+                            </button>
+
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="&#123;&#123;publisher&#125;&#125;"
+                                onclick="insertFrameworkPlaceholder(this.dataset.placeholder)"
+                            >
+
+                                &#123;&#123;publisher&#125;&#125;
+
+                            </button>
+
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="&#123;&#123;region&#125;&#125;"
+                                onclick="insertFrameworkPlaceholder(this.dataset.placeholder)"
+                            >
+
+                                &#123;&#123;region&#125;&#125;
+
+                            </button>
+
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="&#123;&#123;industry&#125;&#125;"
+                                onclick="insertFrameworkPlaceholder(this.dataset.placeholder)"
+                            >
+
+                                &#123;&#123;industry&#125;&#125;
+
+                            </button>
+
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="&#123;&#123;framework_type&#125;&#125;"
+                                onclick="insertFrameworkPlaceholder(this.dataset.placeholder)"
+                            >
+
+                                &#123;&#123;framework_type&#125;&#125;
+
+                            </button>
+
+
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+
+            <div class="modal-footer">
+
+
+                <button
+                    type="button"
+                    class="btn-aspia btn-secondary-aspia"
+                    onclick="closeModal('templateModal')"
+                >
+
+                    Cancel
+
+                </button>
+
+
+                <button
+                    type="submit"
+                    class="btn-aspia btn-primary-aspia"
+                >
+
+                    Save Template
+
+                </button>
+
+
+            </div>
+
+
+        </form>
+
+
+    </div>
+
+
+</div>
 
 
 
@@ -1235,9 +1747,11 @@
                         <label class="form-label">
 
                             Framework ID
+
                             <span class="required-star">*</span>
 
                         </label>
+
 
                         <input
                             type="text"
@@ -1257,9 +1771,11 @@
                         <label class="form-label">
 
                             Framework Code
+
                             <span class="required-star">*</span>
 
                         </label>
+
 
                         <input
                             type="text"
@@ -1279,9 +1795,11 @@
                         <label class="form-label">
 
                             Framework Name
+
                             <span class="required-star">*</span>
 
                         </label>
+
 
                         <input
                             type="text"
@@ -1302,6 +1820,7 @@
                             Version
                         </label>
 
+
                         <input
                             type="text"
                             name="version"
@@ -1319,6 +1838,7 @@
                         <label class="form-label">
                             Framework Family
                         </label>
+
 
                         <input
                             type="text"
@@ -1338,6 +1858,7 @@
                             Category
                         </label>
 
+
                         <input
                             type="text"
                             name="category"
@@ -1355,6 +1876,7 @@
                         <label class="form-label">
                             Publisher
                         </label>
+
 
                         <input
                             type="text"
@@ -1374,6 +1896,7 @@
                             Region
                         </label>
 
+
                         <input
                             type="text"
                             name="region"
@@ -1391,6 +1914,7 @@
                         <label class="form-label">
                             Industry
                         </label>
+
 
                         <input
                             type="text"
@@ -1410,6 +1934,7 @@
                             Framework Type
                         </label>
 
+
                         <input
                             type="text"
                             name="framework_type"
@@ -1420,11 +1945,8 @@
                     </div>
 
 
-                    {{-- DESCRIPTION --}}
-
-
-
                 </div>
+
 
             </div>
 
@@ -1525,9 +2047,11 @@
                         <label class="form-label">
 
                             Framework ID
+
                             <span class="required-star">*</span>
 
                         </label>
+
 
                         <input
                             type="text"
@@ -1547,9 +2071,11 @@
                         <label class="form-label">
 
                             Framework Code
+
                             <span class="required-star">*</span>
 
                         </label>
+
 
                         <input
                             type="text"
@@ -1569,9 +2095,11 @@
                         <label class="form-label">
 
                             Framework Name
+
                             <span class="required-star">*</span>
 
                         </label>
+
 
                         <input
                             type="text"
@@ -1592,6 +2120,7 @@
                             Version
                         </label>
 
+
                         <input
                             type="text"
                             id="editVersion"
@@ -1609,6 +2138,7 @@
                         <label class="form-label">
                             Framework Family
                         </label>
+
 
                         <input
                             type="text"
@@ -1628,6 +2158,7 @@
                             Category
                         </label>
 
+
                         <input
                             type="text"
                             id="editCategory"
@@ -1645,6 +2176,7 @@
                         <label class="form-label">
                             Publisher
                         </label>
+
 
                         <input
                             type="text"
@@ -1664,6 +2196,7 @@
                             Region
                         </label>
 
+
                         <input
                             type="text"
                             id="editRegion"
@@ -1681,6 +2214,7 @@
                         <label class="form-label">
                             Industry
                         </label>
+
 
                         <input
                             type="text"
@@ -1700,6 +2234,7 @@
                             Framework Type
                         </label>
 
+
                         <input
                             type="text"
                             id="editFrameworkType"
@@ -1710,10 +2245,8 @@
                     </div>
 
 
-
-
-
                 </div>
+
 
             </div>
 
@@ -1833,9 +2366,16 @@
                         <br>
 
                         <strong>
-                            Framework ID, Framework Code, Framework Name,
-                            Version, Framework Family, Category, Publisher,
-                            Region, Industry, Framework Type
+                            Framework ID,
+                            Framework Code,
+                            Framework Name,
+                            Version,
+                            Framework Family,
+                            Category,
+                            Publisher,
+                            Region,
+                            Industry,
+                            Framework Type
                         </strong>
 
                     </div>
@@ -1897,7 +2437,8 @@
 
     function openModal(id)
     {
-        const modal = document.getElementById(id);
+        const modal =
+            document.getElementById(id);
 
         if (modal) {
 
@@ -1915,7 +2456,8 @@
 
     function closeModal(id)
     {
-        const modal = document.getElementById(id);
+        const modal =
+            document.getElementById(id);
 
         if (modal) {
 
@@ -1940,6 +2482,60 @@
 
         }
 
+    }
+
+
+    /* =====================================================
+       INSERT FRAMEWORK PLACEHOLDER
+    ====================================================== */
+
+    function insertFrameworkPlaceholder(placeholder)
+    {
+        const textarea =
+            document.getElementById(
+                'frameworkTemplate'
+            );
+
+        if (!textarea) {
+            return;
+        }
+
+
+        const start =
+            textarea.selectionStart;
+
+        const end =
+            textarea.selectionEnd;
+
+        const currentValue =
+            textarea.value;
+
+
+        textarea.value =
+            currentValue.substring(
+                0,
+                start
+            )
+            +
+            placeholder
+            +
+            currentValue.substring(
+                end
+            );
+
+
+        textarea.focus();
+
+
+        const newCursorPosition =
+            start + placeholder.length;
+
+
+        textarea.selectionStart =
+            newCursorPosition;
+
+        textarea.selectionEnd =
+            newCursorPosition;
     }
 
 
@@ -1977,81 +2573,113 @@
         /* FORM ACTION */
 
         document
-            .getElementById('editFrameworkForm')
-            .action = `/frameworks/${id}`;
+            .getElementById(
+                'editFrameworkForm'
+            )
+            .action =
+                `/frameworks/${id}`;
 
 
         /* FRAMEWORK ID */
 
         document
-            .getElementById('editFrameworkId')
-            .value = frameworkId || '';
+            .getElementById(
+                'editFrameworkId'
+            )
+            .value =
+                frameworkId || '';
 
 
         /* FRAMEWORK CODE */
 
         document
-            .getElementById('editFrameworkCode')
-            .value = frameworkCode || '';
+            .getElementById(
+                'editFrameworkCode'
+            )
+            .value =
+                frameworkCode || '';
 
 
         /* FRAMEWORK NAME */
 
         document
-            .getElementById('editName')
-            .value = name || '';
+            .getElementById(
+                'editName'
+            )
+            .value =
+                name || '';
 
 
         /* VERSION */
 
         document
-            .getElementById('editVersion')
-            .value = version || '';
+            .getElementById(
+                'editVersion'
+            )
+            .value =
+                version || '';
 
 
         /* FRAMEWORK FAMILY */
 
         document
-            .getElementById('editFrameworkFamily')
-            .value = frameworkFamily || '';
+            .getElementById(
+                'editFrameworkFamily'
+            )
+            .value =
+                frameworkFamily || '';
 
 
         /* CATEGORY */
 
         document
-            .getElementById('editCategory')
-            .value = category || '';
+            .getElementById(
+                'editCategory'
+            )
+            .value =
+                category || '';
 
 
         /* PUBLISHER */
 
         document
-            .getElementById('editPublisher')
-            .value = publisher || '';
+            .getElementById(
+                'editPublisher'
+            )
+            .value =
+                publisher || '';
 
 
         /* REGION */
 
         document
-            .getElementById('editRegion')
-            .value = region || '';
+            .getElementById(
+                'editRegion'
+            )
+            .value =
+                region || '';
 
 
         /* INDUSTRY */
 
         document
-            .getElementById('editIndustry')
-            .value = industry || '';
+            .getElementById(
+                'editIndustry'
+            )
+            .value =
+                industry || '';
 
 
         /* FRAMEWORK TYPE */
 
         document
-            .getElementById('editFrameworkType')
-            .value = frameworkType || '';
+            .getElementById(
+                'editFrameworkType'
+            )
+            .value =
+                frameworkType || '';
 
 
-        
         /* SHOW MODAL */
 
         openModal('editModal');
@@ -2071,13 +2699,19 @@
             if (event.key === 'Escape') {
 
                 document
-                    .querySelectorAll('.modal-overlay')
-                    .forEach(function(modal)
-                    {
+                    .querySelectorAll(
+                        '.modal-overlay'
+                    )
+                    .forEach(
+                        function(modal)
+                        {
 
-                        modal.classList.remove('show');
+                            modal
+                                .classList
+                                .remove('show');
 
-                    });
+                        }
+                    );
 
 
                 document.body.style.overflow = '';

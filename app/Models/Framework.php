@@ -18,6 +18,7 @@ class Framework extends Model
         'industry',
         'framework_type',
         'description',
+        'slug',
     ];
 
     public function domains()

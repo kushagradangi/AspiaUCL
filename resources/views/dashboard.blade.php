@@ -221,18 +221,6 @@
         }
 
 
-        .ucl-name {
-
-            color: #10bce8;
-
-            font-size: 11px;
-
-            font-weight: 600;
-
-            letter-spacing: 1.5px;
-        }
-
-
         /* =========================================
            SIDEBAR MENU
         ========================================= */
@@ -696,7 +684,7 @@
             <div class="topbar-logo">
 
                 <img
-                    src="{{ asset('images/aspia-logo.png') }}"
+                    src="{{ asset('images/aspia.png') }}"
                     alt="ASPIA"
                 >
 
@@ -772,15 +760,10 @@
             <div class="aspia-brand">
 
                 <img
-                    src="{{ asset('images/aspia-logo.png') }}"
+                    src="{{ asset('images/aspiaucl.png') }}"
                     alt="ASPIA"
                     class="aspia-logo-image"
                 >
-
-                <div class="ucl-name">
-                    ASPIA UNIFIED CONTROL LIBRARY
-                </div>
-
             </div>
 
 
