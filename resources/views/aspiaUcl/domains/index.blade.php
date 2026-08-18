@@ -8,78 +8,173 @@
 
 <style>
 
+/* =========================================================
+   PAGE
+========================================================= */
+
 .domain-page {
     width: 100%;
 }
 
-.domain-header {
+
+/* =========================================================
+   PAGE HEADER
+========================================================= */
+
+.page-header {
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    margin-bottom: 25px;
+    align-items: flex-end;
     gap: 20px;
+    margin-bottom: 25px;
 }
 
-.domain-header h1 {
+.page-header h1 {
     margin: 0 0 8px;
-    font-size: 30px;
+    font-size: 32px;
     font-weight: 500;
+    color: #ffffff;
 }
 
-.domain-header p {
+.page-header p {
     margin: 0;
     color: #8f9db5;
     font-size: 14px;
 }
 
-.domain-actions {
+.header-actions {
     display: flex;
     gap: 10px;
+    flex-wrap: wrap;
 }
 
-.aspia-btn {
+
+/* =========================================================
+   BUTTONS
+========================================================= */
+
+.btn-aspia {
     border: none;
     border-radius: 8px;
-    padding: 11px 17px;
-    cursor: pointer;
+    padding: 11px 18px;
     font-size: 13px;
     font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+    transition: .2s;
 }
 
-.btn-primary {
+.btn-primary-aspia {
     background: #10bce8;
     color: #07152e;
 }
 
-.btn-secondary {
-    background: #162544;
-    border: 1px solid #1c4266;
-    color: white;
+.btn-primary-aspia:hover {
+    background: #20c9f2;
+    color: #07152e;
 }
+
+.btn-secondary-aspia {
+    background: #162544;
+    color: #ffffff;
+    border: 1px solid #1c4266;
+}
+
+.btn-secondary-aspia:hover {
+    background: #1c3155;
+}
+
+.btn-danger-aspia {
+    background: rgba(239, 68, 68, .12);
+    color: #ff7070;
+    border: 1px solid rgba(239, 68, 68, .2);
+}
+
+.btn-danger-aspia:hover {
+    background: rgba(239, 68, 68, .2);
+}
+
+
+/* =========================================================
+   ALERTS
+========================================================= */
+
+.alert-success {
+    background: rgba(34,197,94,.10);
+    border: 1px solid rgba(34,197,94,.2);
+    color: #6ee7a0;
+
+    padding: 13px 16px;
+    border-radius: 9px;
+
+    margin-bottom: 20px;
+
+    font-size: 13px;
+}
+
+.alert-error {
+    background: rgba(239,68,68,.10);
+    border: 1px solid rgba(239,68,68,.2);
+    color: #ff8585;
+
+    padding: 13px 16px;
+    border-radius: 9px;
+
+    margin-bottom: 20px;
+
+    font-size: 13px;
+}
+
+
+/* =========================================================
+   DOMAIN PANEL
+========================================================= */
 
 .domain-panel {
     background: #162544;
     border: 1px solid #1c4266;
-    border-radius: 15px;
+    border-radius: 14px;
     overflow: hidden;
     margin-bottom: 25px;
 }
 
+
+/* =========================================================
+   PANEL HEADER
+========================================================= */
+
 .panel-header {
-    padding: 20px;
-    border-bottom: 1px solid rgba(255,255,255,.06);
+    padding: 20px 28px;
+
+    border-bottom: 1px solid rgba(255,255,255,.07);
 
     display: flex;
     justify-content: space-between;
     align-items: center;
+
     gap: 15px;
+    flex-wrap: wrap;
 }
 
 .panel-header h2 {
     margin: 0;
+
+    color: #ffffff;
+
     font-size: 17px;
     font-weight: 500;
 }
+
+
+/* =========================================================
+   SEARCH
+========================================================= */
 
 .search-form {
     display: flex;
@@ -88,13 +183,32 @@
 
 .search-input {
     width: 280px;
+
     background: #0e1836;
+
     border: 1px solid #27496b;
+
+    color: #ffffff;
+
     border-radius: 8px;
-    color: white;
+
     padding: 10px 13px;
+
     outline: none;
 }
+
+.search-input:focus {
+    border-color: #10bce8;
+}
+
+.search-input::placeholder {
+    color: #687993;
+}
+
+
+/* =========================================================
+   TABLE
+========================================================= */
 
 .table-wrapper {
     overflow-x: auto;
@@ -102,225 +216,660 @@
 
 .domain-table {
     width: 100%;
+
     min-width: 1500px;
+
     border-collapse: collapse;
 }
 
 .domain-table th {
-    padding: 14px;
     text-align: left;
+
+    padding: 14px 16px;
+
     color: #71829f;
+
     font-size: 11px;
+
     text-transform: uppercase;
+
+    letter-spacing: 1px;
+
+    font-weight: 600;
+
+    background: rgba(14,24,54,.35);
+
     white-space: nowrap;
 }
 
 .domain-table td {
-    padding: 15px;
-    border-top: 1px solid rgba(255,255,255,.05);
+    padding: 16px;
+
+    border-top: 1px solid rgba(255,255,255,.06);
+
     color: #b9c5d8;
+
     font-size: 13px;
+
+    vertical-align: middle;
+
     white-space: nowrap;
 }
+
+.domain-table tr:hover td {
+    background: rgba(16,188,232,.025);
+}
+
+
+/* =========================================================
+   DOMAIN ID
+========================================================= */
 
 .domain-id {
     color: #10bce8;
     font-weight: 600;
 }
 
-.domain-name {
-    color: white;
+
+/* =========================================================
+   DOMAIN CODE
+========================================================= */
+
+.domain-code {
+    color: #ffffff;
     font-weight: 500;
 }
+
+
+/* =========================================================
+   DOMAIN NAME
+========================================================= */
+
+.domain-name-link {
+    color: #ffffff;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.domain-name-link:hover {
+    color: #20c9f2;
+}
+
+
+/* =========================================================
+   MUTED
+========================================================= */
+
+.table-muted {
+    color: #63728c;
+}
+
+
+/* =========================================================
+   ACTIONS
+========================================================= */
 
 .actions {
     display: flex;
     gap: 7px;
+    white-space: nowrap;
 }
 
 .action-btn {
-    border: 1px solid #27496b;
-    background: #101d3b;
-    color: #aebbd0;
     border-radius: 7px;
+
     padding: 7px 11px;
+
+    font-size: 12px;
+
     cursor: pointer;
+
+    border: 1px solid #27496b;
+
+    background: #101d3b;
+
+    color: #aebbd0;
 }
 
-.delete-btn {
-    color: #ff7777;
+.action-btn:hover {
+    color: #ffffff;
+    border-color: #10bce8;
 }
 
-.empty {
+
+/* =========================================================
+   EMPTY STATE
+========================================================= */
+
+.empty-state {
     text-align: center;
-    padding: 40px !important;
+
+    padding: 50px 20px !important;
+
     color: #71829f !important;
 }
 
-.modal {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,.75);
-    display: none;
+.empty-state-icon {
+    font-size: 35px;
+
+    color: #10bce8;
+
+    margin-bottom: 10px;
+}
+
+
+/* =========================================================
+   PAGINATION
+========================================================= */
+
+.pagination-area {
+    padding: 18px 20px;
+
+    border-top: 1px solid rgba(255,255,255,.06);
+
+    display: flex;
+
+    justify-content: flex-end;
+}
+
+.custom-pagination {
+    display: flex;
+
     align-items: center;
+
+    gap: 6px;
+
+    flex-wrap: wrap;
+}
+
+.custom-pagination a,
+.custom-pagination span {
+    min-width: 36px;
+
+    height: 36px;
+
+    padding: 0 11px;
+
+    box-sizing: border-box;
+
+    border-radius: 7px;
+
+    border: 1px solid #27496b;
+
+    background: #101d3b;
+
+    color: #aebbd0;
+
+    display: inline-flex;
+
+    align-items: center;
+
     justify-content: center;
+
+    text-decoration: none;
+
+    font-size: 12px;
+
+    font-weight: 600;
+}
+
+.custom-pagination a:hover {
+    color: #ffffff;
+
+    border-color: #10bce8;
+
+    background: #162544;
+}
+
+.custom-pagination .active-page {
+    background: #10bce8;
+
+    border-color: #10bce8;
+
+    color: #07152e;
+}
+
+.custom-pagination .disabled-page {
+    opacity: .45;
+
+    cursor: not-allowed;
+}
+
+.custom-pagination .pagination-info {
+    min-width: auto;
+
+    border: none;
+
+    background: transparent;
+
+    padding: 0 8px;
+
+    color: #71829f;
+
+    font-weight: 400;
+}
+
+
+/* =========================================================
+   MODAL
+========================================================= */
+
+.modal-overlay {
+    position: fixed;
+
+    inset: 0;
+
+    background: rgba(0,0,0,.70);
+
+    display: none;
+
+    align-items: center;
+
+    justify-content: center;
+
     z-index: 9999;
+
     padding: 25px;
 }
 
-.modal.show {
+.modal-overlay.show {
     display: flex;
 }
 
 .modal-box {
     width: 100%;
-    max-width: 950px;
+
+    max-width: 1050px;
+
     max-height: 90vh;
+
     overflow-y: auto;
+
     background: #162544;
+
     border: 1px solid #1c4266;
-    border-radius: 15px;
+
+    border-radius: 14px;
+
+    box-shadow: 0 20px 60px rgba(0,0,0,.5);
 }
 
 .modal-header {
+    padding: 20px 22px;
+
+    border-bottom: 1px solid rgba(255,255,255,.07);
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
     position: sticky;
+
     top: 0;
-    z-index: 2;
 
     background: #162544;
 
-    padding: 20px;
-
-    border-bottom: 1px solid rgba(255,255,255,.06);
-
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    z-index: 2;
 }
 
 .modal-header h2 {
     margin: 0;
+
+    color: #ffffff;
+
     font-size: 19px;
+
     font-weight: 500;
 }
 
-.close {
+.close-modal {
     background: none;
+
     border: none;
+
     color: #8291aa;
-    font-size: 28px;
+
+    font-size: 27px;
+
     cursor: pointer;
+
+    line-height: 1;
+}
+
+.close-modal:hover {
+    color: #ffffff;
 }
 
 .modal-body {
-    padding: 22px;
+    padding: 28px;
 }
+
+
+/* =========================================================
+   FORM
+========================================================= */
 
 .form-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 18px;
+
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    gap: 22px 24px;
+
+    width: 100%;
 }
 
-.form-group.full {
-    grid-column: 1 / -1;
+.form-group {
+    margin-bottom: 18px;
 }
 
 .form-label {
     display: block;
+
     color: #b9c5d8;
+
     font-size: 13px;
-    margin-bottom: 7px;
+
+    margin-bottom: 8px;
 }
 
-.form-control {
+.form-control-aspia {
     width: 100%;
+
     box-sizing: border-box;
 
     background: #0e1836;
+
     border: 1px solid #27496b;
+
     border-radius: 8px;
 
-    color: white;
     padding: 11px 13px;
+
+    color: #ffffff;
+
     outline: none;
+
+    font-size: 14px;
 }
 
-.form-control:focus {
+.form-control-aspia:focus {
     border-color: #10bce8;
+
+    box-shadow: 0 0 0 2px rgba(16,188,232,.08);
 }
 
-textarea.form-control {
-    min-height: 100px;
-    resize: vertical;
+.form-control-aspia::placeholder {
+    color: #687993;
 }
+
+textarea.form-control-aspia {
+    min-height: 110px;
+
+    resize: vertical;
+
+    line-height: 1.5;
+}
+
+.full-width {
+    grid-column: 1 / -1;
+}
+
+
+/* =========================================================
+   MODAL FOOTER
+========================================================= */
 
 .modal-footer {
+    padding: 16px 22px;
+
+    border-top: 1px solid rgba(255,255,255,.07);
+
+    display: flex;
+
+    justify-content: flex-end;
+
+    gap: 10px;
+
     position: sticky;
+
     bottom: 0;
 
     background: #162544;
-
-    padding: 16px 22px;
-
-    border-top: 1px solid rgba(255,255,255,.06);
-
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
 }
 
-.success {
-    background: rgba(34,197,94,.1);
-    border: 1px solid rgba(34,197,94,.2);
-    color: #6ee7a0;
+
+/* =========================================================
+   DOMAIN TEMPLATE EDITOR
+========================================================= */
+
+.template-editor {
+    width: 100%;
+    min-height: 430px;
+    box-sizing: border-box;
+
+    background: #0e1836;
+
+    border: 1px solid #27496b;
+
+    border-radius: 8px;
+
     padding: 13px;
-    border-radius: 9px;
-    margin-bottom: 20px;
+
+    color: #ffffff;
+
+    outline: none;
+
+    resize: vertical;
+
+    font-family: Consolas, Monaco, 'Courier New', monospace;
+
+    font-size: 13px;
+
+    line-height: 1.6;
+
+    tab-size: 4;
 }
 
-@media(max-width:800px) {
+.template-editor:focus {
+    border-color: #10bce8;
 
-    .domain-header {
-        flex-direction: column;
-        align-items: flex-start;
-    }
+    box-shadow: 0 0 0 2px rgba(16,188,232,.08);
+}
 
-    .panel-header {
-        flex-direction: column;
+.template-editor::placeholder {
+    color: #687993;
+}
+
+.template-help {
+    margin-top: 12px;
+
+    padding: 14px;
+
+    background: #0e1836;
+
+    border: 1px solid #27496b;
+
+    border-radius: 8px;
+}
+
+.template-help-title {
+    color: #ffffff;
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    margin-bottom: 9px;
+}
+
+.template-help-text {
+    color: #8291aa;
+
+    font-size: 12px;
+
+    line-height: 1.6;
+
+    margin-bottom: 10px;
+}
+
+.placeholder-list {
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 7px;
+}
+
+.placeholder-btn {
+    border: 1px solid rgba(16,188,232,.25);
+
+    background: rgba(16,188,232,.08);
+
+    color: #10bce8;
+
+    border-radius: 6px;
+
+    padding: 6px 9px;
+
+    font-family: Consolas, Monaco, 'Courier New', monospace;
+
+    font-size: 11px;
+
+    cursor: pointer;
+}
+
+.placeholder-btn:hover {
+    background: rgba(16,188,232,.16);
+
+    border-color: #10bce8;
+}
+
+
+/* =========================================================
+   IMPORT INFO
+========================================================= */
+
+.import-info {
+    color: #8291aa;
+
+    font-size: 12px;
+
+    margin-top: 10px;
+
+    line-height: 1.5;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media(max-width: 900px) {
+
+    .page-header {
         align-items: flex-start;
+
+        flex-direction: column;
     }
 
     .form-grid {
         grid-template-columns: 1fr;
     }
 
-    .form-group.full {
+    .full-width {
         grid-column: auto;
+    }
+
+    .modal-box {
+        max-width: 1050px;
+    }
+}
+
+@media(max-width: 600px) {
+
+    .search-form {
+        width: 100%;
+    }
+
+    .search-input {
+        width: 100%;
+    }
+
+    .header-actions {
+        width: 100%;
+    }
+
+    .header-actions .btn-aspia {
+        flex: 1;
+    }
+
+    .actions {
+        flex-direction: column;
     }
 }
 
 </style>
 
 
-@if(session('success'))
-
-    <div class="success">
-        {{ session('success') }}
-    </div>
-
-@endif
-
-
 <div class="domain-page">
 
-    {{-- HEADER --}}
 
-    <div class="domain-header">
+    {{-- =====================================================
+         SUCCESS MESSAGE
+    ====================================================== --}}
+
+    @if(session('success'))
+
+        <div class="alert-success">
+
+            {{ session('success') }}
+
+        </div>
+
+    @endif
+
+
+    {{-- =====================================================
+         VALIDATION ERRORS
+    ====================================================== --}}
+
+    @if($errors->any())
+
+        <div class="alert-error">
+
+            <strong>Please fix the following:</strong>
+
+            <ul style="margin:8px 0 0 18px;">
+
+                @foreach($errors->all() as $error)
+
+                    <li>
+                        {{ $error }}
+                    </li>
+
+                @endforeach
+
+            </ul>
+
+        </div>
+
+    @endif
+
+
+    {{-- =====================================================
+         PAGE HEADER
+    ====================================================== --}}
+
+    <div class="page-header">
 
         <div>
 
-            <h1>Domains</h1>
+            <h1>
+                Domains
+            </h1>
 
             <p>
                 Manage governance and compliance domains.
@@ -329,30 +878,61 @@ textarea.form-control {
         </div>
 
 
-        <div class="domain-actions">
+        <div class="header-actions">
+
+
+            {{-- ADD DOMAIN TEMPLATE --}}
 
             <button
-                class="aspia-btn btn-secondary"
+                type="button"
+                class="btn-aspia btn-secondary-aspia"
+                onclick="openModal('domainTemplateModal')"
+            >
+
+                + Add Domain Template
+
+            </button>
+
+
+            {{-- IMPORT XLSX --}}
+
+            <button
+                type="button"
+                class="btn-aspia btn-secondary-aspia"
                 onclick="openModal('importModal')"
             >
+
                 ↑ Import XLSX
+
             </button>
 
+
+            {{-- ADD DOMAIN --}}
+
             <button
-                class="aspia-btn btn-primary"
+                type="button"
+                class="btn-aspia btn-primary-aspia"
                 onclick="openModal('addModal')"
             >
+
                 + Add Domain
+
             </button>
+
 
         </div>
 
     </div>
 
 
-    {{-- TABLE --}}
+    {{-- =====================================================
+         DOMAIN MANAGEMENT
+    ====================================================== --}}
 
     <div class="domain-panel">
+
+
+        {{-- PANEL HEADER --}}
 
         <div class="panel-header">
 
@@ -361,31 +941,40 @@ textarea.form-control {
             </h2>
 
 
+            {{-- SEARCH --}}
+
             <form
-                method="GET"
                 action="{{ route('domains.index') }}"
+                method="GET"
                 class="search-form"
             >
 
                 <input
                     type="text"
                     name="search"
-                    value="{{ request('search') }}"
                     class="search-input"
                     placeholder="Search domains..."
+                    value="{{ request('search') }}"
                 >
+
 
                 <button
                     type="submit"
-                    class="aspia-btn btn-secondary"
+                    class="btn-aspia btn-secondary-aspia"
                 >
+
                     Search
+
                 </button>
 
             </form>
 
         </div>
 
+
+        {{-- =================================================
+             TABLE
+        ================================================== --}}
 
         <div class="table-wrapper">
 
@@ -395,16 +984,49 @@ textarea.form-control {
 
                     <tr>
 
-                        <th>Domain ID</th>
-                        <th>Domain Code</th>
-                        <th>Domain Name</th>
-                        <th>Status</th>
-                        <th>Version</th>
-                        <th>Business Owner</th>
-                        <th>Industry</th>
-                        <th>Technology</th>
-                        <th>Display Order</th>
-                        <th>Actions</th>
+                        <th>
+                            Domain ID
+                        </th>
+
+                        <th>
+                            Domain Code
+                        </th>
+
+                        <th>
+                            Domain Name
+                        </th>
+
+                        <th>
+                            Status
+                        </th>
+
+                        <th>
+                            Version
+                        </th>
+
+                        <th>
+                            Business Owner
+                        </th>
+
+                        <th>
+                            Industry
+                        </th>
+
+                        <th>
+                            Technology
+                        </th>
+
+                        <th>
+                            Display Order
+                        </th>
+
+                        <th>
+                            Created
+                        </th>
+
+                        <th>
+                            Actions
+                        </th>
 
                     </tr>
 
@@ -417,78 +1039,225 @@ textarea.form-control {
 
                         <tr>
 
-                            <td class="domain-id">
-                                {{ $domain->domain_id }}
-                            </td>
+
+                            {{-- DOMAIN ID --}}
 
                             <td>
-                                {{ $domain->domain_code ?: '—' }}
+
+                                <span class="domain-id">
+
+                                    {{ $domain->domain_id }}
+
+                                </span>
+
                             </td>
 
-                            <td class="domain-name">
-                                {{ $domain->name }}
-                            </td>
+
+                            {{-- DOMAIN CODE --}}
 
                             <td>
-                                {{ $domain->status }}
+
+                                <span class="domain-code">
+
+                                    {{ $domain->domain_code ?: '—' }}
+
+                                </span>
+
                             </td>
 
+
+                            {{-- DOMAIN NAME --}}
+
                             <td>
+
+                                <a
+                                    href="{{ route('domains.show', $domain->slug) }}"
+                                    class="domain-name-link"
+                                >
+
+                                    {{ $domain->name }}
+
+                                </a>
+
+                            </td>
+
+
+                            {{-- STATUS --}}
+
+                            <td>
+
+                                {{ $domain->status ?: '—' }}
+
+                            </td>
+
+
+                            {{-- VERSION --}}
+
+                            <td>
+
                                 {{ $domain->version ?: '—' }}
+
                             </td>
 
+
+                            {{-- BUSINESS OWNER --}}
+
                             <td>
+
                                 {{ $domain->business_owner ?: '—' }}
+
                             </td>
 
+
+                            {{-- INDUSTRY --}}
+
                             <td>
+
                                 {{ $domain->applicable_industries ?: '—' }}
+
                             </td>
 
+
+                            {{-- TECHNOLOGY --}}
+
                             <td>
+
                                 {{ $domain->applicable_technologies ?: '—' }}
+
                             </td>
 
+
+                            {{-- DISPLAY ORDER --}}
+
                             <td>
+
                                 {{ $domain->display_order }}
+
                             </td>
+
+
+                            {{-- CREATED --}}
+
+                            <td>
+
+                                {{ $domain->created_at?->format('d M Y') }}
+
+                            </td>
+
+
+                            {{-- ACTIONS --}}
 
                             <td>
 
                                 <div class="actions">
 
+
+                                    {{-- EDIT --}}
+
                                     <button
+                                        type="button"
                                         class="action-btn"
-                                        onclick="editDomain(
+
+                                        onclick="openEditDomainModal(
+
                                             {{ $domain->id }},
-                                            @js($domain)
+
+                                            @js($domain->domain_id),
+
+                                            @js($domain->domain_code),
+
+                                            @js($domain->name),
+
+                                            @js($domain->slug),
+
+                                            @js($domain->purpose),
+
+                                            @js($domain->scope),
+
+                                            @js($domain->business_owner),
+
+                                            @js($domain->applicable_industries),
+
+                                            @js($domain->applicable_technologies),
+
+                                            @js($domain->description),
+
+                                            @js($domain->display_order),
+
+                                            @js($domain->status),
+
+                                            @js($domain->version),
+
+                                            @js($domain->domain_name),
+
+                                            @js($domain->short_overview),
+
+                                            @js($domain->business_objectives),
+
+                                            @js($domain->business_objectives_2),
+
+                                            @js($domain->business_risks),
+
+                                            @js($domain->key_capabilities),
+
+                                            @js($domain->typical_stakeholders),
+
+                                            @js($domain->applicable_industries_2),
+
+                                            @js($domain->applicable_technologies_2),
+
+                                            @js($domain->keywords),
+
+                                            @js($domain->tags),
+
+                                            @js($domain->why_domain_matters),
+
+                                            @js($domain->common_challenges),
+
+                                            @js($domain->related_domains),
+
+                                            @js($domain->related_frameworks)
+
                                         )"
                                     >
+
                                         Edit
+
                                     </button>
 
 
+                                    {{-- DELETE --}}
+
                                     <form
-                                        method="POST"
                                         action="{{ route('domains.destroy', $domain) }}"
-                                        onsubmit="return confirm('Are you sure you want to delete this domain?')"
+                                        method="POST"
+
+                                        onsubmit="return confirm(
+                                            'Are you sure you want to delete this domain?'
+                                        )"
                                     >
 
                                         @csrf
+
                                         @method('DELETE')
 
+
                                         <button
-                                            class="action-btn delete-btn"
                                             type="submit"
+                                            class="action-btn btn-danger-aspia"
                                         >
+
                                             Delete
+
                                         </button>
 
                                     </form>
 
+
                                 </div>
 
                             </td>
+
 
                         </tr>
 
@@ -497,10 +1266,16 @@ textarea.form-control {
                         <tr>
 
                             <td
-                                colspan="10"
-                                class="empty"
+                                colspan="11"
+                                class="empty-state"
                             >
+
+                                <div class="empty-state-icon">
+                                    ◇
+                                </div>
+
                                 No domains found.
+
                             </td>
 
                         </tr>
@@ -514,77 +1289,440 @@ textarea.form-control {
         </div>
 
 
-        <div style="padding:20px;">
+        {{-- =================================================
+             PAGINATION
+        ================================================== --}}
 
-            {{ $domains->links() }}
+        @if($domains->hasPages())
 
-        </div>
+            <div class="pagination-area">
+
+                <div class="custom-pagination">
+
+
+                    {{-- PREVIOUS --}}
+
+                    @if($domains->onFirstPage())
+
+                        <span class="disabled-page">
+                            Previous
+                        </span>
+
+                    @else
+
+                        <a href="{{ $domains->previousPageUrl() }}">
+                            Previous
+                        </a>
+
+                    @endif
+
+
+                    {{-- PAGE NUMBERS --}}
+
+                    @foreach(range(1, $domains->lastPage()) as $page)
+
+                        @if(
+                            $page == 1 ||
+                            $page == $domains->lastPage() ||
+                            abs($page - $domains->currentPage()) <= 2
+                        )
+
+                            @if($page == $domains->currentPage())
+
+                                <span class="active-page">
+                                    {{ $page }}
+                                </span>
+
+                            @else
+
+                                <a href="{{ $domains->url($page) }}">
+                                    {{ $page }}
+                                </a>
+
+                            @endif
+
+                        @elseif(
+                            $page == 2 ||
+                            $page == $domains->lastPage() - 1
+                        )
+
+                            <span class="pagination-info">
+                                ...
+                            </span>
+
+                        @endif
+
+                    @endforeach
+
+
+                    {{-- NEXT --}}
+
+                    @if($domains->hasMorePages())
+
+                        <a href="{{ $domains->nextPageUrl() }}">
+                            Next
+                        </a>
+
+                    @else
+
+                        <span class="disabled-page">
+                            Next
+                        </span>
+
+                    @endif
+
+
+                </div>
+
+            </div>
+
+        @endif
+
 
     </div>
+
 
 </div>
 
 
-{{-- =====================================================
-     ADD MODAL
-===================================================== --}}
+{{-- =========================================================
+     ADD DOMAIN TEMPLATE MODAL
+========================================================= --}}
 
 <div
-    id="addModal"
-    class="modal"
-    onclick="outsideClose(event, 'addModal')"
+    id="domainTemplateModal"
+    class="modal-overlay"
+    onclick="closeModalOutside(event, 'domainTemplateModal')"
 >
 
     <div class="modal-box">
 
         <div class="modal-header">
 
-            <h2>Add Domain</h2>
+            <h2>
+                Add Domain Template
+            </h2>
 
             <button
-                class="close"
-                onclick="closeModal('addModal')"
                 type="button"
+                class="close-modal"
+                onclick="closeModal('domainTemplateModal')"
             >
                 ×
             </button>
 
         </div>
 
-
         <form
+            action="{{ route('domains.template.store') }}"
             method="POST"
-            action="{{ route('domains.store') }}"
         >
 
             @csrf
 
             <div class="modal-body">
 
-                <div class="form-grid">
+                <div class="form-group">
 
-                    @include('aspiaUcl.domains.form')
+                    <label class="form-label">
+                        HTML Template
+                    </label>
+
+                    <textarea
+                        id="domainTemplateHtml"
+                        name="html_content"
+                        class="template-editor"
+                        placeholder="Enter your HTML template here..."
+                        required
+                    ></textarea>
+
+                    <div class="template-help">
+
+                        <div class="template-help-title">
+                            Available Domain Placeholders
+                        </div>
+
+                        <div class="template-help-text">
+                            Click a placeholder to insert it into the HTML template.
+                        </div>
+
+                        <div class="placeholder-list">
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="@{{domain_id}}"
+                                onclick="insertDomainPlaceholder(this.dataset.placeholder)"
+                            >
+                                @{{domain_id}}
+                            </button>
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="@{{domain_code}}"
+                                onclick="insertDomainPlaceholder(this.dataset.placeholder)"
+                            >
+                                @{{domain_code}}
+                            </button>
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="@{{domain_name}}"
+                                onclick="insertDomainPlaceholder(this.dataset.placeholder)"
+                            >
+                                @{{domain_name}}
+                            </button>
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="@{{slug}}"
+                                onclick="insertDomainPlaceholder(this.dataset.placeholder)"
+                            >
+                                @{{slug}}
+                            </button>
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="@{{purpose}}"
+                                onclick="insertDomainPlaceholder(this.dataset.placeholder)"
+                            >
+                                @{{purpose}}
+                            </button>
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="@{{scope}}"
+                                onclick="insertDomainPlaceholder(this.dataset.placeholder)"
+                            >
+                                @{{scope}}
+                            </button>
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="@{{business_owner}}"
+                                onclick="insertDomainPlaceholder(this.dataset.placeholder)"
+                            >
+                                @{{business_owner}}
+                            </button>
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="@{{applicable_industries}}"
+                                onclick="insertDomainPlaceholder(this.dataset.placeholder)"
+                            >
+                                @{{applicable_industries}}
+                            </button>
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="@{{applicable_technologies}}"
+                                onclick="insertDomainPlaceholder(this.dataset.placeholder)"
+                            >
+                                @{{applicable_technologies}}
+                            </button>
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="@{{description}}"
+                                onclick="insertDomainPlaceholder(this.dataset.placeholder)"
+                            >
+                                @{{description}}
+                            </button>
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="@{{display_order}}"
+                                onclick="insertDomainPlaceholder(this.dataset.placeholder)"
+                            >
+                                @{{display_order}}
+                            </button>
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="@{{status}}"
+                                onclick="insertDomainPlaceholder(this.dataset.placeholder)"
+                            >
+                                @{{status}}
+                            </button>
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="@{{version}}"
+                                onclick="insertDomainPlaceholder(this.dataset.placeholder)"
+                            >
+                                @{{version}}
+                            </button>
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="@{{domain_name_2}}"
+                                onclick="insertDomainPlaceholder(this.dataset.placeholder)"
+                            >
+                                @{{domain_name_2}}
+                            </button>
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="@{{short_overview}}"
+                                onclick="insertDomainPlaceholder(this.dataset.placeholder)"
+                            >
+                                @{{short_overview}}
+                            </button>
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="@{{business_objectives}}"
+                                onclick="insertDomainPlaceholder(this.dataset.placeholder)"
+                            >
+                                @{{business_objectives}}
+                            </button>
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="@{{business_objectives_2}}"
+                                onclick="insertDomainPlaceholder(this.dataset.placeholder)"
+                            >
+                                @{{business_objectives_2}}
+                            </button>
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="@{{business_risks}}"
+                                onclick="insertDomainPlaceholder(this.dataset.placeholder)"
+                            >
+                                @{{business_risks}}
+                            </button>
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="@{{key_capabilities}}"
+                                onclick="insertDomainPlaceholder(this.dataset.placeholder)"
+                            >
+                                @{{key_capabilities}}
+                            </button>
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="@{{typical_stakeholders}}"
+                                onclick="insertDomainPlaceholder(this.dataset.placeholder)"
+                            >
+                                @{{typical_stakeholders}}
+                            </button>
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="@{{applicable_industries_2}}"
+                                onclick="insertDomainPlaceholder(this.dataset.placeholder)"
+                            >
+                                @{{applicable_industries_2}}
+                            </button>
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="@{{applicable_technologies_2}}"
+                                onclick="insertDomainPlaceholder(this.dataset.placeholder)"
+                            >
+                                @{{applicable_technologies_2}}
+                            </button>
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="@{{keywords}}"
+                                onclick="insertDomainPlaceholder(this.dataset.placeholder)"
+                            >
+                                @{{keywords}}
+                            </button>
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="@{{tags}}"
+                                onclick="insertDomainPlaceholder(this.dataset.placeholder)"
+                            >
+                                @{{tags}}
+                            </button>
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="@{{why_domain_matters}}"
+                                onclick="insertDomainPlaceholder(this.dataset.placeholder)"
+                            >
+                                @{{why_domain_matters}}
+                            </button>
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="@{{common_challenges}}"
+                                onclick="insertDomainPlaceholder(this.dataset.placeholder)"
+                            >
+                                @{{common_challenges}}
+                            </button>
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="@{{related_domains}}"
+                                onclick="insertDomainPlaceholder(this.dataset.placeholder)"
+                            >
+                                @{{related_domains}}
+                            </button>
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="@{{related_frameworks}}"
+                                onclick="insertDomainPlaceholder(this.dataset.placeholder)"
+                            >
+                                @{{related_frameworks}}
+                            </button>
+
+                        </div>
+
+                    </div>
 
                 </div>
 
             </div>
 
-
             <div class="modal-footer">
 
                 <button
                     type="button"
-                    class="aspia-btn btn-secondary"
-                    onclick="closeModal('addModal')"
+                    class="btn-aspia btn-secondary-aspia"
+                    onclick="closeModal('domainTemplateModal')"
                 >
                     Cancel
                 </button>
 
                 <button
                     type="submit"
-                    class="aspia-btn btn-primary"
+                    class="btn-aspia btn-primary-aspia"
                 >
-                    Add Domain
+                    Save Template
                 </button>
 
             </div>
@@ -596,39 +1734,139 @@ textarea.form-control {
 </div>
 
 
-{{-- =====================================================
-     EDIT MODAL
-===================================================== --}}
+{{-- =========================================================
+     ADD DOMAIN MODAL
+========================================================= --}}
 
 <div
-    id="editModal"
-    class="modal"
-    onclick="outsideClose(event, 'editModal')"
+    id="addModal"
+    class="modal-overlay"
+    onclick="closeModalOutside(event, 'addModal')"
 >
+
 
     <div class="modal-box">
 
+
         <div class="modal-header">
 
-            <h2>Edit Domain</h2>
+            <h2>
+                Add Domain
+            </h2>
+
 
             <button
-                class="close"
-                onclick="closeModal('editModal')"
                 type="button"
+                class="close-modal"
+                onclick="closeModal('addModal')"
             >
+
                 ×
+
             </button>
 
         </div>
 
 
         <form
-            id="editForm"
+            action="{{ route('domains.store') }}"
             method="POST"
         >
 
             @csrf
+
+
+            <div class="modal-body">
+
+                <div class="form-grid">
+
+    @include(
+        'aspiaUcl.domains.form',
+        [
+            'domain' => null,
+            'edit' => false
+        ]
+    )
+
+</div>
+
+            </div>
+
+
+            <div class="modal-footer">
+
+                <button
+                    type="button"
+                    class="btn-aspia btn-secondary-aspia"
+                    onclick="closeModal('addModal')"
+                >
+
+                    Cancel
+
+                </button>
+
+
+                <button
+                    type="submit"
+                    class="btn-aspia btn-primary-aspia"
+                >
+
+                    Add Domain
+
+                </button>
+
+            </div>
+
+
+        </form>
+
+
+    </div>
+
+</div>
+
+
+{{-- =========================================================
+     EDIT DOMAIN MODAL
+========================================================= --}}
+
+<div
+    id="editModal"
+    class="modal-overlay"
+    onclick="closeModalOutside(event, 'editModal')"
+>
+
+
+    <div class="modal-box">
+
+
+        <div class="modal-header">
+
+            <h2>
+                Edit Domain
+            </h2>
+
+
+            <button
+                type="button"
+                class="close-modal"
+                onclick="closeModal('editModal')"
+            >
+
+                ×
+
+            </button>
+
+        </div>
+
+
+        <form
+            id="editDomainForm"
+            method="POST"
+        >
+
+            @csrf
+
             @method('PUT')
 
 
@@ -638,7 +1876,10 @@ textarea.form-control {
 
                     @include(
                         'aspiaUcl.domains.form',
-                        ['edit' => true]
+                        [
+                            'domain' => null,
+                            'edit' => true
+                        ]
                     )
 
                 </div>
@@ -650,58 +1891,72 @@ textarea.form-control {
 
                 <button
                     type="button"
-                    class="aspia-btn btn-secondary"
+                    class="btn-aspia btn-secondary-aspia"
                     onclick="closeModal('editModal')"
                 >
+
                     Cancel
+
                 </button>
+
 
                 <button
                     type="submit"
-                    class="aspia-btn btn-primary"
+                    class="btn-aspia btn-primary-aspia"
                 >
+
                     Save Changes
+
                 </button>
 
             </div>
 
+
         </form>
+
 
     </div>
 
 </div>
 
 
-{{-- =====================================================
-     IMPORT MODAL
-===================================================== --}}
+{{-- =========================================================
+     IMPORT XLSX MODAL
+========================================================= --}}
 
 <div
     id="importModal"
-    class="modal"
-    onclick="outsideClose(event, 'importModal')"
+    class="modal-overlay"
+    onclick="closeModalOutside(event, 'importModal')"
 >
+
 
     <div class="modal-box">
 
+
         <div class="modal-header">
 
-            <h2>Import Domains</h2>
+            <h2>
+                Import Domains
+            </h2>
+
 
             <button
-                class="close"
-                onclick="closeModal('importModal')"
                 type="button"
+                class="close-modal"
+                onclick="closeModal('importModal')"
             >
+
                 ×
+
             </button>
 
         </div>
 
 
         <form
-            method="POST"
             action="{{ route('domains.import') }}"
+            method="POST"
             enctype="multipart/form-data"
         >
 
@@ -710,17 +1965,33 @@ textarea.form-control {
 
             <div class="modal-body">
 
-                <label class="form-label">
-                    XLSX File
-                </label>
 
-                <input
-                    type="file"
-                    name="file"
-                    accept=".xlsx"
-                    class="form-control"
-                    required
-                >
+                <div class="form-group">
+
+                    <label class="form-label">
+
+                        Select XLSX File
+
+                    </label>
+
+
+                    <input
+                        type="file"
+                        name="file"
+                        class="form-control-aspia"
+                        accept=".xlsx"
+                        required
+                    >
+
+
+                    <div class="import-info">
+
+                        Only <strong>.xlsx</strong> files are supported.
+
+                    </div>
+
+                </div>
+
 
             </div>
 
@@ -729,22 +2000,29 @@ textarea.form-control {
 
                 <button
                     type="button"
-                    class="aspia-btn btn-secondary"
+                    class="btn-aspia btn-secondary-aspia"
                     onclick="closeModal('importModal')"
                 >
+
                     Cancel
+
                 </button>
+
 
                 <button
                     type="submit"
-                    class="aspia-btn btn-primary"
+                    class="btn-aspia btn-primary-aspia"
                 >
+
                     Import XLSX
+
                 </button>
 
             </div>
 
+
         </form>
+
 
     </div>
 
@@ -753,82 +2031,302 @@ textarea.form-control {
 
 <script>
 
+
+/* =========================================================
+   OPEN MODAL
+========================================================= */
+
+/* =========================================================
+   INSERT DOMAIN PLACEHOLDER
+========================================================= */
+
+function insertDomainPlaceholder(placeholder)
+{
+    const textarea =
+        document.getElementById('domainTemplateHtml');
+
+    if (!textarea) {
+        return;
+    }
+
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+    const currentValue = textarea.value;
+
+    textarea.value =
+        currentValue.substring(0, start)
+        + placeholder
+        + currentValue.substring(end);
+
+    textarea.focus();
+
+    const cursorPosition =
+        start + placeholder.length;
+
+    textarea.setSelectionRange(
+        cursorPosition,
+        cursorPosition
+    );
+}
+
+
 function openModal(id)
 {
-    document
-        .getElementById(id)
-        .classList.add('show');
+    const modal =
+        document.getElementById(id);
 
-    document.body.style.overflow = 'hidden';
-}
+    if (modal) {
 
+        modal.classList.add('show');
 
-function closeModal(id)
-{
-    document
-        .getElementById(id)
-        .classList.remove('show');
+        document.body.style.overflow = 'hidden';
 
-    document.body.style.overflow = '';
-}
-
-
-function outsideClose(event, id)
-{
-    if (event.target.id === id) {
-        closeModal(id);
     }
 }
 
 
-function editDomain(id, domain)
+/* =========================================================
+   CLOSE MODAL
+========================================================= */
+
+function closeModal(id)
 {
-    const form = document.getElementById('editForm');
+    const modal =
+        document.getElementById(id);
 
-    form.action = `/domains/${id}`;
+    if (modal) {
 
-    const fields = [
-        'domain_id',
-        'domain_code',
-        'name',
-        'slug',
-        'purpose',
-        'scope',
-        'business_owner',
-        'applicable_industries',
-        'applicable_technologies',
-        'description',
-        'display_order',
-        'status',
-        'version',
-        'short_overview',
-        'business_objectives',
-        'business_risks',
-        'key_capabilities',
-        'typical_stakeholders',
-        'keywords',
-        'tags',
-        'why_domain_matters',
-        'common_challenges',
-        'related_domains',
-        'related_frameworks'
-    ];
+        modal.classList.remove('show');
 
-    fields.forEach(function(field) {
+        document.body.style.overflow = '';
 
-        const input = document.getElementById(
-            'edit_' + field
-        );
+    }
+}
+
+
+/* =========================================================
+   CLOSE WHEN CLICKING OUTSIDE
+========================================================= */
+
+function closeModalOutside(event, id)
+{
+    if (event.target.id === id) {
+
+        closeModal(id);
+
+    }
+}
+
+
+/* =========================================================
+   OPEN EDIT DOMAIN MODAL
+========================================================= */
+
+function openEditDomainModal(
+
+    id,
+
+    domainId,
+    domainCode,
+    name,
+    slug,
+    purpose,
+    scope,
+    businessOwner,
+    applicableIndustries,
+    applicableTechnologies,
+    description,
+    displayOrder,
+    status,
+    version,
+    domainName,
+    shortOverview,
+    businessObjectives,
+    businessObjectives2,
+    businessRisks,
+    keyCapabilities,
+    typicalStakeholders,
+    applicableIndustries2,
+    applicableTechnologies2,
+    keywords,
+    tags,
+    whyDomainMatters,
+    commonChallenges,
+    relatedDomains,
+    relatedFrameworks
+
+) {
+
+
+    /* =====================================================
+       FORM ACTION
+    ====================================================== */
+
+    document
+        .getElementById('editDomainForm')
+        .action =
+            `/domains/${id}`;
+
+
+    /* =====================================================
+       FIELD VALUES
+    ====================================================== */
+
+    const values = {
+
+        domain_id:
+            domainId,
+
+        domain_code:
+            domainCode,
+
+        name:
+            name,
+
+        slug:
+            slug,
+
+        purpose:
+            purpose,
+
+        scope:
+            scope,
+
+        business_owner:
+            businessOwner,
+
+        applicable_industries:
+            applicableIndustries,
+
+        applicable_technologies:
+            applicableTechnologies,
+
+        description:
+            description,
+
+        display_order:
+            displayOrder,
+
+        status:
+            status,
+
+        version:
+            version,
+
+        domain_name:
+            domainName,
+
+        short_overview:
+            shortOverview,
+
+        business_objectives:
+            businessObjectives,
+
+        business_objectives_2:
+            businessObjectives2,
+
+        business_risks:
+            businessRisks,
+
+        key_capabilities:
+            keyCapabilities,
+
+        typical_stakeholders:
+            typicalStakeholders,
+
+        applicable_industries_2:
+            applicableIndustries2,
+
+        applicable_technologies_2:
+            applicableTechnologies2,
+
+        keywords:
+            keywords,
+
+        tags:
+            tags,
+
+        why_domain_matters:
+            whyDomainMatters,
+
+        common_challenges:
+            commonChallenges,
+
+        related_domains:
+            relatedDomains,
+
+        related_frameworks:
+            relatedFrameworks
+
+    };
+
+
+    /* =====================================================
+       PUT VALUES INTO EDIT FORM
+    ====================================================== */
+
+    Object.keys(values).forEach(function(field) {
+
+        const input =
+            document.getElementById(
+                'edit_' + field
+            );
 
         if (input) {
-            input.value = domain[field] ?? '';
+
+            input.value =
+                values[field] ?? '';
+
         }
 
     });
 
+
+    /* =====================================================
+       SHOW MODAL
+    ====================================================== */
+
     openModal('editModal');
+
 }
 
+
+/* =========================================================
+   ESCAPE KEY
+========================================================= */
+
+document.addEventListener(
+    'keydown',
+    function(event)
+    {
+
+        if (event.key === 'Escape') {
+
+            document
+                .querySelectorAll(
+                    '.modal-overlay'
+                )
+                .forEach(
+                    function(modal)
+                    {
+
+                        modal
+                            .classList
+                            .remove('show');
+
+                    }
+                );
+
+
+            document.body.style.overflow = '';
+
+        }
+
+    }
+);
+
+
 </script>
+
 
 @endsection

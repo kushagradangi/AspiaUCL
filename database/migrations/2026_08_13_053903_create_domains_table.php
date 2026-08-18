@@ -52,7 +52,7 @@ return new class extends Migration
             $table->string('version')->nullable();
 
             // Domain Name #2
-            $table->string('domain_name')->nullable();
+            $table->string('domain_name_2')->nullable();
 
             // Short Overview
             $table->longText('short_overview')->nullable();

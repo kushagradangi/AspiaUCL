@@ -29,10 +29,10 @@ class Domain extends Model
         // 7. Business Owner
         'business_owner',
 
-        // 8. Applicable Industries #1
+        // 8. Applicable Industries
         'applicable_industries',
 
-        // 9. Applicable Technologies #1
+        // 9. Applicable Technologies
         'applicable_technologies',
 
         // 10. Description
@@ -48,12 +48,12 @@ class Domain extends Model
         'version',
 
         // 14. Domain Name #2
-        'domain_name',
+        'domain_name_2',
 
         // 15. Short Overview
         'short_overview',
 
-        // 16. Business Objectives #1
+        // 16. Business Objectives
         'business_objectives',
 
         // 17. Business Objectives #2

@@ -1,29 +1,47 @@
+{{-- =========================================================
+     DOMAIN FORM - 28 FIELDS
+     Exact Excel Order
+
+     IMPORTANT:
+     This partial uses $edit to decide whether it should load an
+     existing domain. Add Domain must pass edit=false;
+     Edit Domain must pass edit=true.
+========================================================= --}}
+
 @php
+    $domain = $domain ?? null;
     $edit = $edit ?? false;
-    $prefix = $edit ? 'edit_' : '';
+    $prefix = $prefix ?? ($edit ? 'edit_' : '');
 @endphp
 
 
-{{-- 1. Domain ID --}}
+{{-- =========================================================
+     1. DOMAIN ID
+========================================================= --}}
+
 <div class="form-group">
 
     <label class="form-label">
-        Domain ID *
+        Domain ID
+        <span class="required-star">*</span>
     </label>
 
     <input
-        id="{{ $prefix }}domain_id"
+        type="text"
         name="domain_id"
-        class="form-control"
+        class="form-control-aspia"
+        value="{{ old('domain_id', ($edit && $domain) ? $domain->domain_id : '') }}"
+        placeholder="Example: DOM-001"
         required
-        value="{{ $edit ? '' : old('domain_id') }}"
-        placeholder="Enter Domain ID"
     >
 
 </div>
 
 
-{{-- 2. Domain Code --}}
+{{-- =========================================================
+     2. DOMAIN CODE
+========================================================= --}}
+
 <div class="form-group">
 
     <label class="form-label">
@@ -31,36 +49,43 @@
     </label>
 
     <input
-        id="{{ $prefix }}domain_code"
+        type="text"
         name="domain_code"
-        class="form-control"
-        value="{{ $edit ? '' : old('domain_code') }}"
-        placeholder="Enter Domain Code"
+        class="form-control-aspia"
+        value="{{ old('domain_code', ($edit && $domain) ? $domain->domain_code : '') }}"
+        placeholder="Example: GOV"
     >
 
 </div>
 
 
-{{-- 3. Domain Name --}}
+{{-- =========================================================
+     3. DOMAIN NAME
+========================================================= --}}
+
 <div class="form-group">
 
     <label class="form-label">
-        Domain Name *
+        Domain Name
+        <span class="required-star">*</span>
     </label>
 
     <input
-        id="{{ $prefix }}name"
+        type="text"
         name="name"
-        class="form-control"
+        class="form-control-aspia"
+        value="{{ old('name', ($edit && $domain) ? $domain->name : '') }}"
+        placeholder="Example: Governance"
         required
-        value="{{ $edit ? '' : old('name') }}"
-        placeholder="Enter Domain Name"
     >
 
 </div>
 
 
-{{-- 4. Slug --}}
+{{-- =========================================================
+     4. SLUG
+========================================================= --}}
+
 <div class="form-group">
 
     <label class="form-label">
@@ -68,51 +93,58 @@
     </label>
 
     <input
-        id="{{ $prefix }}slug"
+        type="text"
         name="slug"
-        class="form-control"
-        value="{{ $edit ? '' : old('slug') }}"
-        placeholder="Enter Slug"
+        class="form-control-aspia"
+        value="{{ old('slug', ($edit && $domain) ? $domain->slug : '') }}"
+        placeholder="Example: governance"
     >
 
 </div>
 
 
-{{-- 5. Purpose --}}
-<div class="form-group full">
+{{-- =========================================================
+     5. PURPOSE
+========================================================= --}}
+
+<div class="form-group">
 
     <label class="form-label">
         Purpose
     </label>
 
     <textarea
-        id="{{ $prefix }}purpose"
         name="purpose"
-        class="form-control"
-        placeholder="Enter Purpose"
-    >{{ $edit ? '' : old('purpose') }}</textarea>
+        class="form-control-aspia"
+        placeholder="Enter the domain purpose"
+    >{{ old('purpose', ($edit && $domain) ? $domain->purpose : '') }}</textarea>
 
 </div>
 
 
-{{-- 6. Scope --}}
-<div class="form-group full">
+{{-- =========================================================
+     6. SCOPE
+========================================================= --}}
+
+<div class="form-group">
 
     <label class="form-label">
         Scope
     </label>
 
     <textarea
-        id="{{ $prefix }}scope"
         name="scope"
-        class="form-control"
-        placeholder="Enter Scope"
-    >{{ $edit ? '' : old('scope') }}</textarea>
+        class="form-control-aspia"
+        placeholder="Enter the domain scope"
+    >{{ old('scope', ($edit && $domain) ? $domain->scope : '') }}</textarea>
 
 </div>
 
 
-{{-- 7. Business Owner --}}
+{{-- =========================================================
+     7. BUSINESS OWNER
+========================================================= --}}
+
 <div class="form-group">
 
     <label class="form-label">
@@ -120,17 +152,20 @@
     </label>
 
     <input
-        id="{{ $prefix }}business_owner"
+        type="text"
         name="business_owner"
-        class="form-control"
-        value="{{ $edit ? '' : old('business_owner') }}"
-        placeholder="Enter Business Owner"
+        class="form-control-aspia"
+        value="{{ old('business_owner', ($edit && $domain) ? $domain->business_owner : '') }}"
+        placeholder="Example: Board / CISO"
     >
 
 </div>
 
 
-{{-- 8. Applicable Industries #1 --}}
+{{-- =========================================================
+     8. APPLICABLE INDUSTRIES
+========================================================= --}}
+
 <div class="form-group">
 
     <label class="form-label">
@@ -138,17 +173,20 @@
     </label>
 
     <input
-        id="{{ $prefix }}applicable_industries"
+        type="text"
         name="applicable_industries"
-        class="form-control"
-        value="{{ $edit ? '' : old('applicable_industries') }}"
-        placeholder="Enter Applicable Industries"
+        class="form-control-aspia"
+        value="{{ old('applicable_industries', ($edit && $domain) ? $domain->applicable_industries : '') }}"
+        placeholder="Example: All"
     >
 
 </div>
 
 
-{{-- 9. Applicable Technologies #1 --}}
+{{-- =========================================================
+     9. APPLICABLE TECHNOLOGIES
+========================================================= --}}
+
 <div class="form-group">
 
     <label class="form-label">
@@ -156,34 +194,39 @@
     </label>
 
     <input
-        id="{{ $prefix }}applicable_technologies"
+        type="text"
         name="applicable_technologies"
-        class="form-control"
-        value="{{ $edit ? '' : old('applicable_technologies') }}"
-        placeholder="Enter Applicable Technologies"
+        class="form-control-aspia"
+        value="{{ old('applicable_technologies', ($edit && $domain) ? $domain->applicable_technologies : '') }}"
+        placeholder="Example: All"
     >
 
 </div>
 
 
-{{-- 10. Description --}}
-<div class="form-group full">
+{{-- =========================================================
+     10. DESCRIPTION
+========================================================= --}}
+
+<div class="form-group full-width">
 
     <label class="form-label">
         Description
     </label>
 
     <textarea
-        id="{{ $prefix }}description"
         name="description"
-        class="form-control"
-        placeholder="Enter Description"
-    >{{ $edit ? '' : old('description') }}</textarea>
+        class="form-control-aspia"
+        placeholder="Enter domain description"
+    >{{ old('description', ($edit && $domain) ? $domain->description : '') }}</textarea>
 
 </div>
 
 
-{{-- 11. Display Order --}}
+{{-- =========================================================
+     11. DISPLAY ORDER
+========================================================= --}}
+
 <div class="form-group">
 
     <label class="form-label">
@@ -191,40 +234,73 @@
     </label>
 
     <input
-        id="{{ $prefix }}display_order"
         type="number"
         name="display_order"
-        class="form-control"
+        class="form-control-aspia"
+        value="{{ old('display_order', ($edit && $domain) ? $domain->display_order : '') }}"
+        placeholder="Example: 1"
         min="0"
-        value="{{ $edit ? 0 : old('display_order', 0) }}"
     >
 
 </div>
 
 
-{{-- 12. Status --}}
+{{-- =========================================================
+     12. STATUS
+========================================================= --}}
+
 <div class="form-group">
 
     <label class="form-label">
         Status
+        <span class="required-star">*</span>
     </label>
 
     <select
         id="{{ $prefix }}status"
         name="status"
-        class="form-control"
+        class="form-control-aspia"
+        required
     >
 
-        <option value="Active">Active</option>
-        <option value="Inactive">Inactive</option>
-        <option value="Draft">Draft</option>
+        <option
+            value=""
+            disabled
+            {{ old('status', ($edit && $domain) ? $domain->status : '') == '' ? 'selected' : '' }}
+        >
+            Select Status
+        </option>
+
+        <option
+            value="Active"
+            {{ old('status', ($edit && $domain) ? $domain->status : '') == 'Active' ? 'selected' : '' }}
+        >
+            Active
+        </option>
+
+        <option
+            value="Inactive"
+            {{ old('status', ($edit && $domain) ? $domain->status : '') == 'Inactive' ? 'selected' : '' }}
+        >
+            Inactive
+        </option>
+
+        <option
+            value="Draft"
+            {{ old('status', ($edit && $domain) ? $domain->status : '') == 'Draft' ? 'selected' : '' }}
+        >
+            Draft
+        </option>
 
     </select>
 
 </div>
 
 
-{{-- 13. Version --}}
+{{-- =========================================================
+     13. VERSION
+========================================================= --}}
+
 <div class="form-group">
 
     <label class="form-label">
@@ -232,271 +308,298 @@
     </label>
 
     <input
-        id="{{ $prefix }}version"
+        type="text"
         name="version"
-        class="form-control"
-        value="{{ $edit ? '' : old('version') }}"
-        placeholder="Enter Version"
+        class="form-control-aspia"
+        value="{{ old('version', ($edit && $domain) ? $domain->version : '') }}"
+        placeholder="Example: 1"
     >
 
 </div>
 
 
-{{-- 14. Domain Name #2 --}}
+{{-- =========================================================
+     14. DOMAIN NAME #2
+========================================================= --}}
+
 <div class="form-group">
 
     <label class="form-label">
-        Domain Name (Additional)
+        Domain Name #2
     </label>
 
     <input
-        id="{{ $prefix }}domain_name"
-        name="domain_name"
-        class="form-control"
-        value="{{ $edit ? '' : old('domain_name') }}"
-        placeholder="Enter Domain Name"
+        type="text"
+        name="domain_name_2"
+        class="form-control-aspia"
+        value="{{ old('domain_name_2', ($edit && $domain) ? $domain->domain_name_2 : '') }}"
+        placeholder="Example: Governance Management"
     >
 
 </div>
 
 
-{{-- 15. Short Overview --}}
-<div class="form-group full">
+{{-- =========================================================
+     15. SHORT OVERVIEW
+========================================================= --}}
+
+<div class="form-group">
 
     <label class="form-label">
         Short Overview
     </label>
 
     <textarea
-        id="{{ $prefix }}short_overview"
         name="short_overview"
-        class="form-control"
-        placeholder="Enter Short Overview"
-    >{{ $edit ? '' : old('short_overview') }}</textarea>
+        class="form-control-aspia"
+        placeholder="Enter a short overview"
+    >{{ old('short_overview', ($edit && $domain) ? $domain->short_overview : '') }}</textarea>
 
 </div>
 
 
-{{-- 16. Business Objectives #1 --}}
-<div class="form-group full">
+{{-- =========================================================
+     16. BUSINESS OBJECTIVES
+========================================================= --}}
+
+<div class="form-group">
 
     <label class="form-label">
         Business Objectives
     </label>
 
     <textarea
-        id="{{ $prefix }}business_objectives"
         name="business_objectives"
-        class="form-control"
-        placeholder="Enter Business Objectives"
-    >{{ $edit ? '' : old('business_objectives') }}</textarea>
+        class="form-control-aspia"
+        placeholder="Enter business objectives"
+    >{{ old('business_objectives', ($edit && $domain) ? $domain->business_objectives : '') }}</textarea>
 
 </div>
 
 
-{{-- 17. Business Objectives #2 --}}
-<div class="form-group full">
+{{-- =========================================================
+     17. BUSINESS OBJECTIVES #2
+========================================================= --}}
+
+<div class="form-group">
 
     <label class="form-label">
-        Business Objectives (Additional)
+        Business Objectives #2
     </label>
 
     <textarea
-        id="{{ $prefix }}business_objectives_2"
         name="business_objectives_2"
-        class="form-control"
-        placeholder="Enter Additional Business Objectives"
-    >{{ $edit ? '' : old('business_objectives_2') }}</textarea>
+        class="form-control-aspia"
+        placeholder="Enter additional business objectives"
+    >{{ old('business_objectives_2', ($edit && $domain) ? $domain->business_objectives_2 : '') }}</textarea>
 
 </div>
 
 
-{{-- 18. Business Risks --}}
-<div class="form-group full">
+{{-- =========================================================
+     18. BUSINESS RISKS
+========================================================= --}}
+
+<div class="form-group">
 
     <label class="form-label">
         Business Risks
     </label>
 
     <textarea
-        id="{{ $prefix }}business_risks"
         name="business_risks"
-        class="form-control"
-        placeholder="Enter Business Risks"
-    >{{ $edit ? '' : old('business_risks') }}</textarea>
+        class="form-control-aspia"
+        placeholder="Enter business risks"
+    >{{ old('business_risks', ($edit && $domain) ? $domain->business_risks : '') }}</textarea>
 
 </div>
 
 
-{{-- 19. Key Capabilities --}}
-<div class="form-group full">
+{{-- =========================================================
+     19. KEY CAPABILITIES
+========================================================= --}}
+
+<div class="form-group">
 
     <label class="form-label">
         Key Capabilities
     </label>
 
     <textarea
-        id="{{ $prefix }}key_capabilities"
         name="key_capabilities"
-        class="form-control"
-        placeholder="Enter Key Capabilities"
-    >{{ $edit ? '' : old('key_capabilities') }}</textarea>
+        class="form-control-aspia"
+        placeholder="Enter key capabilities"
+    >{{ old('key_capabilities', ($edit && $domain) ? $domain->key_capabilities : '') }}</textarea>
 
 </div>
 
 
-{{-- 20. Typical Stakeholders --}}
-<div class="form-group full">
+{{-- =========================================================
+     20. TYPICAL STAKEHOLDERS
+========================================================= --}}
+
+<div class="form-group">
 
     <label class="form-label">
         Typical Stakeholders
     </label>
 
     <textarea
-        id="{{ $prefix }}typical_stakeholders"
         name="typical_stakeholders"
-        class="form-control"
-        placeholder="Enter Typical Stakeholders"
-    >{{ $edit ? '' : old('typical_stakeholders') }}</textarea>
+        class="form-control-aspia"
+        placeholder="Example: Board, CISO, Compliance Officer"
+    >{{ old('typical_stakeholders', ($edit && $domain) ? $domain->typical_stakeholders : '') }}</textarea>
 
 </div>
 
 
-{{-- 21. Applicable Industries #2 --}}
+{{-- =========================================================
+     21. APPLICABLE INDUSTRIES #2
+========================================================= --}}
+
 <div class="form-group">
 
     <label class="form-label">
-        Applicable Industries (Additional)
+        Applicable Industries #2
     </label>
 
-    <input
-        id="{{ $prefix }}applicable_industries_2"
+    <textarea
         name="applicable_industries_2"
-        class="form-control"
-        value="{{ $edit ? '' : old('applicable_industries_2') }}"
-        placeholder="Enter Additional Industries"
-    >
+        class="form-control-aspia"
+        placeholder="Enter additional applicable industries"
+    >{{ old('applicable_industries_2', ($edit && $domain) ? $domain->applicable_industries_2 : '') }}</textarea>
 
 </div>
 
 
-{{-- 22. Applicable Technologies #2 --}}
+{{-- =========================================================
+     22. APPLICABLE TECHNOLOGIES #2
+========================================================= --}}
+
 <div class="form-group">
 
     <label class="form-label">
-        Applicable Technologies (Additional)
+        Applicable Technologies #2
     </label>
 
-    <input
-        id="{{ $prefix }}applicable_technologies_2"
+    <textarea
         name="applicable_technologies_2"
-        class="form-control"
-        value="{{ $edit ? '' : old('applicable_technologies_2') }}"
-        placeholder="Enter Additional Technologies"
-    >
+        class="form-control-aspia"
+        placeholder="Enter additional applicable technologies"
+    >{{ old('applicable_technologies_2', ($edit && $domain) ? $domain->applicable_technologies_2 : '') }}</textarea>
 
 </div>
 
 
-{{-- 23. Keywords --}}
+{{-- =========================================================
+     23. KEYWORDS
+========================================================= --}}
+
 <div class="form-group">
 
     <label class="form-label">
         Keywords
     </label>
 
-    <input
-        id="{{ $prefix }}keywords"
+    <textarea
         name="keywords"
-        class="form-control"
-        value="{{ $edit ? '' : old('keywords') }}"
-        placeholder="Enter Keywords"
-    >
+        class="form-control-aspia"
+        placeholder="Example: governance, compliance, risk"
+    >{{ old('keywords', ($edit && $domain) ? $domain->keywords : '') }}</textarea>
 
 </div>
 
 
-{{-- 24. Tags --}}
+{{-- =========================================================
+     24. TAGS
+========================================================= --}}
+
 <div class="form-group">
 
     <label class="form-label">
         Tags
     </label>
 
-    <input
-        id="{{ $prefix }}tags"
+    <textarea
         name="tags"
-        class="form-control"
-        value="{{ $edit ? '' : old('tags') }}"
-        placeholder="Enter Tags"
-    >
+        class="form-control-aspia"
+        placeholder="Example: governance, GRC"
+    >{{ old('tags', ($edit && $domain) ? $domain->tags : '') }}</textarea>
 
 </div>
 
 
-{{-- 25. Why This Domain Matters --}}
-<div class="form-group full">
+{{-- =========================================================
+     25. WHY THIS DOMAIN MATTERS
+========================================================= --}}
+
+<div class="form-group">
 
     <label class="form-label">
         Why This Domain Matters
     </label>
 
     <textarea
-        id="{{ $prefix }}why_domain_matters"
         name="why_domain_matters"
-        class="form-control"
+        class="form-control-aspia"
         placeholder="Explain why this domain matters"
-    >{{ $edit ? '' : old('why_domain_matters') }}</textarea>
+    >{{ old('why_domain_matters', ($edit && $domain) ? $domain->why_domain_matters : '') }}</textarea>
 
 </div>
 
 
-{{-- 26. Common Challenges --}}
-<div class="form-group full">
+{{-- =========================================================
+     26. COMMON CHALLENGES
+========================================================= --}}
+
+<div class="form-group">
 
     <label class="form-label">
         Common Challenges
     </label>
 
     <textarea
-        id="{{ $prefix }}common_challenges"
         name="common_challenges"
-        class="form-control"
-        placeholder="Enter Common Challenges"
-    >{{ $edit ? '' : old('common_challenges') }}</textarea>
+        class="form-control-aspia"
+        placeholder="Enter common challenges"
+    >{{ old('common_challenges', ($edit && $domain) ? $domain->common_challenges : '') }}</textarea>
 
 </div>
 
 
-{{-- 27. Related Domains --}}
-<div class="form-group full">
+{{-- =========================================================
+     27. RELATED DOMAINS
+========================================================= --}}
+
+<div class="form-group">
 
     <label class="form-label">
         Related Domains
     </label>
 
     <textarea
-        id="{{ $prefix }}related_domains"
         name="related_domains"
-        class="form-control"
-        placeholder="Enter Related Domains"
-    >{{ $edit ? '' : old('related_domains') }}</textarea>
+        class="form-control-aspia"
+        placeholder="Enter related domains"
+    >{{ old('related_domains', ($edit && $domain) ? $domain->related_domains : '') }}</textarea>
 
 </div>
 
 
-{{-- 28. Related Frameworks --}}
-<div class="form-group full">
+{{-- =========================================================
+     28. RELATED FRAMEWORKS
+========================================================= --}}
+
+<div class="form-group">
 
     <label class="form-label">
         Related Frameworks
     </label>
 
     <textarea
-        id="{{ $prefix }}related_frameworks"
         name="related_frameworks"
-        class="form-control"
-        placeholder="Enter Related Frameworks"
-    >{{ $edit ? '' : old('related_frameworks') }}</textarea>
+        class="form-control-aspia"
+        placeholder="Enter related frameworks"
+    >{{ old('related_frameworks', ($edit && $domain) ? $domain->related_frameworks : '') }}</textarea>
 
 </div>

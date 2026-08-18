@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\FrameworkController;
 use App\Http\Controllers\FrameworkTemplateController;
 use App\Http\Controllers\DomainController;
+use App\Http\Controllers\DomainTemplateController;
 use App\Http\Controllers\ControlController;
 use App\Http\Controllers\RequirementController;
 use Illuminate\Support\Facades\Route;
@@ -164,11 +165,16 @@ Route::middleware('auth')->group(function () {
     |--------------------------------------------------------------------------
     */
 
+
+    // Domain list
+
     Route::get(
         '/domains',
         [DomainController::class, 'index']
     )->name('domains.index');
 
+
+    // Add Domain
 
     Route::post(
         '/domains',
@@ -176,17 +182,23 @@ Route::middleware('auth')->group(function () {
     )->name('domains.store');
 
 
+    // Update Domain
+
     Route::put(
         '/domains/{domain}',
         [DomainController::class, 'update']
     )->name('domains.update');
 
 
+    // Delete Domain
+
     Route::delete(
         '/domains/{domain}',
         [DomainController::class, 'destroy']
     )->name('domains.destroy');
 
+
+    // Import Domains
 
     Route::post(
         '/domains/import',
@@ -197,9 +209,50 @@ Route::middleware('auth')->group(function () {
 
     /*
     |--------------------------------------------------------------------------
+    | Domain Template
+    |--------------------------------------------------------------------------
+    */
+
+
+    // Save Domain HTML Template
+
+    Route::post(
+        '/domains/template',
+        [DomainTemplateController::class, 'store']
+    )->name('domains.template.store');
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Domain Detail Page
+    |--------------------------------------------------------------------------
+    |
+    | Example:
+    |
+    | /domains/access-control
+    |
+    */
+
+    Route::get(
+        '/domains/{slug}',
+        [DomainTemplateController::class, 'show']
+    )
+        ->where(
+            'slug',
+            '[a-z0-9]+(?:-[a-z0-9]+)*'
+        )
+        ->name('domains.show');
+
+
+
+    /*
+    |--------------------------------------------------------------------------
     | Controls
     |--------------------------------------------------------------------------
     */
+
+
+    // Control list
 
     Route::get(
         '/controls',
@@ -207,11 +260,15 @@ Route::middleware('auth')->group(function () {
     )->name('controls.index');
 
 
+    // Add Control
+
     Route::post(
         '/controls',
         [ControlController::class, 'store']
     )->name('controls.store');
 
+
+    // Update Control
 
     Route::put(
         '/controls/{control}',
@@ -219,11 +276,15 @@ Route::middleware('auth')->group(function () {
     )->name('controls.update');
 
 
+    // Delete Control
+
     Route::delete(
         '/controls/{control}',
         [ControlController::class, 'destroy']
     )->name('controls.destroy');
 
+
+    // Import Controls
 
     Route::post(
         '/controls/import',
@@ -238,11 +299,16 @@ Route::middleware('auth')->group(function () {
     |--------------------------------------------------------------------------
     */
 
+
+    // Requirement list
+
     Route::get(
         '/requirements',
         [RequirementController::class, 'index']
     )->name('requirements.index');
 
+
+    // Add Requirement
 
     Route::post(
         '/requirements',
@@ -250,17 +316,23 @@ Route::middleware('auth')->group(function () {
     )->name('requirements.store');
 
 
+    // Update Requirement
+
     Route::put(
         '/requirements/{requirement}',
         [RequirementController::class, 'update']
     )->name('requirements.update');
 
 
+    // Delete Requirement
+
     Route::delete(
         '/requirements/{requirement}',
         [RequirementController::class, 'destroy']
     )->name('requirements.destroy');
 
+
+    // Import Requirements
 
     Route::post(
         '/requirements/import',
