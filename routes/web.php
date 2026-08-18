@@ -6,6 +6,7 @@ use App\Http\Controllers\FrameworkTemplateController;
 use App\Http\Controllers\DomainController;
 use App\Http\Controllers\DomainTemplateController;
 use App\Http\Controllers\ControlController;
+use App\Http\Controllers\ControlTemplateController;
 use App\Http\Controllers\RequirementController;
 use Illuminate\Support\Facades\Route;
 
@@ -16,7 +17,6 @@ use Illuminate\Support\Facades\Route;
 |--------------------------------------------------------------------------
 */
 
-// Website root → Login page
 Route::get('/', function () {
 
     return redirect()->route('login');
@@ -79,46 +79,30 @@ Route::middleware('auth')->group(function () {
     |--------------------------------------------------------------------------
     */
 
-
-    // Framework list
-
     Route::get(
         '/frameworks',
         [FrameworkController::class, 'index']
     )->name('frameworks.index');
-
-
-    // Add Framework
 
     Route::post(
         '/frameworks',
         [FrameworkController::class, 'store']
     )->name('frameworks.store');
 
-
-    // Update Framework
-
     Route::put(
         '/frameworks/{framework}',
         [FrameworkController::class, 'update']
     )->name('frameworks.update');
-
-
-    // Delete Framework
 
     Route::delete(
         '/frameworks/{framework}',
         [FrameworkController::class, 'destroy']
     )->name('frameworks.destroy');
 
-
-    // Import Frameworks
-
     Route::post(
         '/frameworks/import',
         [FrameworkController::class, 'import']
     )->name('frameworks.import');
-
 
 
     /*
@@ -127,25 +111,10 @@ Route::middleware('auth')->group(function () {
     |--------------------------------------------------------------------------
     */
 
-
-    // Save Framework HTML Template
-
     Route::post(
         '/frameworks/template',
         [FrameworkTemplateController::class, 'store']
     )->name('frameworks.template.store');
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | Framework Detail Page
-    |--------------------------------------------------------------------------
-    |
-    | Example:
-    |
-    | /frameworks/iso-27001
-    |
-    */
 
     Route::get(
         '/frameworks/{slug}',
@@ -165,46 +134,30 @@ Route::middleware('auth')->group(function () {
     |--------------------------------------------------------------------------
     */
 
-
-    // Domain list
-
     Route::get(
         '/domains',
         [DomainController::class, 'index']
     )->name('domains.index');
-
-
-    // Add Domain
 
     Route::post(
         '/domains',
         [DomainController::class, 'store']
     )->name('domains.store');
 
-
-    // Update Domain
-
     Route::put(
         '/domains/{domain}',
         [DomainController::class, 'update']
     )->name('domains.update');
-
-
-    // Delete Domain
 
     Route::delete(
         '/domains/{domain}',
         [DomainController::class, 'destroy']
     )->name('domains.destroy');
 
-
-    // Import Domains
-
     Route::post(
         '/domains/import',
         [DomainController::class, 'import']
     )->name('domains.import');
-
 
 
     /*
@@ -213,25 +166,10 @@ Route::middleware('auth')->group(function () {
     |--------------------------------------------------------------------------
     */
 
-
-    // Save Domain HTML Template
-
     Route::post(
         '/domains/template',
         [DomainTemplateController::class, 'store']
     )->name('domains.template.store');
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | Domain Detail Page
-    |--------------------------------------------------------------------------
-    |
-    | Example:
-    |
-    | /domains/access-control
-    |
-    */
 
     Route::get(
         '/domains/{slug}',
@@ -251,16 +189,11 @@ Route::middleware('auth')->group(function () {
     |--------------------------------------------------------------------------
     */
 
-
-    // Control list
-
     Route::get(
         '/controls',
         [ControlController::class, 'index']
     )->name('controls.index');
 
-
-    // Add Control
 
     Route::post(
         '/controls',
@@ -268,15 +201,11 @@ Route::middleware('auth')->group(function () {
     )->name('controls.store');
 
 
-    // Update Control
-
     Route::put(
         '/controls/{control}',
         [ControlController::class, 'update']
     )->name('controls.update');
 
-
-    // Delete Control
 
     Route::delete(
         '/controls/{control}',
@@ -284,12 +213,44 @@ Route::middleware('auth')->group(function () {
     )->name('controls.destroy');
 
 
-    // Import Controls
-
     Route::post(
         '/controls/import',
         [ControlController::class, 'import']
     )->name('controls.import');
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Control Template
+    |--------------------------------------------------------------------------
+    */
+
+    Route::post(
+        '/controls/template',
+        [ControlTemplateController::class, 'store']
+    )->name('controls.template.store');
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Control Detail / Rendered Template
+    |--------------------------------------------------------------------------
+    |
+    | Example:
+    |
+    | /controls/GOV-001
+    |
+    */
+
+    Route::get(
+    '/controls/view/{control_id}',
+    [ControlTemplateController::class, 'show']
+)
+    ->where(
+        'control_id',
+        '[A-Za-z0-9_-]+'
+    )
+    ->name('controls.show');
 
 
 
@@ -299,40 +260,25 @@ Route::middleware('auth')->group(function () {
     |--------------------------------------------------------------------------
     */
 
-
-    // Requirement list
-
     Route::get(
         '/requirements',
         [RequirementController::class, 'index']
     )->name('requirements.index');
-
-
-    // Add Requirement
 
     Route::post(
         '/requirements',
         [RequirementController::class, 'store']
     )->name('requirements.store');
 
-
-    // Update Requirement
-
     Route::put(
         '/requirements/{requirement}',
         [RequirementController::class, 'update']
     )->name('requirements.update');
 
-
-    // Delete Requirement
-
     Route::delete(
         '/requirements/{requirement}',
         [RequirementController::class, 'destroy']
     )->name('requirements.destroy');
-
-
-    // Import Requirements
 
     Route::post(
         '/requirements/import',
