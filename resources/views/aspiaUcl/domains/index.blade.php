@@ -831,6 +831,20 @@ textarea.form-control-aspia {
 
     @endif
 
+    {{-- =====================================================
+     ERROR MESSAGE
+    ====================================================== --}}
+
+    @if(session('error'))
+
+        <div class="alert-error">
+
+            {{ session('error') }}
+
+        </div>
+
+    @endif
+
 
     {{-- =====================================================
          VALIDATION ERRORS
