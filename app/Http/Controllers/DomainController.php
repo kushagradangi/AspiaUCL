@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Imports\DomainImport;
+use App\Models\Activity;
 use App\Models\Domain;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -493,8 +494,14 @@ public function store(Request $request)
     |--------------------------------------------------------------------------
     */
 
-    Domain::create($validated);
+    $domain = Domain::create($validated);
 
+    Activity::create([
+        'user_id' => auth()->id(),
+        'module' => 'domain',
+        'action' => 'Created',
+        'description' => 'Created domain: ' . $domain->name,
+    ]);
 
     return redirect()
         ->route('domains.index')
@@ -542,6 +549,12 @@ public function store(Request $request)
 
         $domain->update($validated);
 
+        Activity::create([
+            'user_id' => auth()->id(),
+            'module' => 'domain',
+            'action' => 'Updated',
+            'description' => 'Updated domain: ' . $domain->name,
+        ]);
 
         return redirect()
             ->route('domains.index')
@@ -560,7 +573,15 @@ public function store(Request $request)
 
     public function destroy(Domain $domain)
     {
+        $domainName = $domain->name;
         $domain->delete();
+
+        Activity::create([
+            'user_id' => auth()->id(),
+            'module' => 'domain',
+            'action' => 'Deleted',
+            'description' => 'Deleted domain: ' . $domainName,
+        ]);
 
         return redirect()
             ->route('domains.index')
@@ -593,6 +614,12 @@ public function store(Request $request)
             $request->file('file')
         );
 
+        Activity::create([
+            'user_id' => auth()->id(),
+            'module' => 'domain',
+            'action' => 'Imported',
+            'description' => 'Imported domains from XLSX file.',
+        ]);
 
         return redirect()
             ->route('domains.index')

@@ -1023,31 +1023,38 @@
                     </div>
 
 
-                    <div class="activity">
+                    @forelse($activities as $activity)
 
-                        <span class="activity-dot"></span>
+                        <div class="activity">
 
-                        Framework information updated
+                            <span class="activity-dot"></span>
 
-                    </div>
+                            <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
 
+                                <div>
+                                    <strong style="color: #10bce8; text-transform: uppercase; font-size: 11px; margin-right: 6px; letter-spacing: 0.5px;">[{{ $activity->module }}]</strong>
+                                    <span>{{ $activity->description }}</span>
+                                </div>
 
-                    <div class="activity">
+                                <span style="font-size: 12px; color: #63728c; white-space: nowrap; margin-left: 12px;">
+                                    {{ $activity->created_at->diffForHumans() }}
+                                </span>
 
-                        <span class="activity-dot"></span>
+                            </div>
 
-                        New control added
+                        </div>
 
-                    </div>
+                    @empty
 
+                        <div class="activity" style="color: #63728c;">
 
-                    <div class="activity">
+                            <span class="activity-dot" style="background: #63728c;"></span>
 
-                        <span class="activity-dot"></span>
+                            No recent activity recorded yet.
 
-                        Requirement modified
+                        </div>
 
-                    </div>
+                    @endforelse
 
 
                 </section>

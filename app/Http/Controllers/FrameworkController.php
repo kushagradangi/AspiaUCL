@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Imports\FrameworkImport;
+use App\Models\Activity;
 use App\Models\Framework;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -187,8 +188,14 @@ class FrameworkController extends Controller
         |--------------------------------------------------------------------------
         */
 
-        Framework::create($validated);
+        $framework = Framework::create($validated);
 
+        Activity::create([
+            'user_id' => auth()->id(),
+            'module' => 'framework',
+            'action' => 'Created',
+            'description' => 'Created framework: ' . $framework->name,
+        ]);
 
         return redirect()
             ->route('frameworks.index')
@@ -299,6 +306,12 @@ class FrameworkController extends Controller
 
         $framework->update($validated);
 
+        Activity::create([
+            'user_id' => auth()->id(),
+            'module' => 'framework',
+            'action' => 'Updated',
+            'description' => 'Updated framework: ' . $framework->name,
+        ]);
 
         return redirect()
             ->route('frameworks.index')
@@ -317,7 +330,15 @@ class FrameworkController extends Controller
 
     public function destroy(Framework $framework)
     {
+        $frameworkName = $framework->name;
         $framework->delete();
+
+        Activity::create([
+            'user_id' => auth()->id(),
+            'module' => 'framework',
+            'action' => 'Deleted',
+            'description' => 'Deleted framework: ' . $frameworkName,
+        ]);
 
         return redirect()
             ->route('frameworks.index')
@@ -350,6 +371,12 @@ class FrameworkController extends Controller
             $request->file('file')
         );
 
+        Activity::create([
+            'user_id' => auth()->id(),
+            'module' => 'framework',
+            'action' => 'Imported',
+            'description' => 'Imported frameworks from XLSX file.',
+        ]);
 
         return redirect()
             ->route('frameworks.index')

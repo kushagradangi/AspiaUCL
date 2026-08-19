@@ -38,11 +38,14 @@ Route::get('/', function () {
 
 Route::get('/dashboard', function () {
 
+    $activities = \App\Models\Activity::latest()->take(10)->get();
+
     return view('dashboard', [
         'frameworksCount' => \App\Models\Framework::count(),
         'domainsCount' => \App\Models\Domain::count(),
         'controlsCount' => \App\Models\Control::count(),
         'requirementsCount' => \App\Models\Requirement::count(),
+        'activities' => $activities,
     ]);
 
 })
