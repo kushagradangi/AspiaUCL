@@ -28,6 +28,7 @@
 
     <input
         type="text"
+        id="{{ $prefix }}domain_id"
         name="domain_id"
         class="form-control-aspia"
         value="{{ old('domain_id', ($edit && $domain) ? $domain->domain_id : '') }}"
@@ -50,6 +51,7 @@
 
     <input
         type="text"
+        id="{{ $prefix }}domain_code"
         name="domain_code"
         class="form-control-aspia"
         value="{{ old('domain_code', ($edit && $domain) ? $domain->domain_code : '') }}"
@@ -72,6 +74,7 @@
 
     <input
         type="text"
+        id="{{ $prefix }}name"
         name="name"
         class="form-control-aspia"
         value="{{ old('name', ($edit && $domain) ? $domain->name : '') }}"
@@ -94,6 +97,7 @@
 
     <input
         type="text"
+        id="{{ $prefix }}slug"
         name="slug"
         class="form-control-aspia"
         value="{{ old('slug', ($edit && $domain) ? $domain->slug : '') }}"
@@ -114,6 +118,7 @@
     </label>
 
     <textarea
+        id="{{ $prefix }}purpose"
         name="purpose"
         class="form-control-aspia"
         placeholder="Enter the domain purpose"
@@ -133,6 +138,7 @@
     </label>
 
     <textarea
+        id="{{ $prefix }}scope"
         name="scope"
         class="form-control-aspia"
         placeholder="Enter the domain scope"
@@ -153,6 +159,7 @@
 
     <input
         type="text"
+        id="{{ $prefix }}business_owner"
         name="business_owner"
         class="form-control-aspia"
         value="{{ old('business_owner', ($edit && $domain) ? $domain->business_owner : '') }}"
@@ -174,6 +181,7 @@
 
     <input
         type="text"
+        id="{{ $prefix }}applicable_industries"
         name="applicable_industries"
         class="form-control-aspia"
         value="{{ old('applicable_industries', ($edit && $domain) ? $domain->applicable_industries : '') }}"
@@ -195,6 +203,7 @@
 
     <input
         type="text"
+        id="{{ $prefix }}applicable_technologies"
         name="applicable_technologies"
         class="form-control-aspia"
         value="{{ old('applicable_technologies', ($edit && $domain) ? $domain->applicable_technologies : '') }}"
@@ -215,6 +224,7 @@
     </label>
 
     <textarea
+        id="{{ $prefix }}description"
         name="description"
         class="form-control-aspia"
         placeholder="Enter domain description"
@@ -235,6 +245,7 @@
 
     <input
         type="number"
+        id="{{ $prefix }}display_order"
         name="display_order"
         class="form-control-aspia"
         value="{{ old('display_order', ($edit && $domain) ? $domain->display_order : '') }}"
@@ -309,6 +320,7 @@
 
     <input
         type="text"
+        id="{{ $prefix }}version"
         name="version"
         class="form-control-aspia"
         value="{{ old('version', ($edit && $domain) ? $domain->version : '') }}"
@@ -330,6 +342,7 @@
 
     <input
         type="text"
+        id="{{ $prefix }}domain_name_2"
         name="domain_name_2"
         class="form-control-aspia"
         value="{{ old('domain_name_2', ($edit && $domain) ? $domain->domain_name_2 : '') }}"
@@ -350,6 +363,7 @@
     </label>
 
     <textarea
+        id="{{ $prefix }}short_overview"
         name="short_overview"
         class="form-control-aspia"
         placeholder="Enter a short overview"
@@ -369,6 +383,7 @@
     </label>
 
     <textarea
+        id="{{ $prefix }}business_objectives"
         name="business_objectives"
         class="form-control-aspia"
         placeholder="Enter business objectives"
@@ -388,6 +403,7 @@
     </label>
 
     <textarea
+        id="{{ $prefix }}business_objectives_2"
         name="business_objectives_2"
         class="form-control-aspia"
         placeholder="Enter additional business objectives"
@@ -407,6 +423,7 @@
     </label>
 
     <textarea
+        id="{{ $prefix }}business_risks"
         name="business_risks"
         class="form-control-aspia"
         placeholder="Enter business risks"
@@ -426,6 +443,7 @@
     </label>
 
     <textarea
+        id="{{ $prefix }}key_capabilities"
         name="key_capabilities"
         class="form-control-aspia"
         placeholder="Enter key capabilities"
@@ -445,6 +463,7 @@
     </label>
 
     <textarea
+        id="{{ $prefix }}typical_stakeholders"
         name="typical_stakeholders"
         class="form-control-aspia"
         placeholder="Example: Board, CISO, Compliance Officer"
@@ -464,6 +483,7 @@
     </label>
 
     <textarea
+        id="{{ $prefix }}applicable_industries_2"
         name="applicable_industries_2"
         class="form-control-aspia"
         placeholder="Enter additional applicable industries"
@@ -483,6 +503,7 @@
     </label>
 
     <textarea
+        id="{{ $prefix }}applicable_technologies_2"
         name="applicable_technologies_2"
         class="form-control-aspia"
         placeholder="Enter additional applicable technologies"
@@ -502,6 +523,7 @@
     </label>
 
     <textarea
+        id="{{ $prefix }}keywords"
         name="keywords"
         class="form-control-aspia"
         placeholder="Example: governance, compliance, risk"
@@ -521,6 +543,7 @@
     </label>
 
     <textarea
+        id="{{ $prefix }}tags"
         name="tags"
         class="form-control-aspia"
         placeholder="Example: governance, GRC"
@@ -540,6 +563,7 @@
     </label>
 
     <textarea
+        id="{{ $prefix }}why_domain_matters"
         name="why_domain_matters"
         class="form-control-aspia"
         placeholder="Explain why this domain matters"
@@ -559,6 +583,7 @@
     </label>
 
     <textarea
+        id="{{ $prefix }}common_challenges"
         name="common_challenges"
         class="form-control-aspia"
         placeholder="Enter common challenges"
@@ -578,6 +603,7 @@
     </label>
 
     <textarea
+        id="{{ $prefix }}related_domains"
         name="related_domains"
         class="form-control-aspia"
         placeholder="Enter related domains"
@@ -597,6 +623,7 @@
     </label>
 
     <textarea
+        id="{{ $prefix }}related_frameworks"
         name="related_frameworks"
         class="form-control-aspia"
         placeholder="Enter related frameworks"

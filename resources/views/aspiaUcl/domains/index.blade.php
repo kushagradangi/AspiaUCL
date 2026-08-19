@@ -306,6 +306,58 @@
 
 
 /* =========================================================
+   STATUS BADGES
+========================================================= */
+
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px 13px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: 0.3px;
+    transition: all 0.3s ease;
+}
+
+/* Active - Glowing Green */
+.status-badge.status-active {
+    background: rgba(34, 197, 94, 0.14);
+    color: #4ade80;
+    border: 1px solid rgba(34, 197, 94, 0.4);
+    box-shadow: 0 0 12px rgba(34, 197, 94, 0.35), inset 0 0 8px rgba(34, 197, 94, 0.12);
+    text-shadow: 0 0 8px rgba(74, 222, 128, 0.7);
+}
+
+/* Inactive - Glowing Red */
+.status-badge.status-inactive {
+    background: rgba(239, 68, 68, 0.14);
+    color: #f87171;
+    border: 1px solid rgba(239, 68, 68, 0.4);
+    box-shadow: 0 0 12px rgba(239, 68, 68, 0.35), inset 0 0 8px rgba(239, 68, 68, 0.12);
+    text-shadow: 0 0 8px rgba(248, 113, 113, 0.7);
+}
+
+/* Draft - Glowing Amber / Orange */
+.status-badge.status-draft {
+    background: rgba(245, 158, 11, 0.14);
+    color: #fbbf24;
+    border: 1px solid rgba(245, 158, 11, 0.4);
+    box-shadow: 0 0 12px rgba(245, 158, 11, 0.35), inset 0 0 8px rgba(245, 158, 11, 0.12);
+    text-shadow: 0 0 8px rgba(251, 191, 36, 0.7);
+}
+
+/* Default / Fallback */
+.status-badge.status-default {
+    background: rgba(148, 163, 184, 0.12);
+    color: #94a3b8;
+    border: 1px solid rgba(148, 163, 184, 0.2);
+}
+
+
+/* =========================================================
    ACTIONS
 ========================================================= */
 
@@ -1100,7 +1152,29 @@ textarea.form-control-aspia {
 
                             <td>
 
-                                {{ $domain->status ?: '—' }}
+                                @php
+                                    $statusLower = strtolower(trim($domain->status ?? ''));
+                                @endphp
+
+                                @if($statusLower === 'active')
+                                    <span class="status-badge status-active">
+                                        Active
+                                    </span>
+                                @elseif($statusLower === 'inactive')
+                                    <span class="status-badge status-inactive">
+                                        Inactive
+                                    </span>
+                                @elseif($statusLower === 'draft')
+                                    <span class="status-badge status-draft">
+                                        Draft
+                                    </span>
+                                @elseif($domain->status)
+                                    <span class="status-badge status-default">
+                                        {{ $domain->status }}
+                                    </span>
+                                @else
+                                    —
+                                @endif
 
                             </td>
 
@@ -1202,7 +1276,7 @@ textarea.form-control-aspia {
 
                                             @js($domain->version),
 
-                                            @js($domain->domain_name),
+                                            @js($domain->domain_name_2),
 
                                             @js($domain->short_overview),
 
@@ -2153,7 +2227,7 @@ function openEditDomainModal(
     displayOrder,
     status,
     version,
-    domainName,
+    domainName2,
     shortOverview,
     businessObjectives,
     businessObjectives2,
@@ -2227,8 +2301,8 @@ function openEditDomainModal(
         version:
             version,
 
-        domain_name:
-            domainName,
+        domain_name_2:
+            domainName2,
 
         short_overview:
             shortOverview,

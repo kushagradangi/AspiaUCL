@@ -1,13 +1,19 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+
 use App\Http\Controllers\FrameworkController;
 use App\Http\Controllers\FrameworkTemplateController;
+
 use App\Http\Controllers\DomainController;
 use App\Http\Controllers\DomainTemplateController;
+
 use App\Http\Controllers\ControlController;
 use App\Http\Controllers\ControlTemplateController;
+
 use App\Http\Controllers\RequirementController;
+use App\Http\Controllers\RequirementTemplateController;
+
 use Illuminate\Support\Facades\Route;
 
 
@@ -84,25 +90,30 @@ Route::middleware('auth')->group(function () {
         [FrameworkController::class, 'index']
     )->name('frameworks.index');
 
+
     Route::post(
         '/frameworks',
         [FrameworkController::class, 'store']
     )->name('frameworks.store');
+
 
     Route::put(
         '/frameworks/{framework}',
         [FrameworkController::class, 'update']
     )->name('frameworks.update');
 
+
     Route::delete(
         '/frameworks/{framework}',
         [FrameworkController::class, 'destroy']
     )->name('frameworks.destroy');
 
+
     Route::post(
         '/frameworks/import',
         [FrameworkController::class, 'import']
     )->name('frameworks.import');
+
 
 
     /*
@@ -115,6 +126,7 @@ Route::middleware('auth')->group(function () {
         '/frameworks/template',
         [FrameworkTemplateController::class, 'store']
     )->name('frameworks.template.store');
+
 
     Route::get(
         '/frameworks/{slug}',
@@ -139,25 +151,30 @@ Route::middleware('auth')->group(function () {
         [DomainController::class, 'index']
     )->name('domains.index');
 
+
     Route::post(
         '/domains',
         [DomainController::class, 'store']
     )->name('domains.store');
+
 
     Route::put(
         '/domains/{domain}',
         [DomainController::class, 'update']
     )->name('domains.update');
 
+
     Route::delete(
         '/domains/{domain}',
         [DomainController::class, 'destroy']
     )->name('domains.destroy');
 
+
     Route::post(
         '/domains/import',
         [DomainController::class, 'import']
     )->name('domains.import');
+
 
 
     /*
@@ -170,6 +187,7 @@ Route::middleware('auth')->group(function () {
         '/domains/template',
         [DomainTemplateController::class, 'store']
     )->name('domains.template.store');
+
 
     Route::get(
         '/domains/{slug}',
@@ -219,6 +237,7 @@ Route::middleware('auth')->group(function () {
     )->name('controls.import');
 
 
+
     /*
     |--------------------------------------------------------------------------
     | Control Template
@@ -243,14 +262,14 @@ Route::middleware('auth')->group(function () {
     */
 
     Route::get(
-    '/controls/view/{control_id}',
-    [ControlTemplateController::class, 'show']
-)
-    ->where(
-        'control_id',
-        '[A-Za-z0-9_-]+'
+        '/controls/view/{control_id}',
+        [ControlTemplateController::class, 'show']
     )
-    ->name('controls.show');
+        ->where(
+            'control_id',
+            '[A-Za-z0-9_-]+'
+        )
+        ->name('controls.show');
 
 
 
@@ -265,25 +284,64 @@ Route::middleware('auth')->group(function () {
         [RequirementController::class, 'index']
     )->name('requirements.index');
 
+
     Route::post(
         '/requirements',
         [RequirementController::class, 'store']
     )->name('requirements.store');
+
 
     Route::put(
         '/requirements/{requirement}',
         [RequirementController::class, 'update']
     )->name('requirements.update');
 
+
     Route::delete(
         '/requirements/{requirement}',
         [RequirementController::class, 'destroy']
     )->name('requirements.destroy');
 
+
     Route::post(
         '/requirements/import',
         [RequirementController::class, 'import']
     )->name('requirements.import');
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Requirement Template
+    |--------------------------------------------------------------------------
+    */
+
+    Route::post(
+        '/requirements/template',
+        [RequirementTemplateController::class, 'store']
+    )->name('requirements.template.store');
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Requirement Detail / Rendered Template
+    |--------------------------------------------------------------------------
+    |
+    | Example:
+    |
+    | /requirements/REQ-001
+    |
+    */
+
+    Route::get(
+        '/requirements/view/{requirement_id}',
+        [RequirementTemplateController::class, 'show']
+    )
+        ->where(
+            'requirement_id',
+            '[A-Za-z0-9_-]+'
+        )
+        ->name('requirements.show');
 
 });
 
