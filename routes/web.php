@@ -38,7 +38,12 @@ Route::get('/', function () {
 
 Route::get('/dashboard', function () {
 
-    return view('dashboard');
+    return view('dashboard', [
+        'frameworksCount' => \App\Models\Framework::count(),
+        'domainsCount' => \App\Models\Domain::count(),
+        'controlsCount' => \App\Models\Control::count(),
+        'requirementsCount' => \App\Models\Requirement::count(),
+    ]);
 
 })
     ->middleware(['auth', 'verified'])

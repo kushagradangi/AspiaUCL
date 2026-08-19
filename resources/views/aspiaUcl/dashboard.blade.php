@@ -30,7 +30,7 @@
         </div>
 
         <div class="card-number">
-            12
+            {{ $frameworksCount ?? \App\Models\Framework::count() }}
         </div>
 
     </div>
@@ -45,7 +45,7 @@
         </div>
 
         <div class="card-number">
-            24
+            {{ $domainsCount ?? \App\Models\Domain::count() }}
         </div>
 
     </div>
@@ -60,7 +60,22 @@
         </div>
 
         <div class="card-number">
-            156
+            {{ $controlsCount ?? \App\Models\Control::count() }}
+        </div>
+
+    </div>
+
+
+    <div class="card">
+
+        <span class="card-icon">◆</span>
+
+        <div class="card-label">
+            Requirements
+        </div>
+
+        <div class="card-number">
+            {{ $requirementsCount ?? \App\Models\Requirement::count() }}
         </div>
 
     </div>

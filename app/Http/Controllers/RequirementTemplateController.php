@@ -22,59 +22,28 @@ class RequirementTemplateController extends Controller
             ],
         ]);
 
-
         /*
         |--------------------------------------------------------------------------
-        | Get Existing Template
+        | Replace Single Requirement Template
         |--------------------------------------------------------------------------
+        |
+        | We keep exactly one active Requirement Template.
+        | Overwrites and replaces any existing template in place.
+        |
         */
 
-        $template = RequirementTemplate::first();
+        RequirementTemplate::query()->delete();
 
-
-        /*
-        |--------------------------------------------------------------------------
-        | Update Existing Template
-        |--------------------------------------------------------------------------
-        */
-
-        if ($template) {
-
-            $template->html_content =
-                $validated['html_content'];
-
-            $template->save();
-
-        }
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | Create Template If None Exists
-        |--------------------------------------------------------------------------
-        */
-
-        else {
-
-            RequirementTemplate::create([
-                'html_content' =>
-                    $validated['html_content'],
-            ]);
-
-        }
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | Redirect
-        |--------------------------------------------------------------------------
-        */
+        RequirementTemplate::create([
+            'id' => 1,
+            'html_content' => $validated['html_content'],
+        ]);
 
         return redirect()
             ->route('requirements.index')
             ->with(
                 'success',
-                'Requirement template updated successfully.'
+                'Requirement template saved successfully.'
             );
     }
 

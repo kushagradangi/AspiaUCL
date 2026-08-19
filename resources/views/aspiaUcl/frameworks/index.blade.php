@@ -1509,7 +1509,7 @@
                         class="template-editor"
                         placeholder="Write your HTML template here..."
                         required
-                    >{{ old('html_content') }}</textarea>
+                    ></textarea>
 
 
                     <div class="template-help">
@@ -2455,6 +2455,13 @@
             document.getElementById(id);
 
         if (modal) {
+
+            if (id === 'templateModal') {
+                const textarea = document.getElementById('frameworkTemplate');
+                if (textarea) {
+                    textarea.value = '';
+                }
+            }
 
             modal.classList.add('show');
 

@@ -298,6 +298,16 @@
     }
 
 
+    .requirement-text {
+        max-width: 250px;
+        display: inline-block;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        vertical-align: middle;
+    }
+
+
     .table-muted {
         color: #63728c;
     }
@@ -1098,10 +1108,12 @@
 
                             <td>
 
-                                {{ \Illuminate\Support\Str::limit(
-                                    $requirement->requirement,
-                                    120
-                                ) }}
+                                <span class="requirement-text" title="{{ $requirement->requirement }}">
+                                    {{ \Illuminate\Support\Str::limit(
+                                        $requirement->requirement,
+                                        55
+                                    ) }}
+                                </span>
 
                             </td>
 
@@ -1378,7 +1390,7 @@
                         class="template-editor"
                         placeholder="Write your HTML template here..."
                         required
-                    >{{ old('html_content') }}</textarea>
+                    ></textarea>
 
 
                     <div class="template-help">
@@ -2243,6 +2255,13 @@
             document.getElementById(id);
 
         if (modal) {
+
+            if (id === 'requirementTemplateModal') {
+                const textarea = document.getElementById('requirementTemplate');
+                if (textarea) {
+                    textarea.value = '';
+                }
+            }
 
             modal.classList.add('show');
 

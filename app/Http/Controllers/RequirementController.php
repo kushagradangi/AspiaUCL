@@ -86,11 +86,14 @@ class RequirementController extends Controller
             ->get();
 
 
+        $requirementTemplate = \App\Models\RequirementTemplate::first();
+
         return view(
             'aspiaUcl.requirements.index',
             compact(
                 'requirements',
-                'activities'
+                'activities',
+                'requirementTemplate'
             )
         );
     }

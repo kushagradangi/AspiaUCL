@@ -393,7 +393,7 @@
 
             display: grid;
 
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(4, 1fr);
 
             gap: 20px;
 
@@ -574,6 +574,16 @@
         /* =========================================
            RESPONSIVE
         ========================================= */
+
+        @media(max-width: 1200px) {
+
+            .stats {
+
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+        }
+
 
         @media(max-width: 900px) {
 
@@ -912,7 +922,7 @@
 
 
                         <div class="stat-number">
-                            12
+                            {{ $frameworksCount ?? \App\Models\Framework::count() }}
                         </div>
 
                     </div>
@@ -936,7 +946,7 @@
 
 
                         <div class="stat-number">
-                            24
+                            {{ $domainsCount ?? \App\Models\Domain::count() }}
                         </div>
 
                     </div>
@@ -960,7 +970,31 @@
 
 
                         <div class="stat-number">
-                            156
+                            {{ $controlsCount ?? \App\Models\Control::count() }}
+                        </div>
+
+                    </div>
+
+
+                    <!-- REQUIREMENTS -->
+
+                    <div class="stat-card">
+
+                        <div class="stat-top">
+
+                            <div class="stat-title">
+                                Requirements
+                            </div>
+
+                            <div class="stat-icon">
+                                ◆
+                            </div>
+
+                        </div>
+
+
+                        <div class="stat-number">
+                            {{ $requirementsCount ?? \App\Models\Requirement::count() }}
                         </div>
 
                     </div>

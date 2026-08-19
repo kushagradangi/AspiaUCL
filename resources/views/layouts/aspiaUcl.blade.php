@@ -332,7 +332,7 @@
             display: grid;
 
             grid-template-columns:
-                repeat(3, 1fr);
+                repeat(4, 1fr);
 
             gap: 20px;
 
@@ -425,6 +425,17 @@
 
 
         /* ================= RESPONSIVE ================= */
+
+        @media(max-width: 1200px) {
+
+            .cards {
+
+                grid-template-columns: repeat(2, 1fr);
+
+            }
+
+        }
+
 
         @media(max-width: 900px) {
 
