@@ -17,18 +17,26 @@ class FrameworkTemplateController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
+            'framework_type' => [
+                'required',
+                'string',
+                'max:255',
+            ],
             'html_content' => [
                 'required',
                 'string',
             ],
         ]);
 
+        $frameworkType = trim($validated['framework_type']);
+
         FrameworkTemplate::updateOrCreate(
             [
-                'id' => 1,
+                'framework_type' => $frameworkType,
             ],
             [
-                'name' => 'Default Framework Template',
+                'name' => $frameworkType . ' Framework Template',
+                'framework_type' => $frameworkType,
                 'html_content' => $validated['html_content'],
             ]
         );
@@ -37,7 +45,7 @@ class FrameworkTemplateController extends Controller
             ->route('frameworks.index')
             ->with(
                 'success',
-                'Framework template saved successfully.'
+                "Framework template for type '{$frameworkType}' saved successfully."
             );
     }
 
@@ -58,20 +66,36 @@ class FrameworkTemplateController extends Controller
 
         /*
         |--------------------------------------------------------------------------
-        | Get Template From DATABASE
+        | Get Template From DATABASE According to Framework Type
         |--------------------------------------------------------------------------
         */
 
-        $template = FrameworkTemplate::first();
+        $template = null;
 
+        if ($framework->framework_type) {
+            $template = FrameworkTemplate::where(
+                'framework_type',
+                $framework->framework_type
+            )->first();
+
+            if (!$template) {
+                $template = FrameworkTemplate::whereRaw(
+                    'LOWER(framework_type) = ?',
+                    [strtolower(trim($framework->framework_type))]
+                )->first();
+            }
+        } else {
+            $template = FrameworkTemplate::whereNull('framework_type')->first();
+        }
 
         if (!$template) {
+            $errorMessage = 'Framework template has not been created yet.';
 
             return redirect()
                 ->route('frameworks.index')
                 ->with(
                     'error',
-                    'Framework template has not been created yet.'
+                    $errorMessage
                 );
         }
 

@@ -1494,6 +1494,38 @@
 
                     <label class="form-label">
 
+                        Framework Type
+
+                        <span class="required-star">
+                            *
+                        </span>
+
+                    </label>
+
+
+                    <select
+                        name="framework_type"
+                        id="templateFrameworkType"
+                        class="form-control-aspia"
+                        onchange="onFrameworkTypeChange(this.value)"
+                        required
+                    >
+                        <option value="" disabled selected>-- Select Framework Type --</option>
+                        @if(isset($frameworkTypes) && count($frameworkTypes) > 0)
+                            @foreach($frameworkTypes as $type)
+                                <option value="{{ $type }}">{{ $type }}</option>
+                            @endforeach
+                        @endif
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+
+                    <label class="form-label">
+
                         HTML Template
 
                         <span class="required-star">
@@ -2445,9 +2477,23 @@
 <script>
 
 
-    /* =====================================================
-       OPEN MODAL
-    ====================================================== */
+    const existingFrameworkTemplates = @json($frameworkTemplates ?? []);
+
+    function onFrameworkTypeChange(val)
+    {
+        const textarea = document.getElementById('frameworkTemplate');
+        if (!textarea) return;
+        const trimmed = (val || '').trim().toLowerCase();
+        textarea.value = '';
+        if (!trimmed) return;
+
+        for (const [type, content] of Object.entries(existingFrameworkTemplates)) {
+            if ((type || '').trim().toLowerCase() === trimmed) {
+                textarea.value = content;
+                return;
+            }
+        }
+    }
 
     function openModal(id)
     {
@@ -2457,7 +2503,11 @@
         if (modal) {
 
             if (id === 'templateModal') {
+                const typeInput = document.getElementById('templateFrameworkType');
                 const textarea = document.getElementById('frameworkTemplate');
+                if (typeInput) {
+                    typeInput.value = '';
+                }
                 if (textarea) {
                     textarea.value = '';
                 }

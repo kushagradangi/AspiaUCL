@@ -8,6 +8,7 @@ class FrameworkTemplate extends Model
 {
     protected $fillable = [
         'name',
+        'framework_type',
         'html_content',
     ];
 }

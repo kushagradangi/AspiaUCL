@@ -89,10 +89,30 @@ class FrameworkController extends Controller
             ->paginate(10)
             ->withQueryString();
 
+        $typesFromFrameworks = Framework::whereNotNull('framework_type')
+            ->where('framework_type', '!=', '')
+            ->distinct()
+            ->pluck('framework_type')
+            ->toArray();
+
+        $typesFromTemplates = \App\Models\FrameworkTemplate::whereNotNull('framework_type')
+            ->where('framework_type', '!=', '')
+            ->distinct()
+            ->pluck('framework_type')
+            ->toArray();
+
+        $frameworkTypes = collect(array_merge($typesFromFrameworks, $typesFromTemplates))
+            ->unique()
+            ->filter()
+            ->values()
+            ->sort(SORT_NATURAL | SORT_FLAG_CASE)
+            ->values();
+
+        $frameworkTemplates = \App\Models\FrameworkTemplate::all()->pluck('html_content', 'framework_type');
 
         return view(
             'aspiaUcl.frameworks.index',
-            compact('frameworks')
+            compact('frameworks', 'frameworkTypes', 'frameworkTemplates')
         );
     }
 
