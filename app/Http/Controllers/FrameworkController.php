@@ -105,104 +105,103 @@ class FrameworkController extends Controller
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
+        // Check for duplicate framework fields before creating
+        if ($request->filled('framework_id') && Framework::where('framework_id', $request->framework_id)->exists()) {
+            return redirect()
+                ->back()
+                ->withInput()
+                ->with('error', "Duplicate Data Alert: A framework with Framework ID '{$request->framework_id}' already exists in the system.");
+        }
 
+        if ($request->filled('framework_code') && Framework::where('framework_code', $request->framework_code)->exists()) {
+            return redirect()
+                ->back()
+                ->withInput()
+                ->with('error', "Duplicate Data Alert: A framework with Framework Code '{$request->framework_code}' already exists in the system.");
+        }
+
+        if ($request->filled('name') && Framework::where('name', $request->name)->exists()) {
+            return redirect()
+                ->back()
+                ->withInput()
+                ->with('error', "Duplicate Data Alert: A framework with Name '{$request->name}' already exists in the system.");
+        }
+
+        $validated = $request->validate([
             'framework_id' => [
                 'required',
                 'string',
                 'max:255',
-                'unique:frameworks,framework_id',
             ],
-
             'framework_code' => [
                 'required',
                 'string',
                 'max:255',
             ],
-
             'name' => [
                 'required',
                 'string',
                 'max:255',
             ],
-
             'version' => [
                 'nullable',
                 'string',
                 'max:255',
             ],
-
             'framework_family' => [
                 'nullable',
                 'string',
                 'max:255',
             ],
-
             'category' => [
                 'nullable',
                 'string',
                 'max:255',
             ],
-
             'publisher' => [
                 'nullable',
                 'string',
                 'max:255',
             ],
-
             'region' => [
                 'nullable',
                 'string',
                 'max:255',
             ],
-
             'industry' => [
                 'nullable',
                 'string',
                 'max:255',
             ],
-
             'framework_type' => [
                 'nullable',
                 'string',
                 'max:255',
             ],
-
         ]);
 
+        try {
+            $validated['slug'] = $this->generateUniqueSlug($validated['name']);
 
-        /*
-        |--------------------------------------------------------------------------
-        | Generate Unique Slug
-        |--------------------------------------------------------------------------
-        */
+            $framework = Framework::create($validated);
 
-        $validated['slug'] = $this->generateUniqueSlug(
-            $validated['name']
-        );
+            Activity::create([
+                'user_id' => auth()->id(),
+                'module' => 'framework',
+                'action' => 'Created',
+                'description' => 'Created framework: ' . $framework->name,
+            ]);
 
+            return redirect()
+                ->route('frameworks.index')
+                ->with('success', 'Framework created successfully.');
 
-        /*
-        |--------------------------------------------------------------------------
-        | Create Framework
-        |--------------------------------------------------------------------------
-        */
-
-        $framework = Framework::create($validated);
-
-        Activity::create([
-            'user_id' => auth()->id(),
-            'module' => 'framework',
-            'action' => 'Created',
-            'description' => 'Created framework: ' . $framework->name,
-        ]);
-
-        return redirect()
-            ->route('frameworks.index')
-            ->with(
-                'success',
-                'Framework created successfully.'
-            );
+        } catch (\Illuminate\Database\QueryException $e) {
+            return redirect()
+                ->back()
+                ->withInput()
+                ->with('error', 'Duplicate Data Alert: A framework with duplicate details already exists in the database.');
+        }
     }
 
 
@@ -216,109 +215,106 @@ class FrameworkController extends Controller
         Request $request,
         Framework $framework
     ) {
+        // Check for duplicate framework fields on other records
+        if ($request->filled('framework_id') && Framework::where('framework_id', $request->framework_id)->where('id', '!=', $framework->id)->exists()) {
+            return redirect()
+                ->back()
+                ->withInput()
+                ->with('error', "Duplicate Data Alert: Another framework with Framework ID '{$request->framework_id}' already exists.");
+        }
+
+        if ($request->filled('framework_code') && Framework::where('framework_code', $request->framework_code)->where('id', '!=', $framework->id)->exists()) {
+            return redirect()
+                ->back()
+                ->withInput()
+                ->with('error', "Duplicate Data Alert: Another framework with Framework Code '{$request->framework_code}' already exists.");
+        }
+
+        if ($request->filled('name') && Framework::where('name', $request->name)->where('id', '!=', $framework->id)->exists()) {
+            return redirect()
+                ->back()
+                ->withInput()
+                ->with('error', "Duplicate Data Alert: Another framework with Name '{$request->name}' already exists.");
+        }
 
         $validated = $request->validate([
-
             'framework_id' => [
                 'required',
                 'string',
                 'max:255',
-                'unique:frameworks,framework_id,' . $framework->id,
             ],
-
             'framework_code' => [
                 'required',
                 'string',
                 'max:255',
             ],
-
             'name' => [
                 'required',
                 'string',
                 'max:255',
             ],
-
             'version' => [
                 'nullable',
                 'string',
                 'max:255',
             ],
-
             'framework_family' => [
                 'nullable',
                 'string',
                 'max:255',
             ],
-
             'category' => [
                 'nullable',
                 'string',
                 'max:255',
             ],
-
             'publisher' => [
                 'nullable',
                 'string',
                 'max:255',
             ],
-
             'region' => [
                 'nullable',
                 'string',
                 'max:255',
             ],
-
             'industry' => [
                 'nullable',
                 'string',
                 'max:255',
             ],
-
             'framework_type' => [
                 'nullable',
                 'string',
                 'max:255',
             ],
-
         ]);
 
-
-        /*
-        |--------------------------------------------------------------------------
-        | Regenerate Slug
-        |--------------------------------------------------------------------------
-        |
-        | If the Framework name changes, the slug changes too.
-        |
-        */
-
-        $validated['slug'] = $this->generateUniqueSlug(
-            $validated['name'],
-            $framework->id
-        );
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | Update Framework
-        |--------------------------------------------------------------------------
-        */
-
-        $framework->update($validated);
-
-        Activity::create([
-            'user_id' => auth()->id(),
-            'module' => 'framework',
-            'action' => 'Updated',
-            'description' => 'Updated framework: ' . $framework->name,
-        ]);
-
-        return redirect()
-            ->route('frameworks.index')
-            ->with(
-                'success',
-                'Framework updated successfully.'
+        try {
+            $validated['slug'] = $this->generateUniqueSlug(
+                $validated['name'],
+                $framework->id
             );
+
+            $framework->update($validated);
+
+            Activity::create([
+                'user_id' => auth()->id(),
+                'module' => 'framework',
+                'action' => 'Updated',
+                'description' => 'Updated framework: ' . $framework->name,
+            ]);
+
+            return redirect()
+                ->route('frameworks.index')
+                ->with('success', 'Framework updated successfully.');
+
+        } catch (\Illuminate\Database\QueryException $e) {
+            return redirect()
+                ->back()
+                ->withInput()
+                ->with('error', 'Duplicate Data Alert: Cannot update framework because duplicate information already exists.');
+        }
     }
 
 
@@ -365,25 +361,37 @@ class FrameworkController extends Controller
             ],
         ]);
 
+        try {
+            session()->forget('import_duplicates_count');
 
-        Excel::import(
-            new FrameworkImport(),
-            $request->file('file')
-        );
-
-        Activity::create([
-            'user_id' => auth()->id(),
-            'module' => 'framework',
-            'action' => 'Imported',
-            'description' => 'Imported frameworks from XLSX file.',
-        ]);
-
-        return redirect()
-            ->route('frameworks.index')
-            ->with(
-                'success',
-                'Frameworks imported successfully.'
+            Excel::import(
+                new FrameworkImport(),
+                $request->file('file')
             );
+
+            Activity::create([
+                'user_id' => auth()->id(),
+                'module' => 'framework',
+                'action' => 'Imported',
+                'description' => 'Imported frameworks from XLSX file.',
+            ]);
+
+            $dupCount = session('import_duplicates_count', 0);
+            if ($dupCount > 0) {
+                return redirect()
+                    ->route('frameworks.index')
+                    ->with('error', "Duplicate Data Alert: {$dupCount} duplicate framework record(s) were found in the uploaded file and skipped to prevent duplicate errors.");
+            }
+
+            return redirect()
+                ->route('frameworks.index')
+                ->with('success', 'Frameworks imported successfully.');
+
+        } catch (\Throwable $e) {
+            return redirect()
+                ->route('frameworks.index')
+                ->with('error', 'Duplicate Data Alert: Import stopped because the file contained duplicate framework records.');
+        }
     }
 
 

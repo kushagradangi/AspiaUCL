@@ -25,6 +25,19 @@ class RequirementImport implements ToModel, WithHeadingRow
             return null;
         }
 
+        $reqId = $row['requirement_id'];
+        $title = $row['requirement_title'];
+
+        $exists = Requirement::where('requirement_id', $reqId)
+            ->orWhere('requirement_title', $title)
+            ->exists();
+
+        if ($exists) {
+            $curr = session('import_duplicates_count', 0);
+            session(['import_duplicates_count' => $curr + 1]);
+            return null;
+        }
+
 
         /*
         |--------------------------------------------------------------------------
@@ -39,6 +52,15 @@ class RequirementImport implements ToModel, WithHeadingRow
         |
         */
 
+        $reqId = $row['requirement_id'] ?? null;
+        $controlId = $row['control_id'] ?? null;
+
+        if (empty($controlId) || str_starts_with(trim($controlId), '=') || str_contains($controlId, 'LEFT(') || str_contains($controlId, 'FIND(')) {
+            if ($reqId) {
+                $controlId = preg_replace('/-R\d+$/i', '', $reqId);
+            }
+        }
+
         return new Requirement([
 
             /*
@@ -48,7 +70,7 @@ class RequirementImport implements ToModel, WithHeadingRow
             */
 
             'requirement_id' =>
-                $row['requirement_id'] ?? null,
+                $reqId,
 
 
             /*
@@ -58,7 +80,7 @@ class RequirementImport implements ToModel, WithHeadingRow
             */
 
             'control_id' =>
-                $row['control_id'] ?? null,
+                $controlId,
 
 
             /*

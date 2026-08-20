@@ -32,6 +32,24 @@ class DomainImport implements ToModel, WithStartRow
             return null;
         }
 
+        $domainId = $this->value($row, 0);
+        $domainCode = $this->value($row, 1);
+        $name = $this->value($row, 2);
+
+        if ($domainId || $domainCode || $name) {
+            $exists = Domain::where(function ($q) use ($domainId, $domainCode, $name) {
+                if ($domainId) $q->where('domain_id', $domainId);
+                if ($domainCode) $q->orWhere('domain_code', $domainCode);
+                if ($name) $q->orWhere('name', $name);
+            })->exists();
+
+            if ($exists) {
+                $curr = session('import_duplicates_count', 0);
+                session(['import_duplicates_count' => $curr + 1]);
+                return null;
+            }
+        }
+
 
         return new Domain([
 

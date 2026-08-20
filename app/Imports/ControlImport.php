@@ -73,6 +73,22 @@ class ControlImport implements ToModel, WithStartRow
             return null;
         }
 
+        $controlId = $this->value($row, 0);
+        $name = $this->value($row, 2);
+
+        if ($controlId || $name) {
+            $exists = Control::where(function ($q) use ($controlId, $name) {
+                if ($controlId) $q->where('control_id', $controlId);
+                if ($name) $q->orWhere('name', $name);
+            })->exists();
+
+            if ($exists) {
+                $curr = session('import_duplicates_count', 0);
+                session(['import_duplicates_count' => $curr + 1]);
+                return null;
+            }
+        }
+
 
         /*
         |--------------------------------------------------------------------------

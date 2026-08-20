@@ -458,57 +458,54 @@ class DomainController extends Controller
 
 public function store(Request $request)
 {
+    if ($request->filled('domain_id') && Domain::where('domain_id', $request->domain_id)->exists()) {
+        return redirect()
+            ->back()
+            ->withInput()
+            ->with('error', "Duplicate Data Alert: A domain with Domain ID '{$request->domain_id}' already exists in the system.");
+    }
+
+    if ($request->filled('domain_code') && Domain::where('domain_code', $request->domain_code)->exists()) {
+        return redirect()
+            ->back()
+            ->withInput()
+            ->with('error', "Duplicate Data Alert: A domain with Domain Code '{$request->domain_code}' already exists in the system.");
+    }
+
+    if ($request->filled('name') && Domain::where('name', $request->name)->exists()) {
+        return redirect()
+            ->back()
+            ->withInput()
+            ->with('error', "Duplicate Data Alert: A domain with Name '{$request->name}' already exists in the system.");
+    }
+
     $validated = $request->validate(
         $this->validationRules()
     );
 
+    try {
+        $validated['slug'] = $this->generateUniqueSlug($validated['name']);
+        $validated['display_order'] = (Domain::max('display_order') ?? 0) + 1;
 
-    /*
-    |--------------------------------------------------------------------------
-    | Generate Slug Automatically
-    |--------------------------------------------------------------------------
-    */
+        $domain = Domain::create($validated);
 
-    $validated['slug'] =
-        $this->generateUniqueSlug(
-            $validated['name']
-        );
+        Activity::create([
+            'user_id' => auth()->id(),
+            'module' => 'domain',
+            'action' => 'Created',
+            'description' => 'Created domain: ' . $domain->name,
+        ]);
 
+        return redirect()
+            ->route('domains.index')
+            ->with('success', 'Domain created successfully.');
 
-    /*
-    |--------------------------------------------------------------------------
-    | Generate Display Order Automatically
-    |--------------------------------------------------------------------------
-    |
-    | Always place a newly created domain after the existing domains.
-    |
-    */
-
-    $validated['display_order'] =
-        (Domain::max('display_order') ?? 0) + 1;
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | Create Domain
-    |--------------------------------------------------------------------------
-    */
-
-    $domain = Domain::create($validated);
-
-    Activity::create([
-        'user_id' => auth()->id(),
-        'module' => 'domain',
-        'action' => 'Created',
-        'description' => 'Created domain: ' . $domain->name,
-    ]);
-
-    return redirect()
-        ->route('domains.index')
-        ->with(
-            'success',
-            'Domain created successfully.'
-        );
+    } catch (\Illuminate\Database\QueryException $e) {
+        return redirect()
+            ->back()
+            ->withInput()
+            ->with('error', 'Duplicate Data Alert: A domain with duplicate details already exists in the database.');
+    }
 }
 
 
@@ -522,46 +519,53 @@ public function store(Request $request)
         Request $request,
         Domain $domain
     ) {
+        if ($request->filled('domain_id') && Domain::where('domain_id', $request->domain_id)->where('id', '!=', $domain->id)->exists()) {
+            return redirect()
+                ->back()
+                ->withInput()
+                ->with('error', "Duplicate Data Alert: Another domain with Domain ID '{$request->domain_id}' already exists.");
+        }
+
+        if ($request->filled('domain_code') && Domain::where('domain_code', $request->domain_code)->where('id', '!=', $domain->id)->exists()) {
+            return redirect()
+                ->back()
+                ->withInput()
+                ->with('error', "Duplicate Data Alert: Another domain with Domain Code '{$request->domain_code}' already exists.");
+        }
+
+        if ($request->filled('name') && Domain::where('name', $request->name)->where('id', '!=', $domain->id)->exists()) {
+            return redirect()
+                ->back()
+                ->withInput()
+                ->with('error', "Duplicate Data Alert: Another domain with Name '{$request->name}' already exists.");
+        }
 
         $validated = $request->validate(
             $this->validationRules($domain->id)
         );
 
+        try {
+            $validated['slug'] = $this->generateUniqueSlug($validated['name'], $domain->id);
 
-        /*
-        |----------------------------------------------------------------------
-        | Regenerate Slug
-        |----------------------------------------------------------------------
-        */
+            $domain->update($validated);
 
-        $validated['slug'] =
-            $this->generateUniqueSlug(
-                $validated['name'],
-                $domain->id
-            );
+            Activity::create([
+                'user_id' => auth()->id(),
+                'module' => 'domain',
+                'action' => 'Updated',
+                'description' => 'Updated domain: ' . $domain->name,
+            ]);
 
+            return redirect()
+                ->route('domains.index')
+                ->with('success', 'Domain updated successfully.');
 
-        /*
-        |----------------------------------------------------------------------
-        | Update Domain
-        |----------------------------------------------------------------------
-        */
-
-        $domain->update($validated);
-
-        Activity::create([
-            'user_id' => auth()->id(),
-            'module' => 'domain',
-            'action' => 'Updated',
-            'description' => 'Updated domain: ' . $domain->name,
-        ]);
-
-        return redirect()
-            ->route('domains.index')
-            ->with(
-                'success',
-                'Domain updated successfully.'
-            );
+        } catch (\Illuminate\Database\QueryException $e) {
+            return redirect()
+                ->back()
+                ->withInput()
+                ->with('error', 'Duplicate Data Alert: Cannot update domain because duplicate information already exists.');
+        }
     }
 
 
@@ -608,24 +612,36 @@ public function store(Request $request)
             ],
         ]);
 
+        try {
+            session()->forget('import_duplicates_count');
 
-        Excel::import(
-            new DomainImport(),
-            $request->file('file')
-        );
-
-        Activity::create([
-            'user_id' => auth()->id(),
-            'module' => 'domain',
-            'action' => 'Imported',
-            'description' => 'Imported domains from XLSX file.',
-        ]);
-
-        return redirect()
-            ->route('domains.index')
-            ->with(
-                'success',
-                'Domains imported successfully.'
+            Excel::import(
+                new DomainImport(),
+                $request->file('file')
             );
+
+            Activity::create([
+                'user_id' => auth()->id(),
+                'module' => 'domain',
+                'action' => 'Imported',
+                'description' => 'Imported domains from XLSX file.',
+            ]);
+
+            $dupCount = session('import_duplicates_count', 0);
+            if ($dupCount > 0) {
+                return redirect()
+                    ->route('domains.index')
+                    ->with('error', "Duplicate Data Alert: {$dupCount} duplicate domain record(s) were found in the uploaded file and skipped to prevent duplicate errors.");
+            }
+
+            return redirect()
+                ->route('domains.index')
+                ->with('success', 'Domains imported successfully.');
+
+        } catch (\Throwable $e) {
+            return redirect()
+                ->route('domains.index')
+                ->with('error', 'Duplicate Data Alert: Import stopped because the file contained duplicate domain records.');
+        }
     }
 }

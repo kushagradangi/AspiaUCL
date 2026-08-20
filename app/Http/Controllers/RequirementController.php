@@ -66,7 +66,7 @@ class RequirementController extends Controller
 
             })
 
-            ->latest()
+            ->orderBy('id', 'asc')
             ->paginate(10)
             ->withQueryString();
 
@@ -107,161 +107,54 @@ class RequirementController extends Controller
 
     public function store(Request $request)
     {
+        if ($request->filled('requirement_id') && Requirement::where('requirement_id', $request->requirement_id)->exists()) {
+            return redirect()
+                ->back()
+                ->withInput()
+                ->with('error', "Duplicate Data Alert: A requirement with Requirement ID '{$request->requirement_id}' already exists in the system.");
+        }
+
+        if ($request->filled('requirement_title') && Requirement::where('requirement_title', $request->requirement_title)->exists()) {
+            return redirect()
+                ->back()
+                ->withInput()
+                ->with('error', "Duplicate Data Alert: A requirement with Title '{$request->requirement_title}' already exists in the system.");
+        }
+
         $validated = $request->validate([
-
-            /*
-            |--------------------------------------------------------------------------
-            | Requirement ID
-            |--------------------------------------------------------------------------
-            */
-
-            'requirement_id' =>
-                'required|string|max:255|unique:requirements,requirement_id',
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | Control ID
-            |--------------------------------------------------------------------------
-            */
-
-            'control_id' =>
-                'required|string|max:255',
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | Requirement Title
-            |--------------------------------------------------------------------------
-            */
-
-            'requirement_title' =>
-                'required|string|max:255',
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | Requirement
-            |--------------------------------------------------------------------------
-            */
-
-            'requirement' =>
-                'required|string',
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | Why this Requirement Exists
-            |--------------------------------------------------------------------------
-            */
-
-            'why_requirement_exists' =>
-                'nullable|string',
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | Implementation Guidance
-            |--------------------------------------------------------------------------
-            */
-
-            'implementation_guidance' =>
-                'nullable|string',
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | Common Audit Findings
-            |--------------------------------------------------------------------------
-            */
-
-            'common_audit_findings' =>
-                'nullable|string',
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | Common Mistakes
-            |--------------------------------------------------------------------------
-            */
-
-            'common_mistakes' =>
-                'nullable|string',
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | Best Practices
-            |--------------------------------------------------------------------------
-            */
-
-            'best_practices' =>
-                'nullable|string',
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | Business Examples
-            |--------------------------------------------------------------------------
-            */
-
-            'business_examples' =>
-                'nullable|string',
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | Typical Owner
-            |--------------------------------------------------------------------------
-            */
-
-            'typical_owner' =>
-                'nullable|string|max:255',
-
+            'requirement_id' => 'required|string|max:255',
+            'control_id' => 'required|string|max:255',
+            'requirement_title' => 'required|string|max:255',
+            'requirement' => 'required|string',
+            'why_requirement_exists' => 'nullable|string',
+            'implementation_guidance' => 'nullable|string',
+            'common_audit_findings' => 'nullable|string',
+            'common_mistakes' => 'nullable|string',
+            'best_practices' => 'nullable|string',
+            'business_examples' => 'nullable|string',
+            'typical_owner' => 'nullable|string|max:255',
         ]);
 
+        try {
+            $requirement = Requirement::create($validated);
 
-        /*
-        |--------------------------------------------------------------------------
-        | Create Requirement
-        |--------------------------------------------------------------------------
-        */
+            Activity::create([
+                'user_id' => auth()->id(),
+                'module' => 'requirement',
+                'action' => 'Created',
+                'description' => 'Created requirement: ' . $requirement->requirement_title,
+            ]);
 
-        $requirement = Requirement::create(
-            $validated
-        );
+            return redirect()
+                ->route('requirements.index')
+                ->with('success', 'Requirement created successfully.');
 
-
-        /*
-        |--------------------------------------------------------------------------
-        | Activity
-        |--------------------------------------------------------------------------
-        */
-
-        Activity::create([
-
-            'user_id' =>
-                auth()->id(),
-
-            'module' =>
-                'requirement',
-
-            'action' =>
-                'Created',
-
-            'description' =>
-                'Created requirement: ' .
-                $requirement->requirement_title,
-
-        ]);
-
-
-        return redirect()
-            ->route('requirements.index')
-            ->with(
-                'success',
-                'Requirement created successfully.'
-            );
+        } catch (\Illuminate\Database\QueryException $e) {
+            return redirect()
+                ->back()
+                ->withInput()
+                ->with('error', 'Duplicate Data Alert: A requirement with duplicate details already exists in the database.');
+        }
     }
 
 
@@ -275,163 +168,54 @@ class RequirementController extends Controller
         Request $request,
         Requirement $requirement
     ) {
+        if ($request->filled('requirement_id') && Requirement::where('requirement_id', $request->requirement_id)->where('id', '!=', $requirement->id)->exists()) {
+            return redirect()
+                ->back()
+                ->withInput()
+                ->with('error', "Duplicate Data Alert: Another requirement with Requirement ID '{$request->requirement_id}' already exists.");
+        }
+
+        if ($request->filled('requirement_title') && Requirement::where('requirement_title', $request->requirement_title)->where('id', '!=', $requirement->id)->exists()) {
+            return redirect()
+                ->back()
+                ->withInput()
+                ->with('error', "Duplicate Data Alert: Another requirement with Title '{$request->requirement_title}' already exists.");
+        }
 
         $validated = $request->validate([
-
-            /*
-            |--------------------------------------------------------------------------
-            | Requirement ID
-            |--------------------------------------------------------------------------
-            */
-
-            'requirement_id' =>
-                'required|string|max:255|unique:requirements,requirement_id,' .
-                $requirement->id,
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | Control ID
-            |--------------------------------------------------------------------------
-            */
-
-            'control_id' =>
-                'required|string|max:255',
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | Requirement Title
-            |--------------------------------------------------------------------------
-            */
-
-            'requirement_title' =>
-                'required|string|max:255',
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | Requirement
-            |--------------------------------------------------------------------------
-            */
-
-            'requirement' =>
-                'required|string',
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | Why this Requirement Exists
-            |--------------------------------------------------------------------------
-            */
-
-            'why_requirement_exists' =>
-                'nullable|string',
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | Implementation Guidance
-            |--------------------------------------------------------------------------
-            */
-
-            'implementation_guidance' =>
-                'nullable|string',
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | Common Audit Findings
-            |--------------------------------------------------------------------------
-            */
-
-            'common_audit_findings' =>
-                'nullable|string',
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | Common Mistakes
-            |--------------------------------------------------------------------------
-            */
-
-            'common_mistakes' =>
-                'nullable|string',
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | Best Practices
-            |--------------------------------------------------------------------------
-            */
-
-            'best_practices' =>
-                'nullable|string',
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | Business Examples
-            |--------------------------------------------------------------------------
-            */
-
-            'business_examples' =>
-                'nullable|string',
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | Typical Owner
-            |--------------------------------------------------------------------------
-            */
-
-            'typical_owner' =>
-                'nullable|string|max:255',
-
+            'requirement_id' => 'required|string|max:255',
+            'control_id' => 'required|string|max:255',
+            'requirement_title' => 'required|string|max:255',
+            'requirement' => 'required|string',
+            'why_requirement_exists' => 'nullable|string',
+            'implementation_guidance' => 'nullable|string',
+            'common_audit_findings' => 'nullable|string',
+            'common_mistakes' => 'nullable|string',
+            'best_practices' => 'nullable|string',
+            'business_examples' => 'nullable|string',
+            'typical_owner' => 'nullable|string|max:255',
         ]);
 
+        try {
+            $requirement->update($validated);
 
-        /*
-        |--------------------------------------------------------------------------
-        | Update Requirement
-        |--------------------------------------------------------------------------
-        */
+            Activity::create([
+                'user_id' => auth()->id(),
+                'module' => 'requirement',
+                'action' => 'Updated',
+                'description' => 'Updated requirement: ' . $requirement->requirement_title,
+            ]);
 
-        $requirement->update(
-            $validated
-        );
+            return redirect()
+                ->route('requirements.index')
+                ->with('success', 'Requirement updated successfully.');
 
-
-        /*
-        |--------------------------------------------------------------------------
-        | Activity
-        |--------------------------------------------------------------------------
-        */
-
-        Activity::create([
-
-            'user_id' =>
-                auth()->id(),
-
-            'module' =>
-                'requirement',
-
-            'action' =>
-                'Updated',
-
-            'description' =>
-                'Updated requirement: ' .
-                $requirement->requirement_title,
-
-        ]);
-
-
-        return redirect()
-            ->route('requirements.index')
-            ->with(
-                'success',
-                'Requirement updated successfully.'
-            );
+        } catch (\Illuminate\Database\QueryException $e) {
+            return redirect()
+                ->back()
+                ->withInput()
+                ->with('error', 'Duplicate Data Alert: Cannot update requirement because duplicate information already exists.');
+        }
     }
 
 
@@ -444,44 +228,20 @@ class RequirementController extends Controller
     public function destroy(
         Requirement $requirement
     ) {
-
-        $name =
-            $requirement->requirement_title;
-
+        $name = $requirement->requirement_title;
 
         $requirement->delete();
 
-
-        /*
-        |--------------------------------------------------------------------------
-        | Activity
-        |--------------------------------------------------------------------------
-        */
-
         Activity::create([
-
-            'user_id' =>
-                auth()->id(),
-
-            'module' =>
-                'requirement',
-
-            'action' =>
-                'Deleted',
-
-            'description' =>
-                'Deleted requirement: ' .
-                $name,
-
+            'user_id' => auth()->id(),
+            'module' => 'requirement',
+            'action' => 'Deleted',
+            'description' => 'Deleted requirement: ' . $name,
         ]);
-
 
         return redirect()
             ->route('requirements.index')
-            ->with(
-                'success',
-                'Requirement deleted successfully.'
-            );
+            ->with('success', 'Requirement deleted successfully.');
     }
 
 
@@ -494,54 +254,44 @@ class RequirementController extends Controller
     public function import(
         Request $request
     ) {
-
         $request->validate([
-
             'file' => [
-
                 'required',
                 'file',
                 'mimes:xlsx',
-
             ],
-
         ]);
 
+        try {
+            session()->forget('import_duplicates_count');
 
-        Excel::import(
-            new RequirementImport(),
-            $request->file('file')
-        );
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | Activity
-        |--------------------------------------------------------------------------
-        */
-
-        Activity::create([
-
-            'user_id' =>
-                auth()->id(),
-
-            'module' =>
-                'requirement',
-
-            'action' =>
-                'Imported',
-
-            'description' =>
-                'Imported requirements from XLSX file.',
-
-        ]);
-
-
-        return redirect()
-            ->route('requirements.index')
-            ->with(
-                'success',
-                'Requirements imported successfully.'
+            Excel::import(
+                new RequirementImport(),
+                $request->file('file')
             );
+
+            Activity::create([
+                'user_id' => auth()->id(),
+                'module' => 'requirement',
+                'action' => 'Imported',
+                'description' => 'Imported requirements from XLSX file.',
+            ]);
+
+            $dupCount = session('import_duplicates_count', 0);
+            if ($dupCount > 0) {
+                return redirect()
+                    ->route('requirements.index')
+                    ->with('error', "Duplicate Data Alert: {$dupCount} duplicate requirement record(s) were found in the uploaded file and skipped to prevent duplicate errors.");
+            }
+
+            return redirect()
+                ->route('requirements.index')
+                ->with('success', 'Requirements imported successfully.');
+
+        } catch (\Throwable $e) {
+            return redirect()
+                ->route('requirements.index')
+                ->with('error', 'Duplicate Data Alert: Import stopped because the file contained duplicate requirement records.');
+        }
     }
 }

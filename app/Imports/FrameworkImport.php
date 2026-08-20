@@ -18,6 +18,8 @@ class FrameworkImport implements ToModel, WithHeadingRow
         */
 
         $name = $row['framework_name'] ?? null;
+        $frameworkId = $row['framework_id'] ?? null;
+        $frameworkCode = $row['framework_code'] ?? null;
 
         /*
         |--------------------------------------------------------------------------
@@ -25,7 +27,26 @@ class FrameworkImport implements ToModel, WithHeadingRow
         |--------------------------------------------------------------------------
         */
 
-        if (empty($row['framework_id']) || empty($name)) {
+        if (empty($frameworkId) || empty($name)) {
+            return null;
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | Skip duplicate records
+        |--------------------------------------------------------------------------
+        */
+
+        $exists = Framework::where('framework_id', $frameworkId)
+            ->orWhere('name', $name)
+            ->when($frameworkCode, function ($q) use ($frameworkCode) {
+                return $q->orWhere('framework_code', $frameworkCode);
+            })
+            ->exists();
+
+        if ($exists) {
+            $currentCount = session('import_duplicates_count', 0);
+            session(['import_duplicates_count' => $currentCount + 1]);
             return null;
         }
 
