@@ -71,6 +71,7 @@
         .topbar-logo {
             display: flex;
             align-items: center;
+            margin-left: 15px;
         }
 
 
@@ -235,7 +236,7 @@
 
             letter-spacing: 1.5px;
 
-            margin: 30px 12px 12px;
+            margin: 5px 12px 12px;
         }
 
 
@@ -765,16 +766,7 @@
         <aside class="aspia-sidebar">
 
 
-            <!-- BRAND -->
 
-            <div class="aspia-brand">
-
-                <img
-                    src="{{ asset('images/aspiaucl.png') }}"
-                    alt="ASPIA"
-                    class="aspia-logo-image"
-                >
-            </div>
 
 
             <!-- MENU TITLE -->
