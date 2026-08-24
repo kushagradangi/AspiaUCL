@@ -75,7 +75,7 @@
 
             display: block;
 
-            width: 205px;
+            width: 150px;
             max-width: 100%;
             height: auto;
 
@@ -531,8 +531,8 @@
         >
 
             <img
-                src="{{ asset('images/aspiaucl.png') }}"
-                alt="ASPIA aspiaUCL"
+                src="{{ asset('images/aspia.png') }}"
+                alt="ASPIA"
                 class="brand-logo"
             >
 

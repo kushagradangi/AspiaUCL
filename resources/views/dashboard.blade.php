@@ -76,7 +76,7 @@
 
 
         .topbar-logo img {
-            width: 150px;
+            width: 130px;
             height: auto;
             display: block;
         }

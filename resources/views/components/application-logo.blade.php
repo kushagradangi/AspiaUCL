@@ -1,5 +1,5 @@
 <img
-    src="{{ asset('images/aspiaucl.png') }}"
-    alt="aspiaUCL"
+    src="{{ asset('images/aspia.png') }}"
+    alt="ASPIA"
     {{ $attributes }}
 >
