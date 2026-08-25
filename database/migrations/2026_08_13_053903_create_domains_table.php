@@ -33,12 +33,6 @@ return new class extends Migration
             // Business Owner
             $table->string('business_owner')->nullable();
 
-            // Applicable Industries #1
-            $table->longText('applicable_industries')->nullable();
-
-            // Applicable Technologies #1
-            $table->longText('applicable_technologies')->nullable();
-
             // Description
             $table->longText('description')->nullable();
 
@@ -51,17 +45,11 @@ return new class extends Migration
             // Version
             $table->string('version')->nullable();
 
-            // Domain Name #2
-            $table->string('domain_name_2')->nullable();
-
             // Short Overview
             $table->longText('short_overview')->nullable();
 
-            // Business Objectives #1
+            // Business Objectives
             $table->longText('business_objectives')->nullable();
-
-            // Business Objectives #2
-            $table->longText('business_objectives_2')->nullable();
 
             // Business Risks
             $table->longText('business_risks')->nullable();
@@ -72,11 +60,11 @@ return new class extends Migration
             // Typical Stakeholders
             $table->longText('typical_stakeholders')->nullable();
 
-            // Applicable Industries #2
-            $table->longText('applicable_industries_2')->nullable();
+            // Applicable Industries
+            $table->longText('applicable_industries')->nullable();
 
-            // Applicable Technologies #2
-            $table->longText('applicable_technologies_2')->nullable();
+            // Applicable Technologies
+            $table->longText('applicable_technologies')->nullable();
 
             // Keywords
             $table->longText('keywords')->nullable();

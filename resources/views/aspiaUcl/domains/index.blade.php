@@ -1075,14 +1075,6 @@ textarea.form-control-aspia {
                         </th>
 
                         <th>
-                            Industry
-                        </th>
-
-                        <th>
-                            Technology
-                        </th>
-
-                        <th>
                             Display Order
                         </th>
 
@@ -1197,24 +1189,6 @@ textarea.form-control-aspia {
                             </td>
 
 
-                            {{-- INDUSTRY --}}
-
-                            <td>
-
-                                {{ $domain->applicable_industries ?: '—' }}
-
-                            </td>
-
-
-                            {{-- TECHNOLOGY --}}
-
-                            <td>
-
-                                {{ $domain->applicable_technologies ?: '—' }}
-
-                            </td>
-
-
                             {{-- DISPLAY ORDER --}}
 
                             <td>
@@ -1264,10 +1238,6 @@ textarea.form-control-aspia {
 
                                             @js($domain->business_owner),
 
-                                            @js($domain->applicable_industries),
-
-                                            @js($domain->applicable_technologies),
-
                                             @js($domain->description),
 
                                             @js($domain->display_order),
@@ -1276,13 +1246,9 @@ textarea.form-control-aspia {
 
                                             @js($domain->version),
 
-                                            @js($domain->domain_name_2),
-
                                             @js($domain->short_overview),
 
                                             @js($domain->business_objectives),
-
-                                            @js($domain->business_objectives_2),
 
                                             @js($domain->business_risks),
 
@@ -1290,9 +1256,9 @@ textarea.form-control-aspia {
 
                                             @js($domain->typical_stakeholders),
 
-                                            @js($domain->applicable_industries_2),
+                                            @js($domain->applicable_industries),
 
-                                            @js($domain->applicable_technologies_2),
+                                            @js($domain->applicable_technologies),
 
                                             @js($domain->keywords),
 
@@ -1354,7 +1320,7 @@ textarea.form-control-aspia {
                         <tr>
 
                             <td
-                                colspan="11"
+                                colspan="9"
                                 class="empty-state"
                             >
 
@@ -1602,24 +1568,6 @@ textarea.form-control-aspia {
                             <button
                                 type="button"
                                 class="placeholder-btn"
-                                data-placeholder="@{{applicable_industries}}"
-                                onclick="insertDomainPlaceholder(this.dataset.placeholder)"
-                            >
-                                @{{applicable_industries}}
-                            </button>
-
-                            <button
-                                type="button"
-                                class="placeholder-btn"
-                                data-placeholder="@{{applicable_technologies}}"
-                                onclick="insertDomainPlaceholder(this.dataset.placeholder)"
-                            >
-                                @{{applicable_technologies}}
-                            </button>
-
-                            <button
-                                type="button"
-                                class="placeholder-btn"
                                 data-placeholder="@{{description}}"
                                 onclick="insertDomainPlaceholder(this.dataset.placeholder)"
                             >
@@ -1656,15 +1604,6 @@ textarea.form-control-aspia {
                             <button
                                 type="button"
                                 class="placeholder-btn"
-                                data-placeholder="@{{domain_name_2}}"
-                                onclick="insertDomainPlaceholder(this.dataset.placeholder)"
-                            >
-                                @{{domain_name_2}}
-                            </button>
-
-                            <button
-                                type="button"
-                                class="placeholder-btn"
                                 data-placeholder="@{{short_overview}}"
                                 onclick="insertDomainPlaceholder(this.dataset.placeholder)"
                             >
@@ -1678,15 +1617,6 @@ textarea.form-control-aspia {
                                 onclick="insertDomainPlaceholder(this.dataset.placeholder)"
                             >
                                 @{{business_objectives}}
-                            </button>
-
-                            <button
-                                type="button"
-                                class="placeholder-btn"
-                                data-placeholder="@{{business_objectives_2}}"
-                                onclick="insertDomainPlaceholder(this.dataset.placeholder)"
-                            >
-                                @{{business_objectives_2}}
                             </button>
 
                             <button
@@ -1719,19 +1649,19 @@ textarea.form-control-aspia {
                             <button
                                 type="button"
                                 class="placeholder-btn"
-                                data-placeholder="@{{applicable_industries_2}}"
+                                data-placeholder="@{{applicable_industries}}"
                                 onclick="insertDomainPlaceholder(this.dataset.placeholder)"
                             >
-                                @{{applicable_industries_2}}
+                                @{{applicable_industries}}
                             </button>
 
                             <button
                                 type="button"
                                 class="placeholder-btn"
-                                data-placeholder="@{{applicable_technologies_2}}"
+                                data-placeholder="@{{applicable_technologies}}"
                                 onclick="insertDomainPlaceholder(this.dataset.placeholder)"
                             >
-                                @{{applicable_technologies_2}}
+                                @{{applicable_technologies}}
                             </button>
 
                             <button
@@ -2221,21 +2151,17 @@ function openEditDomainModal(
     purpose,
     scope,
     businessOwner,
-    applicableIndustries,
-    applicableTechnologies,
     description,
     displayOrder,
     status,
     version,
-    domainName2,
     shortOverview,
     businessObjectives,
-    businessObjectives2,
     businessRisks,
     keyCapabilities,
     typicalStakeholders,
-    applicableIndustries2,
-    applicableTechnologies2,
+    applicableIndustries,
+    applicableTechnologies,
     keywords,
     tags,
     whyDomainMatters,
@@ -2283,12 +2209,6 @@ function openEditDomainModal(
         business_owner:
             businessOwner,
 
-        applicable_industries:
-            applicableIndustries,
-
-        applicable_technologies:
-            applicableTechnologies,
-
         description:
             description,
 
@@ -2301,17 +2221,11 @@ function openEditDomainModal(
         version:
             version,
 
-        domain_name_2:
-            domainName2,
-
         short_overview:
             shortOverview,
 
         business_objectives:
             businessObjectives,
-
-        business_objectives_2:
-            businessObjectives2,
 
         business_risks:
             businessRisks,
@@ -2322,11 +2236,11 @@ function openEditDomainModal(
         typical_stakeholders:
             typicalStakeholders,
 
-        applicable_industries_2:
-            applicableIndustries2,
+        applicable_industries:
+            applicableIndustries,
 
-        applicable_technologies_2:
-            applicableTechnologies2,
+        applicable_technologies:
+            applicableTechnologies,
 
         keywords:
             keywords,

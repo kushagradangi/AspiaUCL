@@ -132,12 +132,6 @@ class DomainTemplateController extends Controller
             '{{business_owner}}'
                 => $domain->business_owner,
 
-            '{{applicable_industries}}'
-                => $domain->applicable_industries,
-
-            '{{applicable_technologies}}'
-                => $domain->applicable_technologies,
-
             '{{description}}'
                 => $domain->description,
 
@@ -150,17 +144,11 @@ class DomainTemplateController extends Controller
             '{{version}}'
                 => $domain->version,
 
-            '{{domain_name_2}}'
-                => $domain->domain_name,
-
             '{{short_overview}}'
                 => $domain->short_overview,
 
             '{{business_objectives}}'
                 => $domain->business_objectives,
-
-            '{{business_objectives_2}}'
-                => $domain->business_objectives_2,
 
             '{{business_risks}}'
                 => $domain->business_risks,
@@ -171,11 +159,11 @@ class DomainTemplateController extends Controller
             '{{typical_stakeholders}}'
                 => $domain->typical_stakeholders,
 
-            '{{applicable_industries_2}}'
-                => $domain->applicable_industries_2,
+            '{{applicable_industries}}'
+                => $domain->applicable_industries,
 
-            '{{applicable_technologies_2}}'
-                => $domain->applicable_technologies_2,
+            '{{applicable_technologies}}'
+                => $domain->applicable_technologies,
 
             '{{keywords}}'
                 => $domain->keywords,

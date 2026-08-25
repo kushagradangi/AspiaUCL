@@ -29,67 +29,55 @@ class Domain extends Model
         // 7. Business Owner
         'business_owner',
 
-        // 8. Applicable Industries
-        'applicable_industries',
-
-        // 9. Applicable Technologies
-        'applicable_technologies',
-
-        // 10. Description
+        // 8. Description
         'description',
 
-        // 11. Display Order
+        // 9. Display Order
         'display_order',
 
-        // 12. Status
+        // 10. Status
         'status',
 
-        // 13. Version
+        // 11. Version
         'version',
 
-        // 14. Domain Name #2
-        'domain_name_2',
-
-        // 15. Short Overview
+        // 12. Short Overview
         'short_overview',
 
-        // 16. Business Objectives
+        // 13. Business Objectives
         'business_objectives',
 
-        // 17. Business Objectives #2
-        'business_objectives_2',
-
-        // 18. Business Risks
+        // 14. Business Risks
         'business_risks',
 
-        // 19. Key Capabilities
+        // 15. Key Capabilities
         'key_capabilities',
 
-        // 20. Typical Stakeholders
+        // 16. Typical Stakeholders
         'typical_stakeholders',
 
-        // 21. Applicable Industries #2
-        'applicable_industries_2',
+        // 17. Applicable Industries
+        'applicable_industries',
 
-        // 22. Applicable Technologies #2
-        'applicable_technologies_2',
+        // 18. Applicable Technologies
+        'applicable_technologies',
 
-        // 23. Keywords
+        // 19. Keywords
         'keywords',
 
-        // 24. Tags
+        // 20. Tags
         'tags',
 
-        // 25. Why This Domain Matters
+        // 21. Why This Domain Matters
         'why_domain_matters',
 
-        // 26. Common Challenges
+        // 22. Common Challenges
         'common_challenges',
 
-        // 27. Related Domains
+        // 23. Related Domains
         'related_domains',
 
-        // 28. Related Frameworks
+        // 24. Related Frameworks
         'related_frameworks',
     ];
 }

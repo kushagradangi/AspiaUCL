@@ -1,5 +1,5 @@
 {{-- =========================================================
-     DOMAIN FORM - 28 FIELDS
+     DOMAIN FORM - 24 FIELDS
      Exact Excel Order
 
      IMPORTANT:
@@ -170,51 +170,7 @@
 
 
 {{-- =========================================================
-     8. APPLICABLE INDUSTRIES
-========================================================= --}}
-
-<div class="form-group">
-
-    <label class="form-label">
-        Applicable Industries
-    </label>
-
-    <input
-        type="text"
-        id="{{ $prefix }}applicable_industries"
-        name="applicable_industries"
-        class="form-control-aspia"
-        value="{{ old('applicable_industries', ($edit && $domain) ? $domain->applicable_industries : '') }}"
-        placeholder="Example: All"
-    >
-
-</div>
-
-
-{{-- =========================================================
-     9. APPLICABLE TECHNOLOGIES
-========================================================= --}}
-
-<div class="form-group">
-
-    <label class="form-label">
-        Applicable Technologies
-    </label>
-
-    <input
-        type="text"
-        id="{{ $prefix }}applicable_technologies"
-        name="applicable_technologies"
-        class="form-control-aspia"
-        value="{{ old('applicable_technologies', ($edit && $domain) ? $domain->applicable_technologies : '') }}"
-        placeholder="Example: All"
-    >
-
-</div>
-
-
-{{-- =========================================================
-     10. DESCRIPTION
+     8. DESCRIPTION
 ========================================================= --}}
 
 <div class="form-group full-width">
@@ -234,7 +190,7 @@
 
 
 {{-- =========================================================
-     11. DISPLAY ORDER
+     9. DISPLAY ORDER
 ========================================================= --}}
 
 <div class="form-group">
@@ -257,7 +213,7 @@
 
 
 {{-- =========================================================
-     12. STATUS
+     10. STATUS
 ========================================================= --}}
 
 <div class="form-group">
@@ -309,7 +265,7 @@
 
 
 {{-- =========================================================
-     13. VERSION
+     11. VERSION
 ========================================================= --}}
 
 <div class="form-group">
@@ -331,29 +287,7 @@
 
 
 {{-- =========================================================
-     14. DOMAIN NAME #2
-========================================================= --}}
-
-<div class="form-group">
-
-    <label class="form-label">
-        Domain Name #2
-    </label>
-
-    <input
-        type="text"
-        id="{{ $prefix }}domain_name_2"
-        name="domain_name_2"
-        class="form-control-aspia"
-        value="{{ old('domain_name_2', ($edit && $domain) ? $domain->domain_name_2 : '') }}"
-        placeholder="Example: Governance Management"
-    >
-
-</div>
-
-
-{{-- =========================================================
-     15. SHORT OVERVIEW
+     12. SHORT OVERVIEW
 ========================================================= --}}
 
 <div class="form-group">
@@ -373,7 +307,7 @@
 
 
 {{-- =========================================================
-     16. BUSINESS OBJECTIVES
+     13. BUSINESS OBJECTIVES
 ========================================================= --}}
 
 <div class="form-group">
@@ -393,27 +327,7 @@
 
 
 {{-- =========================================================
-     17. BUSINESS OBJECTIVES #2
-========================================================= --}}
-
-<div class="form-group">
-
-    <label class="form-label">
-        Business Objectives #2
-    </label>
-
-    <textarea
-        id="{{ $prefix }}business_objectives_2"
-        name="business_objectives_2"
-        class="form-control-aspia"
-        placeholder="Enter additional business objectives"
-    >{{ old('business_objectives_2', ($edit && $domain) ? $domain->business_objectives_2 : '') }}</textarea>
-
-</div>
-
-
-{{-- =========================================================
-     18. BUSINESS RISKS
+     14. BUSINESS RISKS
 ========================================================= --}}
 
 <div class="form-group">
@@ -433,7 +347,7 @@
 
 
 {{-- =========================================================
-     19. KEY CAPABILITIES
+     15. KEY CAPABILITIES
 ========================================================= --}}
 
 <div class="form-group">
@@ -453,7 +367,7 @@
 
 
 {{-- =========================================================
-     20. TYPICAL STAKEHOLDERS
+     16. TYPICAL STAKEHOLDERS
 ========================================================= --}}
 
 <div class="form-group">
@@ -473,47 +387,47 @@
 
 
 {{-- =========================================================
-     21. APPLICABLE INDUSTRIES #2
+     17. APPLICABLE INDUSTRIES
 ========================================================= --}}
 
 <div class="form-group">
 
     <label class="form-label">
-        Applicable Industries #2
+        Applicable Industries
     </label>
 
     <textarea
-        id="{{ $prefix }}applicable_industries_2"
-        name="applicable_industries_2"
+        id="{{ $prefix }}applicable_industries"
+        name="applicable_industries"
         class="form-control-aspia"
-        placeholder="Enter additional applicable industries"
-    >{{ old('applicable_industries_2', ($edit && $domain) ? $domain->applicable_industries_2 : '') }}</textarea>
+        placeholder="Enter applicable industries"
+    >{{ old('applicable_industries', ($edit && $domain) ? $domain->applicable_industries : '') }}</textarea>
 
 </div>
 
 
 {{-- =========================================================
-     22. APPLICABLE TECHNOLOGIES #2
+     18. APPLICABLE TECHNOLOGIES
 ========================================================= --}}
 
 <div class="form-group">
 
     <label class="form-label">
-        Applicable Technologies #2
+        Applicable Technologies
     </label>
 
     <textarea
-        id="{{ $prefix }}applicable_technologies_2"
-        name="applicable_technologies_2"
+        id="{{ $prefix }}applicable_technologies"
+        name="applicable_technologies"
         class="form-control-aspia"
-        placeholder="Enter additional applicable technologies"
-    >{{ old('applicable_technologies_2', ($edit && $domain) ? $domain->applicable_technologies_2 : '') }}</textarea>
+        placeholder="Enter applicable technologies"
+    >{{ old('applicable_technologies', ($edit && $domain) ? $domain->applicable_technologies : '') }}</textarea>
 
 </div>
 
 
 {{-- =========================================================
-     23. KEYWORDS
+     19. KEYWORDS
 ========================================================= --}}
 
 <div class="form-group">
@@ -533,7 +447,7 @@
 
 
 {{-- =========================================================
-     24. TAGS
+     20. TAGS
 ========================================================= --}}
 
 <div class="form-group">
@@ -553,7 +467,7 @@
 
 
 {{-- =========================================================
-     25. WHY THIS DOMAIN MATTERS
+     21. WHY THIS DOMAIN MATTERS
 ========================================================= --}}
 
 <div class="form-group">
@@ -573,7 +487,7 @@
 
 
 {{-- =========================================================
-     26. COMMON CHALLENGES
+     22. COMMON CHALLENGES
 ========================================================= --}}
 
 <div class="form-group">
@@ -593,7 +507,7 @@
 
 
 {{-- =========================================================
-     27. RELATED DOMAINS
+     23. RELATED DOMAINS
 ========================================================= --}}
 
 <div class="form-group">
@@ -613,7 +527,7 @@
 
 
 {{-- =========================================================
-     28. RELATED FRAMEWORKS
+     24. RELATED FRAMEWORKS
 ========================================================= --}}
 
 <div class="form-group">
