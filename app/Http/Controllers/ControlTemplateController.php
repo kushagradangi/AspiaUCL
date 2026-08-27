@@ -63,12 +63,13 @@ class ControlTemplateController extends Controller
         $template = ControlTemplate::first();
 
         if (!$template) {
-            return redirect()
-                ->route('controls.index')
-                ->with(
-                    'error',
-                    'Control template has not been created yet.'
-                );
+            if (auth()->check()) {
+                return redirect()
+                    ->route('controls.index')
+                    ->with('error', 'Control template has not been created yet.');
+            }
+
+            abort(404, 'Control template has not been created yet.');
         }
 
         $html = $template->html_content;

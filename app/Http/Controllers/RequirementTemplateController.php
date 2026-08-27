@@ -63,12 +63,13 @@ class RequirementTemplateController extends Controller
         $template = RequirementTemplate::latest('updated_at')->first();
 
         if (!$template) {
-            return redirect()
-                ->route('requirements.index')
-                ->with(
-                    'error',
-                    'Requirement template has not been created yet.'
-                );
+            if (auth()->check()) {
+                return redirect()
+                    ->route('requirements.index')
+                    ->with('error', 'Requirement template has not been created yet.');
+            }
+
+            abort(404, 'Requirement template has not been created yet.');
         }
 
         $html = $template->html_content;

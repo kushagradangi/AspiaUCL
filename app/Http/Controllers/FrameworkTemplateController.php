@@ -91,14 +91,13 @@ class FrameworkTemplateController extends Controller
         }
 
         if (!$template) {
-            $errorMessage = 'Framework template has not been created yet.';
+            if (auth()->check()) {
+                return redirect()
+                    ->route('frameworks.index')
+                    ->with('error', 'Framework template has not been created yet.');
+            }
 
-            return redirect()
-                ->route('frameworks.index')
-                ->with(
-                    'error',
-                    $errorMessage
-                );
+            abort(404, 'Framework template has not been created yet.');
         }
 
         $html = $template->html_content;

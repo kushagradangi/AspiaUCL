@@ -19,47 +19,102 @@ use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
-| Public Routes
+| Public Routes (No Authentication Required)
 |--------------------------------------------------------------------------
 */
 
 Route::get('/', function () {
-
+    if (auth()->check()) {
+        return redirect()->route('dashboard');
+    }
     return redirect()->route('login');
-
 });
 
 
 /*
 |--------------------------------------------------------------------------
-| Dashboard
+| Public Template Views
 |--------------------------------------------------------------------------
+|
+| Unauthenticated users can access the rendered templates for Frameworks,
+| Domains, Controls, and Requirements.
+|
 */
 
-Route::get('/dashboard', function () {
+// Framework Template View (e.g. /frameworks/isoiec-27001)
+Route::get(
+    '/frameworks/{slug}',
+    [FrameworkTemplateController::class, 'show']
+)
+    ->where('slug', '[a-z0-9]+(?:-[a-z0-9]+)*')
+    ->name('frameworks.show');
 
-    $activities = \App\Models\Activity::latest()->take(10)->get();
 
-    return view('dashboard', [
-        'frameworksCount' => \App\Models\Framework::count(),
-        'domainsCount' => \App\Models\Domain::count(),
-        'controlsCount' => \App\Models\Control::count(),
-        'requirementsCount' => \App\Models\Requirement::count(),
-        'activities' => $activities,
-    ]);
+// Domain Template View (e.g. /domains/access-control)
+Route::get(
+    '/domains/{slug}',
+    [DomainTemplateController::class, 'show']
+)
+    ->where('slug', '[a-z0-9]+(?:-[a-z0-9]+)*')
+    ->name('domains.show');
 
-})
-    ->middleware(['auth', 'verified'])
-    ->name('dashboard');
+
+// Control Template View (e.g. /controls/view/GOV-001 or /controls/GOV-001)
+Route::get(
+    '/controls/view/{control_id}',
+    [ControlTemplateController::class, 'show']
+)
+    ->where('control_id', '[A-Za-z0-9_-]+')
+    ->name('controls.show');
+
+Route::get(
+    '/controls/{control_id}',
+    [ControlTemplateController::class, 'show']
+)
+    ->where('control_id', '[A-Za-z0-9_-]+');
+
+
+// Requirement Template View (e.g. /requirements/view/REQ-001 or /requirements/REQ-001)
+Route::get(
+    '/requirements/view/{requirement_id}',
+    [RequirementTemplateController::class, 'show']
+)
+    ->where('requirement_id', '[A-Za-z0-9_-]+')
+    ->name('requirements.show');
+
+Route::get(
+    '/requirements/{requirement_id}',
+    [RequirementTemplateController::class, 'show']
+)
+    ->where('requirement_id', '[A-Za-z0-9_-]+');
+
 
 
 /*
 |--------------------------------------------------------------------------
-| Authenticated Routes
+| Authenticated Routes (Super Admin & Management Modules)
 |--------------------------------------------------------------------------
 */
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'verified'])->group(function () {
+
+    /*
+    |--------------------------------------------------------------------------
+    | Dashboard
+    |--------------------------------------------------------------------------
+    */
+
+    Route::get('/dashboard', function () {
+        $activities = \App\Models\Activity::latest()->take(10)->get();
+
+        return view('dashboard', [
+            'frameworksCount'   => \App\Models\Framework::count(),
+            'domainsCount'      => \App\Models\Domain::count(),
+            'controlsCount'     => \App\Models\Control::count(),
+            'requirementsCount' => \App\Models\Requirement::count(),
+            'activities'        => $activities,
+        ]);
+    })->name('dashboard');
 
 
     /*
@@ -73,12 +128,10 @@ Route::middleware('auth')->group(function () {
         [ProfileController::class, 'edit']
     )->name('profile.edit');
 
-
     Route::patch(
         '/profile',
         [ProfileController::class, 'update']
     )->name('profile.update');
-
 
     Route::delete(
         '/profile',
@@ -86,10 +139,9 @@ Route::middleware('auth')->group(function () {
     )->name('profile.destroy');
 
 
-
     /*
     |--------------------------------------------------------------------------
-    | Frameworks
+    | Frameworks Management
     |--------------------------------------------------------------------------
     */
 
@@ -98,37 +150,25 @@ Route::middleware('auth')->group(function () {
         [FrameworkController::class, 'index']
     )->name('frameworks.index');
 
-
     Route::post(
         '/frameworks',
         [FrameworkController::class, 'store']
     )->name('frameworks.store');
-
 
     Route::put(
         '/frameworks/{framework}',
         [FrameworkController::class, 'update']
     )->name('frameworks.update');
 
-
     Route::delete(
         '/frameworks/{framework}',
         [FrameworkController::class, 'destroy']
     )->name('frameworks.destroy');
 
-
     Route::post(
         '/frameworks/import',
         [FrameworkController::class, 'import']
     )->name('frameworks.import');
-
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | Framework Template
-    |--------------------------------------------------------------------------
-    */
 
     Route::post(
         '/frameworks/template',
@@ -136,21 +176,9 @@ Route::middleware('auth')->group(function () {
     )->name('frameworks.template.store');
 
 
-    Route::get(
-        '/frameworks/{slug}',
-        [FrameworkTemplateController::class, 'show']
-    )
-        ->where(
-            'slug',
-            '[a-z0-9]+(?:-[a-z0-9]+)*'
-        )
-        ->name('frameworks.show');
-
-
-
     /*
     |--------------------------------------------------------------------------
-    | Domains
+    | Domains Management
     |--------------------------------------------------------------------------
     */
 
@@ -159,37 +187,25 @@ Route::middleware('auth')->group(function () {
         [DomainController::class, 'index']
     )->name('domains.index');
 
-
     Route::post(
         '/domains',
         [DomainController::class, 'store']
     )->name('domains.store');
-
 
     Route::put(
         '/domains/{domain}',
         [DomainController::class, 'update']
     )->name('domains.update');
 
-
     Route::delete(
         '/domains/{domain}',
         [DomainController::class, 'destroy']
     )->name('domains.destroy');
 
-
     Route::post(
         '/domains/import',
         [DomainController::class, 'import']
     )->name('domains.import');
-
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | Domain Template
-    |--------------------------------------------------------------------------
-    */
 
     Route::post(
         '/domains/template',
@@ -197,21 +213,9 @@ Route::middleware('auth')->group(function () {
     )->name('domains.template.store');
 
 
-    Route::get(
-        '/domains/{slug}',
-        [DomainTemplateController::class, 'show']
-    )
-        ->where(
-            'slug',
-            '[a-z0-9]+(?:-[a-z0-9]+)*'
-        )
-        ->name('domains.show');
-
-
-
     /*
     |--------------------------------------------------------------------------
-    | Controls
+    | Controls Management
     |--------------------------------------------------------------------------
     */
 
@@ -220,37 +224,25 @@ Route::middleware('auth')->group(function () {
         [ControlController::class, 'index']
     )->name('controls.index');
 
-
     Route::post(
         '/controls',
         [ControlController::class, 'store']
     )->name('controls.store');
-
 
     Route::put(
         '/controls/{control}',
         [ControlController::class, 'update']
     )->name('controls.update');
 
-
     Route::delete(
         '/controls/{control}',
         [ControlController::class, 'destroy']
     )->name('controls.destroy');
 
-
     Route::post(
         '/controls/import',
         [ControlController::class, 'import']
     )->name('controls.import');
-
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | Control Template
-    |--------------------------------------------------------------------------
-    */
 
     Route::post(
         '/controls/template',
@@ -260,30 +252,7 @@ Route::middleware('auth')->group(function () {
 
     /*
     |--------------------------------------------------------------------------
-    | Control Detail / Rendered Template
-    |--------------------------------------------------------------------------
-    |
-    | Example:
-    |
-    | /controls/GOV-001
-    |
-    */
-
-    Route::get(
-        '/controls/view/{control_id}',
-        [ControlTemplateController::class, 'show']
-    )
-        ->where(
-            'control_id',
-            '[A-Za-z0-9_-]+'
-        )
-        ->name('controls.show');
-
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | Requirements
+    | Requirements Management
     |--------------------------------------------------------------------------
     */
 
@@ -292,64 +261,30 @@ Route::middleware('auth')->group(function () {
         [RequirementController::class, 'index']
     )->name('requirements.index');
 
-
     Route::post(
         '/requirements',
         [RequirementController::class, 'store']
     )->name('requirements.store');
-
 
     Route::put(
         '/requirements/{requirement}',
         [RequirementController::class, 'update']
     )->name('requirements.update');
 
-
     Route::delete(
         '/requirements/{requirement}',
         [RequirementController::class, 'destroy']
     )->name('requirements.destroy');
-
 
     Route::post(
         '/requirements/import',
         [RequirementController::class, 'import']
     )->name('requirements.import');
 
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | Requirement Template
-    |--------------------------------------------------------------------------
-    */
-
     Route::post(
         '/requirements/template',
         [RequirementTemplateController::class, 'store']
     )->name('requirements.template.store');
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | Requirement Detail / Rendered Template
-    |--------------------------------------------------------------------------
-    |
-    | Example:
-    |
-    | /requirements/REQ-001
-    |
-    */
-
-    Route::get(
-        '/requirements/view/{requirement_id}',
-        [RequirementTemplateController::class, 'show']
-    )
-        ->where(
-            'requirement_id',
-            '[A-Za-z0-9_-]+'
-        )
-        ->name('requirements.show');
 
 });
 

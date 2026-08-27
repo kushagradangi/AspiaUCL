@@ -63,12 +63,13 @@ class DomainTemplateController extends Controller
         $template = DomainTemplate::first();
 
         if (!$template) {
-            return redirect()
-                ->route('domains.index')
-                ->with(
-                    'error',
-                    'Domain template has not been created yet.'
-                );
+            if (auth()->check()) {
+                return redirect()
+                    ->route('domains.index')
+                    ->with('error', 'Domain template has not been created yet.');
+            }
+
+            abort(404, 'Domain template has not been created yet.');
         }
 
         $html = $template->html_content;
