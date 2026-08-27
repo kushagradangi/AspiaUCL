@@ -1224,6 +1224,8 @@ textarea.form-control-aspia {
 
                                             {{ $domain->id }},
 
+                                            @js($domain->framework_id),
+
                                             @js($domain->domain_id),
 
                                             @js($domain->domain_code),
@@ -1718,6 +1720,96 @@ textarea.form-control-aspia {
                                 @{{related_frameworks}}
                             </button>
 
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="@{{framework_name}}"
+                                onclick="insertDomainPlaceholder(this.dataset.placeholder)"
+                            >
+                                @{{framework_name}}
+                            </button>
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="@{{framework_code}}"
+                                onclick="insertDomainPlaceholder(this.dataset.placeholder)"
+                            >
+                                @{{framework_code}}
+                            </button>
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="@{{controls_count}}"
+                                onclick="insertDomainPlaceholder(this.dataset.placeholder)"
+                            >
+                                @{{controls_count}}
+                            </button>
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="@{{controls_table}}"
+                                onclick="insertDomainPlaceholder(this.dataset.placeholder)"
+                            >
+                                @{{controls_table}}
+                            </button>
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="@{{controls_list}}"
+                                onclick="insertDomainPlaceholder(this.dataset.placeholder)"
+                            >
+                                @{{controls_list}}
+                            </button>
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="@{{requirements_count}}"
+                                onclick="insertDomainPlaceholder(this.dataset.placeholder)"
+                            >
+                                @{{requirements_count}}
+                            </button>
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="@{{framework_badge}}"
+                                onclick="insertDomainPlaceholder(this.dataset.placeholder)"
+                            >
+                                @{{framework_badge}}
+                            </button>
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="@{{control_id_chips}}"
+                                onclick="insertDomainPlaceholder(this.dataset.placeholder)"
+                            >
+                                @{{control_id_chips}}
+                            </button>
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="@{{requirement_id_chips}}"
+                                onclick="insertDomainPlaceholder(this.dataset.placeholder)"
+                            >
+                                @{{requirement_id_chips}}
+                            </button>
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="@{{framework_id}}"
+                                onclick="insertDomainPlaceholder(this.dataset.placeholder)"
+                            >
+                                @{{framework_id}}
+                            </button>
+
                         </div>
 
                     </div>
@@ -2095,6 +2187,13 @@ function openModal(id)
 
     if (modal) {
 
+        if (id === 'domainTemplateModal') {
+            const textarea = document.getElementById('domainTemplateHtml');
+            if (textarea) {
+                textarea.value = '';
+            }
+        }
+
         modal.classList.add('show');
 
         document.body.style.overflow = 'hidden';
@@ -2144,6 +2243,7 @@ function openEditDomainModal(
 
     id,
 
+    frameworkId,
     domainId,
     domainCode,
     name,
@@ -2187,6 +2287,9 @@ function openEditDomainModal(
     ====================================================== */
 
     const values = {
+
+        framework_id:
+            frameworkId,
 
         domain_id:
             domainId,

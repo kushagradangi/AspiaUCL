@@ -20,7 +20,7 @@ class RequirementController extends Controller
     {
         $search = $request->search;
 
-        $requirements = Requirement::query()
+        $requirements = Requirement::with('control.domain.framework')
 
             ->when($search, function ($query) use ($search) {
 
@@ -66,6 +66,7 @@ class RequirementController extends Controller
 
             })
 
+            ->orderBy('display_order', 'asc')
             ->orderBy('id', 'asc')
             ->paginate(10)
             ->withQueryString();
@@ -107,20 +108,6 @@ class RequirementController extends Controller
 
     public function store(Request $request)
     {
-        if ($request->filled('requirement_id') && Requirement::where('requirement_id', $request->requirement_id)->exists()) {
-            return redirect()
-                ->back()
-                ->withInput()
-                ->with('error', "Duplicate Data Alert: A requirement with Requirement ID '{$request->requirement_id}' already exists in the system.");
-        }
-
-        if ($request->filled('requirement_title') && Requirement::where('requirement_title', $request->requirement_title)->exists()) {
-            return redirect()
-                ->back()
-                ->withInput()
-                ->with('error', "Duplicate Data Alert: A requirement with Title '{$request->requirement_title}' already exists in the system.");
-        }
-
         $validated = $request->validate([
             'requirement_id' => 'required|string|max:255',
             'control_id' => 'required|string|max:255',
@@ -135,7 +122,26 @@ class RequirementController extends Controller
             'typical_owner' => 'nullable|string|max:255',
         ]);
 
+        // Check if matching requirement already exists
+        $existing = Requirement::where('requirement_id', $validated['requirement_id'])->first();
+
         try {
+            if ($existing) {
+                $existing->update($validated);
+
+                Activity::create([
+                    'user_id' => auth()->id(),
+                    'module' => 'requirement',
+                    'action' => 'Updated',
+                    'description' => 'Updated existing requirement (replaced data): ' . $existing->requirement_title,
+                ]);
+
+                return redirect()
+                    ->route('requirements.index')
+                    ->with('success', "Existing requirement '{$existing->requirement_title}' was found and successfully updated with new data.");
+            }
+
+            $validated['display_order'] = (Requirement::max('display_order') ?? 0) + 1;
             $requirement = Requirement::create($validated);
 
             Activity::create([
@@ -153,7 +159,7 @@ class RequirementController extends Controller
             return redirect()
                 ->back()
                 ->withInput()
-                ->with('error', 'Duplicate Data Alert: A requirement with duplicate details already exists in the database.');
+                ->with('error', 'Database Error: Could not save requirement data.');
         }
     }
 
@@ -263,35 +269,33 @@ class RequirementController extends Controller
         ]);
 
         try {
-            session()->forget('import_duplicates_count');
+            $import = new RequirementImport();
 
             Excel::import(
-                new RequirementImport(),
+                $import,
                 $request->file('file')
             );
+
+            $created = $import->getCreatedCount();
+            $updated = $import->getUpdatedCount();
 
             Activity::create([
                 'user_id' => auth()->id(),
                 'module' => 'requirement',
                 'action' => 'Imported',
-                'description' => 'Imported requirements from XLSX file.',
+                'description' => "Imported requirements: {$created} created, {$updated} updated.",
             ]);
 
-            $dupCount = session('import_duplicates_count', 0);
-            if ($dupCount > 0) {
-                return redirect()
-                    ->route('requirements.index')
-                    ->with('error', "Duplicate Data Alert: {$dupCount} duplicate requirement record(s) were found in the uploaded file and skipped to prevent duplicate errors.");
-            }
+            $message = "Requirements imported successfully ({$created} new added, {$updated} existing updated).";
 
             return redirect()
                 ->route('requirements.index')
-                ->with('success', 'Requirements imported successfully.');
+                ->with('success', $message);
 
         } catch (\Throwable $e) {
             return redirect()
                 ->route('requirements.index')
-                ->with('error', 'Duplicate Data Alert: Import stopped because the file contained duplicate requirement records.');
+                ->with('error', 'Error occurred during requirement import: ' . $e->getMessage());
         }
     }
 }

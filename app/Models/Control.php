@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Control extends Model
 {
@@ -62,20 +63,46 @@ class Control extends Model
 
         // 17. Control Type
         'control_type',
+
+        // 18. Display Order
+        'display_order',
     ];
 
 
     /*
     |--------------------------------------------------------------------------
-    | Control belongs to Domain
+    | Relationships
     |--------------------------------------------------------------------------
     */
 
+    /**
+     * Control belongs to Domain.
+     */
     public function domain(): BelongsTo
     {
         return $this->belongsTo(
             Domain::class,
             'domain_id'
         );
+    }
+
+    /**
+     * Control has many Requirements.
+     */
+    public function requirements(): HasMany
+    {
+        return $this->hasMany(
+            Requirement::class,
+            'control_id',
+            'control_id'
+        );
+    }
+
+    /**
+     * Get grandparent Framework through Domain.
+     */
+    public function getFrameworkAttribute(): ?Framework
+    {
+        return $this->domain?->framework;
     }
 }

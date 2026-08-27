@@ -21,7 +21,7 @@ class ControlController extends Controller
     {
         $search = $request->search;
 
-        $controls = Control::with('domain')
+        $controls = Control::with(['domain.framework', 'requirements'])
             ->when($search, function ($query) use ($search) {
 
                 $query->where(function ($q) use ($search) {
@@ -83,6 +83,7 @@ class ControlController extends Controller
                 });
 
             })
+            ->orderBy('display_order', 'asc')
             ->orderBy('id', 'asc')
             ->paginate(10)
             ->withQueryString();
@@ -95,11 +96,14 @@ class ControlController extends Controller
             ->take(10)
             ->get();
 
+        $controlTemplate = \App\Models\ControlTemplate::first();
+
         return view(
             'aspiaUcl.controls.index',
             compact(
                 'controls',
-                'activities'
+                'activities',
+                'controlTemplate'
             )
         );
     }
@@ -184,22 +188,14 @@ class ControlController extends Controller
 
     public function store(Request $request)
     {
-        if ($request->filled('control_id') && Control::where('control_id', $request->control_id)->exists()) {
-            return redirect()
-                ->back()
-                ->withInput()
-                ->with('error', "Duplicate Data Alert: A control with Control ID '{$request->control_id}' already exists in the system.");
-        }
-
-        if ($request->filled('name') && Control::where('name', $request->name)->exists()) {
-            return redirect()
-                ->back()
-                ->withInput()
-                ->with('error', "Duplicate Data Alert: A control with Name '{$request->name}' already exists in the system.");
+        // Check if matching control already exists
+        $existing = null;
+        if ($request->filled('control_id')) {
+            $existing = Control::where('control_id', $request->control_id)->first();
         }
 
         $validated = $request->validate(
-            $this->validationRules()
+            $this->validationRules($existing ? $existing->id : null)
         );
 
         $domain = Domain::where(
@@ -218,6 +214,22 @@ class ControlController extends Controller
         $validated['domain_id'] = $domain->id;
 
         try {
+            if ($existing) {
+                $existing->update($validated);
+
+                Activity::create([
+                    'user_id' => auth()->id(),
+                    'module' => 'control',
+                    'action' => 'Updated',
+                    'description' => 'Updated existing control (replaced data): ' . $existing->name,
+                ]);
+
+                return redirect()
+                    ->route('controls.index')
+                    ->with('success', "Existing control '{$existing->name}' was found and successfully updated with new data.");
+            }
+
+            $validated['display_order'] = (Control::max('display_order') ?? 0) + 1;
             $control = Control::create($validated);
 
             Activity::create([
@@ -235,7 +247,7 @@ class ControlController extends Controller
             return redirect()
                 ->back()
                 ->withInput()
-                ->with('error', 'Duplicate Data Alert: A control with duplicate details already exists in the database.');
+                ->with('error', 'Database Error: Could not save control data.');
         }
     }
 
@@ -350,35 +362,33 @@ class ControlController extends Controller
         ]);
 
         try {
-            session()->forget('import_duplicates_count');
+            $import = new ControlImport();
 
             Excel::import(
-                new ControlImport(),
+                $import,
                 $request->file('file')
             );
+
+            $created = $import->getCreatedCount();
+            $updated = $import->getUpdatedCount();
 
             Activity::create([
                 'user_id' => auth()->id(),
                 'module' => 'control',
                 'action' => 'Imported',
-                'description' => 'Imported controls from XLSX file.',
+                'description' => "Imported controls: {$created} created, {$updated} updated.",
             ]);
 
-            $dupCount = session('import_duplicates_count', 0);
-            if ($dupCount > 0) {
-                return redirect()
-                    ->route('controls.index')
-                    ->with('error', "Duplicate Data Alert: {$dupCount} duplicate control record(s) were found in the uploaded file and skipped to prevent duplicate errors.");
-            }
+            $message = "Controls imported successfully ({$created} new added, {$updated} existing updated).";
 
             return redirect()
                 ->route('controls.index')
-                ->with('success', 'Controls imported successfully.');
+                ->with('success', $message);
 
         } catch (\Throwable $e) {
             return redirect()
                 ->route('controls.index')
-                ->with('error', 'Duplicate Data Alert: Import stopped because the file contained duplicate control records.');
+                ->with('error', 'Error occurred during control import: ' . $e->getMessage());
         }
     }
 }

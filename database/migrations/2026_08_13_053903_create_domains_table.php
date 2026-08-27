@@ -12,6 +12,12 @@ return new class extends Migration
 
             $table->id();
 
+            // Relationship with Frameworks
+            $table->foreignId('framework_id')
+                ->nullable()
+                ->constrained('frameworks')
+                ->nullOnDelete();
+
             // Domain ID
             $table->string('domain_id')->unique();
 

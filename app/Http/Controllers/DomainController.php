@@ -21,8 +21,7 @@ class DomainController extends Controller
     {
         $search = $request->input('search');
 
-        $domains = Domain::query()
-
+        $domains = Domain::with(['framework', 'controls'])
             ->when($search, function ($query) use ($search) {
 
                 $query->where(function ($q) use ($search) {
@@ -96,9 +95,12 @@ class DomainController extends Controller
             ->paginate(10)
             ->withQueryString();
 
+        $frameworks = \App\Models\Framework::orderBy('name')->get();
+        $domainTemplate = \App\Models\DomainTemplate::first();
+
         return view(
             'aspiaUcl.domains.index',
-            compact('domains')
+            compact('domains', 'frameworks', 'domainTemplate')
         );
     }
 
@@ -112,6 +114,9 @@ class DomainController extends Controller
     private function validationRules($domainId = null): array
     {
         return [
+
+            'framework_id' =>
+                'nullable|exists:frameworks,id',
 
             /*
             |------------------------------------------------------------------
@@ -410,57 +415,61 @@ class DomainController extends Controller
 |--------------------------------------------------------------------------
 */
 
-public function store(Request $request)
-{
-    if ($request->filled('domain_id') && Domain::where('domain_id', $request->domain_id)->exists()) {
-        return redirect()
-            ->back()
-            ->withInput()
-            ->with('error', "Duplicate Data Alert: A domain with Domain ID '{$request->domain_id}' already exists in the system.");
+    public function store(Request $request)
+    {
+        // Check if matching domain already exists
+        $existing = null;
+        if ($request->filled('domain_id')) {
+            $existing = Domain::where('domain_id', $request->domain_id)->first();
+        }
+        if (!$existing && $request->filled('domain_code')) {
+            $existing = Domain::where('domain_code', $request->domain_code)->first();
+        }
+
+        $validated = $request->validate(
+            $this->validationRules($existing ? $existing->id : null)
+        );
+
+        try {
+            if ($existing) {
+                $validated['slug'] = $this->generateUniqueSlug($validated['name'], $existing->id);
+                $existing->update($validated);
+
+                Activity::create([
+                    'user_id' => auth()->id(),
+                    'module' => 'domain',
+                    'action' => 'Updated',
+                    'description' => 'Updated existing domain (replaced data): ' . $existing->name,
+                ]);
+
+                return redirect()
+                    ->route('domains.index')
+                    ->with('success', "Existing domain '{$existing->name}' was found and successfully updated with new data.");
+            }
+
+            $validated['slug'] = $this->generateUniqueSlug($validated['name']);
+            $validated['display_order'] = (Domain::max('display_order') ?? 0) + 1;
+
+            $domain = Domain::create($validated);
+
+            Activity::create([
+                'user_id' => auth()->id(),
+                'module' => 'domain',
+                'action' => 'Created',
+                'description' => 'Created domain: ' . $domain->name,
+            ]);
+
+            return redirect()
+                ->route('domains.index')
+                ->with('success', 'Domain created successfully.');
+
+        } catch (\Illuminate\Database\QueryException $e) {
+            return redirect()
+                ->back()
+                ->withInput()
+                ->with('error', 'Database Error: Could not save domain data.');
+        }
     }
-
-    if ($request->filled('domain_code') && Domain::where('domain_code', $request->domain_code)->exists()) {
-        return redirect()
-            ->back()
-            ->withInput()
-            ->with('error', "Duplicate Data Alert: A domain with Domain Code '{$request->domain_code}' already exists in the system.");
-    }
-
-    if ($request->filled('name') && Domain::where('name', $request->name)->exists()) {
-        return redirect()
-            ->back()
-            ->withInput()
-            ->with('error', "Duplicate Data Alert: A domain with Name '{$request->name}' already exists in the system.");
-    }
-
-    $validated = $request->validate(
-        $this->validationRules()
-    );
-
-    try {
-        $validated['slug'] = $this->generateUniqueSlug($validated['name']);
-        $validated['display_order'] = (Domain::max('display_order') ?? 0) + 1;
-
-        $domain = Domain::create($validated);
-
-        Activity::create([
-            'user_id' => auth()->id(),
-            'module' => 'domain',
-            'action' => 'Created',
-            'description' => 'Created domain: ' . $domain->name,
-        ]);
-
-        return redirect()
-            ->route('domains.index')
-            ->with('success', 'Domain created successfully.');
-
-    } catch (\Illuminate\Database\QueryException $e) {
-        return redirect()
-            ->back()
-            ->withInput()
-            ->with('error', 'Duplicate Data Alert: A domain with duplicate details already exists in the database.');
-    }
-}
 
 
     /*
@@ -567,35 +576,33 @@ public function store(Request $request)
         ]);
 
         try {
-            session()->forget('import_duplicates_count');
+            $import = new DomainImport();
 
             Excel::import(
-                new DomainImport(),
+                $import,
                 $request->file('file')
             );
+
+            $created = $import->getCreatedCount();
+            $updated = $import->getUpdatedCount();
 
             Activity::create([
                 'user_id' => auth()->id(),
                 'module' => 'domain',
                 'action' => 'Imported',
-                'description' => 'Imported domains from XLSX file.',
+                'description' => "Imported domains: {$created} created, {$updated} updated.",
             ]);
 
-            $dupCount = session('import_duplicates_count', 0);
-            if ($dupCount > 0) {
-                return redirect()
-                    ->route('domains.index')
-                    ->with('error', "Duplicate Data Alert: {$dupCount} duplicate domain record(s) were found in the uploaded file and skipped to prevent duplicate errors.");
-            }
+            $message = "Domains imported successfully ({$created} new added, {$updated} existing updated).";
 
             return redirect()
                 ->route('domains.index')
-                ->with('success', 'Domains imported successfully.');
+                ->with('success', $message);
 
         } catch (\Throwable $e) {
             return redirect()
                 ->route('domains.index')
-                ->with('error', 'Duplicate Data Alert: Import stopped because the file contained duplicate domain records.');
+                ->with('error', 'Error occurred during domain import: ' . $e->getMessage());
         }
     }
 }

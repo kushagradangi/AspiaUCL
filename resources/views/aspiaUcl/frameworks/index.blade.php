@@ -1686,6 +1686,85 @@
 
                             </button>
 
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="&#123;&#123;description&#125;&#125;"
+                                onclick="insertFrameworkPlaceholder(this.dataset.placeholder)"
+                            >
+
+                                &#123;&#123;description&#125;&#125;
+
+                            </button>
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="&#123;&#123;domains_count&#125;&#125;"
+                                onclick="insertFrameworkPlaceholder(this.dataset.placeholder)"
+                            >
+
+                                &#123;&#123;domains_count&#125;&#125;
+
+                            </button>
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="&#123;&#123;domains_table&#125;&#125;"
+                                onclick="insertFrameworkPlaceholder(this.dataset.placeholder)"
+                            >
+
+                                &#123;&#123;domains_table&#125;&#125;
+
+                            </button>
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="&#123;&#123;domains_list&#125;&#125;"
+                                onclick="insertFrameworkPlaceholder(this.dataset.placeholder)"
+                            >
+
+                                &#123;&#123;domains_list&#125;&#125;
+
+                            </button>
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="&#123;&#123;controls_count&#125;&#125;"
+                                onclick="insertFrameworkPlaceholder(this.dataset.placeholder)"
+                            >
+                                &#123;&#123;controls_count&#125;&#125;
+                            </button>
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="&#123;&#123;domain_id_chips&#125;&#125;"
+                                onclick="insertFrameworkPlaceholder(this.dataset.placeholder)"
+                            >
+                                &#123;&#123;domain_id_chips&#125;&#125;
+                            </button>
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="&#123;&#123;control_id_chips&#125;&#125;"
+                                onclick="insertFrameworkPlaceholder(this.dataset.placeholder)"
+                            >
+                                &#123;&#123;control_id_chips&#125;&#125;
+                            </button>
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="&#123;&#123;requirement_id_chips&#125;&#125;"
+                                onclick="insertFrameworkPlaceholder(this.dataset.placeholder)"
+                            >
+                                &#123;&#123;requirement_id_chips&#125;&#125;
+                            </button>
 
                         </div>
 
@@ -2477,21 +2556,11 @@
 <script>
 
 
-    const existingFrameworkTemplates = @json($frameworkTemplates ?? []);
-
     function onFrameworkTypeChange(val)
     {
         const textarea = document.getElementById('frameworkTemplate');
-        if (!textarea) return;
-        const trimmed = (val || '').trim().toLowerCase();
-        textarea.value = '';
-        if (!trimmed) return;
-
-        for (const [type, content] of Object.entries(existingFrameworkTemplates)) {
-            if ((type || '').trim().toLowerCase() === trimmed) {
-                textarea.value = content;
-                return;
-            }
+        if (textarea) {
+            textarea.value = '';
         }
     }
 

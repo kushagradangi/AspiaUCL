@@ -508,6 +508,37 @@
 
         }
 
+        /* ================= ALERTS ================= */
+        .alert-success {
+            background: rgba(34,197,94,.12);
+            border: 1px solid rgba(34,197,94,.3);
+            color: #6ee7a0;
+            padding: 14px 18px;
+            border-radius: 10px;
+            margin-bottom: 22px;
+            font-size: 13.5px;
+        }
+
+        .alert-error {
+            background: rgba(239,68,68,.12);
+            border: 1px solid rgba(239,68,68,.3);
+            color: #ff8585;
+            padding: 14px 18px;
+            border-radius: 10px;
+            margin-bottom: 22px;
+            font-size: 13.5px;
+        }
+
+        .alert-info {
+            background: rgba(16,188,232,.12);
+            border: 1px solid rgba(16,188,232,.3);
+            color: #10bce8;
+            padding: 14px 18px;
+            border-radius: 10px;
+            margin-bottom: 22px;
+            font-size: 13.5px;
+        }
+
     </style>
 
 </head>

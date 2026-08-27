@@ -21,7 +21,7 @@ class FrameworkController extends Controller
     {
         $search = $request->input('search');
 
-        $frameworks = Framework::query()
+        $frameworks = Framework::with(['domains.controls'])
 
             ->when($search, function ($query) use ($search) {
 
@@ -85,6 +85,7 @@ class FrameworkController extends Controller
 
             })
 
+            ->orderBy('display_order', 'asc')
             ->orderBy('id', 'asc')
             ->paginate(10)
             ->withQueryString();
@@ -125,28 +126,6 @@ class FrameworkController extends Controller
 
     public function store(Request $request)
     {
-        // Check for duplicate framework fields before creating
-        if ($request->filled('framework_id') && Framework::where('framework_id', $request->framework_id)->exists()) {
-            return redirect()
-                ->back()
-                ->withInput()
-                ->with('error', "Duplicate Data Alert: A framework with Framework ID '{$request->framework_id}' already exists in the system.");
-        }
-
-        if ($request->filled('framework_code') && Framework::where('framework_code', $request->framework_code)->exists()) {
-            return redirect()
-                ->back()
-                ->withInput()
-                ->with('error', "Duplicate Data Alert: A framework with Framework Code '{$request->framework_code}' already exists in the system.");
-        }
-
-        if ($request->filled('name') && Framework::where('name', $request->name)->exists()) {
-            return redirect()
-                ->back()
-                ->withInput()
-                ->with('error', "Duplicate Data Alert: A framework with Name '{$request->name}' already exists in the system.");
-        }
-
         $validated = $request->validate([
             'framework_id' => [
                 'required',
@@ -200,9 +179,32 @@ class FrameworkController extends Controller
             ],
         ]);
 
-        try {
-            $validated['slug'] = $this->generateUniqueSlug($validated['name']);
+        // Check if matching framework already exists
+        $existing = Framework::where('framework_id', $validated['framework_id'])
+            ->when(!empty($validated['framework_code']), function ($q) use ($validated) {
+                return $q->orWhere('framework_code', $validated['framework_code']);
+            })
+            ->first();
 
+        try {
+            if ($existing) {
+                $validated['slug'] = $this->generateUniqueSlug($validated['name'], $existing->id);
+                $existing->update($validated);
+
+                Activity::create([
+                    'user_id' => auth()->id(),
+                    'module' => 'framework',
+                    'action' => 'Updated',
+                    'description' => 'Updated existing framework (replaced data): ' . $existing->name,
+                ]);
+
+                return redirect()
+                    ->route('frameworks.index')
+                    ->with('success', "Existing framework '{$existing->name}' was found and successfully updated with new data.");
+            }
+
+            $validated['slug'] = $this->generateUniqueSlug($validated['name']);
+            $validated['display_order'] = (Framework::max('display_order') ?? 0) + 1;
             $framework = Framework::create($validated);
 
             Activity::create([
@@ -220,7 +222,7 @@ class FrameworkController extends Controller
             return redirect()
                 ->back()
                 ->withInput()
-                ->with('error', 'Duplicate Data Alert: A framework with duplicate details already exists in the database.');
+                ->with('error', 'Database Error: Could not save framework data.');
         }
     }
 
@@ -382,35 +384,33 @@ class FrameworkController extends Controller
         ]);
 
         try {
-            session()->forget('import_duplicates_count');
+            $import = new FrameworkImport();
 
             Excel::import(
-                new FrameworkImport(),
+                $import,
                 $request->file('file')
             );
+
+            $created = $import->getCreatedCount();
+            $updated = $import->getUpdatedCount();
 
             Activity::create([
                 'user_id' => auth()->id(),
                 'module' => 'framework',
                 'action' => 'Imported',
-                'description' => 'Imported frameworks from XLSX file.',
+                'description' => "Imported frameworks: {$created} created, {$updated} updated.",
             ]);
 
-            $dupCount = session('import_duplicates_count', 0);
-            if ($dupCount > 0) {
-                return redirect()
-                    ->route('frameworks.index')
-                    ->with('error', "Duplicate Data Alert: {$dupCount} duplicate framework record(s) were found in the uploaded file and skipped to prevent duplicate errors.");
-            }
+            $message = "Frameworks imported successfully ({$created} new added, {$updated} existing updated).";
 
             return redirect()
                 ->route('frameworks.index')
-                ->with('success', 'Frameworks imported successfully.');
+                ->with('success', $message);
 
         } catch (\Throwable $e) {
             return redirect()
                 ->route('frameworks.index')
-                ->with('error', 'Duplicate Data Alert: Import stopped because the file contained duplicate framework records.');
+                ->with('error', 'Error occurred during framework import: ' . $e->getMessage());
         }
     }
 

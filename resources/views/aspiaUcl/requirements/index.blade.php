@@ -1525,6 +1525,104 @@
                                 &#123;&#123;typical_owner&#125;&#125;
                             </button>
 
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="&#123;&#123;control_name&#125;&#125;"
+                                onclick="insertRequirementPlaceholder(this.dataset.placeholder)"
+                            >
+                                &#123;&#123;control_name&#125;&#125;
+                            </button>
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="&#123;&#123;control_category&#125;&#125;"
+                                onclick="insertRequirementPlaceholder(this.dataset.placeholder)"
+                            >
+                                &#123;&#123;control_category&#125;&#125;
+                            </button>
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="&#123;&#123;control_summary&#125;&#125;"
+                                onclick="insertRequirementPlaceholder(this.dataset.placeholder)"
+                            >
+                                &#123;&#123;control_summary&#125;&#125;
+                            </button>
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="&#123;&#123;domain_name&#125;&#125;"
+                                onclick="insertRequirementPlaceholder(this.dataset.placeholder)"
+                            >
+                                &#123;&#123;domain_name&#125;&#125;
+                            </button>
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="&#123;&#123;domain_code&#125;&#125;"
+                                onclick="insertRequirementPlaceholder(this.dataset.placeholder)"
+                            >
+                                &#123;&#123;domain_code&#125;&#125;
+                            </button>
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="&#123;&#123;framework_name&#125;&#125;"
+                                onclick="insertRequirementPlaceholder(this.dataset.placeholder)"
+                            >
+                                &#123;&#123;framework_name&#125;&#125;
+                            </button>
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="&#123;&#123;control_badge&#125;&#125;"
+                                onclick="insertRequirementPlaceholder(this.dataset.placeholder)"
+                            >
+                                &#123;&#123;control_badge&#125;&#125;
+                            </button>
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="&#123;&#123;domain_badge&#125;&#125;"
+                                onclick="insertRequirementPlaceholder(this.dataset.placeholder)"
+                            >
+                                &#123;&#123;domain_badge&#125;&#125;
+                            </button>
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="&#123;&#123;framework_badge&#125;&#125;"
+                                onclick="insertRequirementPlaceholder(this.dataset.placeholder)"
+                            >
+                                &#123;&#123;framework_badge&#125;&#125;
+                            </button>
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="&#123;&#123;domain_id&#125;&#125;"
+                                onclick="insertRequirementPlaceholder(this.dataset.placeholder)"
+                            >
+                                &#123;&#123;domain_id&#125;&#125;
+                            </button>
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="&#123;&#123;framework_id&#125;&#125;"
+                                onclick="insertRequirementPlaceholder(this.dataset.placeholder)"
+                            >
+                                &#123;&#123;framework_id&#125;&#125;
+                            </button>
 
                         </div>
 

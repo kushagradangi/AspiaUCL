@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Requirement extends Model
 {
@@ -41,5 +42,42 @@ class Requirement extends Model
         // Typical Owner
         'typical_owner',
 
+        // Display Order
+        'display_order',
+
     ];
+
+    /*
+    |--------------------------------------------------------------------------
+    | Relationships
+    |--------------------------------------------------------------------------
+    */
+
+    /**
+     * Requirement belongs to Control.
+     */
+    public function control(): BelongsTo
+    {
+        return $this->belongsTo(
+            Control::class,
+            'control_id',
+            'control_id'
+        );
+    }
+
+    /**
+     * Get parent Domain through Control.
+     */
+    public function getDomainAttribute(): ?Domain
+    {
+        return $this->control?->domain;
+    }
+
+    /**
+     * Get grandparent Framework through Control -> Domain.
+     */
+    public function getFrameworkAttribute(): ?Framework
+    {
+        return $this->control?->domain?->framework;
+    }
 }

@@ -16,6 +16,37 @@
 
 
 {{-- =========================================================
+     FRAMEWORK SELECTION (RELATIONSHIP)
+========================================================= --}}
+
+<div class="form-group">
+
+    <label class="form-label">
+        Associated Framework
+    </label>
+
+    <select
+        id="{{ $prefix }}framework_id"
+        name="framework_id"
+        class="form-control-aspia"
+    >
+        <option value="">-- None (Standalone Domain) --</option>
+        @if(isset($frameworks) && $frameworks->isNotEmpty())
+            @foreach($frameworks as $fw)
+                <option
+                    value="{{ $fw->id }}"
+                    {{ old('framework_id', ($edit && $domain) ? $domain->framework_id : '') == $fw->id ? 'selected' : '' }}
+                >
+                    {{ $fw->name }} ({{ $fw->framework_code ?: $fw->framework_id }})
+                </option>
+            @endforeach
+        @endif
+    </select>
+
+</div>
+
+
+{{-- =========================================================
      1. DOMAIN ID
 ========================================================= --}}
 

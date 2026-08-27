@@ -3,10 +3,15 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Domain extends Model
 {
     protected $fillable = [
+
+        // Relationship
+        'framework_id',
 
         // 1. Domain ID
         'domain_id',
@@ -80,4 +85,20 @@ class Domain extends Model
         // 24. Related Frameworks
         'related_frameworks',
     ];
+
+    /**
+     * Domain belongs to Framework.
+     */
+    public function framework(): BelongsTo
+    {
+        return $this->belongsTo(Framework::class, 'framework_id');
+    }
+
+    /**
+     * Domain has many Controls.
+     */
+    public function controls(): HasMany
+    {
+        return $this->hasMany(Control::class, 'domain_id');
+    }
 }

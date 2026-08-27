@@ -1708,6 +1708,122 @@
                                 &#123;&#123;control_type&#125;&#125;
                             </button>
 
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="&#123;&#123;domain_name&#125;&#125;"
+                                onclick="insertControlPlaceholder(this.dataset.placeholder)"
+                            >
+                                &#123;&#123;domain_name&#125;&#125;
+                            </button>
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="&#123;&#123;domain_purpose&#125;&#125;"
+                                onclick="insertControlPlaceholder(this.dataset.placeholder)"
+                            >
+                                &#123;&#123;domain_purpose&#125;&#125;
+                            </button>
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="&#123;&#123;domain_scope&#125;&#125;"
+                                onclick="insertControlPlaceholder(this.dataset.placeholder)"
+                            >
+                                &#123;&#123;domain_scope&#125;&#125;
+                            </button>
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="&#123;&#123;framework_name&#125;&#125;"
+                                onclick="insertControlPlaceholder(this.dataset.placeholder)"
+                            >
+                                &#123;&#123;framework_name&#125;&#125;
+                            </button>
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="&#123;&#123;framework_code&#125;&#125;"
+                                onclick="insertControlPlaceholder(this.dataset.placeholder)"
+                            >
+                                &#123;&#123;framework_code&#125;&#125;
+                            </button>
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="&#123;&#123;framework_family&#125;&#125;"
+                                onclick="insertControlPlaceholder(this.dataset.placeholder)"
+                            >
+                                &#123;&#123;framework_family&#125;&#125;
+                            </button>
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="&#123;&#123;requirements_count&#125;&#125;"
+                                onclick="insertControlPlaceholder(this.dataset.placeholder)"
+                            >
+                                &#123;&#123;requirements_count&#125;&#125;
+                            </button>
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="&#123;&#123;requirements_table&#125;&#125;"
+                                onclick="insertControlPlaceholder(this.dataset.placeholder)"
+                            >
+                                &#123;&#123;requirements_table&#125;&#125;
+                            </button>
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="&#123;&#123;domain_badge&#125;&#125;"
+                                onclick="insertControlPlaceholder(this.dataset.placeholder)"
+                            >
+                                &#123;&#123;domain_badge&#125;&#125;
+                            </button>
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="&#123;&#123;framework_badge&#125;&#125;"
+                                onclick="insertControlPlaceholder(this.dataset.placeholder)"
+                            >
+                                &#123;&#123;framework_badge&#125;&#125;
+                            </button>
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="&#123;&#123;requirement_id_chips&#125;&#125;"
+                                onclick="insertControlPlaceholder(this.dataset.placeholder)"
+                            >
+                                &#123;&#123;requirement_id_chips&#125;&#125;
+                            </button>
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="&#123;&#123;domain_id&#125;&#125;"
+                                onclick="insertControlPlaceholder(this.dataset.placeholder)"
+                            >
+                                &#123;&#123;domain_id&#125;&#125;
+                            </button>
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="&#123;&#123;framework_id&#125;&#125;"
+                                onclick="insertControlPlaceholder(this.dataset.placeholder)"
+                            >
+                                &#123;&#123;framework_id&#125;&#125;
+                            </button>
 
                         </div>
 

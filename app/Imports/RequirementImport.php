@@ -8,6 +8,20 @@ use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
 class RequirementImport implements ToModel, WithHeadingRow
 {
+    private int $createdCount = 0;
+    private int $updatedCount = 0;
+    private int $currentRow = 0;
+
+    public function getCreatedCount(): int
+    {
+        return $this->createdCount;
+    }
+
+    public function getUpdatedCount(): int
+    {
+        return $this->updatedCount;
+    }
+
     public function model(array $row)
     {
         /*
@@ -16,50 +30,79 @@ class RequirementImport implements ToModel, WithHeadingRow
         |--------------------------------------------------------------------------
         */
 
+        $reqId = isset($row['requirement_id']) ? trim((string)$row['requirement_id']) : null;
+        $title = isset($row['requirement_title']) ? trim((string)$row['requirement_title']) : null;
+        $reqStatement = isset($row['requirement']) ? trim((string)$row['requirement']) : null;
+
         if (
-            empty($row['requirement_id']) ||
-            empty($row['control_id']) ||
-            empty($row['requirement_title']) ||
-            empty($row['requirement'])
+            empty($reqId) ||
+            empty($title) ||
+            empty($reqStatement)
         ) {
             return null;
         }
 
-        $reqId = $row['requirement_id'];
-        $title = $row['requirement_title'];
+        $this->currentRow++;
 
-        $exists = Requirement::where('requirement_id', $reqId)
-            ->orWhere('requirement_title', $title)
-            ->exists();
+        $controlId = isset($row['control_id']) ? trim((string)$row['control_id']) : null;
 
-        if ($exists) {
-            $curr = session('import_duplicates_count', 0);
-            session(['import_duplicates_count' => $curr + 1]);
-            return null;
-        }
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | Create Requirement
-        |--------------------------------------------------------------------------
-        |
-        | Control ID is stored directly as a string.
-        |
-        | Example:
-        |
-        | GOV-001
-        |
-        */
-
-        $reqId = $row['requirement_id'] ?? null;
-        $controlId = $row['control_id'] ?? null;
-
-        if (empty($controlId) || str_starts_with(trim($controlId), '=') || str_contains($controlId, 'LEFT(') || str_contains($controlId, 'FIND(')) {
+        if (empty($controlId) || str_starts_with($controlId, '=') || str_contains($controlId, 'LEFT(') || str_contains($controlId, 'FIND(')) {
             if ($reqId) {
                 $controlId = preg_replace('/-R\d+$/i', '', $reqId);
             }
         }
+
+        /*
+        |--------------------------------------------------------------------------
+        | Check for existing requirement to replace / update
+        |--------------------------------------------------------------------------
+        */
+
+        $existing = Requirement::where('requirement_id', $reqId)
+            ->orWhere('requirement_title', $title)
+            ->first();
+
+        if ($existing) {
+            $existing->update([
+                'requirement_id' => $reqId,
+                'control_id' => $controlId ?? $existing->control_id,
+                'requirement_title' => $title,
+                'requirement' => $reqStatement,
+                'display_order' => $this->currentRow,
+                'why_requirement_exists' => isset($row['why_this_requirement_exists'])
+                    ? trim((string)$row['why_this_requirement_exists'])
+                    : (isset($row['why_requirement_exists']) ? trim((string)$row['why_requirement_exists']) : $existing->why_requirement_exists),
+                'implementation_guidance' => isset($row['implementation_guidance'])
+                    ? trim((string)$row['implementation_guidance'])
+                    : $existing->implementation_guidance,
+                'common_audit_findings' => isset($row['common_audit_findings'])
+                    ? trim((string)$row['common_audit_findings'])
+                    : $existing->common_audit_findings,
+                'common_mistakes' => isset($row['common_mistakes'])
+                    ? trim((string)$row['common_mistakes'])
+                    : $existing->common_mistakes,
+                'best_practices' => isset($row['best_practices'])
+                    ? trim((string)$row['best_practices'])
+                    : $existing->best_practices,
+                'business_examples' => isset($row['business_examples'])
+                    ? trim((string)$row['business_examples'])
+                    : $existing->business_examples,
+                'typical_owner' => isset($row['typical_owner'])
+                    ? trim((string)$row['typical_owner'])
+                    : $existing->typical_owner,
+            ]);
+
+            $this->updatedCount++;
+            return null;
+        }
+
+        $this->createdCount++;
+
+        /*
+        |--------------------------------------------------------------------------
+        | Create New Requirement
+        |--------------------------------------------------------------------------
+        */
 
         return new Requirement([
 
@@ -80,7 +123,7 @@ class RequirementImport implements ToModel, WithHeadingRow
             */
 
             'control_id' =>
-                $controlId,
+                $controlId ?? '',
 
 
             /*
@@ -90,7 +133,7 @@ class RequirementImport implements ToModel, WithHeadingRow
             */
 
             'requirement_title' =>
-                $row['requirement_title'] ?? null,
+                $title,
 
 
             /*
@@ -100,7 +143,17 @@ class RequirementImport implements ToModel, WithHeadingRow
             */
 
             'requirement' =>
-                $row['requirement'] ?? null,
+                $reqStatement,
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | Display Order (Excel Row Order)
+            |--------------------------------------------------------------------------
+            */
+
+            'display_order' =>
+                $this->currentRow,
 
 
             /*
@@ -110,9 +163,9 @@ class RequirementImport implements ToModel, WithHeadingRow
             */
 
             'why_requirement_exists' =>
-                $row['why_this_requirement_exists']
-                ?? $row['why_requirement_exists']
-                ?? null,
+                isset($row['why_this_requirement_exists'])
+                    ? trim((string)$row['why_this_requirement_exists'])
+                    : (isset($row['why_requirement_exists']) ? trim((string)$row['why_requirement_exists']) : null),
 
 
             /*
@@ -122,8 +175,9 @@ class RequirementImport implements ToModel, WithHeadingRow
             */
 
             'implementation_guidance' =>
-                $row['implementation_guidance']
-                ?? null,
+                isset($row['implementation_guidance'])
+                    ? trim((string)$row['implementation_guidance'])
+                    : null,
 
 
             /*
@@ -133,8 +187,9 @@ class RequirementImport implements ToModel, WithHeadingRow
             */
 
             'common_audit_findings' =>
-                $row['common_audit_findings']
-                ?? null,
+                isset($row['common_audit_findings'])
+                    ? trim((string)$row['common_audit_findings'])
+                    : null,
 
 
             /*
@@ -144,8 +199,9 @@ class RequirementImport implements ToModel, WithHeadingRow
             */
 
             'common_mistakes' =>
-                $row['common_mistakes']
-                ?? null,
+                isset($row['common_mistakes'])
+                    ? trim((string)$row['common_mistakes'])
+                    : null,
 
 
             /*
@@ -155,8 +211,9 @@ class RequirementImport implements ToModel, WithHeadingRow
             */
 
             'best_practices' =>
-                $row['best_practices']
-                ?? null,
+                isset($row['best_practices'])
+                    ? trim((string)$row['best_practices'])
+                    : null,
 
 
             /*
@@ -166,8 +223,9 @@ class RequirementImport implements ToModel, WithHeadingRow
             */
 
             'business_examples' =>
-                $row['business_examples']
-                ?? null,
+                isset($row['business_examples'])
+                    ? trim((string)$row['business_examples'])
+                    : null,
 
 
             /*
@@ -177,8 +235,9 @@ class RequirementImport implements ToModel, WithHeadingRow
             */
 
             'typical_owner' =>
-                $row['typical_owner']
-                ?? null,
+                isset($row['typical_owner'])
+                    ? trim((string)$row['typical_owner'])
+                    : null,
 
         ]);
     }

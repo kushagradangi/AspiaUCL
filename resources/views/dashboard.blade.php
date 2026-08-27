@@ -677,6 +677,52 @@
 
         }
 
+        /* =========================================
+           ALERTS / FLASH MESSAGES
+        ========================================= */
+
+        .alert-success {
+            background: rgba(34,197,94,.12);
+            border: 1px solid rgba(34,197,94,.3);
+            color: #6ee7a0;
+            padding: 14px 18px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            font-size: 13.5px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .alert-error {
+            background: rgba(239,68,68,.12);
+            border: 1px solid rgba(239,68,68,.3);
+            color: #ff8585;
+            padding: 14px 18px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            font-size: 13.5px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .alert-info {
+            background: rgba(16,188,232,.12);
+            border: 1px solid rgba(16,188,232,.3);
+            color: #10bce8;
+            padding: 14px 18px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            font-size: 13.5px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
     </style>
 
 
@@ -887,6 +933,32 @@
 
 
                 </section>
+
+
+                {{-- =====================================================
+                     FLASH MESSAGES
+                ====================================================== --}}
+
+                @if(session('success'))
+                    <div class="alert-success">
+                        <span style="font-size: 16px; font-weight: bold;">✓</span>
+                        <div>{{ session('success') }}</div>
+                    </div>
+                @endif
+
+                @if(session('error'))
+                    <div class="alert-error">
+                        <span style="font-size: 16px; font-weight: bold;">⚠</span>
+                        <div>{{ session('error') }}</div>
+                    </div>
+                @endif
+
+                @if(session('info') || session('status'))
+                    <div class="alert-info">
+                        <span style="font-size: 16px; font-weight: bold;">ℹ</span>
+                        <div>{{ session('info') ?? session('status') }}</div>
+                    </div>
+                @endif
 
 
                 <!-- =================================================

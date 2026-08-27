@@ -9,6 +9,20 @@ use Maatwebsite\Excel\Concerns\WithStartRow;
 
 class ControlImport implements ToModel, WithStartRow
 {
+    private int $createdCount = 0;
+    private int $updatedCount = 0;
+    private int $currentRow = 0;
+
+    public function getCreatedCount(): int
+    {
+        return $this->createdCount;
+    }
+
+    public function getUpdatedCount(): int
+    {
+        return $this->updatedCount;
+    }
+
     /**
      * Row 1 contains the Excel headings.
      */
@@ -37,19 +51,15 @@ class ControlImport implements ToModel, WithStartRow
             return null;
         }
 
-
-        /*
-        |--------------------------------------------------------------------------
-        | Get Domain Code
-        |--------------------------------------------------------------------------
-        */
-
+        $controlId = $this->value($row, 0);
         $domainCode = $this->value($row, 1);
+        $name = $this->value($row, 2);
 
-        if (!$domainCode) {
+        if (empty($controlId) || empty($name)) {
             return null;
         }
 
+        $this->currentRow++;
 
         /*
         |--------------------------------------------------------------------------
@@ -57,15 +67,46 @@ class ControlImport implements ToModel, WithStartRow
         |--------------------------------------------------------------------------
         */
 
-        $domain = Domain::where(
-            'domain_code',
-            $domainCode
-        )->first();
-
+        $domain = $domainCode ? Domain::where('domain_code', $domainCode)->first() : null;
 
         /*
         |--------------------------------------------------------------------------
-        | Skip if Domain doesn't exist
+        | Check for existing control to replace / update
+        |--------------------------------------------------------------------------
+        */
+
+        $existing = Control::where('control_id', $controlId)->first();
+
+        if ($existing) {
+            $existing->update([
+                'domain_id' => $domain ? $domain->id : $existing->domain_id,
+                'control_id' => $controlId,
+                'domain_code' => $domainCode ?? $existing->domain_code,
+                'name' => $name,
+                'display_order' => $this->currentRow,
+                'business_description' => $this->value($row, 3) ?? $existing->business_description,
+                'business_objective' => $this->value($row, 4) ?? $existing->business_objective,
+                'business_owner' => $this->value($row, 5) ?? $existing->business_owner,
+                'control_category' => $this->value($row, 6) ?? $existing->control_category,
+                'criticality' => $this->value($row, 7) ?? $existing->criticality,
+                'applicable_industries' => $this->value($row, 8) ?? $existing->applicable_industries,
+                'applicable_technologies' => $this->value($row, 9) ?? $existing->applicable_technologies,
+                'status' => $this->value($row, 10) ?: ($existing->status ?: 'Active'),
+                'version' => $this->value($row, 11) ?? $existing->version,
+                'control_summary' => $this->value($row, 12) ?? $existing->control_summary,
+                'business_benefits' => $this->value($row, 13) ?? $existing->business_benefits,
+                'business_risks_if_missing' => $this->value($row, 14) ?? $existing->business_risks_if_missing,
+                'primary_stakeholders' => $this->value($row, 15) ?? $existing->primary_stakeholders,
+                'control_type' => $this->value($row, 16) ?? $existing->control_type,
+            ]);
+
+            $this->updatedCount++;
+            return null;
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | Skip new control if Domain doesn't exist
         |--------------------------------------------------------------------------
         */
 
@@ -73,22 +114,7 @@ class ControlImport implements ToModel, WithStartRow
             return null;
         }
 
-        $controlId = $this->value($row, 0);
-        $name = $this->value($row, 2);
-
-        if ($controlId || $name) {
-            $exists = Control::where(function ($q) use ($controlId, $name) {
-                if ($controlId) $q->where('control_id', $controlId);
-                if ($name) $q->orWhere('name', $name);
-            })->exists();
-
-            if ($exists) {
-                $curr = session('import_duplicates_count', 0);
-                session(['import_duplicates_count' => $curr + 1]);
-                return null;
-            }
-        }
-
+        $this->createdCount++;
 
         /*
         |--------------------------------------------------------------------------
@@ -104,15 +130,19 @@ class ControlImport implements ToModel, WithStartRow
 
             // 1. Control ID
             'control_id' =>
-                $this->value($row, 0),
+                $controlId,
 
             // 2. Domain Code
             'domain_code' =>
-                $this->value($row, 1),
+                $domainCode,
 
             // 3. Control Name
             'name' =>
-                $this->value($row, 2),
+                $name,
+
+            // Display Order (Excel row sequence)
+            'display_order' =>
+                $this->currentRow,
 
             // 4. Business Description
             'business_description' =>

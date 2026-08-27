@@ -8,6 +8,20 @@ use Maatwebsite\Excel\Concerns\WithStartRow;
 
 class DomainImport implements ToModel, WithStartRow
 {
+    private int $createdCount = 0;
+    private int $updatedCount = 0;
+    private int $currentRow = 0;
+
+    public function getCreatedCount(): int
+    {
+        return $this->createdCount;
+    }
+
+    public function getUpdatedCount(): int
+    {
+        return $this->updatedCount;
+    }
+
     /**
      * Excel row 1 contains the headers.
      * Start importing from row 2.
@@ -32,26 +46,75 @@ class DomainImport implements ToModel, WithStartRow
             return null;
         }
 
+        $this->currentRow++;
+
         $domainId = $this->value($row, 0);
         $domainCode = $this->value($row, 1);
         $name = $this->value($row, 2);
 
-        if ($domainId || $domainCode || $name) {
-            $exists = Domain::where(function ($q) use ($domainId, $domainCode, $name) {
-                if ($domainId) $q->where('domain_id', $domainId);
-                if ($domainCode) $q->orWhere('domain_code', $domainCode);
-                if ($name) $q->orWhere('name', $name);
-            })->exists();
+        if (empty($domainId) || empty($name)) {
+            return null;
+        }
 
-            if ($exists) {
-                $curr = session('import_duplicates_count', 0);
-                session(['import_duplicates_count' => $curr + 1]);
-                return null;
+        $relatedFrameworks = $this->value($row, 23);
+        $frameworkId = null;
+        if ($relatedFrameworks) {
+            $firstFwName = trim(explode(',', $relatedFrameworks)[0]);
+            $matchedFw = \App\Models\Framework::where('name', 'like', "%{$firstFwName}%")
+                ->orWhere('framework_code', 'like', "%{$firstFwName}%")
+                ->first();
+            if ($matchedFw) {
+                $frameworkId = $matchedFw->id;
             }
         }
 
+        // Check if existing domain should be replaced / updated
+        $existing = Domain::where('domain_id', $domainId)
+            ->when($domainCode, function ($q) use ($domainCode) {
+                return $q->orWhere('domain_code', $domainCode);
+            })
+            ->first();
+
+        if ($existing) {
+            $existing->update([
+                'framework_id' => $frameworkId ?? $existing->framework_id,
+                'domain_id' => $domainId,
+                'domain_code' => $domainCode ?? $existing->domain_code,
+                'name' => $name,
+                'slug' => $this->value($row, 3) ?? $existing->slug,
+                'purpose' => $this->value($row, 4) ?? $existing->purpose,
+                'scope' => $this->value($row, 5) ?? $existing->scope,
+                'business_owner' => $this->value($row, 6) ?? $existing->business_owner,
+                'description' => $this->value($row, 7) ?? $existing->description,
+                'display_order' => ($this->value($row, 8) !== null && $this->value($row, 8) !== '')
+                    ? (int) $this->value($row, 8)
+                    : $existing->display_order,
+                'status' => $this->value($row, 9) ?: ($existing->status ?: 'Active'),
+                'version' => $this->value($row, 10) ?? $existing->version,
+                'short_overview' => $this->value($row, 11) ?? $existing->short_overview,
+                'business_objectives' => $this->value($row, 12) ?? $existing->business_objectives,
+                'business_risks' => $this->value($row, 13) ?? $existing->business_risks,
+                'key_capabilities' => $this->value($row, 14) ?? $existing->key_capabilities,
+                'typical_stakeholders' => $this->value($row, 15) ?? $existing->typical_stakeholders,
+                'applicable_industries' => $this->value($row, 16) ?? $existing->applicable_industries,
+                'applicable_technologies' => $this->value($row, 17) ?? $existing->applicable_technologies,
+                'keywords' => $this->value($row, 18) ?? $existing->keywords,
+                'tags' => $this->value($row, 19) ?? $existing->tags,
+                'why_domain_matters' => $this->value($row, 20) ?? $existing->why_domain_matters,
+                'common_challenges' => $this->value($row, 21) ?? $existing->common_challenges,
+                'related_domains' => $this->value($row, 22) ?? $existing->related_domains,
+                'related_frameworks' => $this->value($row, 23) ?? $existing->related_frameworks,
+            ]);
+
+            $this->updatedCount++;
+            return null;
+        }
+
+        $this->createdCount++;
 
         return new Domain([
+
+            'framework_id' => $frameworkId,
 
             /*
             |--------------------------------------------------------------------------
@@ -143,7 +206,7 @@ class DomainImport implements ToModel, WithStartRow
                 $this->value($row, 8) !== null &&
                 $this->value($row, 8) !== ''
                     ? (int) $this->value($row, 8)
-                    : 0,
+                    : $this->currentRow,
 
 
             /*
