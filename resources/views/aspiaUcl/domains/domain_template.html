@@ -1,0 +1,1606 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <!-- Primary Meta Tags -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{domain_name}} ({{domain_code}}) - Universal Control Library | ASPIA GRC</title>
+    <meta name="title" content="{{domain_name}} ({{domain_code}}) - Universal Control Library | ASPIA GRC">
+    <meta name="description" content="Explore {{domain_name}} ({{domain_id}}), its associated compliance frameworks (ISO 27001, NIST CSF, SOC 2), governance controls, and audit requirements in the ASPIA Unified Control Library.">
+    <meta name="keywords" content="{{keywords}}, {{tags}}, {{domain_code}}, {{domain_name}}, GRC domain, governance framework, compliance controls, risk management, internal audit">
+    <meta name="author" content="ASPIA Unified Control Library">
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+    <link rel="canonical" href="https://grc.aspia.io/domains/{{slug}}">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://grc.aspia.io/domains/{{slug}}">
+    <meta property="og:title" content="{{domain_name}} ({{domain_code}}) - GRC Control Domain">
+    <meta property="og:description" content="Comprehensive governance specifications, controls catalog, and requirements mapping for {{domain_name}}.">
+    <meta property="og:image" content="/images/aspia.png">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://grc.aspia.io/domains/{{slug}}">
+    <meta name="twitter:title" content="{{domain_name}} ({{domain_code}}) - ASPIA GRC Domain">
+    <meta name="twitter:description" content="Governance specification, control baseline, and crosswalk requirements.">
+
+    <!-- Google Fonts: Plus Jakarta Sans & JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <!-- JSON-LD Structured Data for High-Precision SEO -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "Home",
+              "item": "https://grc.aspia.io"
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "name": "Domains",
+              "item": "https://grc.aspia.io/domains"
+            },
+            {
+              "@type": "ListItem",
+              "position": 3,
+              "name": "{{domain_name}}",
+              "item": "https://grc.aspia.io/domains/{{slug}}"
+            }
+          ]
+        },
+        {
+          "@type": "TechArticle",
+          "headline": "{{domain_name}} ({{domain_code}}) - GRC Control Domain Specification",
+          "description": "{{purpose}}",
+          "proficiencyLevel": "Expert",
+          "inLanguage": "en-US",
+          "keywords": "{{keywords}}, {{tags}}",
+          "about": [
+            {
+              "@type": "DefinedTerm",
+              "name": "{{domain_name}}",
+              "termCode": "{{domain_code}}",
+              "inDefinedTermSet": "Universal Control Library"
+            }
+          ]
+        }
+      ]
+    }
+    </script>
+
+    <style>
+        /* ==========================================================================
+           1. CSS Variables & Design Tokens (Classic GRC Theme)
+           ========================================================================== */
+        :root {
+            --bg-page: #f8fafc;
+            --bg-surface: #ffffff;
+            --bg-subtle: #f1f5f9;
+            --bg-elevated: #ffffff;
+            --bg-glass: rgba(255, 255, 255, 0.9);
+
+            --border-light: #e2e8f0;
+            --border-subtle: #cbd5e1;
+            --border-hover: #94a3b8;
+
+            --text-title: #0f172a;
+            --text-body: #334155;
+            --text-secondary: #64748b;
+            --text-muted: #94a3b8;
+
+            --brand-primary: #0284c7;
+            --brand-primary-light: #e0f2fe;
+            --brand-sapphire: #1e40af;
+            --brand-purple: #7c3aed;
+            --brand-purple-light: #f5f3ff;
+            --brand-emerald: #059669;
+            --brand-emerald-light: #ecfdf5;
+            --brand-amber: #d97706;
+            --brand-amber-light: #fffbeb;
+            --brand-rose: #e11d48;
+            --brand-rose-light: #fff1f2;
+
+            --shadow-sm: 0 1px 2px 0 rgba(15, 23, 42, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(15, 23, 42, 0.08), 0 2px 4px -2px rgba(15, 23, 42, 0.04);
+            --shadow-lg: 0 10px 15px -3px rgba(15, 23, 42, 0.08), 0 4px 6px -4px rgba(15, 23, 42, 0.03);
+
+            --radius-sm: 6px;
+            --radius-md: 10px;
+            --radius-lg: 16px;
+            --radius-full: 9999px;
+
+            --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        [data-theme="dark"] {
+            --bg-page: #0b0f19;
+            --bg-surface: #111827;
+            --bg-subtle: #1f2937;
+            --bg-elevated: #1e293b;
+            --bg-glass: rgba(17, 24, 39, 0.9);
+
+            --border-light: #374151;
+            --border-subtle: #4b5563;
+            --border-hover: #6b7280;
+
+            --text-title: #f9fafb;
+            --text-body: #e5e7eb;
+            --text-secondary: #9ca3af;
+            --text-muted: #6b7280;
+
+            --brand-primary: #38bdf8;
+            --brand-primary-light: rgba(56, 189, 248, 0.15);
+            --brand-sapphire: #60a5fa;
+            --brand-purple: #c084fc;
+            --brand-purple-light: rgba(192, 132, 252, 0.15);
+            --brand-emerald: #34d399;
+            --brand-emerald-light: rgba(52, 211, 153, 0.15);
+            --brand-amber: #fbbf24;
+            --brand-amber-light: rgba(251, 191, 36, 0.15);
+            --brand-rose: #fb7185;
+            --brand-rose-light: rgba(251, 113, 133, 0.15);
+
+            --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.4);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+            --shadow-lg: 0 12px 20px -3px rgba(0, 0, 0, 0.6);
+        }
+
+        /* ==========================================================================
+           2. Reset & Base Styles
+           ========================================================================== */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--bg-page);
+            color: var(--text-body);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        a {
+            color: var(--brand-primary);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        a:hover {
+            color: var(--brand-sapphire);
+            text-decoration: underline;
+        }
+
+        .mono {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1320px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* ==========================================================================
+           3. Top Navigation & Logo
+           ========================================================================== */
+        .site-header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: var(--bg-glass);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-light);
+            padding: 12px 0;
+            transition: var(--transition);
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+
+        .brand-group {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+        }
+
+        .brand-logo-link {
+            display: inline-flex;
+            align-items: center;
+            text-decoration: none;
+            padding: 2px 0;
+        }
+
+        .brand-logo-img {
+            height: 38px;
+            width: auto;
+            max-width: 160px;
+            object-fit: contain;
+            display: block;
+            transition: transform 0.2s ease, filter 0.3s ease;
+        }
+
+        .brand-logo-link:hover .brand-logo-img {
+            transform: scale(1.03);
+        }
+
+        [data-theme="dark"] .brand-logo-img {
+            filter: brightness(1.1) drop-shadow(0 2px 8px rgba(255, 255, 255, 0.08));
+        }
+
+        .breadcrumb-nav {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13.5px;
+            color: var(--text-secondary);
+        }
+
+        .breadcrumb-separator {
+            color: var(--text-muted);
+            font-size: 13px;
+        }
+
+        .breadcrumb-current {
+            color: var(--text-title);
+            font-weight: 700;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .theme-switch-container {
+            display: inline-flex;
+            align-items: center;
+            background: var(--bg-subtle);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-full);
+            padding: 3px;
+            cursor: pointer;
+            user-select: none;
+            transition: var(--transition);
+        }
+
+        .theme-switch-container:hover {
+            border-color: var(--border-subtle);
+        }
+
+        .theme-btn {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 14px;
+            border-radius: var(--radius-full);
+            border: none;
+            background: transparent;
+            color: var(--text-secondary);
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .theme-btn.active {
+            background: var(--bg-surface);
+            color: var(--text-title);
+            box-shadow: var(--shadow-sm);
+        }
+
+        /* ==========================================================================
+           4. Executive Hero Header & Glowing Status
+           ========================================================================== */
+        .hero-section {
+            padding: 32px 0 20px;
+        }
+
+        .domain-hero-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-lg);
+            padding: 36px;
+            box-shadow: var(--shadow-md);
+            position: relative;
+            overflow: hidden;
+            transition: var(--transition);
+        }
+
+        .domain-hero-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--brand-primary), var(--brand-purple), var(--brand-emerald));
+        }
+
+        .badge-bar {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 12px;
+            border-radius: var(--radius-full);
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+            text-transform: uppercase;
+        }
+
+        .badge-cyan { background: var(--brand-primary-light); color: var(--brand-primary); border: 1px solid rgba(2, 132, 199, 0.2); }
+        .badge-purple { background: var(--brand-purple-light); color: var(--brand-purple); border: 1px solid rgba(124, 58, 237, 0.2); }
+
+        .badge-status-glow {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 5px 14px;
+            border-radius: var(--radius-full);
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.4px;
+            text-transform: uppercase;
+            background: rgba(16, 185, 129, 0.12);
+            color: #059669;
+            border: 1px solid rgba(16, 185, 129, 0.4);
+            box-shadow: 0 0 14px rgba(16, 185, 129, 0.3), inset 0 0 6px rgba(16, 185, 129, 0.1);
+            animation: pulseGlow 2.5s infinite alternate ease-in-out;
+        }
+
+        [data-theme="dark"] .badge-status-glow {
+            background: rgba(52, 211, 153, 0.15);
+            color: #34d399;
+            border-color: rgba(52, 211, 153, 0.5);
+            box-shadow: 0 0 18px rgba(52, 211, 153, 0.45), inset 0 0 8px rgba(52, 211, 153, 0.2);
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #10b981;
+            border-radius: 50%;
+            display: inline-block;
+            box-shadow: 0 0 8px #10b981;
+            animation: pulseDot 1.8s infinite ease-in-out;
+        }
+
+        [data-theme="dark"] .status-dot {
+            background-color: #34d399;
+            box-shadow: 0 0 10px #34d399;
+        }
+
+        @keyframes pulseGlow {
+            0% {
+                box-shadow: 0 0 8px rgba(16, 185, 129, 0.2), inset 0 0 4px rgba(16, 185, 129, 0.1);
+            }
+            100% {
+                box-shadow: 0 0 20px rgba(16, 185, 129, 0.55), inset 0 0 10px rgba(16, 185, 129, 0.25);
+            }
+        }
+
+        @keyframes pulseDot {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.35); opacity: 0.65; }
+        }
+
+        .domain-title-wrap {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-bottom: 18px;
+        }
+
+        h1.domain-title {
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--text-title);
+            line-height: 1.25;
+            letter-spacing: -0.5px;
+            max-width: 850px;
+        }
+
+        .domain-lead {
+            font-size: 16px;
+            color: var(--text-body);
+            line-height: 1.7;
+            max-width: 980px;
+            margin-bottom: 28px;
+        }
+
+        /* Executive Metadata Strip */
+        .meta-strip {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border-light);
+        }
+
+        .meta-cell {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .meta-key {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+        }
+
+        .meta-value {
+            font-size: 14.5px;
+            font-weight: 600;
+            color: var(--text-title);
+        }
+
+        /* ==========================================================================
+           5. Key KPI Metric Cards
+           ========================================================================== */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 18px;
+            margin-top: 24px;
+            margin-bottom: 32px;
+        }
+
+        .stat-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-md);
+            padding: 22px 24px;
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: var(--transition);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-md);
+            border-color: var(--border-subtle);
+        }
+
+        .stat-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .stat-name {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+        }
+
+        .stat-number {
+            font-size: 30px;
+            font-weight: 800;
+            color: var(--text-title);
+            line-height: 1;
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: var(--radius-md);
+            display: grid;
+            place-items: center;
+            font-size: 22px;
+        }
+
+        .stat-cyan .stat-icon { background: var(--brand-primary-light); color: var(--brand-primary); }
+        .stat-purple .stat-icon { background: var(--brand-purple-light); color: var(--brand-purple); }
+        .stat-emerald .stat-icon { background: var(--brand-emerald-light); color: var(--brand-emerald); }
+        .stat-amber .stat-icon { background: var(--brand-amber-light); color: var(--brand-amber); }
+
+        /* ==========================================================================
+           6. Tab Navigation
+           ========================================================================== */
+        .tabs-nav-wrapper {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-md);
+            padding: 6px;
+            margin-bottom: 28px;
+            box-shadow: var(--shadow-sm);
+            overflow-x: auto;
+        }
+
+        .tabs-nav {
+            display: flex;
+            gap: 6px;
+            list-style: none;
+            min-width: max-content;
+        }
+
+        .tab-btn {
+            padding: 10px 20px;
+            border-radius: var(--radius-sm);
+            font-size: 13.5px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: var(--transition);
+        }
+
+        .tab-btn:hover {
+            color: var(--text-title);
+            background: var(--bg-subtle);
+        }
+
+        .tab-btn.active {
+            background: var(--brand-primary);
+            color: #ffffff;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .tab-count {
+            padding: 2px 7px;
+            font-size: 11px;
+            font-weight: 700;
+            border-radius: var(--radius-full);
+            background: rgba(255, 255, 255, 0.25);
+            color: inherit;
+        }
+
+        .tab-btn:not(.active) .tab-count {
+            background: var(--bg-subtle);
+            color: var(--text-secondary);
+            border: 1px solid var(--border-light);
+        }
+
+        .tab-panel {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .tab-panel.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ==========================================================================
+           7. Unified Excel-Aligned Details Section
+           ========================================================================== */
+        .section-box {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-lg);
+            padding: 30px;
+            margin-bottom: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 22px;
+            padding-bottom: 14px;
+            border-bottom: 1px solid var(--border-light);
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .section-title {
+            font-size: 19px;
+            font-weight: 700;
+            color: var(--text-title);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-badge {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
+        /* Excel-Aligned Key-Value Matrix Grid */
+        .excel-spec-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .excel-field-card {
+            background: var(--bg-subtle);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-md);
+            padding: 16px 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            transition: var(--transition);
+        }
+
+        .excel-field-card:hover {
+            border-color: var(--border-subtle);
+        }
+
+        .excel-field-card.span-2 {
+            grid-column: span 2;
+        }
+
+        .excel-field-card.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .excel-label {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 11.5px;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+        }
+
+        .excel-val {
+            font-size: 14.5px;
+            font-weight: 500;
+            color: var(--text-title);
+            line-height: 1.6;
+            word-break: break-word;
+        }
+
+        /* Chips Container */
+        .chip-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 6px;
+        }
+
+        .chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 12px;
+            border-radius: var(--radius-md);
+            font-size: 12.5px;
+            font-weight: 600;
+            background: var(--bg-surface);
+            border: 1px solid var(--border-light);
+            color: var(--text-title);
+            transition: var(--transition);
+        }
+
+        .chip:hover {
+            border-color: var(--brand-primary);
+            color: var(--brand-primary);
+            transform: translateY(-1px);
+        }
+
+        /* ==========================================================================
+           8. Controls Matrix & Search
+           ========================================================================== */
+        .matrix-toolbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 18px;
+            flex-wrap: wrap;
+        }
+
+        .search-input-wrap {
+            position: relative;
+            flex: 1;
+            min-width: 260px;
+            max-width: 420px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 10px 14px 10px 38px;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-light);
+            background: var(--bg-surface);
+            color: var(--text-title);
+            font-size: 13.5px;
+            font-family: inherit;
+            transition: var(--transition);
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--brand-primary);
+            box-shadow: 0 0 0 3px var(--brand-primary-light);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        .filter-buttons {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .filter-pill {
+            padding: 6px 12px;
+            border-radius: var(--radius-full);
+            font-size: 12px;
+            font-weight: 600;
+            border: 1px solid var(--border-light);
+            background: var(--bg-surface);
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .filter-pill.active, .filter-pill:hover {
+            background: var(--brand-primary-light);
+            border-color: var(--brand-primary);
+            color: var(--brand-primary);
+        }
+
+        .grc-table-wrapper {
+            width: 100%;
+            overflow-x: auto;
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-md);
+            background: var(--bg-surface);
+        }
+
+        .grc-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 13.5px;
+        }
+
+        .grc-table th {
+            background: var(--bg-subtle);
+            padding: 14px 18px;
+            font-weight: 700;
+            color: var(--text-title);
+            text-transform: uppercase;
+            font-size: 11.5px;
+            letter-spacing: 0.6px;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .grc-table td {
+            padding: 16px 18px;
+            border-bottom: 1px solid var(--border-light);
+            color: var(--text-body);
+            vertical-align: middle;
+        }
+
+        .grc-table tbody tr:hover {
+            background: var(--bg-subtle);
+        }
+
+        .control-link {
+            font-weight: 700;
+            color: var(--brand-primary);
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            text-decoration: none;
+        }
+
+        .control-link:hover {
+            color: var(--brand-sapphire);
+            text-decoration: underline;
+        }
+
+        .criticality-badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: var(--radius-full);
+            font-size: 11.5px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .crit-critical { background: var(--brand-rose-light); color: var(--brand-rose); }
+        .crit-high { background: var(--brand-amber-light); color: var(--brand-amber); }
+        .crit-medium { background: var(--brand-primary-light); color: var(--brand-primary); }
+        .crit-low { background: var(--brand-emerald-light); color: var(--brand-emerald); }
+
+        .btn-action {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            border-radius: var(--radius-sm);
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            border: 1px solid var(--border-light);
+            background: var(--bg-surface);
+            color: var(--text-title);
+        }
+
+        .btn-action:hover {
+            border-color: var(--brand-primary);
+            color: var(--brand-primary);
+        }
+
+        /* ==========================================================================
+           9. Mapped Frameworks Crosswalk Cards
+           ========================================================================== */
+        .frameworks-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 18px;
+        }
+
+        .framework-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-md);
+            padding: 20px;
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .framework-card:hover {
+            border-color: var(--brand-primary);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .fw-top {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .fw-code {
+            font-size: 12px;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: var(--radius-sm);
+            background: var(--brand-primary-light);
+            color: var(--brand-primary);
+        }
+
+        .fw-name {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--text-title);
+            margin-bottom: 8px;
+        }
+
+        .fw-desc {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+            line-height: 1.5;
+        }
+
+        .fw-bottom {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-top: 12px;
+            border-top: 1px solid var(--border-light);
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
+        /* ==========================================================================
+           10. Toast Notification
+           ========================================================================== */
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: var(--text-title);
+            color: var(--bg-surface);
+            padding: 12px 20px;
+            border-radius: var(--radius-md);
+            font-size: 13.5px;
+            font-weight: 600;
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s ease;
+            z-index: 9999;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        /* ==========================================================================
+           11. Footer
+           ========================================================================== */
+        .site-footer {
+            margin-top: auto;
+            border-top: 1px solid var(--border-light);
+            background: var(--bg-surface);
+            padding: 32px 0;
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .footer-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        @media (max-width: 768px) {
+            .container { padding: 0 16px; }
+            .domain-hero-card { padding: 24px; }
+            h1.domain-title { font-size: 24px; }
+            .meta-strip { grid-template-columns: 1fr 1fr; }
+            .stats-grid { grid-template-columns: 1fr 1fr; }
+            .excel-field-card.span-2 { grid-column: 1 / -1; }
+            .brand-logo-img { height: 30px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ==========================================================================
+       HEADER & THEME SWITCHER (Light Mode by Default, Logo Only)
+       ========================================================================== -->
+    <header class="site-header" role="banner">
+        <div class="container header-content">
+            <!-- Brand Group: ASPIA Logo + Breadcrumbs -->
+            <div class="brand-group">
+                <a href="/domains" class="brand-logo-link" aria-label="ASPIA Home">
+                    <img src="/images/aspia.png" alt="ASPIA" class="brand-logo-img">
+                </a>
+
+                <nav class="breadcrumb-nav" aria-label="Breadcrumb">
+                    <span class="breadcrumb-separator">/</span>
+                    <a href="/domains">Domains</a>
+                    <span class="breadcrumb-separator">/</span>
+                    <span class="breadcrumb-current">{{domain_code}}</span>
+                </nav>
+            </div>
+
+            <!-- Actions: Light / Dark Mode Switcher -->
+            <div class="header-actions">
+                <div class="theme-switch-container" id="themeSwitch" role="group" aria-label="Color theme switcher">
+                    <button type="button" class="theme-btn active" id="btnThemeLight" aria-pressed="true">
+                        <span>☀️</span> Light
+                    </button>
+                    <button type="button" class="theme-btn" id="btnThemeDark" aria-pressed="false">
+                        <span>🌙</span> Dark
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- ==========================================================================
+       MAIN CONTENT
+       ========================================================================== -->
+    <main class="container" id="main-content" role="main">
+
+        <!-- Executive Hero Banner -->
+        <article class="hero-section">
+            <div class="domain-hero-card">
+                <!-- Identification Badges with Glowing Status -->
+                <div class="badge-bar">
+                    <span class="badge badge-purple"><span class="mono">{{domain_code}}</span></span>
+                    <span class="badge badge-cyan"><span class="mono">{{domain_id}}</span></span>
+                    <span class="badge badge-status-glow">
+                        <span class="status-dot"></span>
+                        <span>Status: <strong>{{status}}</strong></span>
+                    </span>
+                </div>
+
+                <!-- Domain Title (Single Semantic H1) -->
+                <div class="domain-title-wrap">
+                    <h1 class="domain-title">{{domain_name}}</h1>
+                </div>
+
+                <!-- Domain Purpose -->
+                <p class="domain-lead">{{purpose}}</p>
+
+                <!-- Executive Metadata Grid with Tags -->
+                <div class="meta-strip">
+                    <div class="meta-cell">
+                        <span class="meta-key">Business Owner</span>
+                        <span class="meta-value">{{business_owner}}</span>
+                    </div>
+                    <div class="meta-cell">
+                        <span class="meta-key">Scope</span>
+                        <span class="meta-value">{{scope}}</span>
+                    </div>
+                    <div class="meta-cell">
+                        <span class="meta-key">Framework Family</span>
+                        <span class="meta-value">{{framework_family}}</span>
+                    </div>
+                    <div class="meta-cell">
+                        <span class="meta-key">Tags</span>
+                        <span class="meta-value">{{tags}}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Key Metrics Strip -->
+            <div class="stats-grid">
+                <div class="stat-card stat-cyan">
+                    <div class="stat-info">
+                        <span class="stat-name">Associated Controls</span>
+                        <span class="stat-number">{{controls_count}}</span>
+                    </div>
+                    <div class="stat-icon">🛡️</div>
+                </div>
+                <div class="stat-card stat-purple">
+                    <div class="stat-info">
+                        <span class="stat-name">Total Requirements</span>
+                        <span class="stat-number">{{requirements_count}}</span>
+                    </div>
+                    <div class="stat-icon">📋</div>
+                </div>
+                <div class="stat-card stat-emerald">
+                    <div class="stat-info">
+                        <span class="stat-name">Mapped Frameworks</span>
+                        <span class="stat-number">8</span>
+                    </div>
+                    <div class="stat-icon">🌐</div>
+                </div>
+                <div class="stat-card stat-amber">
+                    <div class="stat-info">
+                        <span class="stat-name">Target Maturity</span>
+                        <span class="stat-number">Level 4</span>
+                    </div>
+                    <div class="stat-icon">📈</div>
+                </div>
+            </div>
+        </article>
+
+        <!-- Tabbed Navigation: Single Details Section + Controls + Requirements + Frameworks -->
+        <nav class="tabs-nav-wrapper" aria-label="Domain Sections Navigation">
+            <ul class="tabs-nav" role="tablist">
+                <li role="presentation">
+                    <button type="button" class="tab-btn active" role="tab" aria-selected="true" aria-controls="panel-details" id="tab-details" data-target="panel-details">
+                        <span>📋</span> Domain Details
+                    </button>
+                </li>
+                <li role="presentation">
+                    <button type="button" class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-controls" id="tab-controls" data-target="panel-controls">
+                        <span>🛡️</span> Associated Controls <span class="tab-count">{{controls_count}}</span>
+                    </button>
+                </li>
+                <li role="presentation">
+                    <button type="button" class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-requirements" id="tab-requirements" data-target="panel-requirements">
+                        <span>📝</span> Requirements & Audit <span class="tab-count">{{requirements_count}}</span>
+                    </button>
+                </li>
+                <li role="presentation">
+                    <button type="button" class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-frameworks" id="tab-frameworks" data-target="panel-frameworks">
+                        <span>🌐</span> Mapped Frameworks
+                    </button>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- ======================================================================
+           TAB PANEL 1: UNIFIED DOMAIN DETAILS (All 24 Excel Fields in Order)
+           ====================================================================== -->
+        <div class="tab-panel active" id="panel-details" role="tabpanel" aria-labelledby="tab-details">
+            
+            <!-- Group A: Identification & Governance Metadata -->
+            <div class="section-box">
+                <div class="section-header">
+                    <h2 class="section-title"><span>🏛️</span> Domain Identification & Governance Specifications</h2>
+                    <span class="section-badge">Excel Fields 1 – 12</span>
+                </div>
+                
+                <div class="excel-spec-grid">
+                    <!-- 1. Domain ID -->
+                    <div class="excel-field-card">
+                        <div class="excel-label"><span>Domain ID</span></div>
+                        <div class="excel-val mono" style="color: var(--brand-primary); font-weight: 700;">{{domain_id}}</div>
+                    </div>
+
+                    <!-- 2. Domain Code -->
+                    <div class="excel-field-card">
+                        <div class="excel-label"><span>Domain Code</span></div>
+                        <div class="excel-val mono" style="color: var(--brand-purple); font-weight: 700;">{{domain_code}}</div>
+                    </div>
+
+                    <!-- 3. Domain Name -->
+                    <div class="excel-field-card span-2">
+                        <div class="excel-label"><span>Domain Name</span></div>
+                        <div class="excel-val" style="font-weight: 700;">{{domain_name}}</div>
+                    </div>
+
+                    <!-- 4. Slug -->
+                    <div class="excel-field-card">
+                        <div class="excel-label"><span>Slug</span></div>
+                        <div class="excel-val mono" style="color: var(--text-secondary); font-size: 13.5px;">{{slug}}</div>
+                    </div>
+
+                    <!-- 7. Business Owner -->
+                    <div class="excel-field-card">
+                        <div class="excel-label"><span>Business Owner</span></div>
+                        <div class="excel-val">{{business_owner}}</div>
+                    </div>
+
+                    <!-- 9. Display Order -->
+                    <div class="excel-field-card">
+                        <div class="excel-label"><span>Display Order</span></div>
+                        <div class="excel-val mono">{{display_order}}</div>
+                    </div>
+
+                    <!-- 10. Status -->
+                    <div class="excel-field-card">
+                        <div class="excel-label"><span>Status</span></div>
+                        <div class="excel-val"><span class="badge badge-cyan">{{status}}</span></div>
+                    </div>
+
+                    <!-- 11. Version -->
+                    <div class="excel-field-card">
+                        <div class="excel-label"><span>Version</span></div>
+                        <div class="excel-val mono">{{version}}</div>
+                    </div>
+
+                    <!-- 5. Purpose -->
+                    <div class="excel-field-card full-width">
+                        <div class="excel-label"><span>Purpose</span></div>
+                        <div class="excel-val">{{purpose}}</div>
+                    </div>
+
+                    <!-- 6. Scope -->
+                    <div class="excel-field-card full-width">
+                        <div class="excel-label"><span>Scope</span></div>
+                        <div class="excel-val">{{scope}}</div>
+                    </div>
+
+                    <!-- 12. Short Overview -->
+                    <div class="excel-field-card full-width">
+                        <div class="excel-label"><span>Short Overview</span></div>
+                        <div class="excel-val">{{short_overview}}</div>
+                    </div>
+
+                    <!-- 8. Description -->
+                    <div class="excel-field-card full-width">
+                        <div class="excel-label"><span>Description</span></div>
+                        <div class="excel-val">{{description}}</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Group B: Strategic Objectives, Risks & Operational Capabilities -->
+            <div class="section-box">
+                <div class="section-header">
+                    <h2 class="section-title"><span>🎯</span> Strategic Alignment, Risk Register & Capabilities</h2>
+                    <span class="section-badge">Excel Fields 13 – 18</span>
+                </div>
+                
+                <div class="excel-spec-grid">
+                    <!-- 13. Business Objectives -->
+                    <div class="excel-field-card span-2">
+                        <div class="excel-label"><span>Business Objectives</span></div>
+                        <div class="excel-val">{{business_objectives}}</div>
+                    </div>
+
+                    <!-- 14. Business Risks -->
+                    <div class="excel-field-card span-2">
+                        <div class="excel-label"><span>Business Risks</span></div>
+                        <div class="excel-val">{{business_risks}}</div>
+                    </div>
+
+                    <!-- 15. Key Capabilities -->
+                    <div class="excel-field-card span-2">
+                        <div class="excel-label"><span>Key Capabilities</span></div>
+                        <div class="excel-val">{{key_capabilities}}</div>
+                    </div>
+
+                    <!-- 16. Typical Stakeholders -->
+                    <div class="excel-field-card span-2">
+                        <div class="excel-label"><span>Typical Stakeholders</span></div>
+                        <div class="excel-val">{{typical_stakeholders}}</div>
+                    </div>
+
+                    <!-- 17. Applicable Industries -->
+                    <div class="excel-field-card span-2">
+                        <div class="excel-label"><span>Applicable Industries</span></div>
+                        <div class="excel-val">{{applicable_industries}}</div>
+                    </div>
+
+                    <!-- 18. Applicable Technologies -->
+                    <div class="excel-field-card span-2">
+                        <div class="excel-label"><span>Applicable Technologies</span></div>
+                        <div class="excel-val">{{applicable_technologies}}</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Group C: Insights, Challenges & Ecosystem Taxonomy -->
+            <div class="section-box">
+                <div class="section-header">
+                    <h2 class="section-title"><span>💡</span> Implementation Insights & Cross-Taxonomy Mappings</h2>
+                    <span class="section-badge">Excel Fields 19 – 24</span>
+                </div>
+                
+                <div class="excel-spec-grid">
+                    <!-- 21. Why This Domain Matters -->
+                    <div class="excel-field-card span-2">
+                        <div class="excel-label"><span>Why This Domain Matters</span></div>
+                        <div class="excel-val">{{why_domain_matters}}</div>
+                    </div>
+
+                    <!-- 22. Common Challenges -->
+                    <div class="excel-field-card span-2">
+                        <div class="excel-label"><span>Common Challenges</span></div>
+                        <div class="excel-val">{{common_challenges}}</div>
+                    </div>
+
+                    <!-- 19. Keywords -->
+                    <div class="excel-field-card">
+                        <div class="excel-label"><span>Keywords</span></div>
+                        <div class="excel-val">{{keywords}}</div>
+                    </div>
+
+                    <!-- 20. Tags -->
+                    <div class="excel-field-card">
+                        <div class="excel-label"><span>Tags</span></div>
+                        <div class="excel-val">{{tags}}</div>
+                    </div>
+
+                    <!-- 23. Related Domains -->
+                    <div class="excel-field-card span-2">
+                        <div class="excel-label"><span>Related Domains</span></div>
+                        <div class="excel-val">{{related_domains}}</div>
+                    </div>
+
+                    <!-- 24. Related Frameworks -->
+                    <div class="excel-field-card full-width">
+                        <div class="excel-label"><span>Related Frameworks</span></div>
+                        <div class="excel-val" style="margin-top: 6px;">{{related_frameworks_badges}}</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ======================================================================
+           TAB PANEL 2: ASSOCIATED CONTROLS MATRIX
+           ====================================================================== -->
+        <div class="tab-panel" id="panel-controls" role="tabpanel" aria-labelledby="tab-controls">
+            <div class="section-box">
+                <div class="section-header">
+                    <h2 class="section-title"><span>🛡️</span> Associated Controls Catalog</h2>
+                    <span class="section-badge">{{controls_count}} Active Controls in Domain</span>
+                </div>
+
+                <div class="matrix-toolbar">
+                    <div class="search-input-wrap">
+                        <span class="search-icon">🔍</span>
+                        <input type="text" id="controlSearchInput" class="search-input" placeholder="Search controls by ID, name, or keyword..." aria-label="Search controls">
+                    </div>
+                    <div class="filter-buttons" role="group" aria-label="Filter controls by criticality">
+                        <button type="button" class="filter-pill active" data-filter="all">All ({{controls_count}})</button>
+                        <button type="button" class="filter-pill" data-filter="critical">Critical</button>
+                        <button type="button" class="filter-pill" data-filter="high">High</button>
+                        <button type="button" class="filter-pill" data-filter="medium">Medium</button>
+                        <button type="button" class="filter-pill" data-filter="low">Low</button>
+                    </div>
+                </div>
+
+                <div class="grc-table-wrapper">
+                    {{controls_table}}
+
+                    
+                </div>
+
+                
+            </div>
+        </div>
+
+        <!-- ======================================================================
+           TAB PANEL 3: ASSOCIATED REQUIREMENTS & AUDIT
+           ====================================================================== -->
+        <div class="tab-panel" id="panel-requirements" role="tabpanel" aria-labelledby="tab-requirements">
+            <div class="section-box">
+                <div class="section-header">
+                    <h2 class="section-title"><span>📝</span> Compliance Requirements & Audit Crosswalk</h2>
+                    <span class="section-badge">{{requirements_count}} Specific Audit Clauses</span>
+                </div>
+                <p style="font-size: 14px; color: var(--text-secondary); margin-bottom: 20px;">
+                    The following requirements dictate specific audit evidence criteria and testing steps mapped directly under the controls of this domain.
+                </p>
+
+                {{requirements_chips}}
+            </div>
+        </div>
+
+        <!-- ======================================================================
+           TAB PANEL 4: MAPPED COMPLIANCE FRAMEWORKS
+           ====================================================================== -->
+        <div class="tab-panel" id="panel-frameworks" role="tabpanel" aria-labelledby="tab-frameworks">
+            <div class="section-box">
+                <div class="section-header">
+                    <h2 class="section-title"><span>🌐</span> Cross-Mapped Regulatory Frameworks</h2>
+                    <span class="section-badge">Harmonized Control Mappings</span>
+                </div>
+
+                <div class="frameworks-grid">
+                    <div class="framework-card">
+                        <div class="fw-top">
+                            <span class="fw-code">ISO/IEC 27001:2022</span>
+                            <span class="badge badge-green">100% Mapped</span>
+                        </div>
+                        <h3 class="fw-name">Annex A.9 & A.5 Controls</h3>
+                        <p class="fw-desc">Access Control policies, User Access Management, User Responsibilities, and System Access Control.</p>
+                        <div class="fw-bottom">
+                            <span>14 Mapped Controls</span>
+                            <a href="/frameworks/iso-27001-2022">View Crosswalk ↗</a>
+                        </div>
+                    </div>
+
+                    <div class="framework-card">
+                        <div class="fw-top">
+                            <span class="fw-code">NIST CSF 2.0</span>
+                            <span class="badge badge-green">Core Profile</span>
+                        </div>
+                        <h3 class="fw-name">PR.AA (Identity Management)</h3>
+                        <p class="fw-desc">Identities and credentials are managed for authorized users, devices, and other assets.</p>
+                        <div class="fw-bottom">
+                            <span>8 Subcategories</span>
+                            <a href="/frameworks/nist-csf-2">View Crosswalk ↗</a>
+                        </div>
+                    </div>
+
+                    <div class="framework-card">
+                        <div class="fw-top">
+                            <span class="fw-code">SOC 2 Type II</span>
+                            <span class="badge badge-cyan">Trust Criteria</span>
+                        </div>
+                        <h3 class="fw-name">CC6.1 - CC6.3 Logical Access</h3>
+                        <p class="fw-desc">Logical access security software, infrastructure, and architectures have been implemented.</p>
+                        <div class="fw-bottom">
+                            <span>12 Criteria Points</span>
+                            <a href="/frameworks/soc2-type-2">View Crosswalk ↗</a>
+                        </div>
+                    </div>
+
+                    <div class="framework-card">
+                        <div class="fw-top">
+                            <span class="fw-code">CIS Controls v8</span>
+                            <span class="badge badge-purple">Safeguards</span>
+                        </div>
+                        <h3 class="fw-name">Control 05 & 06: Account Mgmt</h3>
+                        <p class="fw-desc">Account Monitoring and Access Control Management across IG1, IG2, and IG3 baselines.</p>
+                        <div class="fw-bottom">
+                            <span>16 Safeguards</span>
+                            <a href="/frameworks/cis-controls-v8">View Crosswalk ↗</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="margin-top: 24px;">
+                    <span style="font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">All Framework Badges:</span>
+                    <div style="margin-top: 8px;">
+                        {{related_frameworks_badges}}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toastMessage" role="status" aria-live="polite">
+        <span>✓</span> <span id="toastText">Copied to clipboard</span>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="site-footer" role="contentinfo">
+        <div class="container footer-content">
+            <div>
+                <strong>ASPIA Universal Control Library (UCL)</strong> &bull; Unified Governance, Risk, and Compliance Engine
+            </div>
+            <div>
+                Domain Code: <span class="mono" style="color: var(--text-title); font-weight: 700;">{{domain_code}}</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            /* 1. Theme Switcher (Starts Light by default) */
+            const htmlEl = document.documentElement;
+            const btnThemeLight = document.getElementById('btnThemeLight');
+            const btnThemeDark = document.getElementById('btnThemeDark');
+
+            const savedTheme = localStorage.getItem('aspia_theme') || 'light';
+            setTheme(savedTheme);
+
+            btnThemeLight.addEventListener('click', () => setTheme('light'));
+            btnThemeDark.addEventListener('click', () => setTheme('dark'));
+
+            function setTheme(theme) {
+                htmlEl.setAttribute('data-theme', theme);
+                localStorage.setItem('aspia_theme', theme);
+
+                if (theme === 'light') {
+                    btnThemeLight.classList.add('active');
+                    btnThemeLight.setAttribute('aria-pressed', 'true');
+                    btnThemeDark.classList.remove('active');
+                    btnThemeDark.setAttribute('aria-pressed', 'false');
+                } else {
+                    btnThemeDark.classList.add('active');
+                    btnThemeDark.setAttribute('aria-pressed', 'true');
+                    btnThemeLight.classList.remove('active');
+                    btnThemeLight.setAttribute('aria-pressed', 'false');
+                }
+            }
+
+            /* 2. Tab Navigation */
+            const tabButtons = document.querySelectorAll('.tab-btn');
+            const tabPanels = document.querySelectorAll('.tab-panel');
+
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    tabButtons.forEach(btn => {
+                        btn.classList.remove('active');
+                        btn.setAttribute('aria-selected', 'false');
+                    });
+                    tabPanels.forEach(panel => panel.classList.remove('active'));
+
+                    button.classList.add('active');
+                    button.setAttribute('aria-selected', 'true');
+
+                    const targetId = button.getAttribute('data-target');
+                    const targetPanel = document.getElementById(targetId);
+                    if (targetPanel) {
+                        targetPanel.classList.add('active');
+                    }
+                });
+            });
+
+            /* 3. Controls Search & Criticality Filter */
+            const searchInput = document.getElementById('controlSearchInput');
+            const filterPills = document.querySelectorAll('.filter-pill');
+            const tableRows = document.querySelectorAll('.grc-table-wrapper table tbody tr');
+
+            let currentSearchTerm = '';
+            let currentFilter = 'all';
+
+            if (searchInput) {
+                searchInput.addEventListener('input', (e) => {
+                    currentSearchTerm = e.target.value.toLowerCase().trim();
+                    filterControls();
+                });
+            }
+
+            filterPills.forEach(pill => {
+                pill.addEventListener('click', () => {
+                    filterPills.forEach(p => p.classList.remove('active'));
+                    pill.classList.add('active');
+                    currentFilter = pill.getAttribute('data-filter');
+                    filterControls();
+                });
+            });
+
+            function filterControls() {
+                tableRows.forEach(row => {
+                    const rowText = row.innerText.toLowerCase();
+                    const criticality = row.getAttribute('data-criticality') || '';
+
+                    const matchesSearch = currentSearchTerm === '' || rowText.includes(currentSearchTerm);
+                    const matchesFilter = currentFilter === 'all' || criticality === currentFilter;
+
+                    row.style.display = (matchesSearch && matchesFilter) ? '' : 'none';
+                });
+            }
+        });
+
+        function copyText(text) {
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text).then(() => {
+                    showToast(`Copied "${text}" to clipboard`);
+                }).catch(() => {
+                    fallbackCopy(text);
+                });
+            } else {
+                fallbackCopy(text);
+            }
+        }
+
+        function fallbackCopy(text) {
+            const temp = document.createElement('input');
+            temp.value = text;
+            document.body.appendChild(temp);
+            temp.select();
+            document.execCommand('copy');
+            document.body.removeChild(temp);
+            showToast(`Copied "${text}"`);
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toastMessage');
+            const toastText = document.getElementById('toastText');
+            if (toast && toastText) {
+                toastText.textContent = message;
+                toast.classList.add('show');
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 2600);
+            }
+        }
+    </script>
+</body>
+</html>

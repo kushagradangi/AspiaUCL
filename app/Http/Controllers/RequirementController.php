@@ -87,7 +87,7 @@ class RequirementController extends Controller
             ->get();
 
 
-        $requirementTemplate = \App\Models\RequirementTemplate::first();
+        $requirementTemplate = \App\Models\RequirementTemplate::latest('updated_at')->first() ?? \App\Models\RequirementTemplate::first();
 
         return view(
             'aspiaUcl.requirements.index',

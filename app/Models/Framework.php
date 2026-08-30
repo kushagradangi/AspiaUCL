@@ -25,7 +25,7 @@ class Framework extends Model
     ];
 
     /**
-     * Framework has many Domains.
+     * Direct relationship: Framework has many Domains.
      */
     public function domains(): HasMany
     {
@@ -33,17 +33,175 @@ class Framework extends Model
     }
 
     /**
-     * Framework has many Controls through Domains.
+     * Direct relationship: Framework has many Controls through Domains.
      */
     public function controls(): HasManyThrough
     {
         return $this->hasManyThrough(
             Control::class,
             Domain::class,
-            'framework_id', // Foreign key on domains table
-            'domain_id',    // Foreign key on controls table
-            'id',           // Local key on frameworks table
-            'id'            // Local key on domains table
+            'framework_id',
+            'domain_id',
+            'id',
+            'id'
         );
+    }
+
+    /**
+     * Mappings to requirements.
+     */
+    public function mappings(): HasMany
+    {
+        return $this->hasMany(RequirementFrameworkMapping::class, 'framework_id');
+    }
+
+    /**
+     * Get all mapped Requirements for this compliance framework.
+     */
+    public function getMappedRequirements()
+    {
+        // 1. Direct framework_id in mappings table
+        $reqIds = RequirementFrameworkMapping::where('framework_id', $this->id)
+            ->pluck('requirement_id')
+            ->filter();
+
+        // 2. Search by framework name, code, slug, or framework_id
+        if ($reqIds->isEmpty()) {
+            $name   = $this->name;
+            $code   = $this->framework_code;
+            $fwId   = $this->framework_id;
+            $slug   = $this->slug;
+
+            $allText = $name . ' ' . $code . ' ' . $slug . ' ' . $fwId;
+            $normalizedText = str_ireplace('is0', 'iso', $allText);
+
+            $tokens = array_unique(array_filter(preg_split('/[^A-Za-z0-9]+/', $allText . ' ' . $normalizedText)));
+
+            $reqIds = RequirementFrameworkMapping::where(function ($q) use ($name, $code, $fwId, $slug, $tokens) {
+                if ($name) {
+                    $q->where('framework_name', 'like', "%{$name}%")
+                      ->orWhere('framework_code', 'like', "%{$name}%");
+                }
+                if ($code) {
+                    $cleanCode = str_ireplace('is0', 'iso', $code);
+                    $q->orWhere('framework_name', 'like', "%{$code}%")
+                      ->orWhere('framework_code', 'like', "%{$code}%")
+                      ->orWhere('framework_name', 'like', "%{$cleanCode}%")
+                      ->orWhere('framework_code', 'like', "%{$cleanCode}%");
+                }
+                if ($slug) {
+                    $q->orWhere('framework_name', 'like', "%{$slug}%");
+                }
+                foreach ($tokens as $token) {
+                    if (strlen($token) >= 3 && !in_array(strtolower($token), ['and', 'the', 'for', 'sec', 'std', 'rule', 'act'])) {
+                        $q->orWhere('framework_name', 'like', "%{$token}%")
+                          ->orWhere('framework_code', 'like', "%{$token}%");
+                    }
+                }
+            })->pluck('requirement_id')->filter();
+        }
+
+        // 3. Fallback: If UCL / Universal Control Library or default, return all requirements
+        $isUcl = str_contains(strtolower($this->name ?? ''), 'universal')
+            || str_contains(strtolower($this->name ?? ''), 'ucl')
+            || str_contains(strtolower($this->framework_code ?? ''), 'ucl')
+            || str_contains(strtolower($this->framework_id ?? ''), 'ucl');
+
+        if ($reqIds->isEmpty() && $isUcl) {
+            return Requirement::with('control.domain')->orderBy('display_order', 'asc')->orderBy('id', 'asc')->get();
+        }
+
+        if ($reqIds->isEmpty()) {
+            // Direct child requirements via controls
+            $directControlIds = Control::where('domain_id', $this->id)
+                ->orWhereIn('domain_id', Domain::where('framework_id', $this->id)->pluck('id'))
+                ->pluck('control_id');
+            if ($directControlIds->isNotEmpty()) {
+                return Requirement::with('control.domain')->whereIn('control_id', $directControlIds)->orderBy('display_order', 'asc')->orderBy('id', 'asc')->get();
+            }
+
+            return collect();
+        }
+
+        return Requirement::with('control.domain')
+            ->whereIn('requirement_id', $reqIds)
+            ->orderBy('display_order', 'asc')
+            ->orderBy('id', 'asc')
+            ->get();
+    }
+
+    /**
+     * Get all mapped Controls for this framework.
+     */
+    public function getMappedControls()
+    {
+        $requirements = $this->getMappedRequirements();
+        $controlIds = $requirements->pluck('control_id')->filter()->unique();
+
+        if ($controlIds->isEmpty()) {
+            $direct = $this->controls()->get();
+            if ($direct->isNotEmpty()) {
+                return $direct;
+            }
+
+            $isUcl = str_contains(strtolower($this->name ?? ''), 'universal')
+                || str_contains(strtolower($this->name ?? ''), 'ucl')
+                || str_contains(strtolower($this->framework_code ?? ''), 'ucl')
+                || str_contains(strtolower($this->framework_id ?? ''), 'ucl');
+
+            if ($isUcl) {
+                return Control::with('domain')->orderBy('display_order', 'asc')->orderBy('id', 'asc')->get();
+            }
+
+            return collect();
+        }
+
+        return Control::with('domain')
+            ->whereIn('control_id', $controlIds)
+            ->orderBy('display_order', 'asc')
+            ->orderBy('id', 'asc')
+            ->get();
+    }
+
+    /**
+     * Get all mapped Domains for this framework.
+     */
+    public function getMappedDomains()
+    {
+        $controls = $this->getMappedControls();
+        $domainIds = $controls->pluck('domain_id')->filter()->unique();
+        $domainCodes = $controls->pluck('domain_code')->filter()->unique();
+
+        if ($domainIds->isEmpty() && $domainCodes->isEmpty()) {
+            $direct = $this->domains()->get();
+            if ($direct->isNotEmpty()) {
+                return $direct;
+            }
+
+            $isUcl = str_contains(strtolower($this->name ?? ''), 'universal')
+                || str_contains(strtolower($this->name ?? ''), 'ucl')
+                || str_contains(strtolower($this->framework_code ?? ''), 'ucl')
+                || str_contains(strtolower($this->framework_id ?? ''), 'ucl');
+
+            if ($isUcl) {
+                return Domain::with('controls')->orderBy('display_order', 'asc')->orderBy('id', 'asc')->get();
+            }
+
+            return collect();
+        }
+
+        return Domain::with('controls')
+            ->where(function ($q) use ($domainIds, $domainCodes) {
+                if ($domainIds->isNotEmpty()) {
+                    $q->whereIn('id', $domainIds);
+                }
+                if ($domainCodes->isNotEmpty()) {
+                    $q->orWhereIn('domain_code', $domainCodes)
+                      ->orWhereIn('domain_id', $domainCodes);
+                }
+            })
+            ->orderBy('display_order', 'asc')
+            ->orderBy('id', 'asc')
+            ->get();
     }
 }

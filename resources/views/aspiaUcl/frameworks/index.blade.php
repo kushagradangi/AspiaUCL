@@ -2556,11 +2556,13 @@
 <script>
 
 
+    const frameworkTemplatesMap = @json($frameworkTemplates ?? []);
+
     function onFrameworkTypeChange(val)
     {
         const textarea = document.getElementById('frameworkTemplate');
         if (textarea) {
-            textarea.value = '';
+            textarea.value = frameworkTemplatesMap[val] || '';
         }
     }
 

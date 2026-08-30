@@ -1,472 +1,27 @@
-<?php
-
-namespace App\Http\Controllers;
-
-use App\Models\Requirement;
-use App\Models\RequirementTemplate;
-use Illuminate\Http\Request;
-
-class RequirementTemplateController extends Controller
-{
-    /*
-    |--------------------------------------------------------------------------
-    | Store / Replace Requirement Template
-    |--------------------------------------------------------------------------
-    */
-
-    public function store(Request $request)
-    {
-        $validated = $request->validate([
-            'html_content' => [
-                'required',
-                'string',
-            ],
-        ]);
-
-        $template = RequirementTemplate::first();
-
-        if ($template) {
-            $template->update([
-                'html_content' => $validated['html_content'],
-            ]);
-            RequirementTemplate::where('id', '!=', $template->id)->delete();
-        } else {
-            RequirementTemplate::create([
-                'html_content' => $validated['html_content'],
-            ]);
-        }
-
-        return redirect()
-            ->route('requirements.index')
-            ->with(
-                'success',
-                'Requirement template saved successfully.'
-            );
-    }
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | Show Requirement
-    |--------------------------------------------------------------------------
-    */
-
-    public function show($requirement_id)
-    {
-        $requirement = Requirement::with('control.domain.framework')
-            ->where('requirement_id', $requirement_id)
-            ->first();
-
-        if (!$requirement) {
-            $requirement = Requirement::with('control.domain.framework')
-                ->whereRaw('LOWER(requirement_id) = ?', [strtolower(trim($requirement_id))])
-                ->orWhere('id', $requirement_id)
-                ->firstOrFail();
-        }
-
-        $template = RequirementTemplate::latest('updated_at')->first() ?? RequirementTemplate::first();
-
-        $html = ($template && !empty(trim($template->html_content)))
-            ? $template->html_content
-            : $this->getDefaultTemplateHtml();
-
-        // Control Info & Links
-        $control                  = $requirement->control;
-        $controlId                = $requirement->control_id;
-        $controlName              = $control?->name ?? '';
-        $controlCategory          = $control?->control_category ?? '';
-        $controlSummary           = $control?->control_summary ?? '';
-        $controlType              = $control?->control_type ?? '';
-        $controlBusinessDesc      = $control?->business_description ?? '';
-        $controlBusinessObj       = $control?->business_objective ?? '';
-        $controlBusinessOwner     = $control?->business_owner ?? '';
-        $controlCriticality       = $control?->criticality ?? 'High';
-        $controlIndustries        = $control?->applicable_industries ?? 'All Industries';
-        $controlTechnologies      = $control?->applicable_technologies ?? 'Enterprise IT & Cloud Infrastructure';
-        $controlStatus            = $control?->status ?? 'Active';
-        $controlVersion           = $control?->version ?? '1.0';
-        $controlBenefits          = $control?->business_benefits ?? '';
-        $controlRisksIfMissing    = $control?->business_risks_if_missing ?? '';
-        $controlStakeholders      = $control?->primary_stakeholders ?? '';
-        $controlUrl               = $control ? route('controls.show', $control->control_id) : '#';
-
-        $controlBadge = $control ? <<<HTML
-        <a href="{$controlUrl}" class="badge-chip chip-purple" title="View Control {$controlId}">
-            <span>Control: {$controlId}</span>
-            <span style="opacity: 0.7; font-size: 10px;">↗</span>
-        </a>
-HTML : "<span class=\"badge-chip chip-purple\">Control: {$controlId}</span>";
-
-        // Domain Info & Links
-        $domain        = $requirement->domain;
-        $domainId      = $domain?->domain_id ?? '';
-        $domainName    = $domain?->name ?? '';
-        $domainCode    = $domain?->domain_code ?? ($control?->domain_code ?? '');
-        $domainPurpose = $domain?->purpose ?? '';
-        $domainScope   = $domain?->scope ?? '';
-        $domainUrl     = $domain ? route('domains.show', $domain->slug) : '#';
-
-        $domainBadge = $domain ? <<<HTML
-        <a href="{$domainUrl}" class="badge-chip chip-cyan" title="View Domain {$domainCode}">
-            <span>Domain: {$domainCode}</span>
-            <span style="opacity: 0.7; font-size: 10px;">↗</span>
-        </a>
-HTML : ($domainName ? "<span class=\"badge-chip chip-cyan\">Domain: {$domainName}</span>" : '');
-
-        // Framework Info & Links
-        $framework       = $requirement->framework;
-        $frameworkId     = $framework?->framework_id ?? '';
-        $frameworkName   = $framework?->name ?? ($domain?->related_frameworks ?: 'Universal Control Library');
-        $frameworkCode   = $framework?->framework_code ?? 'UCL';
-        $frameworkFamily = $framework?->framework_family ?? 'UCL';
-        $frameworkUrl    = $framework ? route('frameworks.show', $framework->slug) : '#';
-
-        // Framework Mappings
-        $mappings                = $requirement->frameworkMappings()->get();
-        $mappingsCount           = $mappings->count();
-        $frameworkMappingsBadges = $this->renderFrameworkMappingsBadges($requirement, $mappings);
-        $frameworkMappingsTable  = $this->renderFrameworkMappingsTable($requirement, $mappings);
-        $frameworkBadge          = $frameworkMappingsBadges;
-
-        // Sibling Requirements under same Control
-        $siblingRequirements      = $control ? $control->requirements()->orderBy('display_order', 'asc')->orderBy('id', 'asc')->get() : collect([$requirement]);
-        $siblingRequirementsCount = $siblingRequirements->count();
-        $siblingRequirementsChips = $this->renderSiblingRequirementsChips($siblingRequirements, $requirement->requirement_id);
-        $siblingRequirementsTable = $this->renderSiblingRequirementsTable($siblingRequirements, $requirement->requirement_id);
-
-        $canonicalUrl = route('requirements.show', $requirement->requirement_id);
-
-        $placeholders = [
-            '{{requirement_id}}'             => $requirement->requirement_id,
-            '{{control_id}}'                 => $controlId,
-            '{{requirement_title}}'          => $requirement->requirement_title,
-            '{{requirement}}'                => $requirement->requirement,
-            '{{why_requirement_exists}}'     => $requirement->why_requirement_exists,
-            '{{implementation_guidance}}'    => $requirement->implementation_guidance,
-            '{{common_audit_findings}}'      => $requirement->common_audit_findings,
-            '{{common_mistakes}}'            => $requirement->common_mistakes,
-            '{{best_practices}}'             => $requirement->best_practices,
-            '{{business_examples}}'          => $requirement->business_examples,
-            '{{typical_owner}}'              => $requirement->typical_owner,
-            '{{canonical_url}}'              => $canonicalUrl,
-            '{{control_name}}'               => $controlName,
-            '{{control_category}}'           => $controlCategory,
-            '{{control_summary}}'            => $controlSummary,
-            '{{control_type}}'               => $controlType,
-            '{{business_description}}'      => $controlBusinessDesc,
-            '{{business_objective}}'        => $controlBusinessObj,
-            '{{business_owner}}'            => $controlBusinessOwner,
-            '{{criticality}}'               => $controlCriticality,
-            '{{applicable_industries}}'     => $controlIndustries,
-            '{{applicable_technologies}}'   => $controlTechnologies,
-            '{{status}}'                    => $controlStatus,
-            '{{version}}'                   => $controlVersion,
-            '{{business_benefits}}'         => $controlBenefits,
-            '{{business_risks_if_missing}}' => $controlRisksIfMissing,
-            '{{primary_stakeholders}}'      => $controlStakeholders,
-            '{{control_url}}'                => $controlUrl,
-            '{{control_badge}}'              => $controlBadge,
-            '{{control_id_badge}}'           => $controlBadge,
-            '{{domain_id}}'                  => $domainId,
-            '{{domain_name}}'                => $domainName,
-            '{{domain_code}}'                => $domainCode,
-            '{{domain_purpose}}'             => $domainPurpose,
-            '{{domain_scope}}'               => $domainScope,
-            '{{domain_url}}'                 => $domainUrl,
-            '{{domain_badge}}'               => $domainBadge,
-            '{{domain_id_badge}}'            => $domainBadge,
-            '{{framework_id}}'               => $frameworkId,
-            '{{framework_name}}'             => $frameworkName,
-            '{{framework_code}}'             => $frameworkCode,
-            '{{framework_family}}'           => $frameworkFamily,
-            '{{framework_url}}'              => $frameworkUrl,
-            '{{framework_badge}}'            => $frameworkBadge,
-            '{{framework_id_badge}}'         => $frameworkBadge,
-            '{{framework_mappings}}'         => $frameworkMappingsBadges,
-            '{{framework_mappings_badges}}'  => $frameworkMappingsBadges,
-            '{{framework_mappings_table}}'   => $frameworkMappingsTable,
-            '{{mappings_count}}'             => $mappingsCount,
-            '{{sibling_requirements_chips}}' => $siblingRequirementsChips,
-            '{{sibling_requirements_table}}' => $siblingRequirementsTable,
-            '{{sibling_requirements_count}}' => $siblingRequirementsCount,
-        ];
-
-        foreach ($placeholders as $placeholder => $value) {
-            $html = str_ireplace($placeholder, (string) ($value ?? ''), $html);
-        }
-
-        return response($html);
-    }
-
-    protected function renderFrameworkMappingsBadges($requirement, $mappings = null): string
-    {
-        $mappings = $mappings ?? $requirement->frameworkMappings()->get();
-        if ($mappings->isEmpty()) {
-            return '<span class="badge-chip chip-purple font-mono">Universal Control Library</span>';
-        }
-
-        $chips = '';
-        foreach ($mappings as $m) {
-            $fwModel = $this->resolveFrameworkModel($m->framework_name, $m->framework_code, $m->framework_id);
-            $url = $fwModel ? route('frameworks.show', $fwModel->slug) : '#';
-            $fwName = htmlspecialchars($m->framework_name);
-            $clause = htmlspecialchars($m->clause_reference ?? '');
-
-            $chips .= <<<HTML
-            <a href="{$url}" class="badge-chip chip-cyan" title="View {$fwName}">
-                <span><strong>{$fwName}</strong>: {$clause}</span>
-                <span style="opacity: 0.7; font-size: 10px;">↗</span>
-            </a>
-HTML;
-        }
-
-        return "<div style=\"display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px;\">{$chips}</div>";
-    }
-
-    protected function renderFrameworkMappingsTable($requirement, $mappings = null): string
-    {
-        $mappings = $mappings ?? $requirement->frameworkMappings()->get();
-        if ($mappings->isEmpty()) {
-            return '<p style="color: var(--text-muted); font-size: 13.5px; padding: 12px 0;">No direct framework mappings configured for this requirement yet.</p>';
-        }
-
-        $rows = '';
-        foreach ($mappings as $m) {
-            $fwModel = $this->resolveFrameworkModel($m->framework_name, $m->framework_code, $m->framework_id);
-            $url = $fwModel ? route('frameworks.show', $fwModel->slug) : '#';
-            $fwName = htmlspecialchars($m->framework_name);
-            $code   = htmlspecialchars($m->framework_code ?? $fwModel?->framework_code ?? '-');
-            $clause = htmlspecialchars($m->clause_reference ?? '-');
-
-            $rows .= <<<HTML
-            <tr>
-                <td style="font-weight: 700;">
-                    <a href="{$url}" style="color: var(--accent-cyan); text-decoration: none;">{$fwName}</a>
-                </td>
-                <td><span class="badge-chip chip-purple font-mono" style="font-size: 11px;">{$code}</span></td>
-                <td><strong class="font-mono" style="color: var(--accent-emerald);">{$clause}</strong></td>
-                <td style="text-align: right;">
-                    <a href="{$url}" class="badge-chip chip-cyan" style="font-size: 11px; padding: 4px 10px;">View Framework →</a>
-                </td>
-            </tr>
-HTML;
-        }
-
-        return <<<HTML
-        <div class="table-responsive">
-            <table>
-                <thead>
-                    <tr>
-                        <th style="width: 32%;">Compliance Framework</th>
-                        <th style="width: 20%;">Code</th>
-                        <th style="width: 28%;">Clause / Section Reference</th>
-                        <th style="width: 20%; text-align: right;">Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {$rows}
-                </tbody>
-            </table>
-        </div>
-HTML;
-    }
-
-    /**
-     * Resolve a mapped framework name or code to the corresponding Framework database model.
-     */
-    protected function resolveFrameworkModel(?string $frameworkName, ?string $frameworkCode = null, $frameworkId = null): ?\App\Models\Framework
-    {
-        if ($frameworkId) {
-            $fw = \App\Models\Framework::find($frameworkId);
-            if ($fw) return $fw;
-        }
-
-        if (!$frameworkName && !$frameworkCode) {
-            return null;
-        }
-
-        // 1. Direct match by Name or Code
-        if ($frameworkName) {
-            $fw = \App\Models\Framework::where('name', $frameworkName)
-                ->orWhere('framework_code', $frameworkName)
-                ->first();
-            if ($fw) return $fw;
-        }
-
-        if ($frameworkCode) {
-            $fw = \App\Models\Framework::where('framework_code', $frameworkCode)
-                ->orWhere('name', $frameworkCode)
-                ->first();
-            if ($fw) return $fw;
-        }
-
-        // 2. Intelligent Keyword & Acronym Matching
-        $nameLower = strtolower(trim((string)$frameworkName));
-        $codeLower = strtolower(trim((string)$frameworkCode));
-        $allFrameworks = \App\Models\Framework::all();
-
-        return $allFrameworks->first(function ($item) use ($nameLower, $codeLower) {
-            $fwName = strtolower($item->name);
-            $fwCode = strtolower($item->framework_code ?? '');
-            $fwSlug = strtolower($item->slug ?? '');
-
-            // Specific regulatory bodies (India & Global)
-            if (str_contains($nameLower, 'rbi') || str_contains($codeLower, 'rbi')) {
-                return str_contains($fwName, 'rbi') || str_contains($fwSlug, 'rbi');
-            }
-            if (str_contains($nameLower, 'sebi') || str_contains($codeLower, 'sebi')) {
-                return str_contains($fwName, 'sebi') || str_contains($fwSlug, 'sebi');
-            }
-            if (str_contains($nameLower, 'irdai') || str_contains($codeLower, 'irdai')) {
-                return str_contains($fwName, 'irdai') || str_contains($fwSlug, 'irdai');
-            }
-            if (str_contains($nameLower, 'npci') || str_contains($codeLower, 'npci')) {
-                return str_contains($fwName, 'npci') || str_contains($fwSlug, 'npci');
-            }
-            if (str_contains($nameLower, 'cert-in') || str_contains($codeLower, 'cert-in')) {
-                return str_contains($fwName, 'cert-in') || str_contains($fwSlug, 'cert-in');
-            }
-
-            // ISO Standards
-            if (str_contains($nameLower, '27001')) return str_contains($fwName, '27001') || str_contains($fwSlug, '27001');
-            if (str_contains($nameLower, '27002')) return str_contains($fwName, '27002') || str_contains($fwSlug, '27002');
-            if (str_contains($nameLower, '27701')) return str_contains($fwName, '27701') || str_contains($fwSlug, '27701');
-            if (str_contains($nameLower, '22301')) return str_contains($fwName, '22301') || str_contains($fwSlug, '22301');
-
-            // Privacy & Digital Resilience Regulations
-            if (str_contains($nameLower, 'gdpr') || str_contains($codeLower, 'gdpr')) {
-                return str_contains($fwName, 'gdpr') || str_contains($fwSlug, 'gdpr') || str_contains($fwName, 'general data protection');
-            }
-            if (str_contains($nameLower, 'dora') || str_contains($codeLower, 'dora')) {
-                return str_contains($fwName, 'dora') || str_contains($fwSlug, 'dora') || str_contains($fwName, 'digital operational resilience');
-            }
-            if (str_contains($nameLower, 'dpdpa') || str_contains($codeLower, 'dpdpa')) {
-                return str_contains($fwName, 'dpdpa') || str_contains($fwSlug, 'dpdpa') || str_contains($fwName, 'digital personal data');
-            }
-            if (str_contains($nameLower, 'hipaa') || str_contains($codeLower, 'hipaa')) {
-                return str_contains($fwName, 'hipaa') || str_contains($fwSlug, 'hipaa') || str_contains($fwName, 'health insurance portability');
-            }
-            if (str_contains($nameLower, 'nis2') || str_contains($codeLower, 'nis2')) {
-                return str_contains($fwName, 'nis2') || str_contains($fwSlug, 'nis2');
-            }
-
-            // Cybersecurity & Industry Benchmarks
-            if (str_contains($nameLower, '800-53') || str_contains($codeLower, '800-53')) return str_contains($fwName, '800-53') || str_contains($fwSlug, '800-53');
-            if (str_contains($nameLower, 'pci') || str_contains($codeLower, 'pci')) return str_contains($fwName, 'pci') || str_contains($fwSlug, 'pci');
-            if (str_contains($nameLower, 'soc 2') || str_contains($codeLower, 'soc 2')) return str_contains($fwName, 'soc 2') || str_contains($fwSlug, 'soc-2');
-            if (str_contains($nameLower, 'cis') || str_contains($codeLower, 'cis')) return str_contains($fwName, 'cis') || str_contains($fwSlug, 'cis');
-            if (str_contains($nameLower, 'cobit') || str_contains($codeLower, 'cobit')) return str_contains($fwName, 'cobit') || str_contains($fwSlug, 'cobit');
-            if (str_contains($nameLower, 'csf') || str_contains($codeLower, 'csf')) return str_contains($fwName, 'csf') || str_contains($fwName, 'cybersecurity framework');
-
-            return str_contains($fwName, $nameLower) || str_contains($nameLower, $fwName);
-        });
-    }
-
-    protected function renderSiblingRequirementsChips($requirements, string $currentRequirementId): string
-    {
-        if ($requirements->isEmpty()) {
-            return '<p style="color: var(--text-muted); font-size: 13px;">No sibling requirements under this control.</p>';
-        }
-
-        $items = '';
-        foreach ($requirements as $req) {
-            $reqUrl = route('requirements.show', $req->requirement_id);
-            $rid    = htmlspecialchars($req->requirement_id);
-            $title  = htmlspecialchars($req->requirement_title);
-            $isCurrent = (strcasecmp($req->requirement_id, $currentRequirementId) === 0);
-
-            $chipClass = $isCurrent ? 'chip-cyan' : 'chip-purple';
-            $activeStyle = $isCurrent ? 'outline: 2px solid var(--accent-cyan); font-weight: 800;' : '';
-
-            $items .= <<<HTML
-            <a href="{$reqUrl}" class="badge-chip {$chipClass}" style="{$activeStyle}" title="{$title}">
-                <span><strong>{$rid}</strong>: {$title}</span>
-                <span style="opacity: 0.7; font-size: 10px;">↗</span>
-            </a>
-HTML;
-        }
-
-        return "<div style=\"display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px;\">{$items}</div>";
-    }
-
-    protected function renderSiblingRequirementsTable($requirements, string $currentRequirementId): string
-    {
-        if ($requirements->isEmpty()) {
-            return '<p style="color: var(--text-muted); font-size: 13px;">No sibling requirements under this control.</p>';
-        }
-
-        $rows = '';
-        foreach ($requirements as $req) {
-            $reqUrl = route('requirements.show', $req->requirement_id);
-            $rid    = htmlspecialchars($req->requirement_id);
-            $title  = htmlspecialchars($req->requirement_title);
-            $owner  = htmlspecialchars($req->typical_owner ?? 'InfoSec Team');
-            $isCurrent = (strcasecmp($req->requirement_id, $currentRequirementId) === 0);
-
-            $highlightStyle = $isCurrent ? 'background: var(--accent-cyan-glow);' : '';
-            $badge = $isCurrent ? '<span class="badge-chip chip-emerald" style="font-size: 10px; padding: 2px 8px; margin-left: 6px;">Current</span>' : '';
-
-            $rows .= <<<HTML
-            <tr style="{$highlightStyle}">
-                <td>
-                    <a href="{$reqUrl}" style="color: var(--accent-cyan); font-weight: 700; text-decoration: none;" class="font-mono">{$rid}</a>
-                    {$badge}
-                </td>
-                <td><a href="{$reqUrl}" style="color: var(--text-primary); text-decoration: none; font-weight: 600;">{$title}</a></td>
-                <td><span style="color: var(--text-secondary);">{$owner}</span></td>
-                <td style="text-align: right;">
-                    <a href="{$reqUrl}" class="badge-chip chip-cyan" style="font-size: 11px; padding: 4px 10px;">View Requirement →</a>
-                </td>
-            </tr>
-HTML;
-        }
-
-        return <<<HTML
-        <div class="table-responsive">
-            <table>
-                <thead>
-                    <tr>
-                        <th style="width: 20%;">Requirement ID</th>
-                        <th style="width: 45%;">Requirement Title</th>
-                        <th style="width: 20%;">Typical Owner</th>
-                        <th style="width: 15%; text-align: right;">Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {$rows}
-                </tbody>
-            </table>
-        </div>
-HTML;
-    }
-
-    private function getDefaultTemplateHtml(): string
-    {
-        return <<<'HTML'
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{requirement_title}} ({{requirement_id}}) | ASPIA Unified Control Library</title>
-    <meta name="description" content="Auditable compliance specification, implementation guidance, common audit findings, best practices, and cross-framework mappings for {{requirement_title}} ({{requirement_id}}) under control {{control_name}} ({{control_id}}).">
-    <meta name="keywords" content="{{requirement_id}}, {{requirement_title}}, {{control_id}}, {{control_name}}, {{domain_name}}, {{domain_code}}, {{framework_name}}, cybersecurity compliance, audit findings, implementation guidance, UCL, ASPIA">
+    <title>Governance Framework (GOV-001-R001) | ASPIA Unified Control Library</title>
+    <meta name="description" content="Auditable compliance specification, implementation guidance, common audit findings, best practices, and cross-framework mappings for Governance Framework (GOV-001-R001) under control Information Security Governance (GOV-001).">
+    <meta name="keywords" content="GOV-001-R001, Governance Framework, GOV-001, Information Security Governance, Governance, GOV, COBIT, cybersecurity compliance, audit findings, implementation guidance, UCL, ASPIA">
     <meta name="author" content="ASPIA Unified Control Library">
     <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
-    <link rel="canonical" href="{{canonical_url}}">
+    <link rel="canonical" href="http://localhost/requirements/view/GOV-001-R001">
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="article">
-    <meta property="og:title" content="{{requirement_id}}: {{requirement_title}} | ASPIA UCL">
-    <meta property="og:description" content="Compliance requirements, audit findings, implementation guidance, and regulatory mappings for {{requirement_title}} ({{requirement_id}}).">
-    <meta property="og:url" content="{{canonical_url}}">
+    <meta property="og:title" content="GOV-001-R001: Governance Framework | ASPIA UCL">
+    <meta property="og:description" content="Compliance requirements, audit findings, implementation guidance, and regulatory mappings for Governance Framework (GOV-001-R001).">
+    <meta property="og:url" content="http://localhost/requirements/view/GOV-001-R001">
     <meta property="og:site_name" content="ASPIA Unified Control Library">
     <meta property="og:locale" content="en_US">
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="{{requirement_id}}: {{requirement_title}} | ASPIA UCL">
-    <meta name="twitter:description" content="Enforcement requirement specifications, implementation steps, and regulatory mappings for {{requirement_id}}.">
+    <meta name="twitter:title" content="GOV-001-R001: Governance Framework | ASPIA UCL">
+    <meta name="twitter:description" content="Enforcement requirement specifications, implementation steps, and regulatory mappings for GOV-001-R001.">
 
     <!-- Schema.org Structured Data (JSON-LD) -->
     <script type="application/ld+json">
@@ -475,49 +30,49 @@ HTML;
         "@graph": [
             {
                 "@type": "TechArticle",
-                "@id": "{{canonical_url}}#article",
-                "headline": "{{requirement_title}} ({{requirement_id}})",
-                "description": "Auditable compliance requirement specifications and implementation guidance under Control {{control_id}} ({{control_name}}).",
-                "articleSection": "{{domain_name}}",
+                "@id": "http://localhost/requirements/view/GOV-001-R001#article",
+                "headline": "Governance Framework (GOV-001-R001)",
+                "description": "Auditable compliance requirement specifications and implementation guidance under Control GOV-001 (Information Security Governance).",
+                "articleSection": "Governance",
                 "inLanguage": "en-US",
                 "about": {
                     "@type": "DefinedTerm",
-                    "name": "{{requirement_title}}",
-                    "termCode": "{{requirement_id}}",
+                    "name": "Governance Framework",
+                    "termCode": "GOV-001-R001",
                     "inDefinedTermSet": {
                         "@type": "DefinedTermSet",
-                        "name": "{{control_name}} ({{control_id}})",
-                        "url": "{{control_url}}"
+                        "name": "Information Security Governance (GOV-001)",
+                        "url": "http://localhost/controls/view/GOV-001"
                     }
                 }
             },
             {
                 "@type": "BreadcrumbList",
-                "@id": "{{canonical_url}}#breadcrumb",
+                "@id": "http://localhost/requirements/view/GOV-001-R001#breadcrumb",
                 "itemListElement": [
                     {
                         "@type": "ListItem",
                         "position": 1,
                         "name": "Frameworks",
-                        "item": "{{framework_url}}"
+                        "item": "http://localhost/frameworks/cobit"
                     },
                     {
                         "@type": "ListItem",
                         "position": 2,
-                        "name": "{{domain_name}}",
-                        "item": "{{domain_url}}"
+                        "name": "Governance",
+                        "item": "http://localhost/domains/governance"
                     },
                     {
                         "@type": "ListItem",
                         "position": 3,
-                        "name": "{{control_id}}",
-                        "item": "{{control_url}}"
+                        "name": "GOV-001",
+                        "item": "http://localhost/controls/view/GOV-001"
                     },
                     {
                         "@type": "ListItem",
                         "position": 4,
-                        "name": "{{requirement_id}}",
-                        "item": "{{canonical_url}}"
+                        "name": "GOV-001-R001",
+                        "item": "http://localhost/requirements/view/GOV-001-R001"
                     }
                 ]
             }
@@ -892,13 +447,13 @@ HTML;
         <nav class="breadcrumbs-nav" aria-label="Breadcrumbs">
             <a href="/" class="breadcrumb-item">ASPIA UCL</a>
             <span class="breadcrumb-sep">/</span>
-            <a href="{{framework_url}}" class="breadcrumb-item">{{framework_code}}</a>
+            <a href="http://localhost/frameworks/cobit" class="breadcrumb-item">COBIT2019</a>
             <span class="breadcrumb-sep">/</span>
-            <a href="{{domain_url}}" class="breadcrumb-item">{{domain_code}}</a>
+            <a href="http://localhost/domains/governance" class="breadcrumb-item">GOV</a>
             <span class="breadcrumb-sep">/</span>
-            <a href="{{control_url}}" class="breadcrumb-item">{{control_id}}</a>
+            <a href="http://localhost/controls/view/GOV-001" class="breadcrumb-item">GOV-001</a>
             <span class="breadcrumb-sep">/</span>
-            <span class="breadcrumb-current font-mono">{{requirement_id}}</span>
+            <span class="breadcrumb-current font-mono">GOV-001-R001</span>
         </nav>
 
         <div class="theme-switch-container" title="Toggle Light / Dark mode">
@@ -913,20 +468,26 @@ HTML;
     <!-- Requirement Main Hero Card -->
     <article class="hero-card">
         <div class="tags-row">
-            <span class="badge-chip chip-cyan font-mono" id="reqIdBadge">◈ {{requirement_id}}</span>
-            {{control_badge}}
-            {{domain_badge}}
-            <span class="badge-chip chip-emerald" style="white-space: normal; word-break: break-word; text-align: left;">👤 Owner: {{typical_owner}}</span>
+            <span class="badge-chip chip-cyan font-mono" id="reqIdBadge">◈ GOV-001-R001</span>
+                    <a href="http://localhost/controls/view/GOV-001" class="badge-chip chip-purple" title="View Control GOV-001">
+            <span>Control: GOV-001</span>
+            <span style="opacity: 0.7; font-size: 10px;">↗</span>
+        </a>
+                    <a href="http://localhost/domains/governance" class="badge-chip chip-cyan" title="View Domain GOV">
+            <span>Domain: GOV</span>
+            <span style="opacity: 0.7; font-size: 10px;">↗</span>
+        </a>
+            <span class="badge-chip chip-emerald" style="white-space: normal; word-break: break-word; text-align: left;">👤 Owner: CISO, Governance Committee, Board of Directors, Risk Management</span>
         </div>
 
-        <h1 class="requirement-h1">{{requirement_title}}</h1>
+        <h1 class="requirement-h1">Governance Framework</h1>
 
         <div class="statement-card">
             <div class="statement-label">
                 <span>📌</span>
                 <span>Official Auditable Requirement Statement</span>
             </div>
-            <p class="statement-body">{{requirement}}</p>
+            <p class="statement-body">The organization shall establish and maintain a formal governance framework for the information security and privacy program that defines the structure, processes, and practices through which security and privacy decisions are made, implemented, and overseen. The framework shall articulate the organization's approach to governing security and privacy risks and shall be aligned with the organization's overall governance structure. The framework shall provide the foundation for all security and privacy policies, standards, and procedures and shall be reviewed periodically to ensure it remains appropriate for the organization's risk environment, regulatory obligations, and strategic objectives.</p>
         </div>
 
         <div class="meta-cards-grid">
@@ -935,7 +496,7 @@ HTML;
                 <div class="meta-info-col">
                     <span class="meta-caption">Parent Control</span>
                     <span class="meta-val">
-                        <a href="{{control_url}}" style="color: var(--accent-purple); text-decoration: none;">{{control_id}}: {{control_name}}</a>
+                        <a href="http://localhost/controls/view/GOV-001" style="color: var(--accent-purple); text-decoration: none;">GOV-001: Information Security Governance</a>
                     </span>
                 </div>
             </div>
@@ -944,7 +505,7 @@ HTML;
                 <div class="meta-info-col">
                     <span class="meta-caption">Domain</span>
                     <span class="meta-val">
-                        <a href="{{domain_url}}" style="color: var(--accent-cyan); text-decoration: none;">{{domain_name}} ({{domain_code}})</a>
+                        <a href="http://localhost/domains/governance" style="color: var(--accent-cyan); text-decoration: none;">Governance (GOV)</a>
                     </span>
                 </div>
             </div>
@@ -952,7 +513,7 @@ HTML;
                 <div class="meta-icon-box" style="color: var(--accent-emerald);">⚙️</div>
                 <div class="meta-info-col">
                     <span class="meta-caption">Control Category</span>
-                    <span class="meta-val" style="color: var(--accent-emerald);">{{control_category}}</span>
+                    <span class="meta-val" style="color: var(--accent-emerald);">Administrative</span>
                 </div>
             </div>
             <div class="meta-card">
@@ -960,7 +521,7 @@ HTML;
                 <div class="meta-info-col">
                     <span class="meta-caption">Parent Framework</span>
                     <span class="meta-val">
-                        <a href="{{framework_url}}" style="color: var(--accent-amber); text-decoration: none;">{{framework_name}} ({{framework_code}})</a>
+                        <a href="http://localhost/frameworks/cobit" style="color: var(--accent-amber); text-decoration: none;">COBIT (COBIT2019)</a>
                     </span>
                 </div>
             </div>
@@ -972,21 +533,21 @@ HTML;
         <div class="stat-card stat-card-cyan" onclick="switchTab('frameworks-tab')">
             <div class="stat-content">
                 <span class="stat-label">Mapped Frameworks</span>
-                <span class="stat-value" style="color: var(--accent-cyan);">{{mappings_count}}</span>
+                <span class="stat-value" style="color: var(--accent-cyan);">0</span>
             </div>
             <div class="stat-icon-bubble chip-cyan">🌐</div>
         </div>
         <div class="stat-card stat-card-purple" onclick="switchTab('control-tab')">
             <div class="stat-content">
                 <span class="stat-label">Parent Control</span>
-                <span class="stat-value" style="color: var(--accent-purple); font-size: 22px;">{{control_id}}</span>
+                <span class="stat-value" style="color: var(--accent-purple); font-size: 22px;">GOV-001</span>
             </div>
             <div class="stat-icon-bubble chip-purple">🛡️</div>
         </div>
         <div class="stat-card stat-card-emerald" onclick="switchTab('siblings-tab')">
             <div class="stat-content">
                 <span class="stat-label">Control Siblings</span>
-                <span class="stat-value" style="color: var(--accent-emerald);">{{sibling_requirements_count}}</span>
+                <span class="stat-value" style="color: var(--accent-emerald);">12</span>
             </div>
             <div class="stat-icon-bubble chip-emerald">◆</div>
         </div>
@@ -1004,7 +565,7 @@ HTML;
                 </button>
                 <button class="tab-btn" id="btn-frameworks-tab" onclick="switchTab('frameworks-tab')" role="tab" aria-selected="false">
                     <span>🌐 Framework Mappings</span>
-                    <span class="tab-counter">{{mappings_count}}</span>
+                    <span class="tab-counter">0</span>
                 </button>
                 <button class="tab-btn" id="btn-siblings-tab" onclick="switchTab('siblings-tab')" role="tab" aria-selected="false">
                     <span>◈ Domain & Sibling Context</span>
@@ -1026,7 +587,7 @@ HTML;
                         <div class="meta-icon-box" style="color: var(--accent-cyan);">◈</div>
                         <div class="meta-info-col">
                             <span class="meta-caption">Requirement ID</span>
-                            <span class="meta-val font-mono" style="color: var(--accent-cyan);">{{requirement_id}}</span>
+                            <span class="meta-val font-mono" style="color: var(--accent-cyan);">GOV-001-R001</span>
                         </div>
                     </div>
                     <div class="meta-card">
@@ -1034,7 +595,7 @@ HTML;
                         <div class="meta-info-col">
                             <span class="meta-caption">Control ID</span>
                             <span class="meta-val">
-                                <a href="{{control_url}}" style="color: var(--accent-purple); text-decoration: none;" class="font-mono">{{control_id}} ↗</a>
+                                <a href="http://localhost/controls/view/GOV-001" style="color: var(--accent-purple); text-decoration: none;" class="font-mono">GOV-001 ↗</a>
                             </span>
                         </div>
                     </div>
@@ -1042,14 +603,14 @@ HTML;
                         <div class="meta-icon-box" style="color: var(--accent-cyan);">📋</div>
                         <div class="meta-info-col">
                             <span class="meta-caption">Requirement Title</span>
-                            <span class="meta-val">{{requirement_title}}</span>
+                            <span class="meta-val">Governance Framework</span>
                         </div>
                     </div>
                     <div class="meta-card">
                         <div class="meta-icon-box" style="color: var(--accent-emerald);">👤</div>
                         <div class="meta-info-col">
                             <span class="meta-caption">Typical Owner</span>
-                            <span class="meta-val">{{typical_owner}}</span>
+                            <span class="meta-val">CISO, Governance Committee, Board of Directors, Risk Management</span>
                         </div>
                     </div>
                 </div>
@@ -1064,7 +625,7 @@ HTML;
                     <div class="statement-label">
                         <span>Official Auditable Requirement Statement</span>
                     </div>
-                    <p class="statement-body">{{requirement}}</p>
+                    <p class="statement-body">The organization shall establish and maintain a formal governance framework for the information security and privacy program that defines the structure, processes, and practices through which security and privacy decisions are made, implemented, and overseen. The framework shall articulate the organization's approach to governing security and privacy risks and shall be aligned with the organization's overall governance structure. The framework shall provide the foundation for all security and privacy policies, standards, and procedures and shall be reviewed periodically to ensure it remains appropriate for the organization's risk environment, regulatory obligations, and strategic objectives.</p>
                 </div>
             </div>
 
@@ -1074,7 +635,7 @@ HTML;
                     <span style="color: var(--accent-purple);">💡</span> Why this Requirement Exists
                 </h2>
                 <div class="callout-block accent-purple">
-                    <p class="callout-text">{{why_requirement_exists}}</p>
+                    <p class="callout-text">To establish a consistent governance foundation for information security and privacy, ensuring decisions, oversight, policies, and responsibilities operate within a defined and accountable framework.</p>
                 </div>
             </div>
 
@@ -1084,7 +645,7 @@ HTML;
                     <span style="color: var(--accent-emerald);">🛠️</span> Implementation Guidance
                 </h2>
                 <div class="callout-block accent-emerald">
-                    <p class="callout-text">{{implementation_guidance}}</p>
+                    <p class="callout-text">Define the governance structure, roles, committees, decision rights, and processes; align the framework with enterprise governance and risk management; document supporting policies and procedures; obtain leadership approval; review the framework periodically.</p>
                 </div>
             </div>
 
@@ -1094,7 +655,7 @@ HTML;
                     <span style="color: var(--accent-cyan);">💼</span> Business Examples
                 </h2>
                 <div class="callout-block accent-cyan">
-                    <p class="callout-text">{{business_examples}}</p>
+                    <p class="callout-text">A financial services organization establishes an enterprise security and privacy governance framework linking board oversight, the CISO, risk committees, business units, and control owners, with defined decision and escalation processes.</p>
                 </div>
             </div>
 
@@ -1104,7 +665,7 @@ HTML;
                     <span style="color: var(--accent-amber);">⚠️</span> Common Audit Findings
                 </h2>
                 <div class="callout-block accent-amber">
-                    <p class="callout-text">{{common_audit_findings}}</p>
+                    <p class="callout-text">No formal governance framework; governance roles or decision rights unclear; framework not aligned with enterprise governance; supporting processes undocumented; framework not reviewed or updated.</p>
                 </div>
             </div>
 
@@ -1114,7 +675,7 @@ HTML;
                     <span style="color: var(--accent-rose);">🚫</span> Common Mistakes
                 </h2>
                 <div class="callout-block accent-rose">
-                    <p class="callout-text">{{common_mistakes}}</p>
+                    <p class="callout-text">Creating a framework that is too high-level; failing to define decision rights; treating security governance as separate from enterprise governance; not documenting supporting processes; allowing the framework to become outdated.</p>
                 </div>
             </div>
 
@@ -1124,7 +685,7 @@ HTML;
                     <span style="color: var(--accent-emerald);">⭐</span> Best Practices
                 </h2>
                 <div class="callout-block accent-emerald">
-                    <p class="callout-text">{{best_practices}}</p>
+                    <p class="callout-text">Align security and privacy governance with enterprise governance; define clear roles and escalation paths; document decision rights; maintain supporting policies and procedures; review the framework regularly and after significant changes.</p>
                 </div>
             </div>
         </section>
@@ -1137,15 +698,15 @@ HTML;
                 </h2>
                 <div class="callout-block accent-purple">
                     <h3 class="callout-title" style="color: var(--accent-purple);">
-                        <span>📌</span> {{control_id}}: {{control_name}}
+                        <span>📌</span> GOV-001: Information Security Governance
                     </h3>
-                    <p class="callout-text">{{control_summary}}</p>
+                    <p class="callout-text">Establishes the foundational governance structures, accountabilities, and decision-making processes for the enterprise information security program, ensuring alignment with business strategy and regulatory requirements.</p>
                 </div>
                 <div class="callout-block accent-cyan">
                     <h3 class="callout-title" style="color: var(--accent-cyan);">
                         <span>📝</span> Business Description
                     </h3>
-                    <p class="callout-text">{{business_description}}</p>
+                    <p class="callout-text">Establish, govern, operate, monitor, and continually improve an enterprise information security program that manages information security, cybersecurity, privacy, resilience, and regulatory compliance risks.</p>
                 </div>
             </div>
 
@@ -1156,15 +717,15 @@ HTML;
                 <div class="details-grid">
                     <div class="narrative-card objective-border">
                         <h3 class="narrative-title" style="color: var(--accent-cyan);"><span>🎯</span> Business Objective</h3>
-                        <p class="narrative-text">{{business_objective}}</p>
+                        <p class="narrative-text">To ensure a structured and accountable approach to managing security and compliance across the organization.</p>
                     </div>
                     <div class="narrative-card benefits-border">
                         <h3 class="narrative-title" style="color: var(--accent-emerald);"><span>🛡️</span> Business Benefits</h3>
-                        <p class="narrative-text">{{business_benefits}}</p>
+                        <p class="narrative-text">Aligns security with business strategy; provides clear accountability; enables informed executive decisions; reduces regulatory exposure; optimizes security investments; builds stakeholder confidence.</p>
                     </div>
                     <div class="narrative-card risks-border">
                         <h3 class="narrative-title" style="color: var(--accent-rose);"><span>⚠️</span> Business Risks If Missing</h3>
-                        <p class="narrative-text">{{business_risks_if_missing}}</p>
+                        <p class="narrative-text">Unclear accountability; misaligned security investments; regulatory non-compliance; ineffective decision-making; fragmented security program; increased risk exposure; loss of stakeholder trust.</p>
                     </div>
                 </div>
             </div>
@@ -1176,21 +737,21 @@ HTML;
                 <div class="table-responsive">
                     <table>
                         <tbody>
-                            <tr><th style="width: 260px;">1. Control ID</th><td><strong class="font-mono" style="color: var(--accent-cyan); font-size: 14px;">{{control_id}}</strong></td></tr>
-                            <tr><th>2. Domain Code</th><td><strong class="font-mono" style="color: var(--accent-purple);">{{domain_code}}</strong></td></tr>
-                            <tr><th>3. Control Name</th><td><strong>{{control_name}}</strong></td></tr>
-                            <tr><th>4. Control Category</th><td><span class="badge-chip chip-purple">{{control_category}}</span></td></tr>
-                            <tr><th>5. Control Type</th><td><span class="badge-chip chip-emerald">{{control_type}}</span></td></tr>
-                            <tr><th>6. Criticality</th><td><span class="badge-chip chip-amber">{{criticality}}</span></td></tr>
-                            <tr><th>7. Status</th><td><span class="badge-chip chip-emerald">{{status}}</span></td></tr>
-                            <tr><th>8. Version</th><td class="font-mono">{{version}}</td></tr>
-                            <tr><th>9. Business Owner</th><td>{{business_owner}}</td></tr>
-                            <tr><th>10. Primary Stakeholders</th><td>{{primary_stakeholders}}</td></tr>
-                            <tr><th>11. Applicable Industries</th><td>{{applicable_industries}}</td></tr>
-                            <tr><th>12. Applicable Technologies</th><td>{{applicable_technologies}}</td></tr>
-                            <tr><th>13. Parent Domain</th><td><a href="{{domain_url}}" style="color: var(--accent-purple); font-weight: 700; text-decoration: none;">{{domain_name}} ({{domain_code}}) ↗</a></td></tr>
-                            <tr><th>14. Parent Framework</th><td><a href="{{framework_url}}" style="color: var(--accent-cyan); font-weight: 700; text-decoration: none;">{{framework_name}} ({{framework_family}}) ↗</a></td></tr>
-                            <tr><th>15. Control Profile Link</th><td><a href="{{control_url}}" class="badge-chip chip-cyan" style="font-size: 11px; padding: 4px 12px;">View Complete Control Page →</a></td></tr>
+                            <tr><th style="width: 260px;">1. Control ID</th><td><strong class="font-mono" style="color: var(--accent-cyan); font-size: 14px;">GOV-001</strong></td></tr>
+                            <tr><th>2. Domain Code</th><td><strong class="font-mono" style="color: var(--accent-purple);">GOV</strong></td></tr>
+                            <tr><th>3. Control Name</th><td><strong>Information Security Governance</strong></td></tr>
+                            <tr><th>4. Control Category</th><td><span class="badge-chip chip-purple">Administrative</span></td></tr>
+                            <tr><th>5. Control Type</th><td><span class="badge-chip chip-emerald">Preventive</span></td></tr>
+                            <tr><th>6. Criticality</th><td><span class="badge-chip chip-amber">Critical</span></td></tr>
+                            <tr><th>7. Status</th><td><span class="badge-chip chip-emerald">Active</span></td></tr>
+                            <tr><th>8. Version</th><td class="font-mono">1</td></tr>
+                            <tr><th>9. Business Owner</th><td>CISO</td></tr>
+                            <tr><th>10. Primary Stakeholders</th><td>Board of Directors, CEO, CISO, CIO, Risk Committee, Audit Committee</td></tr>
+                            <tr><th>11. Applicable Industries</th><td>All</td></tr>
+                            <tr><th>12. Applicable Technologies</th><td>All</td></tr>
+                            <tr><th>13. Parent Domain</th><td><a href="http://localhost/domains/governance" style="color: var(--accent-purple); font-weight: 700; text-decoration: none;">Governance (GOV) ↗</a></td></tr>
+                            <tr><th>14. Parent Framework</th><td><a href="http://localhost/frameworks/cobit" style="color: var(--accent-cyan); font-weight: 700; text-decoration: none;">COBIT (COBIT) ↗</a></td></tr>
+                            <tr><th>15. Control Profile Link</th><td><a href="http://localhost/controls/view/GOV-001" class="badge-chip chip-cyan" style="font-size: 11px; padding: 4px 12px;">View Complete Control Page →</a></td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -1208,12 +769,12 @@ HTML;
                     <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
                         <div>
                             <h3 class="callout-title" style="color: var(--accent-cyan); margin-bottom: 4px;">
-                                <span>🏛️</span> {{framework_name}} <span class="badge-chip chip-cyan font-mono" style="font-size: 11px; margin-left: 8px;">{{framework_code}}</span>
+                                <span>🏛️</span> COBIT <span class="badge-chip chip-cyan font-mono" style="font-size: 11px; margin-left: 8px;">COBIT2019</span>
                             </h3>
                             <p class="callout-text" style="font-size: 13.5px;">Primary origin framework under which this requirement and its parent control are structured.</p>
                         </div>
-                        <a href="{{framework_url}}" class="badge-chip chip-cyan" style="font-size: 12px; padding: 6px 16px;">
-                            <span>View Full Framework ({{framework_code}})</span>
+                        <a href="http://localhost/frameworks/cobit" class="badge-chip chip-cyan" style="font-size: 12px; padding: 6px 16px;">
+                            <span>View Full Framework (COBIT2019)</span>
                             <span>↗</span>
                         </a>
                     </div>
@@ -1222,15 +783,15 @@ HTML;
                 <div class="table-responsive" style="margin-bottom: 28px;">
                     <table>
                         <tbody>
-                            <tr><th style="width: 240px;">Framework Name</th><td><strong style="color: var(--accent-cyan); font-size: 15px;">{{framework_name}}</strong></td></tr>
-                            <tr><th>Framework Code</th><td><span class="badge-chip chip-cyan font-mono">{{framework_code}}</span></td></tr>
-                            <tr><th>Framework Family</th><td>{{framework_family}}</td></tr>
-                            <tr><th>Framework ID</th><td class="font-mono">{{framework_id}}</td></tr>
+                            <tr><th style="width: 240px;">Framework Name</th><td><strong style="color: var(--accent-cyan); font-size: 15px;">COBIT</strong></td></tr>
+                            <tr><th>Framework Code</th><td><span class="badge-chip chip-cyan font-mono">COBIT2019</span></td></tr>
+                            <tr><th>Framework Family</th><td>COBIT</td></tr>
+                            <tr><th>Framework ID</th><td class="font-mono">FW-007</td></tr>
                             <tr>
                                 <th>Framework Profile</th>
                                 <td>
-                                    <a href="{{framework_url}}" class="badge-chip chip-cyan" style="font-size: 12px;">
-                                        <span>View Full Framework ({{framework_code}})</span>
+                                    <a href="http://localhost/frameworks/cobit" class="badge-chip chip-cyan" style="font-size: 12px;">
+                                        <span>View Full Framework (COBIT2019)</span>
                                         <span>↗</span>
                                     </a>
                                 </td>
@@ -1243,15 +804,15 @@ HTML;
             <!-- 2. Cross-Framework Compliance Mappings -->
             <div class="section-box" style="margin-top: 36px;">
                 <h2 class="section-header-title">
-                    <span style="color: var(--accent-cyan);">🌐</span> Cross-Framework Compliance Mapping Matrix ({{mappings_count}})
+                    <span style="color: var(--accent-cyan);">🌐</span> Cross-Framework Compliance Mapping Matrix (0)
                 </h2>
                 <p style="color: var(--text-muted); font-size: 13.5px; margin-bottom: 16px;">
                     This requirement satisfies compliance obligations across the following international cybersecurity standards, data privacy laws, and regulatory benchmarks:
                 </p>
                 <div style="margin-bottom: 20px;">
-                    {{framework_mappings_badges}}
+                    <span class="badge-chip chip-purple font-mono">Universal Control Library</span>
                 </div>
-                {{framework_mappings_table}}
+                <p style="color: var(--text-muted); font-size: 13.5px; padding: 12px 0;">No direct framework mappings configured for this requirement yet.</p>
             </div>
         </section>
 
@@ -1259,12 +820,146 @@ HTML;
         <section class="tab-content" id="siblings-tab" role="tabpanel">
             <div class="section-box">
                 <h2 class="section-header-title">
-                    <span style="color: var(--accent-emerald);">◆</span> Sibling Requirements under {{control_id}} ({{sibling_requirements_count}})
+                    <span style="color: var(--accent-emerald);">◆</span> Sibling Requirements under GOV-001 (12)
                 </h2>
                 <p style="color: var(--text-muted); font-size: 13.5px; margin-bottom: 14px;">
                     Other compliance enforcement requirements grouped under the same parent control:
                 </p>
-                {{sibling_requirements_table}}
+                        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 20%;">Requirement ID</th>
+                        <th style="width: 45%;">Requirement Title</th>
+                        <th style="width: 20%;">Typical Owner</th>
+                        <th style="width: 15%; text-align: right;">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                                <tr style="background: var(--accent-cyan-glow);">
+                <td>
+                    <a href="http://localhost/requirements/view/GOV-001-R001" style="color: var(--accent-cyan); font-weight: 700; text-decoration: none;" class="font-mono">GOV-001-R001</a>
+                    <span class="badge-chip chip-emerald" style="font-size: 10px; padding: 2px 8px; margin-left: 6px;">Current</span>
+                </td>
+                <td><a href="http://localhost/requirements/view/GOV-001-R001" style="color: var(--text-primary); text-decoration: none; font-weight: 600;">Governance Framework</a></td>
+                <td><span style="color: var(--text-secondary);">CISO, Governance Committee, Board of Directors, Risk Management</span></td>
+                <td style="text-align: right;">
+                    <a href="http://localhost/requirements/view/GOV-001-R001" class="badge-chip chip-cyan" style="font-size: 11px; padding: 4px 10px;">View Requirement →</a>
+                </td>
+            </tr>            <tr style="">
+                <td>
+                    <a href="http://localhost/requirements/view/GOV-001-R002" style="color: var(--accent-cyan); font-weight: 700; text-decoration: none;" class="font-mono">GOV-001-R002</a>
+                    
+                </td>
+                <td><a href="http://localhost/requirements/view/GOV-001-R002" style="color: var(--text-primary); text-decoration: none; font-weight: 600;">Governance Charter</a></td>
+                <td><span style="color: var(--text-secondary);">CISO, Board of Directors, CEO, Governance Committee, Legal</span></td>
+                <td style="text-align: right;">
+                    <a href="http://localhost/requirements/view/GOV-001-R002" class="badge-chip chip-cyan" style="font-size: 11px; padding: 4px 10px;">View Requirement →</a>
+                </td>
+            </tr>            <tr style="">
+                <td>
+                    <a href="http://localhost/requirements/view/GOV-001-R003" style="color: var(--accent-cyan); font-weight: 700; text-decoration: none;" class="font-mono">GOV-001-R003</a>
+                    
+                </td>
+                <td><a href="http://localhost/requirements/view/GOV-001-R003" style="color: var(--text-primary); text-decoration: none; font-weight: 600;">Governance Principles</a></td>
+                <td><span style="color: var(--text-secondary);">CISO, Governance Committee, Privacy Officer, Legal, Executive Leadership</span></td>
+                <td style="text-align: right;">
+                    <a href="http://localhost/requirements/view/GOV-001-R003" class="badge-chip chip-cyan" style="font-size: 11px; padding: 4px 10px;">View Requirement →</a>
+                </td>
+            </tr>            <tr style="">
+                <td>
+                    <a href="http://localhost/requirements/view/GOV-001-R004" style="color: var(--accent-cyan); font-weight: 700; text-decoration: none;" class="font-mono">GOV-001-R004</a>
+                    
+                </td>
+                <td><a href="http://localhost/requirements/view/GOV-001-R004" style="color: var(--text-primary); text-decoration: none; font-weight: 600;">Governance Scope</a></td>
+                <td><span style="color: var(--text-secondary);">CISO, Governance Committee, Enterprise Architecture, Asset Owners, Business Unit Leaders</span></td>
+                <td style="text-align: right;">
+                    <a href="http://localhost/requirements/view/GOV-001-R004" class="badge-chip chip-cyan" style="font-size: 11px; padding: 4px 10px;">View Requirement →</a>
+                </td>
+            </tr>            <tr style="">
+                <td>
+                    <a href="http://localhost/requirements/view/GOV-001-R005" style="color: var(--accent-cyan); font-weight: 700; text-decoration: none;" class="font-mono">GOV-001-R005</a>
+                    
+                </td>
+                <td><a href="http://localhost/requirements/view/GOV-001-R005" style="color: var(--text-primary); text-decoration: none; font-weight: 600;">Governance Authority</a></td>
+                <td><span style="color: var(--text-secondary);">CISO, Board of Directors, CEO, Legal</span></td>
+                <td style="text-align: right;">
+                    <a href="http://localhost/requirements/view/GOV-001-R005" class="badge-chip chip-cyan" style="font-size: 11px; padding: 4px 10px;">View Requirement →</a>
+                </td>
+            </tr>            <tr style="">
+                <td>
+                    <a href="http://localhost/requirements/view/GOV-001-R006" style="color: var(--accent-cyan); font-weight: 700; text-decoration: none;" class="font-mono">GOV-001-R006</a>
+                    
+                </td>
+                <td><a href="http://localhost/requirements/view/GOV-001-R006" style="color: var(--text-primary); text-decoration: none; font-weight: 600;">Governance Accountability</a></td>
+                <td><span style="color: var(--text-secondary);">CISO, CEO, Board of Directors, Compliance Committee, Risk Committee</span></td>
+                <td style="text-align: right;">
+                    <a href="http://localhost/requirements/view/GOV-001-R006" class="badge-chip chip-cyan" style="font-size: 11px; padding: 4px 10px;">View Requirement →</a>
+                </td>
+            </tr>            <tr style="">
+                <td>
+                    <a href="http://localhost/requirements/view/GOV-001-R007" style="color: var(--accent-cyan); font-weight: 700; text-decoration: none;" class="font-mono">GOV-001-R007</a>
+                    
+                </td>
+                <td><a href="http://localhost/requirements/view/GOV-001-R007" style="color: var(--text-primary); text-decoration: none; font-weight: 600;">Governance Decision-Making</a></td>
+                <td><span style="color: var(--text-secondary);">CISO, Governance Committee, Risk Committee, Compliance, Legal</span></td>
+                <td style="text-align: right;">
+                    <a href="http://localhost/requirements/view/GOV-001-R007" class="badge-chip chip-cyan" style="font-size: 11px; padding: 4px 10px;">View Requirement →</a>
+                </td>
+            </tr>            <tr style="">
+                <td>
+                    <a href="http://localhost/requirements/view/GOV-001-R008" style="color: var(--accent-cyan); font-weight: 700; text-decoration: none;" class="font-mono">GOV-001-R008</a>
+                    
+                </td>
+                <td><a href="http://localhost/requirements/view/GOV-001-R008" style="color: var(--text-primary); text-decoration: none; font-weight: 600;">Governance Oversight</a></td>
+                <td><span style="color: var(--text-secondary);">Board of Directors, Audit Committee, Risk Committee, CISO, Independent Advisors</span></td>
+                <td style="text-align: right;">
+                    <a href="http://localhost/requirements/view/GOV-001-R008" class="badge-chip chip-cyan" style="font-size: 11px; padding: 4px 10px;">View Requirement →</a>
+                </td>
+            </tr>            <tr style="">
+                <td>
+                    <a href="http://localhost/requirements/view/GOV-001-R009" style="color: var(--accent-cyan); font-weight: 700; text-decoration: none;" class="font-mono">GOV-001-R009</a>
+                    
+                </td>
+                <td><a href="http://localhost/requirements/view/GOV-001-R009" style="color: var(--text-primary); text-decoration: none; font-weight: 600;">Governance Performance</a></td>
+                <td><span style="color: var(--text-secondary);">CISO, Governance Committee, Board of Directors, Audit Committee</span></td>
+                <td style="text-align: right;">
+                    <a href="http://localhost/requirements/view/GOV-001-R009" class="badge-chip chip-cyan" style="font-size: 11px; padding: 4px 10px;">View Requirement →</a>
+                </td>
+            </tr>            <tr style="">
+                <td>
+                    <a href="http://localhost/requirements/view/GOV-001-R010" style="color: var(--accent-cyan); font-weight: 700; text-decoration: none;" class="font-mono">GOV-001-R010</a>
+                    
+                </td>
+                <td><a href="http://localhost/requirements/view/GOV-001-R010" style="color: var(--text-primary); text-decoration: none; font-weight: 600;">Governance Review</a></td>
+                <td><span style="color: var(--text-secondary);">CISO, Internal Audit, Board of Directors, Governance Committee</span></td>
+                <td style="text-align: right;">
+                    <a href="http://localhost/requirements/view/GOV-001-R010" class="badge-chip chip-cyan" style="font-size: 11px; padding: 4px 10px;">View Requirement →</a>
+                </td>
+            </tr>            <tr style="">
+                <td>
+                    <a href="http://localhost/requirements/view/GOV-001-R011" style="color: var(--accent-cyan); font-weight: 700; text-decoration: none;" class="font-mono">GOV-001-R011</a>
+                    
+                </td>
+                <td><a href="http://localhost/requirements/view/GOV-001-R011" style="color: var(--text-primary); text-decoration: none; font-weight: 600;">Governance Reporting</a></td>
+                <td><span style="color: var(--text-secondary);">CISO, Board of Directors, Executive Leadership, Audit Committee</span></td>
+                <td style="text-align: right;">
+                    <a href="http://localhost/requirements/view/GOV-001-R011" class="badge-chip chip-cyan" style="font-size: 11px; padding: 4px 10px;">View Requirement →</a>
+                </td>
+            </tr>            <tr style="">
+                <td>
+                    <a href="http://localhost/requirements/view/GOV-001-R012" style="color: var(--accent-cyan); font-weight: 700; text-decoration: none;" class="font-mono">GOV-001-R012</a>
+                    
+                </td>
+                <td><a href="http://localhost/requirements/view/GOV-001-R012" style="color: var(--text-primary); text-decoration: none; font-weight: 600;">Governance Continuous Improvement</a></td>
+                <td><span style="color: var(--text-secondary);">CISO, Governance Committee, Internal Audit, Risk Management</span></td>
+                <td style="text-align: right;">
+                    <a href="http://localhost/requirements/view/GOV-001-R012" class="badge-chip chip-cyan" style="font-size: 11px; padding: 4px 10px;">View Requirement →</a>
+                </td>
+            </tr>
+                </tbody>
+            </table>
+        </div>
             </div>
 
             <div class="section-box" style="margin-top: 36px;">
@@ -1274,25 +969,25 @@ HTML;
                 <div class="details-grid" style="margin-bottom: 20px;">
                     <div class="narrative-card domain-border">
                         <h3 class="narrative-title" style="color: var(--accent-purple);"><span>🎯</span> Domain Purpose</h3>
-                        <p class="narrative-text">{{domain_purpose}}</p>
+                        <p class="narrative-text">To establish, oversee, and continually improve the organization's security, privacy, and resilience program.</p>
                     </div>
                     <div class="narrative-card domain-border">
                         <h3 class="narrative-title" style="color: var(--accent-purple);"><span>📐</span> Domain Scope</h3>
-                        <p class="narrative-text">{{domain_scope}}</p>
+                        <p class="narrative-text">Enterprise</p>
                     </div>
                 </div>
 
                 <div class="table-responsive">
                     <table>
                         <tbody>
-                            <tr><th style="width: 240px;">Domain Name</th><td><strong style="color: var(--accent-purple); font-size: 15px;">{{domain_name}}</strong></td></tr>
-                            <tr><th>Domain Code</th><td><span class="badge-chip chip-purple font-mono">{{domain_code}}</span></td></tr>
-                            <tr><th>Domain ID</th><td class="font-mono">{{domain_id}}</td></tr>
+                            <tr><th style="width: 240px;">Domain Name</th><td><strong style="color: var(--accent-purple); font-size: 15px;">Governance</strong></td></tr>
+                            <tr><th>Domain Code</th><td><span class="badge-chip chip-purple font-mono">GOV</span></td></tr>
+                            <tr><th>Domain ID</th><td class="font-mono">DOM-001</td></tr>
                             <tr>
                                 <th>Domain Profile</th>
                                 <td>
-                                    <a href="{{domain_url}}" class="badge-chip chip-purple" style="font-size: 12px;">
-                                        <span>View Full Domain ({{domain_code}})</span>
+                                    <a href="http://localhost/domains/governance" class="badge-chip chip-purple" style="font-size: 12px;">
+                                        <span>View Full Domain (GOV)</span>
                                         <span>↗</span>
                                     </a>
                                 </td>
@@ -1365,6 +1060,3 @@ HTML;
     </script>
 </body>
 </html>
-HTML;
-    }
-}

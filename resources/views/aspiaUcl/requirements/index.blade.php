@@ -1390,7 +1390,7 @@
                         class="template-editor"
                         placeholder="Write your HTML template here..."
                         required
-                    ></textarea>
+                    >{{ old('html_content', $requirementTemplate?->html_content ?? '') }}</textarea>
 
 
                     <div class="template-help">
@@ -2353,13 +2353,6 @@
             document.getElementById(id);
 
         if (modal) {
-
-            if (id === 'requirementTemplateModal') {
-                const textarea = document.getElementById('requirementTemplate');
-                if (textarea) {
-                    textarea.value = '';
-                }
-            }
 
             modal.classList.add('show');
 

@@ -6,7 +6,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class RequirementTemplate extends Model
 {
-    protected $fillable = [
-        'html_content',
-    ];
+    protected $guarded = [];
 }

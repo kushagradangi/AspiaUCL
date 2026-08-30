@@ -96,7 +96,7 @@ class ControlController extends Controller
             ->take(10)
             ->get();
 
-        $controlTemplate = \App\Models\ControlTemplate::first();
+        $controlTemplate = \App\Models\ControlTemplate::latest('updated_at')->first() ?? \App\Models\ControlTemplate::first();
 
         return view(
             'aspiaUcl.controls.index',

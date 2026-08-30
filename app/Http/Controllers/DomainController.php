@@ -96,7 +96,7 @@ class DomainController extends Controller
             ->withQueryString();
 
         $frameworks = \App\Models\Framework::orderBy('name')->get();
-        $domainTemplate = \App\Models\DomainTemplate::first();
+        $domainTemplate = \App\Models\DomainTemplate::latest('updated_at')->first() ?? \App\Models\DomainTemplate::first();
 
         return view(
             'aspiaUcl.domains.index',

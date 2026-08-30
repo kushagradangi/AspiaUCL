@@ -6,8 +6,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class DomainTemplate extends Model
 {
-    protected $fillable = [
-        'name',
-        'html_content',
-    ];
+    protected $guarded = [];
 }

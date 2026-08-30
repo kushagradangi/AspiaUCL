@@ -99,10 +99,37 @@ class Control extends Model
     }
 
     /**
+     * Get parent Domain (with domain_code fallback).
+     */
+    public function getDomainAttribute(): ?Domain
+    {
+        $domain = $this->getRelationValue('domain');
+        if (!$domain && $this->domain_code) {
+            $domain = Domain::where('domain_code', $this->domain_code)
+                ->orWhere('domain_id', $this->domain_code)
+                ->first();
+        }
+        return $domain;
+    }
+
+    /**
      * Get grandparent Framework through Domain.
      */
     public function getFrameworkAttribute(): ?Framework
     {
         return $this->domain?->framework;
+    }
+
+    /**
+     * Get all mapped frameworks for this control's requirements.
+     */
+    public function getMappedFrameworks()
+    {
+        $reqIds = $this->requirements()->pluck('requirement_id')->filter();
+        if ($reqIds->isEmpty()) {
+            return collect();
+        }
+
+        return RequirementFrameworkMapping::whereIn('requirement_id', $reqIds)->get();
     }
 }

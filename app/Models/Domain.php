@@ -101,4 +101,40 @@ class Domain extends Model
     {
         return $this->hasMany(Control::class, 'domain_id');
     }
+
+    /**
+     * Get all Controls for this domain (resilient to domain_id or domain_code).
+     */
+    public function getControlsList()
+    {
+        $controls = $this->controls()->orderBy('display_order', 'asc')->orderBy('id', 'asc')->get();
+        if ($controls->isEmpty() && ($this->domain_code || $this->domain_id)) {
+            $code = $this->domain_code ?: $this->domain_id;
+            $controls = Control::where('domain_code', $code)
+                ->orWhere('domain_code', $this->domain_id)
+                ->orderBy('display_order', 'asc')
+                ->orderBy('id', 'asc')
+                ->get();
+        }
+        return $controls;
+    }
+
+    /**
+     * Get all mapped frameworks across all controls in this domain.
+     */
+    public function getMappedFrameworks()
+    {
+        $controls = $this->getControlsList();
+        $controlIds = $controls->pluck('control_id')->filter();
+        if ($controlIds->isEmpty()) {
+            return collect();
+        }
+
+        $reqIds = Requirement::whereIn('control_id', $controlIds)->pluck('requirement_id')->filter();
+        if ($reqIds->isEmpty()) {
+            return collect();
+        }
+
+        return RequirementFrameworkMapping::whereIn('requirement_id', $reqIds)->get();
+    }
 }

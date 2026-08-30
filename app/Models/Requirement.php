@@ -66,6 +66,18 @@ class Requirement extends Model
     }
 
     /**
+     * Requirement has many Framework Mappings.
+     */
+    public function frameworkMappings()
+    {
+        return $this->hasMany(
+            RequirementFrameworkMapping::class,
+            'requirement_id',
+            'requirement_id'
+        );
+    }
+
+    /**
      * Get parent Domain through Control.
      */
     public function getDomainAttribute(): ?Domain
