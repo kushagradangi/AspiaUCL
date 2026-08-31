@@ -1492,20 +1492,14 @@
 
             <div class="modal-body">
 
-
                 <div class="form-group">
 
-
                     <label class="form-label">
-
                         HTML Template
-
                         <span class="required-star">
                             *
                         </span>
-
                     </label>
-
 
                     <textarea
                         name="html_content"
@@ -1513,7 +1507,7 @@
                         class="template-editor"
                         placeholder="Write your HTML template here..."
                         required
-                    >{{ old('html_content', $controlTemplate?->html_content ?? '') }}</textarea>
+                    ></textarea>
 
 
                     <div class="template-help">
@@ -2797,6 +2791,13 @@
             document.getElementById(id);
 
         if (modal) {
+
+            if (id === 'controlTemplateModal') {
+                const textarea = document.getElementById('controlTemplate');
+                if (textarea) {
+                    textarea.value = '';
+                }
+            }
 
             modal.classList.add('show');
 

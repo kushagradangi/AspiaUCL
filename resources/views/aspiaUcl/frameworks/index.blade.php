@@ -1523,17 +1523,12 @@
 
                 <div class="form-group">
 
-
                     <label class="form-label">
-
                         HTML Template
-
                         <span class="required-star">
                             *
                         </span>
-
                     </label>
-
 
                     <textarea
                         name="html_content"
@@ -2561,8 +2556,16 @@
     function onFrameworkTypeChange(val)
     {
         const textarea = document.getElementById('frameworkTemplate');
-        if (textarea) {
-            textarea.value = frameworkTemplatesMap[val] || '';
+        if (!textarea) return;
+        const trimmed = (val || '').trim().toLowerCase();
+        textarea.value = '';
+        if (!trimmed) return;
+
+        for (const [type, content] of Object.entries(frameworkTemplatesMap)) {
+            if ((type || '').trim().toLowerCase() === trimmed) {
+                textarea.value = content || '';
+                return;
+            }
         }
     }
 

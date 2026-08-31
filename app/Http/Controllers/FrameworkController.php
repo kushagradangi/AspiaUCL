@@ -90,6 +90,21 @@ class FrameworkController extends Controller
             ->paginate(10)
             ->withQueryString();
 
+        $canonicalTypes = [
+            'Standard',
+            'Framework',
+            'Control Catalog',
+            'Best Practice',
+            'Governance Framework',
+            'Audit Framework',
+            'Privacy Standard',
+            'Regulation',
+            'Law',
+            'Directive',
+            'Direction',
+            'Guideline',
+        ];
+
         $typesFromFrameworks = Framework::whereNotNull('framework_type')
             ->where('framework_type', '!=', '')
             ->distinct()
@@ -102,11 +117,9 @@ class FrameworkController extends Controller
             ->pluck('framework_type')
             ->toArray();
 
-        $frameworkTypes = collect(array_merge($typesFromFrameworks, $typesFromTemplates))
+        $frameworkTypes = collect(array_merge($canonicalTypes, $typesFromFrameworks, $typesFromTemplates))
             ->unique()
             ->filter()
-            ->values()
-            ->sort(SORT_NATURAL | SORT_FLAG_CASE)
             ->values();
 
         $frameworkTemplates = \App\Models\FrameworkTemplate::all()->pluck('html_content', 'framework_type');

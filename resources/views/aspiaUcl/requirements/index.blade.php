@@ -1372,17 +1372,12 @@
 
                 <div class="form-group">
 
-
                     <label class="form-label">
-
                         HTML Template
-
                         <span class="required-star">
                             *
                         </span>
-
                     </label>
-
 
                     <textarea
                         name="html_content"
@@ -1390,7 +1385,7 @@
                         class="template-editor"
                         placeholder="Write your HTML template here..."
                         required
-                    >{{ old('html_content', $requirementTemplate?->html_content ?? '') }}</textarea>
+                    ></textarea>
 
 
                     <div class="template-help">
@@ -2353,6 +2348,13 @@
             document.getElementById(id);
 
         if (modal) {
+
+            if (id === 'requirementTemplateModal') {
+                const textarea = document.getElementById('requirementTemplate');
+                if (textarea) {
+                    textarea.value = '';
+                }
+            }
 
             modal.classList.add('show');
 

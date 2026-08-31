@@ -68,31 +68,31 @@ class FrameworkTemplateController extends Controller
                 ->firstOrFail();
         }
 
-        $template = null;
+        $frameworkType = trim($framework->framework_type ?? '');
 
-        if ($framework->framework_type) {
-            $template = FrameworkTemplate::where(
-                'framework_type',
-                $framework->framework_type
-            )->first();
-
-            if (!$template) {
-                $template = FrameworkTemplate::whereRaw(
-                    'LOWER(framework_type) = ?',
-                    [strtolower(trim($framework->framework_type))]
-                )->first();
-            }
-        } else {
-            $template = FrameworkTemplate::whereNull('framework_type')->first();
+        if (empty($frameworkType)) {
+            return redirect()
+                ->route('frameworks.index')
+                ->with(
+                    'error',
+                    "Framework '{$framework->name}' does not have a Framework Type assigned."
+                );
         }
 
-        if (!$template) {
-            $template = FrameworkTemplate::first();
+        $template = FrameworkTemplate::where('framework_type', $frameworkType)
+            ->orWhereRaw('LOWER(TRIM(framework_type)) = ?', [strtolower($frameworkType)])
+            ->first();
+
+        if (!$template || empty(trim($template->html_content ?? ''))) {
+            return redirect()
+                ->route('frameworks.index')
+                ->with(
+                    'error',
+                    "Template for framework type '{$frameworkType}' is not present. Please add its template in 'Add Framework Template'."
+                );
         }
 
-        $html = ($template && !empty(trim($template->html_content)))
-            ? $template->html_content
-            : $this->getDefaultTemplateHtml();
+        $html = $template->html_content;
 
         // Domains
         $domains       = $framework->getMappedDomains();

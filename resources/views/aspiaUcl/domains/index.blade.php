@@ -1482,6 +1482,7 @@ textarea.form-control-aspia {
 
                     <label class="form-label">
                         HTML Template
+                        <span class="required-star">*</span>
                     </label>
 
                     <textarea
@@ -1490,7 +1491,7 @@ textarea.form-control-aspia {
                         class="template-editor"
                         placeholder="Enter your HTML template here..."
                         required
-                    >{{ old('html_content', $domainTemplate?->html_content ?? '') }}</textarea>
+                    ></textarea>
 
                     <div class="template-help">
 
@@ -2186,6 +2187,13 @@ function openModal(id)
         document.getElementById(id);
 
     if (modal) {
+
+        if (id === 'domainTemplateModal') {
+            const textarea = document.getElementById('domainTemplateHtml');
+            if (textarea) {
+                textarea.value = '';
+            }
+        }
 
         modal.classList.add('show');
 
