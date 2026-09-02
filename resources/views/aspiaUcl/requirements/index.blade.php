@@ -274,9 +274,9 @@
 
 
     .requirement-id {
-        color: #10bce8;
+        color: #ffffff;
 
-        font-weight: 600;
+        font-weight: 500;
     }
 
 
@@ -288,13 +288,16 @@
 
 
     .requirement-title-link {
-        color: #ffffff;
-        text-decoration: none;
+        color: #10bce8;
+        text-decoration: underline;
+        text-underline-offset: 3px;
         font-weight: 500;
+        transition: color 0.2s ease, text-decoration-color 0.2s ease;
     }
 
     .requirement-title-link:hover {
-        color: #10bce8;
+        color: #38bdf8;
+        text-decoration: underline;
     }
 
 

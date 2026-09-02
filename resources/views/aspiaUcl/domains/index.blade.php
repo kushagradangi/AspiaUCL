@@ -266,8 +266,8 @@
 ========================================================= */
 
 .domain-id {
-    color: #10bce8;
-    font-weight: 600;
+    color: #ffffff;
+    font-weight: 500;
 }
 
 
@@ -286,13 +286,16 @@
 ========================================================= */
 
 .domain-name-link {
-    color: #ffffff;
+    color: #10bce8;
     font-weight: 500;
-    text-decoration: none;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    transition: color 0.2s ease, text-decoration-color 0.2s ease;
 }
 
 .domain-name-link:hover {
-    color: #20c9f2;
+    color: #38bdf8;
+    text-decoration: underline;
 }
 
 
