@@ -130,14 +130,15 @@ HTML : "<span class=\"badge badge-cyan\">Framework: {$frameworkName}</span>";
             '{{tags}}'                    => $domain->tags,
             '{{why_domain_matters}}'        => $domain->why_domain_matters,
             '{{common_challenges}}'         => $domain->common_challenges,
-            '{{related_domains}}'           => $this->renderRelatedDomainBadges($domain->related_domains),
-            '{{related_domains_badges}}'    => $this->renderRelatedDomainBadges($domain->related_domains),
-            '{{related_domains_chips}}'     => $this->renderRelatedDomainBadges($domain->related_domains),
+            '{{related_domains}}'           => $this->renderPlainText($domain->related_domains),
+            '{{related_domains_badges}}'    => $this->renderPlainText($domain->related_domains),
+            '{{related_domains_chips}}'     => $this->renderPlainText($domain->related_domains),
             '{{related_domains_raw}}'       => $domain->related_domains,
-            '{{related_frameworks}}'        => $this->renderRelatedFrameworkBadges($domain->related_frameworks),
-            '{{related_frameworks_badges}}' => $this->renderRelatedFrameworkBadges($domain->related_frameworks),
-            '{{framework_badges}}'          => $this->renderRelatedFrameworkBadges($domain->related_frameworks),
-            '{{frameworks_chips}}'          => $this->renderRelatedFrameworkBadges($domain->related_frameworks),
+            '{{related_frameworks}}'        => $this->renderPlainText($domain->related_frameworks),
+            '{{related_frameworks_badges}}' => $this->renderPlainText($domain->related_frameworks),
+            '{{related_frameworks_cards}}'  => $this->renderRelatedFrameworkBadges($domain->related_frameworks),
+            '{{framework_badges}}'          => $this->renderPlainText($domain->related_frameworks),
+            '{{frameworks_chips}}'          => $this->renderPlainText($domain->related_frameworks),
             '{{framework_id}}'            => $frameworkId,
             '{{framework_name}}'          => $frameworkName,
             '{{framework_code}}'          => $frameworkCode,
@@ -198,48 +199,62 @@ HTML;
     protected function renderRequirementIdChips($requirements, $controls = null): string
     {
         if ($requirements->isEmpty()) {
-            return '<p style="color: #64748b; font-size: 13px;">No associated requirements.</p>';
+            return '<p style="color: var(--text-muted, #64748b); font-size: 14px; padding: 16px 0;">No requirements associated with this domain yet.</p>';
         }
 
-        // Group requirements by control_id
         $grouped = $requirements->groupBy('control_id');
         $controlsMap = $controls ? $controls->keyBy('control_id') : collect();
 
-        $html = '<div style="display: flex; flex-direction: column; gap: 14px; margin-top: 10px;">';
+        $html = '<div class="virtual-scroll-container requirements-virtual-scroll" style="display: flex; flex-direction: column; gap: 16px; margin-top: 10px; max-height: 540px; overflow-y: auto; padding-right: 6px; scroll-behavior: smooth;">';
 
         foreach ($grouped as $controlId => $reqs) {
             $control = $controlsMap->get($controlId);
             $controlUrl = route('controls.show', $controlId);
-            $controlName = $control ? htmlspecialchars($control->name) : '';
+            $controlName = $control ? htmlspecialchars($control->name) : 'Control ' . $controlId;
             $cid = htmlspecialchars($controlId);
             $reqCount = $reqs->count();
 
-            $chips = '';
+            $cards = '';
             foreach ($reqs as $req) {
                 $reqUrl = route('requirements.show', $req->requirement_id);
                 $rid    = htmlspecialchars($req->requirement_id);
                 $title  = htmlspecialchars($req->requirement_title ?: $req->requirement ?: $req->requirement_id);
-                $chips .= <<<HTML
-                <a href="{$reqUrl}" title="{$rid}: {$title}" style="display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 10px 14px; background: rgba(139,92,246,0.08); border: 1px solid rgba(139,92,246,0.22); border-radius: 8px; color: #a78bfa; text-decoration: none; font-size: 12.5px; font-weight: 600; transition: all 0.2s ease; line-height: 1.4; box-sizing: border-box;" onmouseover="this.style.background='rgba(139,92,246,0.18)'; this.style.borderColor='rgba(139,92,246,0.45)';" onmouseout="this.style.background='rgba(139,92,246,0.08)'; this.style.borderColor='rgba(139,92,246,0.22)';">
-                    <span style="flex: 1; word-break: break-word;">{$title}</span>
-                    <span style="opacity: 0.6; font-size: 10px; flex-shrink: 0; margin-left: 6px;">↗</span>
+                $text   = htmlspecialchars(\Illuminate\Support\Str::limit($req->requirement ?: $title, 130));
+                $owner  = htmlspecialchars($req->typical_owner ?: 'Audit & Compliance');
+
+                $cards .= <<<HTML
+                <a href="{$reqUrl}" class="req-card-box" style="display: flex; flex-direction: column; justify-content: space-between; background: var(--bg-surface, #ffffff); border: 1px solid var(--border-light, #e2e8f0); border-radius: 10px; padding: 12px 14px; text-decoration: none; color: inherit; transition: all 0.2s ease;" onmouseover="this.style.transform='translateY(-2px)'; this.style.borderColor='var(--brand-purple, #7c3aed)'; this.style.boxShadow='0 4px 12px rgba(124, 58, 237, 0.1)';" onmouseout="this.style.transform='translateY(0)'; this.style.borderColor='var(--border-light, #e2e8f0)'; this.style.boxShadow='none';">
+                    <div>
+                        <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 6px; flex-wrap: nowrap; overflow: hidden;">
+                            <span class="req-id-badge" style="display: inline-block !important; white-space: nowrap !important; word-break: keep-all !important; hyphens: none !important; font-family: 'JetBrains Mono', monospace; font-size: 10.5px; font-weight: 700; color: var(--brand-purple, #7c3aed); background: var(--brand-purple-light, #f5f3ff); border: 1px solid rgba(124, 58, 237, 0.2); padding: 2px 6px; border-radius: 4px; flex-shrink: 0;">{$rid}</span>
+                            <span style="font-size: 10px; font-weight: 600; color: var(--text-muted, #94a3b8); text-transform: uppercase; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 50%; text-align: right;" title="{$owner}">{$owner}</span>
+                        </div>
+                        <h4 style="font-size: 13px; font-weight: 700; color: var(--text-title, #0f172a); margin: 0 0 4px; line-height: 1.35;">{$title}</h4>
+                        <p style="font-size: 11.5px; color: var(--text-body, #475569); line-height: 1.4; margin: 0 0 8px;">{$text}</p>
+                    </div>
+                    <div style="display: flex; align-items: center; justify-content: flex-end; gap: 4px; font-size: 11px; font-weight: 700; color: var(--brand-purple, #7c3aed); padding-top: 6px; border-top: 1px solid var(--border-light, #f1f5f9);">
+                        <span>View Requirement</span>
+                        <span>↗</span>
+                    </div>
                 </a>
 HTML;
             }
 
             $html .= <<<HTML
-            <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); border-radius: 12px; padding: 16px 18px;">
-                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; flex-wrap: wrap; gap: 8px; padding-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.05);">
-                    <a href="{$controlUrl}" style="display: inline-flex; align-items: center; gap: 8px; text-decoration: none;">
-                        <span style="display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px; background: rgba(16,188,232,0.15); border: 1px solid rgba(16,188,232,0.3); border-radius: 6px; color: #10bce8; font-size: 12px; font-weight: 700;">
-                            {$cid} ↗
+            <div style="background: var(--bg-subtle, #f8fafc); border: 1px solid var(--border-light, #e2e8f0); border-radius: 12px; padding: 14px;">
+                <!-- Group Header -->
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; flex-wrap: wrap; gap: 8px; padding-bottom: 8px; border-bottom: 1px solid var(--border-light, #e2e8f0);">
+                    <a href="{$controlUrl}" style="display: inline-flex; align-items: center; gap: 8px; text-decoration: none;" onmouseover="this.querySelector('.ctrl-link-title').style.color='var(--brand-primary, #0284c7)';" onmouseout="this.querySelector('.ctrl-link-title').style.color='var(--text-title, #0f172a)';">
+                        <span style="display: inline-flex; align-items: center; gap: 4px; padding: 3px 8px; background: var(--brand-primary-light, #e0f2fe); border: 1px solid rgba(2,132,199,0.3); border-radius: 5px; color: var(--brand-primary, #0284c7); font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700;">
+                            🛡️ {$cid} ↗
                         </span>
-                        <span style="color: #f8fafc; font-size: 13.5px; font-weight: 600;">{$controlName}</span>
+                        <span class="ctrl-link-title" style="color: var(--text-title, #0f172a); font-size: 13.5px; font-weight: 700; transition: color 0.2s;">{$controlName}</span>
                     </a>
-                    <span style="font-size: 11px; color: #64748b; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">{$reqCount} Requirements</span>
+                    <span style="font-size: 10.5px; color: var(--text-secondary, #64748b); font-weight: 700; background: var(--bg-surface, #ffffff); border: 1px solid var(--border-light, #e2e8f0); padding: 3px 10px; border-radius: 14px; text-transform: uppercase; letter-spacing: 0.4px;">{$reqCount} Clauses</span>
                 </div>
-                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 10px;">
-                    {$chips}
+                <!-- Cards Grid -->
+                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px;">
+                    {$cards}
                 </div>
             </div>
 HTML;
@@ -252,10 +267,10 @@ HTML;
     protected function renderControlsTable($controls): string
     {
         if ($controls->isEmpty()) {
-            return '<p style="color: #64748b; font-size: 14px; padding: 12px 0;">No controls associated with this domain yet.</p>';
+            return '<p style="color: var(--text-muted, #64748b); font-size: 13px; padding: 12px 0;">No controls associated with this domain yet.</p>';
         }
 
-        $rows = '';
+        $cards = '';
         foreach ($controls as $control) {
             $controlUrl = route('controls.show', $control->control_id);
             $criticalityColor = match (strtolower($control->criticality ?? '')) {
@@ -263,57 +278,69 @@ HTML;
                 'high'     => '#f97316',
                 'medium'   => '#eab308',
                 'low'      => '#3b82f6',
-                default    => '#10bce8',
+                default    => '#0284c7',
             };
             $criticalityBadge = $control->criticality
-                ? "<span style=\"display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 700; background: {$criticalityColor}20; color: {$criticalityColor}; border: 1px solid {$criticalityColor}40;\">" . htmlspecialchars($control->criticality) . "</span>"
-                : '-';
+                ? "<span style=\"display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 10px; font-weight: 700; background: {$criticalityColor}18; color: {$criticalityColor}; border: 1px solid {$criticalityColor}40;\">" . htmlspecialchars($control->criticality) . "</span>"
+                : '';
 
-            $category = htmlspecialchars($control->control_category ?? '-');
-            $type     = htmlspecialchars($control->control_type ?? '-');
+            $category = htmlspecialchars($control->control_category ?? 'Governance');
+            $type     = htmlspecialchars($control->control_type ?? 'Preventative');
             $status   = htmlspecialchars($control->status ?? 'Active');
             $name     = htmlspecialchars($control->name);
             $cid      = htmlspecialchars($control->control_id);
+            $summary  = htmlspecialchars(\Illuminate\Support\Str::limit($control->control_summary ?: $control->business_description ?: 'Governance baseline control.', 80));
+            $reqCount = $control->requirements()->count();
 
-            $rows .= <<<HTML
-            <tr style="border-bottom: 1px solid rgba(255,255,255,0.04); transition: background 0.2s;">
-                <td style="padding: 12px 14px; font-weight: 700; color: #10bce8;">
-                    <a href="{$controlUrl}" style="color: #10bce8; text-decoration: none;">{$cid}</a>
-                </td>
-                <td style="padding: 12px 14px; font-weight: 600;">
-                    <a href="{$controlUrl}" style="color: #f8fafc; text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='#10bce8'; this.style.textDecoration='underline';" onmouseout="this.style.color='#f8fafc'; this.style.textDecoration='none';">{$name}</a>
-                </td>
-                <td style="padding: 12px 14px; color: #94a3b8;">{$category}</td>
-                <td style="padding: 12px 14px;">{$criticalityBadge}</td>
-                <td style="padding: 12px 14px; color: #94a3b8;">{$type}</td>
-                <td style="padding: 12px 14px;">
-                    <span style="display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 700; background: rgba(16,185,129,0.15); color: #34d399; border: 1px solid rgba(16,185,129,0.3);">{$status}</span>
-                </td>
-                <td style="padding: 12px 14px; text-align: right;">
-                    <a href="{$controlUrl}" style="display: inline-flex; align-items: center; padding: 4px 10px; background: rgba(16,188,232,0.1); border: 1px solid rgba(16,188,232,0.3); border-radius: 6px; color: #10bce8; font-size: 12px; font-weight: 600; text-decoration: none;">View →</a>
-                </td>
-            </tr>
+            $cards .= <<<HTML
+            <a href="{$controlUrl}" class="card-box control-card-box" style="display: flex; flex-direction: column; justify-content: space-between; background: var(--bg-surface, #ffffff); border: 1px solid var(--border-light, #e2e8f0); border-radius: 10px; padding: 14px 16px; text-decoration: none; color: inherit; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); position: relative; overflow: hidden; box-shadow: var(--shadow-sm, 0 1px 2px rgba(0,0,0,0.04));" onmouseover="this.style.transform='translateY(-2px)'; this.style.borderColor='var(--brand-primary, #0284c7)'; this.style.boxShadow='0 6px 14px rgba(2,132,199,0.1)';" onmouseout="this.style.transform='translateY(0)'; this.style.borderColor='var(--border-light, #e2e8f0)'; this.style.boxShadow='var(--shadow-sm, 0 1px 2px rgba(0,0,0,0.04))';">
+                <div>
+                    <!-- Header Badges -->
+                    <div style="display: flex; align-items: center; justify-content: space-between; gap: 6px; margin-bottom: 10px; flex-wrap: wrap;">
+                        <div style="display: flex; align-items: center; gap: 6px;">
+                            <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: var(--brand-primary, #0284c7); background: var(--brand-primary-light, #e0f2fe); border: 1px solid rgba(2, 132, 199, 0.25); padding: 2px 6px; border-radius: 5px;">{$cid}</span>
+                            {$criticalityBadge}
+                        </div>
+                        <span style="display: inline-flex; align-items: center; gap: 4px; font-size: 10.5px; font-weight: 700; color: #059669; background: rgba(5, 150, 105, 0.1); border: 1px solid rgba(5, 150, 105, 0.25); padding: 2px 8px; border-radius: 10px;">
+                            <span style="width: 5px; height: 5px; border-radius: 50%; background: #059669; display: inline-block;"></span>
+                            {$status}
+                        </span>
+                    </div>
+
+                    <!-- Title -->
+                    <h3 style="font-size: 14px; font-weight: 700; color: var(--text-title, #0f172a); margin: 0 0 8px; line-height: 1.35;">{$name}</h3>
+
+                    <!-- Details Spec Strip -->
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; background: var(--bg-subtle, #f8fafc); border: 1px solid var(--border-light, #e2e8f0); border-radius: 6px; padding: 6px 8px; margin-bottom: 8px; font-size: 11px;">
+                        <div>
+                            <span style="font-size: 9.5px; font-weight: 700; color: var(--text-muted, #94a3b8); text-transform: uppercase; display: block;">Category</span>
+                            <span style="font-weight: 600; color: var(--text-title, #0f172a);">{$category}</span>
+                        </div>
+                        <div>
+                            <span style="font-size: 9.5px; font-weight: 700; color: var(--text-muted, #94a3b8); text-transform: uppercase; display: block;">Type</span>
+                            <span style="font-weight: 600; color: var(--text-title, #0f172a);">{$type}</span>
+                        </div>
+                    </div>
+
+                    <!-- Description Preview -->
+                    <p style="font-size: 12px; color: var(--text-body, #475569); line-height: 1.4; margin: 0 0 10px;">{$summary}</p>
+                </div>
+
+                <!-- Footer Action Button -->
+                <div style="display: flex; align-items: center; justify-content: space-between; padding-top: 8px; border-top: 1px solid var(--border-light, #e2e8f0);">
+                    <span style="font-size: 11px; font-weight: 600; color: var(--text-secondary, #64748b);">📋 {$reqCount} Reqs</span>
+                    <span style="display: inline-flex; align-items: center; gap: 4px; font-size: 11.5px; font-weight: 700; color: var(--brand-primary, #0284c7);">
+                        <span>View Control</span>
+                        <span>→</span>
+                    </span>
+                </div>
+            </a>
 HTML;
         }
 
         return <<<HTML
-        <div style="overflow-x: auto; margin-top: 8px;">
-            <table style="width: 100%; border-collapse: collapse; font-size: 13px; text-align: left;">
-                <thead>
-                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.08); color: #64748b; text-transform: uppercase; font-size: 11px; letter-spacing: 0.5px;">
-                        <th style="padding: 10px 14px;">Control ID</th>
-                        <th style="padding: 10px 14px;">Control Name</th>
-                        <th style="padding: 10px 14px;">Category</th>
-                        <th style="padding: 10px 14px;">Criticality</th>
-                        <th style="padding: 10px 14px;">Type</th>
-                        <th style="padding: 10px 14px;">Status</th>
-                        <th style="padding: 10px 14px; text-align: right;">Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {$rows}
-                </tbody>
-            </table>
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; margin-top: 10px;">
+            {$cards}
         </div>
 HTML;
     }
@@ -484,18 +511,24 @@ HTML;
 HTML;
     }
 
+    protected function renderPlainText(?string $val): string
+    {
+        $trimmed = trim((string)$val);
+        return $trimmed !== '' ? htmlspecialchars($trimmed) : 'None';
+    }
+
     protected function renderRelatedFrameworkBadges(?string $relatedFrameworks): string
     {
         if (empty($relatedFrameworks)) {
-            return '<span style="color: #64748b; font-size: 13px;">Universal Control Library</span>';
+            return '<p style="color: var(--text-muted, #64748b); font-size: 13px; padding: 12px 0;">No mapped frameworks specified for this domain.</p>';
         }
 
         $items = array_filter(array_map('trim', explode(',', $relatedFrameworks)));
         if (empty($items)) {
-            return '<span style="color: #64748b; font-size: 13px;">Universal Control Library</span>';
+            return '<p style="color: var(--text-muted, #64748b); font-size: 13px; padding: 12px 0;">No mapped frameworks specified for this domain.</p>';
         }
 
-        $html = '<div style="display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 4px;">';
+        $cards = '';
         foreach ($items as $name) {
             $cleanName = trim(preg_replace('/\s*\(.*?\)\s*/', ' ', $name));
             $slug      = \Illuminate\Support\Str::slug($name);
@@ -507,44 +540,61 @@ HTML;
                 ->orWhere('framework_code', 'like', "%{$cleanSlug}%")
                 ->orWhere('slug', 'like', "%{$slug}%")
                 ->orWhere('slug', 'like', "%{$cleanSlug}%")
-                ->orWhere(function ($q) use ($cleanName) {
-                    $terms = preg_split('/[\s\-\/]+/', $cleanName);
-                    $terms = array_filter($terms, fn($t) => strlen($t) > 2);
-                    if (!empty($terms)) {
-                        $q->where(function ($sub) use ($terms) {
-                            foreach ($terms as $term) {
-                                $sub->where(function ($inner) use ($term) {
-                                    $inner->where('name', 'like', "%{$term}%")
-                                          ->orWhere('framework_code', 'like', "%{$term}%");
-                                });
-                            }
-                        });
-                    }
-                })
                 ->first();
 
             $escapedName = htmlspecialchars($name);
 
             if ($fw) {
-                $url = route('frameworks.show', $fw->slug);
-                $html .= <<<HTML
-                <a href="{$url}" title="View Framework: {$escapedName}" style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; background: rgba(16,188,232,0.12); border: 1px solid rgba(16,188,232,0.3); border-radius: 20px; color: #10bce8; text-decoration: none; font-size: 12.5px; font-weight: 700; transition: all 0.2s ease; cursor: pointer;" onmouseover="this.style.background='rgba(16,188,232,0.22)'; this.style.borderColor='rgba(16,188,232,0.55)';" onmouseout="this.style.background='rgba(16,188,232,0.12)'; this.style.borderColor='rgba(16,188,232,0.3)';">
-                    <span>{$escapedName}</span>
-                    <span style="opacity: 0.7; font-size: 10px;">↗</span>
+                $url        = route('frameworks.show', $fw->slug);
+                $fwCode     = htmlspecialchars($fw->framework_code ?: $fw->framework_id ?: 'FW');
+                $fwFamily   = htmlspecialchars($fw->framework_family ?: 'Standard');
+                $fwVersion  = htmlspecialchars($fw->version ? "v{$fw->version}" : 'Latest');
+                $fwType     = htmlspecialchars($fw->framework_type ?: $fw->category ?: 'Framework');
+                $fwDesc     = htmlspecialchars(\Illuminate\Support\Str::limit($fw->description ?: "Harmonized framework mapped under ASPIA UCL.", 75));
+
+                $cards .= <<<HTML
+                <a href="{$url}" class="framework-card-box" style="display: flex; flex-direction: column; justify-content: space-between; background: var(--bg-surface, #ffffff); border: 1px solid var(--border-light, #e2e8f0); border-radius: 10px; padding: 14px 16px; text-decoration: none; color: inherit; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: var(--shadow-sm, 0 1px 2px rgba(0,0,0,0.04));" onmouseover="this.style.transform='translateY(-2px)'; this.style.borderColor='var(--brand-emerald, #059669)'; this.style.boxShadow='0 6px 14px rgba(5, 150, 105, 0.1)';" onmouseout="this.style.transform='translateY(0)'; this.style.borderColor='var(--border-light, #e2e8f0)'; this.style.boxShadow='var(--shadow-sm, 0 1px 2px rgba(0,0,0,0.04))';">
+                    <div>
+                        <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 8px; flex-wrap: wrap;">
+                            <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: var(--brand-emerald, #059669); background: var(--brand-emerald-light, #ecfdf5); border: 1px solid rgba(5, 150, 105, 0.25); padding: 2px 6px; border-radius: 5px;">{$fwCode}</span>
+                            <span style="font-size: 10px; font-weight: 700; color: var(--text-muted, #94a3b8); text-transform: uppercase;">{$fwVersion}</span>
+                        </div>
+                        <h3 style="font-size: 14px; font-weight: 700; color: var(--text-title, #0f172a); margin: 0 0 6px; line-height: 1.35;">{$escapedName}</h3>
+                        
+                        <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 8px;">
+                            <span style="font-size: 10.5px; font-weight: 600; color: var(--text-secondary, #64748b); background: var(--bg-subtle, #f8fafc); border: 1px solid var(--border-light, #e2e8f0); padding: 2px 6px; border-radius: 5px;">🌐 {$fwFamily}</span>
+                            <span style="font-size: 10.5px; font-weight: 600; color: var(--text-secondary, #64748b); background: var(--bg-subtle, #f8fafc); border: 1px solid var(--border-light, #e2e8f0); padding: 2px 6px; border-radius: 5px;">📋 {$fwType}</span>
+                        </div>
+
+                        <p style="font-size: 12px; color: var(--text-body, #475569); line-height: 1.4; margin: 0 0 10px;">{$fwDesc}</p>
+                    </div>
+
+                    <div style="display: flex; align-items: center; justify-content: flex-end; gap: 4px; font-size: 11.5px; font-weight: 700; color: var(--brand-emerald, #059669); padding-top: 8px; border-top: 1px solid var(--border-light, #e2e8f0);">
+                        <span>Explore Framework</span>
+                        <span>→</span>
+                    </div>
                 </a>
 HTML;
             } else {
-                // Not available in database: do nothing (unclickable badge)
-                $html .= <<<HTML
-                <span title="Framework specification not yet available: {$escapedName}" style="display: inline-flex; align-items: center; padding: 6px 14px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; color: #94a3b8; font-size: 12.5px; font-weight: 600; cursor: default; user-select: none;">
-                    <span>{$escapedName}</span>
-                </span>
+                $cards .= <<<HTML
+                <div class="framework-card-box" style="display: flex; flex-direction: column; justify-content: space-between; background: var(--bg-subtle, #f8fafc); border: 1px solid var(--border-light, #e2e8f0); border-radius: 10px; padding: 14px 16px; color: var(--text-secondary, #64748b); opacity: 0.85;">
+                    <div>
+                        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+                            <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: var(--text-muted, #94a3b8); background: var(--bg-surface, #ffffff); border: 1px solid var(--border-light, #e2e8f0); padding: 2px 6px; border-radius: 5px;">MAPPED</span>
+                        </div>
+                        <h3 style="font-size: 14px; font-weight: 700; color: var(--text-title, #0f172a); margin: 0 0 6px;">{$escapedName}</h3>
+                        <p style="font-size: 12px; color: var(--text-muted, #94a3b8); margin: 0;">Crosswalk regulatory baseline mapped under ASPIA UCL.</p>
+                    </div>
+                </div>
 HTML;
             }
         }
-        $html .= '</div>';
 
-        return $html;
+        return <<<HTML
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; margin-top: 10px;">
+            {$cards}
+        </div>
+HTML;
     }
 
     protected function renderRelatedDomainBadges(?string $relatedDomains): string
