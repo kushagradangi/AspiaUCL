@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Domain extends Model
@@ -92,6 +93,11 @@ class Domain extends Model
     public function framework(): BelongsTo
     {
         return $this->belongsTo(Framework::class, 'framework_id');
+    }
+
+    public function frameworks(): BelongsToMany
+    {
+        return $this->belongsToMany(Framework::class, 'framework_domain');
     }
 
     /**

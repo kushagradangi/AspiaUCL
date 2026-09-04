@@ -3,10 +3,13 @@
 namespace App\Imports;
 
 use App\Models\Domain;
+use App\Services\RelationshipResolver;
 use Maatwebsite\Excel\Concerns\ToModel;
+use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Concerns\WithStartRow;
+use Maatwebsite\Excel\Events\AfterImport;
 
-class DomainImport implements ToModel, WithStartRow
+class DomainImport implements ToModel, WithStartRow, WithEvents
 {
     private int $createdCount = 0;
     private int $updatedCount = 0;
@@ -20,6 +23,18 @@ class DomainImport implements ToModel, WithStartRow
     public function getUpdatedCount(): int
     {
         return $this->updatedCount;
+    }
+
+    public function registerEvents(): array
+    {
+        return [
+            AfterImport::class => function () {
+                $resolver = app(RelationshipResolver::class);
+                Domain::whereNotNull('related_frameworks')
+                    ->where('related_frameworks', '!=', '')
+                    ->each(fn (Domain $domain) => $resolver->syncDomainFrameworks($domain));
+            },
+        ];
     }
 
     /**

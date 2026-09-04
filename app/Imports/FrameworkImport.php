@@ -3,11 +3,14 @@
 namespace App\Imports;
 
 use App\Models\Framework;
+use App\Services\RelationshipResolver;
 use Illuminate\Support\Str;
+use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
+use Maatwebsite\Excel\Events\AfterImport;
 
-class FrameworkImport implements ToModel, WithHeadingRow
+class FrameworkImport implements ToModel, WithHeadingRow, WithEvents
 {
     private int $createdCount = 0;
     private int $updatedCount = 0;
@@ -21,6 +24,18 @@ class FrameworkImport implements ToModel, WithHeadingRow
     public function getUpdatedCount(): int
     {
         return $this->updatedCount;
+    }
+
+    public function registerEvents(): array
+    {
+        return [
+            AfterImport::class => function () {
+                $resolver = app(RelationshipResolver::class);
+                Framework::whereNotNull('related_domains')
+                    ->where('related_domains', '!=', '')
+                    ->each(fn (Framework $framework) => $resolver->syncFrameworkDomains($framework));
+            },
+        ];
     }
 
     public function model(array $row)
@@ -82,6 +97,7 @@ class FrameworkImport implements ToModel, WithHeadingRow
                 'region' => $row['region'] ?? $existing->region,
                 'industry' => $row['industry'] ?? $existing->industry,
                 'framework_type' => $row['framework_type'] ?? $existing->framework_type,
+                'related_domains' => $row['related_domains'] ?? $existing->related_domains,
             ]);
 
             $this->updatedCount++;
@@ -124,6 +140,7 @@ class FrameworkImport implements ToModel, WithHeadingRow
             'region' => $row['region'] ?? null,
             'industry' => $row['industry'] ?? null,
             'framework_type' => $row['framework_type'] ?? null,
+            'related_domains' => $row['related_domains'] ?? null,
         ]);
     }
 }

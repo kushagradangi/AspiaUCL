@@ -1121,6 +1121,10 @@
                         </th>
 
                         <th>
+                            Related Domains
+                        </th>
+
+                        <th>
                             Created
                         </th>
 
@@ -1250,6 +1254,15 @@
                             </td>
 
 
+                            {{-- Related Domains --}}
+
+                            <td>
+
+                                {{ $framework->related_domains ?: '—' }}
+
+                            </td>
+
+
                             {{-- Created --}}
 
                             <td>
@@ -1294,7 +1307,9 @@
 
                                             @js($framework->industry),
 
-                                            @js($framework->framework_type)
+                                            @js($framework->framework_type),
+
+                                            @js($framework->related_domains)
 
                                         )"
                                     >
@@ -2068,6 +2083,25 @@
                     </div>
 
 
+                    {{-- RELATED DOMAINS --}}
+
+                    <div class="form-group">
+
+                        <label class="form-label">
+                            Related Domains
+                        </label>
+
+
+                        <textarea
+                            name="related_domains"
+                            class="form-control-aspia"
+                            rows="3"
+                            placeholder="Example: Access Control, Asset Management"
+                        ></textarea>
+
+                    </div>
+
+
                 </div>
 
 
@@ -2368,6 +2402,25 @@
                     </div>
 
 
+                    {{-- RELATED DOMAINS --}}
+
+                    <div class="form-group">
+
+                        <label class="form-label">
+                            Related Domains
+                        </label>
+
+
+                        <textarea
+                            id="editRelatedDomains"
+                            name="related_domains"
+                            class="form-control-aspia"
+                            rows="3"
+                        ></textarea>
+
+                    </div>
+
+
                 </div>
 
 
@@ -2498,7 +2551,8 @@
                             Publisher,
                             Region,
                             Industry,
-                            Framework Type
+                            Framework Type,
+                            Related Domains
                         </strong>
 
                     </div>
@@ -2560,16 +2614,7 @@
     {
         const textarea = document.getElementById('frameworkTemplate');
         if (!textarea) return;
-        const trimmed = (val || '').trim().toLowerCase();
         textarea.value = '';
-        if (!trimmed) return;
-
-        for (const [type, content] of Object.entries(frameworkTemplatesMap)) {
-            if ((type || '').trim().toLowerCase() === trimmed) {
-                textarea.value = content || '';
-                return;
-            }
-        }
     }
 
     function openModal(id)
@@ -2713,7 +2758,9 @@
 
         industry,
 
-        frameworkType
+        frameworkType,
+
+        relatedDomains
 
     ) {
 
@@ -2826,6 +2873,16 @@
             )
             .value =
                 frameworkType || '';
+
+
+        /* RELATED DOMAINS */
+
+        document
+            .getElementById(
+                'editRelatedDomains'
+            )
+            .value =
+                relatedDomains || '';
 
 
         /* SHOW MODAL */

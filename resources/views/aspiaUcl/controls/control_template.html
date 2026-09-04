@@ -1,608 +1,3 @@
-<?php
-
-namespace App\Http\Controllers;
-
-use App\Models\Control;
-use App\Models\ControlTemplate;
-use Illuminate\Http\Request;
-
-class ControlTemplateController extends Controller
-{
-    /*
-    |--------------------------------------------------------------------------
-    | Store Control Template
-    |--------------------------------------------------------------------------
-    */
-
-    public function store(Request $request)
-    {
-        $validated = $request->validate([
-            'html_content' => [
-                'required',
-                'string',
-            ],
-        ]);
-
-        $template = ControlTemplate::first();
-
-        if ($template) {
-            $template->update([
-                'name'         => 'Default Control Template',
-                'html_content' => $validated['html_content'],
-            ]);
-            ControlTemplate::where('id', '!=', $template->id)->delete();
-        } else {
-            ControlTemplate::create([
-                'name'         => 'Default Control Template',
-                'html_content' => $validated['html_content'],
-            ]);
-        }
-
-        return redirect()
-            ->route('controls.index')
-            ->with(
-                'success',
-                'Control template saved successfully.'
-            );
-    }
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | Show Control
-    |--------------------------------------------------------------------------
-    */
-
-    public function show(string $control_id)
-    {
-        $control = Control::with(['domain.framework', 'requirements'])
-            ->where('control_id', $control_id)
-            ->first();
-
-        if (!$control) {
-            $control = Control::with(['domain.framework', 'requirements'])
-                ->where('id', $control_id)
-                ->firstOrFail();
-        }
-
-        $template = ControlTemplate::latest('updated_at')->first() ?? ControlTemplate::first();
-
-        $html = ($template && !empty(trim($template->html_content)))
-            ? $template->html_content
-            : $this->getDefaultTemplateHtml();
-
-        // Domain Info & Links
-        $domainId      = $control->domain?->domain_id ?? '';
-        $domainName    = $control->domain?->name ?? '';
-        $domainCode    = $control->domain_code ?? ($control->domain?->domain_code ?? '');
-        $domainPurpose = $control->domain?->purpose ?? '';
-        $domainScope   = $control->domain?->scope ?? '';
-        $domainUrl     = $control->domain ? route('domains.show', $control->domain->slug) : '#';
-
-        $domainBadge = $control->domain ? <<<HTML
-        <a href="{$domainUrl}" style="display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; background: rgba(139,92,246,0.15); border: 1px solid rgba(139,92,246,0.35); border-radius: 20px; color: #a78bfa; text-decoration: none; font-size: 12px; font-weight: 700; transition: all 0.2s; letter-spacing: 0.5px;">
-            <span>Domain: {$domainCode} ({$domainId})</span>
-            <span style="opacity: 0.7; font-size: 10px;">↗</span>
-        </a>
-HTML : ($domainCode ? "<span class=\"badge badge-purple\">Domain: {$domainCode}</span>" : '');
-
-        // Framework Info & Links
-        $framework       = $control->framework;
-        $frameworkId     = $framework?->framework_id ?? '';
-        $frameworkCode   = $framework?->framework_code ?? ($control->domain?->domain_code ?: 'UCL');
-        $frameworkName   = $framework?->name ?? ($control->domain?->related_frameworks ?: 'Universal Control Library');
-        $frameworkFamily = $framework?->framework_family ?? 'UCL';
-        $frameworkUrl    = $framework ? route('frameworks.show', $framework->slug) : '#';
-
-        $mappedFws = $control->getMappedFrameworks()->unique('framework_name');
-        if ($mappedFws->isNotEmpty()) {
-            $fwChips = '';
-            foreach ($mappedFws as $m) {
-                $fwModel = $this->resolveFrameworkModel($m->framework_name, $m->framework_code, $m->framework_id);
-                $url = $fwModel ? route('frameworks.show', $fwModel->slug) : '#';
-                $fwChips .= <<<HTML
-                <a href="{$url}" style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; background: rgba(16,188,232,0.12); border: 1px solid rgba(16,188,232,0.3); border-radius: 20px; color: #10bce8; text-decoration: none; font-size: 12px; font-weight: 700; transition: all 0.2s; white-space: nowrap !important; word-break: keep-all !important; flex-shrink: 0;" title="View {$m->framework_name}">
-                    <span>{$m->framework_name}</span>
-                    <span style="opacity: 0.7; font-size: 10px;">↗</span>
-                </a>
-HTML;
-            }
-            $frameworkBadge = "<div style=\"display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px;\">{$fwChips}</div>";
-        } elseif ($framework) {
-            $frameworkBadge = <<<HTML
-            <a href="{$frameworkUrl}" style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; background: rgba(16,188,232,0.12); border: 1px solid rgba(16,188,232,0.3); border-radius: 20px; color: #10bce8; text-decoration: none; font-size: 12px; font-weight: 700; transition: all 0.2s; letter-spacing: 0.5px; white-space: nowrap !important; word-break: keep-all !important; flex-shrink: 0;">
-                <span>Framework: {$frameworkId} ({$frameworkCode})</span>
-                <span style="opacity: 0.7; font-size: 10px;">↗</span>
-            </a>
-HTML;
-        } else {
-            $frameworkBadge = "<span class=\"badge badge-cyan\" style=\"white-space: nowrap !important;\">Framework: {$frameworkName}</span>";
-        }
-
-        // Requirements Info & Chips
-        $requirements        = $control->requirements()->orderBy('display_order', 'asc')->orderBy('id', 'asc')->get();
-        $requirementsCount   = $requirements->count();
-        $requirementIdChips  = $this->renderRequirementIdChips($requirements);
-        $requirementsTable   = $this->renderRequirementsTable($requirements, $control);
-        $requirementsList    = $this->renderRequirementsList($requirements);
-
-        $relatedFrameworksStr = $mappedFws->isNotEmpty()
-            ? implode(', ', array_filter($mappedFws->pluck('framework_name')->toArray()))
-            : $control->domain?->related_frameworks;
-
-        $frameworksCount = !empty($relatedFrameworksStr)
-            ? count(array_filter(array_map('trim', explode(',', $relatedFrameworksStr))))
-            : 0;
-
-        $frameworksTable = $this->renderRelatedFrameworkBadges($relatedFrameworksStr);
-
-        $placeholders = [
-            '{{control_id}}'                => $control->control_id,
-            '{{control_name}}'              => $control->name,
-            '{{domain_id}}'                 => $domainId,
-            '{{domain_code}}'               => $domainCode,
-            '{{domain_name}}'               => $domainName,
-            '{{domain_purpose}}'            => $domainPurpose,
-            '{{domain_scope}}'              => $domainScope,
-            '{{domain_url}}'                => $domainUrl,
-            '{{domain_badge}}'              => $domainBadge,
-            '{{domain_id_badge}}'           => $domainBadge,
-            '{{framework_id}}'              => $frameworkId,
-            '{{framework_name}}'            => $frameworkName,
-            '{{framework_code}}'            => $frameworkCode,
-            '{{framework_family}}'          => $frameworkFamily,
-            '{{framework_url}}'             => $frameworkUrl,
-            '{{framework_badge}}'           => $frameworkBadge,
-            '{{framework_id_badge}}'        => $frameworkBadge,
-            '{{business_description}}'      => $control->business_description,
-            '{{business_objective}}'        => $control->business_objective,
-            '{{business_owner}}'            => $control->business_owner,
-            '{{control_category}}'          => $control->control_category,
-            '{{criticality}}'               => $control->criticality,
-            '{{applicable_industries}}'     => $control->applicable_industries,
-            '{{applicable_technologies}}'   => $control->applicable_technologies,
-            '{{status}}'                    => $control->status,
-            '{{version}}'                   => $control->version,
-            '{{control_summary}}'           => $control->control_summary,
-            '{{business_benefits}}'         => $control->business_benefits,
-            '{{business_risks_if_missing}}' => $control->business_risks_if_missing,
-            '{{primary_stakeholders}}'      => $control->primary_stakeholders,
-            '{{control_type}}'              => $control->control_type,
-            '{{requirements_count}}'        => $requirementsCount,
-            '{{requirement_count}}'         => $requirementsCount,
-            '{{total_requirements}}'        => $requirementsCount,
-            '{{requirementsCount}}'         => $requirementsCount,
-            '{{count_requirements}}'        => $requirementsCount,
-            '{{requirement_id_chips}}'      => $requirementIdChips,
-            '{{requirements_chips}}'        => $requirementIdChips,
-            '{{requirements_table}}'        => $requirementsTable,
-            '{{requirements_list}}'         => $requirementsList,
-            '{{related_frameworks_cards}}'  => $frameworksTable,
-            '{{frameworks_table}}'          => $frameworksTable,
-            '{{frameworks_count}}'          => $frameworksCount,
-            '{{framework_count}}'           => $frameworksCount,
-            '{{mapped_frameworks_count}}'   => $frameworksCount,
-            '{{all_frameworks_dropdown_list}}' => $this->renderAllFrameworksDropdownList(),
-            '{{all_domains_dropdown_list}}'    => $this->renderAllDomainsDropdownList(),
-            '{{all_controls_dropdown_list}}'   => $this->renderAllControlsDropdownList(),
-        ];
-
-        foreach ($placeholders as $placeholder => $value) {
-            $html = str_ireplace($placeholder, (string) ($value ?? ''), $html);
-        }
-
-        return response($html);
-    }
-
-    protected function renderRequirementIdChips($requirements): string
-    {
-        if ($requirements->isEmpty()) {
-            return '<p style="color: #64748b; font-size: 13px;">No associated requirements.</p>';
-        }
-
-        $chips = '';
-        foreach ($requirements as $req) {
-            $reqUrl = route('requirements.show', $req->requirement_id);
-            $rid    = htmlspecialchars($req->requirement_id);
-            $title  = htmlspecialchars($req->requirement_title);
-            $chips .= <<<HTML
-            <a href="{$reqUrl}" title="{$title}" style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; background: rgba(16,188,232,0.1); border: 1px solid rgba(16,188,232,0.25); border-radius: 8px; color: #10bce8; text-decoration: none; font-size: 12px; font-weight: 700; transition: all 0.2s;">
-                <span>{$rid}</span>
-                <span style="opacity: 0.6; font-size: 10px;">↗</span>
-            </a>
-HTML;
-        }
-
-        return "<div style=\"display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px;\">{$chips}</div>";
-    }
-
-    protected function renderRequirementsTable($requirements, $control = null): string
-    {
-        if ($requirements->isEmpty()) {
-            return '<p style="color: var(--text-muted, #64748b); font-size: 13px; padding: 12px 0;">No requirements associated with this control yet.</p>';
-        }
-
-        $rows = '';
-        foreach ($requirements as $req) {
-            $reqUrl    = route('requirements.show', $req->requirement_id);
-            $rid       = htmlspecialchars($req->requirement_id);
-            $title     = htmlspecialchars($req->requirement_title ?: $req->requirement ?: $req->requirement_id);
-            $shortText = htmlspecialchars(\Illuminate\Support\Str::limit($req->requirement ?: $title, 40));
-            $owner     = htmlspecialchars($req->typical_owner ?: 'Audit & Compliance');
-
-            $controlId   = $req->control_id ?: ($control?->control_id ?? '');
-            $controlUrl  = $controlId ? route('controls.show', $controlId) : '#';
-            $controlName = $control ? htmlspecialchars(\Illuminate\Support\Str::limit($control->name, 30)) : ($controlId ? 'Control ' . htmlspecialchars($controlId) : '—');
-            $cid         = htmlspecialchars($controlId);
-
-            $mappedControlCol = $controlId ? <<<HTML
-                <a href="{$controlUrl}" style="display: inline-flex; align-items: center; gap: 6px; text-decoration: none; font-weight: 600; color: var(--text-title, #0f172a); font-size: 12px;" onmouseover="this.style.color='var(--brand-primary, #0284c7)'" onmouseout="this.style.color='var(--text-title, #0f172a)'">
-                    <span style="font-family: 'JetBrains Mono', monospace; font-size: 9.5px; font-weight: 700; color: var(--brand-primary, #0284c7); background: var(--brand-primary-light, #e0f2fe); border: 1px solid rgba(2,132,199,0.25); padding: 1px 5px; border-radius: 4px; flex-shrink: 0;">{$cid}</span>
-                    <span style="max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: inline-block;">{$controlName}</span>
-                </a>
-HTML : '<span style="color: var(--text-muted, #64748b);">—</span>';
-
-            $rows .= <<<HTML
-            <tr class="req-card-box" style="border-bottom: 1px solid var(--border-light, #e2e8f0); transition: background 0.15s ease;" onmouseover="this.style.background='var(--bg-subtle, #f8fafc)'" onmouseout="this.style.background='transparent'">
-                <td style="padding: 10px 14px; white-space: nowrap; vertical-align: middle;">
-                    <span class="req-id-badge" style="font-family: 'JetBrains Mono', monospace; font-size: 10.5px; font-weight: 700; color: var(--brand-purple, #7c3aed); background: var(--brand-purple-light, #f5f3ff); border: 1px solid rgba(124, 58, 237, 0.25); padding: 3px 8px; border-radius: 6px; display: inline-block;">{$rid}</span>
-                </td>
-                <td style="padding: 10px 14px; vertical-align: middle;">
-                    <a href="{$reqUrl}" style="font-weight: 700; color: var(--text-title, #0f172a); text-decoration: none; display: block; line-height: 1.3; font-size: 13px;" onmouseover="this.style.color='var(--brand-purple, #7c3aed)'" onmouseout="this.style.color='var(--text-title, #0f172a)'">{$title}</a>
-                    <span style="font-size: 11px; color: var(--text-secondary, #64748b); display: block; margin-top: 2px; line-height: 1.35;">{$shortText}</span>
-                </td>
-                <td style="padding: 10px 14px; white-space: nowrap; vertical-align: middle;">
-                    {$mappedControlCol}
-                </td>
-                <td style="padding: 10px 14px; color: var(--text-body, #475569); font-size: 12px; font-weight: 500; vertical-align: middle;">
-                    {$owner}
-                </td>
-                <td style="padding: 10px 14px; text-align: right; white-space: nowrap; vertical-align: middle;">
-                    <a href="{$reqUrl}" style="display: inline-flex; align-items: center; gap: 4px; padding: 5px 12px; background: var(--brand-purple-light, #f5f3ff); border: 1px solid rgba(124, 58, 237, 0.3); border-radius: 6px; color: var(--brand-purple, #7c3aed); font-size: 11.5px; font-weight: 700; text-decoration: none; transition: all 0.2s ease;" onmouseover="this.style.background='var(--brand-purple, #7c3aed)'; this.style.color='#ffffff';" onmouseout="this.style.background='var(--brand-purple-light, #f5f3ff)'; this.style.color='var(--brand-purple, #7c3aed)';">
-                        <span>View</span>
-                        <span style="font-size: 11px;">↗</span>
-                    </a>
-                </td>
-            </tr>
-HTML;
-        }
-
-        return <<<HTML
-        <div class="ucl-table-container virtual-scroll-container" style="width: 100%; max-height: 520px; overflow-y: auto; overflow-x: auto; background: var(--bg-surface, #ffffff); border: 1px solid var(--border-light, #e2e8f0); border-radius: 10px; box-shadow: var(--shadow-sm, 0 1px 2px rgba(0,0,0,0.04)); margin-top: 8px; scroll-behavior: smooth;">
-            <table class="ucl-data-table" style="width: 100%; border-collapse: collapse; text-align: left; font-size: 12px;">
-                <thead style="position: sticky; top: 0; z-index: 10; background: var(--bg-subtle, #f8fafc); box-shadow: 0 1px 2px rgba(0,0,0,0.05);">
-                    <tr style="border-bottom: 1px solid var(--border-light, #e2e8f0);">
-                        <th style="padding: 10px 14px; font-size: 10.5px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted, #64748b); background: var(--bg-subtle, #f8fafc); white-space: nowrap;">REQUIREMENT ID</th>
-                        <th style="padding: 10px 14px; font-size: 10.5px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted, #64748b); background: var(--bg-subtle, #f8fafc);">REQUIREMENT TITLE & DETAILS</th>
-                        <th style="padding: 10px 14px; font-size: 10.5px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted, #64748b); background: var(--bg-subtle, #f8fafc); white-space: nowrap;">MAPPED CONTROL</th>
-                        <th style="padding: 10px 14px; font-size: 10.5px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted, #64748b); background: var(--bg-subtle, #f8fafc);">TYPICAL OWNER</th>
-                        <th style="padding: 10px 14px; font-size: 10.5px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted, #64748b); text-align: right; background: var(--bg-subtle, #f8fafc); white-space: nowrap;">ACTION</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {$rows}
-                </tbody>
-            </table>
-        </div>
-HTML;
-    }
-
-    protected function renderRequirementsList($requirements): string
-    {
-        if ($requirements->isEmpty()) {
-            return '<p style="color: #64748b; font-size: 14px;">No requirements found.</p>';
-        }
-
-        $items = '';
-        foreach ($requirements as $req) {
-            $reqUrl = route('requirements.show', $req->requirement_id);
-            $rid    = htmlspecialchars($req->requirement_id);
-            $title  = htmlspecialchars($req->requirement_title);
-            $items .= <<<HTML
-            <a href="{$reqUrl}" style="display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: rgba(16,188,232,0.08); border: 1px solid rgba(16,188,232,0.25); border-radius: 8px; color: #f8fafc; text-decoration: none; font-size: 13px; font-weight: 500;">
-                <strong style="color: #10bce8;">{$rid}</strong>
-                <span>{$title}</span>
-            </a>
-HTML;
-        }
-
-        return "<div style=\"display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px;\">{$items}</div>";
-    }
-
-    protected function renderRelatedFrameworkBadges(?string $relatedFrameworks): string
-    {
-        if (empty($relatedFrameworks)) {
-            return '<p style="color: var(--text-muted, #64748b); font-size: 13px; padding: 12px 0;">No mapped frameworks specified for this section.</p>';
-        }
-
-        $items = array_filter(array_map('trim', explode(',', $relatedFrameworks)));
-        if (empty($items)) {
-            return '<p style="color: var(--text-muted, #64748b); font-size: 13px; padding: 12px 0;">No mapped frameworks specified for this section.</p>';
-        }
-
-        $rows = '';
-        foreach ($items as $name) {
-            $cleanName = trim(preg_replace('/\s*\(.*?\)\s*/', ' ', $name));
-            $slug      = \Illuminate\Support\Str::slug($name);
-            $cleanSlug = \Illuminate\Support\Str::slug($cleanName);
-
-            $fw = \App\Models\Framework::where('name', 'like', "%{$name}%")
-                ->orWhere('name', 'like', "%{$cleanName}%")
-                ->orWhere('framework_code', 'like', "%{$name}%")
-                ->orWhere('framework_code', 'like', "%{$cleanSlug}%")
-                ->orWhere('slug', 'like', "%{$slug}%")
-                ->orWhere('slug', 'like', "%{$cleanSlug}%")
-                ->first();
-
-            $escapedName = htmlspecialchars($name);
-
-            if ($fw) {
-                $url        = route('frameworks.show', $fw->slug);
-                $fwCode     = htmlspecialchars($fw->framework_code ?: $fw->framework_id ?: 'FW');
-                $fwFamily   = htmlspecialchars($fw->framework_family ?: 'Standard');
-                $fwVersion  = htmlspecialchars($fw->version ? "v{$fw->version}" : 'Latest');
-                $fwType     = htmlspecialchars($fw->framework_type ?: $fw->category ?: 'Framework');
-                $fwDesc     = htmlspecialchars(\Illuminate\Support\Str::limit($fw->description ?: "Harmonized framework mapped under ASPIA UCL.", 50));
-
-                $rows .= <<<HTML
-                <tr class="framework-card-box" style="border-bottom: 1px solid var(--border-light, #e2e8f0); transition: background 0.15s ease;" onmouseover="this.style.background='var(--bg-subtle, #f8fafc)'" onmouseout="this.style.background='transparent'">
-                    <td style="padding: 10px 14px; white-space: nowrap; vertical-align: middle;">
-                        <span class="fw-code-badge" style="font-family: 'JetBrains Mono', monospace; font-size: 10.5px; font-weight: 700; color: var(--brand-emerald, #059669); background: var(--brand-emerald-light, #ecfdf5); border: 1px solid rgba(5, 150, 105, 0.25); padding: 3px 8px; border-radius: 6px; display: inline-block;">{$fwCode}</span>
-                    </td>
-                    <td style="padding: 10px 14px; vertical-align: middle;">
-                        <a href="{$url}" style="font-weight: 700; color: var(--text-title, #0f172a); text-decoration: none; display: block; line-height: 1.3; font-size: 13px;" onmouseover="this.style.color='var(--brand-emerald, #059669)'" onmouseout="this.style.color='var(--text-title, #0f172a)'">{$escapedName}</a>
-                        <span style="font-size: 11px; color: var(--text-secondary, #64748b); display: block; margin-top: 2px; line-height: 1.35;">{$fwDesc}</span>
-                    </td>
-                    <td style="padding: 10px 14px; white-space: nowrap; vertical-align: middle;">
-                        <div style="font-weight: 700; color: var(--text-title, #0f172a); font-size: 12px;">{$fwFamily}</div>
-                        <div style="font-size: 10.5px; color: var(--text-secondary, #64748b); margin-top: 2px;">{$fwType}</div>
-                    </td>
-                    <td style="padding: 10px 14px; white-space: nowrap; vertical-align: middle;">
-                        <span style="display: inline-block; padding: 2px 9px; border-radius: 12px; font-size: 10.5px; font-weight: 600; background: var(--bg-subtle, #f8fafc); border: 1px solid var(--border-light, #e2e8f0); color: var(--text-muted, #64748b);">{$fwVersion}</span>
-                    </td>
-                    <td style="padding: 10px 14px; text-align: right; white-space: nowrap; vertical-align: middle;">
-                        <a href="{$url}" style="display: inline-flex; align-items: center; gap: 4px; padding: 5px 12px; background: var(--brand-emerald-light, #ecfdf5); border: 1px solid rgba(5, 150, 105, 0.3); border-radius: 6px; color: var(--brand-emerald, #059669); font-size: 11.5px; font-weight: 700; text-decoration: none; transition: all 0.2s ease;" onmouseover="this.style.background='var(--brand-emerald, #059669)'; this.style.color='#ffffff';" onmouseout="this.style.background='var(--brand-emerald-light, #ecfdf5)'; this.style.color='var(--brand-emerald, #059669)';">
-                            <span>View</span>
-                            <span style="font-size: 11px;">→</span>
-                        </a>
-                    </td>
-                </tr>
-HTML;
-            } else {
-                $rows .= <<<HTML
-                <tr class="framework-card-box" style="border-bottom: 1px solid var(--border-light, #e2e8f0); transition: background 0.15s ease;" onmouseover="this.style.background='var(--bg-subtle, #f8fafc)'" onmouseout="this.style.background='transparent'">
-                    <td style="padding: 10px 14px; white-space: nowrap; vertical-align: middle;">
-                        <span class="fw-code-badge" style="font-family: 'JetBrains Mono', monospace; font-size: 10.5px; font-weight: 700; color: var(--text-muted, #94a3b8); background: var(--bg-subtle, #f8fafc); border: 1px solid var(--border-light, #e2e8f0); padding: 3px 8px; border-radius: 6px; display: inline-block;">MAPPED</span>
-                    </td>
-                    <td style="padding: 10px 14px; vertical-align: middle;">
-                        <span style="font-weight: 700; color: var(--text-title, #0f172a); display: block; line-height: 1.3; font-size: 13px;">{$escapedName}</span>
-                        <span style="font-size: 11px; color: var(--text-secondary, #64748b); display: block; margin-top: 2px; line-height: 1.35;">Crosswalk regulatory baseline mapped under ASPIA UCL.</span>
-                    </td>
-                    <td style="padding: 10px 14px; white-space: nowrap; vertical-align: middle;">
-                        <div style="font-weight: 700; color: var(--text-title, #0f172a); font-size: 12px;">Standard</div>
-                        <div style="font-size: 10.5px; color: var(--text-secondary, #64748b); margin-top: 2px;">Governance Framework</div>
-                    </td>
-                    <td style="padding: 10px 14px; white-space: nowrap; vertical-align: middle;">
-                        <span style="display: inline-block; padding: 2px 9px; border-radius: 12px; font-size: 10.5px; font-weight: 600; background: var(--bg-subtle, #f8fafc); border: 1px solid var(--border-light, #e2e8f0); color: var(--text-muted, #64748b);">Baseline</span>
-                    </td>
-                    <td style="padding: 10px 14px; text-align: right; white-space: nowrap; vertical-align: middle; color: var(--text-muted, #64748b); font-size: 13px;">
-                        —
-                    </td>
-                </tr>
-HTML;
-            }
-        }
-
-        return <<<HTML
-        <div class="ucl-table-container virtual-scroll-container" style="width: 100%; max-height: 520px; overflow-y: auto; overflow-x: auto; background: var(--bg-surface, #ffffff); border: 1px solid var(--border-light, #e2e8f0); border-radius: 10px; box-shadow: var(--shadow-sm, 0 1px 2px rgba(0,0,0,0.04)); margin-top: 8px; scroll-behavior: smooth;">
-            <table class="ucl-data-table" style="width: 100%; border-collapse: collapse; text-align: left; font-size: 12px;">
-                <thead style="position: sticky; top: 0; z-index: 10; background: var(--bg-subtle, #f8fafc); box-shadow: 0 1px 2px rgba(0,0,0,0.05);">
-                    <tr style="border-bottom: 1px solid var(--border-light, #e2e8f0);">
-                        <th style="padding: 10px 14px; font-size: 10.5px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted, #64748b); background: var(--bg-subtle, #f8fafc); white-space: nowrap;">FRAMEWORK CODE</th>
-                        <th style="padding: 10px 14px; font-size: 10.5px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted, #64748b); background: var(--bg-subtle, #f8fafc);">FRAMEWORK NAME & DESCRIPTION</th>
-                        <th style="padding: 10px 14px; font-size: 10.5px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted, #64748b); background: var(--bg-subtle, #f8fafc); white-space: nowrap;">FAMILY / CATEGORY</th>
-                        <th style="padding: 10px 14px; font-size: 10.5px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted, #64748b); background: var(--bg-subtle, #f8fafc); white-space: nowrap;">VERSION</th>
-                        <th style="padding: 10px 14px; font-size: 10.5px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted, #64748b); text-align: right; background: var(--bg-subtle, #f8fafc); white-space: nowrap;">ACTION</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {$rows}
-                </tbody>
-            </table>
-        </div>
-HTML;
-    }
-
-    /**
-     * Resolve a mapped framework name or code to the corresponding Framework database model.
-     */
-    protected function resolveFrameworkModel(?string $frameworkName, ?string $frameworkCode = null, $frameworkId = null): ?\App\Models\Framework
-    {
-        if ($frameworkId) {
-            $fw = \App\Models\Framework::find($frameworkId);
-            if ($fw) return $fw;
-        }
-
-        if (!$frameworkName && !$frameworkCode) {
-            return null;
-        }
-
-        // 1. Direct match by Name or Code
-        if ($frameworkName) {
-            $fw = \App\Models\Framework::where('name', $frameworkName)
-                ->orWhere('framework_code', $frameworkName)
-                ->first();
-            if ($fw) return $fw;
-        }
-
-        if ($frameworkCode) {
-            $fw = \App\Models\Framework::where('framework_code', $frameworkCode)
-                ->orWhere('name', $frameworkCode)
-                ->first();
-            if ($fw) return $fw;
-        }
-
-        // 2. Intelligent Keyword & Acronym Matching
-        $nameLower = strtolower(trim((string)$frameworkName));
-        $codeLower = strtolower(trim((string)$frameworkCode));
-        $allFrameworks = \App\Models\Framework::all();
-
-        return $allFrameworks->first(function ($item) use ($nameLower, $codeLower) {
-            $fwName = strtolower($item->name);
-            $fwCode = strtolower($item->framework_code ?? '');
-            $fwSlug = strtolower($item->slug ?? '');
-
-            // Specific regulatory bodies (India & Global)
-            if (str_contains($nameLower, 'rbi') || str_contains($codeLower, 'rbi')) {
-                return str_contains($fwName, 'rbi') || str_contains($fwSlug, 'rbi');
-            }
-            if (str_contains($nameLower, 'sebi') || str_contains($codeLower, 'sebi')) {
-                return str_contains($fwName, 'sebi') || str_contains($fwSlug, 'sebi');
-            }
-            if (str_contains($nameLower, 'irdai') || str_contains($codeLower, 'irdai')) {
-                return str_contains($fwName, 'irdai') || str_contains($fwSlug, 'irdai');
-            }
-            if (str_contains($nameLower, 'npci') || str_contains($codeLower, 'npci')) {
-                return str_contains($fwName, 'npci') || str_contains($fwSlug, 'npci');
-            }
-            if (str_contains($nameLower, 'cert-in') || str_contains($codeLower, 'cert-in')) {
-                return str_contains($fwName, 'cert-in') || str_contains($fwSlug, 'cert-in');
-            }
-
-            // ISO Standards
-            if (str_contains($nameLower, '27001')) return str_contains($fwName, '27001') || str_contains($fwSlug, '27001');
-            if (str_contains($nameLower, '27002')) return str_contains($fwName, '27002') || str_contains($fwSlug, '27002');
-            if (str_contains($nameLower, '27701')) return str_contains($fwName, '27701') || str_contains($fwSlug, '27701');
-            if (str_contains($nameLower, '22301')) return str_contains($fwName, '22301') || str_contains($fwSlug, '22301');
-
-            // Privacy & Digital Resilience Regulations
-            if (str_contains($nameLower, 'gdpr') || str_contains($codeLower, 'gdpr')) {
-                return str_contains($fwName, 'gdpr') || str_contains($fwSlug, 'gdpr') || str_contains($fwName, 'general data protection');
-            }
-            if (str_contains($nameLower, 'dora') || str_contains($codeLower, 'dora')) {
-                return str_contains($fwName, 'dora') || str_contains($fwSlug, 'dora') || str_contains($fwName, 'digital operational resilience');
-            }
-            if (str_contains($nameLower, 'dpdpa') || str_contains($codeLower, 'dpdpa')) {
-                return str_contains($fwName, 'dpdpa') || str_contains($fwSlug, 'dpdpa') || str_contains($fwName, 'digital personal data');
-            }
-            if (str_contains($nameLower, 'hipaa') || str_contains($codeLower, 'hipaa')) {
-                return str_contains($fwName, 'hipaa') || str_contains($fwSlug, 'hipaa') || str_contains($fwName, 'health insurance portability');
-            }
-            if (str_contains($nameLower, 'nis2') || str_contains($codeLower, 'nis2')) {
-                return str_contains($fwName, 'nis2') || str_contains($fwSlug, 'nis2');
-            }
-
-            // Cybersecurity & Industry Benchmarks
-            if (str_contains($nameLower, '800-53') || str_contains($codeLower, '800-53')) return str_contains($fwName, '800-53') || str_contains($fwSlug, '800-53');
-            if (str_contains($nameLower, 'pci') || str_contains($codeLower, 'pci')) return str_contains($fwName, 'pci') || str_contains($fwSlug, 'pci');
-            if (str_contains($nameLower, 'soc 2') || str_contains($codeLower, 'soc 2')) return str_contains($fwName, 'soc 2') || str_contains($fwSlug, 'soc-2');
-            if (str_contains($nameLower, 'cis') || str_contains($codeLower, 'cis')) return str_contains($fwName, 'cis') || str_contains($fwSlug, 'cis');
-            if (str_contains($nameLower, 'cobit') || str_contains($codeLower, 'cobit')) return str_contains($fwName, 'cobit') || str_contains($fwSlug, 'cobit');
-            if (str_contains($nameLower, 'csf') || str_contains($codeLower, 'csf')) return str_contains($fwName, 'csf') || str_contains($fwName, 'cybersecurity framework');
-
-            return str_contains($fwName, $nameLower) || str_contains($nameLower, $fwName);
-        });
-    }
-
-    protected function renderAllFrameworksDropdownList(): string
-    {
-        $frameworks = \App\Models\Framework::orderBy('name', 'asc')->get();
-        if ($frameworks->isEmpty()) {
-            return '';
-        }
-
-        $html = '<div class="dropdown-popover-list virtual-scroll-container" style="display: flex; flex-direction: column; gap: 0;">';
-        $badges = ['badge-emerald', 'badge-cyan', 'badge-amber', 'badge-purple', 'badge-rose'];
-        $i = 0;
-        foreach ($frameworks as $fw) {
-            $badgeClass = $badges[$i % count($badges)];
-            $i++;
-            $url = route('frameworks.show', $fw->slug);
-            $code = e($fw->framework_code ?: $fw->framework_family ?: 'FW');
-            $name = e($fw->name);
-            $cat  = e($fw->category ?: 'Regulatory Framework');
-
-            $html .= <<<HTML
-            <a href="{$url}" class="dropdown-card" style="display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 8px 10px; border-bottom: 1px solid var(--border-light, #e2e8f0); background: transparent; border-radius: 4px; text-decoration: none; transition: background 0.15s ease;" onmouseover="this.style.background='var(--bg-subtle, #f8fafc)';" onmouseout="this.style.background='transparent';">
-                <div style="flex: 1; min-width: 0;">
-                    <div style="font-size: 12.5px; font-weight: 600; color: var(--text-title, #0f172a); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.3;">{$name}</div>
-                    <div style="font-size: 10.5px; color: var(--text-muted, #64748b); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 1px;">{$cat}</div>
-                </div>
-                <span class="card-badge {$badgeClass}" style="font-family: 'JetBrains Mono', monospace; font-size: 9.5px; font-weight: 700; padding: 2px 6px; border-radius: 4px; flex-shrink: 0;">{$code}</span>
-            </a>
-HTML;
-        }
-        $html .= '</div>';
-        return $html;
-    }
-
-    protected function renderAllDomainsDropdownList(): string
-    {
-        $domains = \App\Models\Domain::orderBy('display_order', 'asc')->get();
-        if ($domains->isEmpty()) {
-            return '';
-        }
-
-        $html = '<div class="dropdown-popover-list virtual-scroll-container" style="display: flex; flex-direction: column; gap: 0;">';
-        $badges = ['badge-purple', 'badge-cyan', 'badge-emerald', 'badge-amber', 'badge-rose'];
-        $i = 0;
-        foreach ($domains as $d) {
-            $badgeClass = $badges[$i % count($badges)];
-            $i++;
-            $url = route('domains.show', $d->slug);
-            $code = e($d->domain_code ?: $d->domain_id ?: 'DOM');
-            $name = e($d->name);
-            $sub  = e($d->short_overview ?: $d->purpose ?: 'Control Domain');
-
-            $html .= <<<HTML
-            <a href="{$url}" class="dropdown-card" style="display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 8px 10px; border-bottom: 1px solid var(--border-light, #e2e8f0); background: transparent; border-radius: 4px; text-decoration: none; transition: background 0.15s ease;" onmouseover="this.style.background='var(--bg-subtle, #f8fafc)';" onmouseout="this.style.background='transparent';">
-                <div style="flex: 1; min-width: 0;">
-                    <div style="font-size: 12.5px; font-weight: 600; color: var(--text-title, #0f172a); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.3;">{$name}</div>
-                    <div style="font-size: 10.5px; color: var(--text-muted, #64748b); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 1px;">{$sub}</div>
-                </div>
-                <span class="card-badge {$badgeClass}" style="font-family: 'JetBrains Mono', monospace; font-size: 9.5px; font-weight: 700; padding: 2px 6px; border-radius: 4px; flex-shrink: 0;">{$code}</span>
-            </a>
-HTML;
-        }
-        $html .= '</div>';
-        return $html;
-    }
-
-    protected function renderAllControlsDropdownList(): string
-    {
-        $controls = \App\Models\Control::orderBy('control_id', 'asc')->get();
-        if ($controls->isEmpty()) {
-            return '';
-        }
-
-        $html = '<div class="dropdown-popover-list virtual-scroll-container" style="display: flex; flex-direction: column; gap: 0;">';
-        $badges = ['badge-cyan', 'badge-purple', 'badge-amber', 'badge-emerald', 'badge-rose'];
-        $i = 0;
-        foreach ($controls as $c) {
-            $badgeClass = $badges[$i % count($badges)];
-            $i++;
-            $url = route('controls.show', $c->control_id);
-            $code = e($c->control_id);
-            $name = e($c->name);
-            $sub  = e($c->control_category ?: $c->description ?: 'Security Control');
-
-            $html .= <<<HTML
-            <a href="{$url}" class="dropdown-card" style="display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 8px 10px; border-bottom: 1px solid var(--border-light, #e2e8f0); background: transparent; border-radius: 4px; text-decoration: none; transition: background 0.15s ease;" onmouseover="this.style.background='var(--bg-subtle, #f8fafc)';" onmouseout="this.style.background='transparent';">
-                <div style="flex: 1; min-width: 0;">
-                    <div style="font-size: 12.5px; font-weight: 600; color: var(--text-title, #0f172a); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.3;">{$name}</div>
-                    <div style="font-size: 10.5px; color: var(--text-muted, #64748b); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 1px;">{$sub}</div>
-                </div>
-                <span class="card-badge {$badgeClass}" style="font-family: 'JetBrains Mono', monospace; font-size: 9.5px; font-weight: 700; padding: 2px 6px; border-radius: 4px; flex-shrink: 0;">{$code}</span>
-            </a>
-HTML;
-        }
-        $html .= '</div>';
-        return $html;
-    }
-
-    private function getDefaultTemplateHtml(): string
-    {
-        return <<<'HTML'
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
 
@@ -613,7 +8,8 @@ HTML;
     <meta name="title" content="{{control_name}} ({{control_id}}) - Universal Control Library | ASPIA GRC">
     <meta name="description"
         content="Explore {{control_name}} ({{control_id}}), compliance requirements, business objectives, and framework mappings in ASPIA UCL.">
-    <meta name="keywords" content="{{control_id}}, {{control_name}}, {{control_category}}, {{control_type}}, {{criticality}}, GRC control, ASPIA UCL">
+    <meta name="keywords"
+        content="{{control_id}}, {{control_name}}, {{control_category}}, {{control_type}}, {{criticality}}, GRC control, ASPIA UCL">
     <meta name="author" content="ASPIA Unified Control Library">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://grc.aspia.io/controls/{{control_id}}">
@@ -1581,7 +977,8 @@ HTML;
             <div class="header-actions">
                 <div class="theme-switch-container" id="themeSwitch" role="group" aria-label="Color theme switcher">
                     <button type="button" class="theme-btn active" id="btnThemeLight" aria-pressed="true">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <circle cx="12" cy="12" r="5"></circle>
                             <line x1="12" y1="1" x2="12" y2="3"></line>
                             <line x1="12" y1="21" x2="12" y2="23"></line>
@@ -1595,7 +992,8 @@ HTML;
                         <span>Light</span>
                     </button>
                     <button type="button" class="theme-btn" id="btnThemeDark" aria-pressed="false">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
                         </svg>
                         <span>Dark</span>
@@ -1721,7 +1119,8 @@ HTML;
         <nav class="tabs-nav-wrapper" aria-label="Control Sections Navigation">
             <ul class="tabs-nav" role="tablist">
                 <li role="presentation"><button type="button" class="tab-btn active" role="tab" aria-selected="true"
-                        aria-controls="panel-requirements" id="tab-requirements" data-target="panel-requirements">Associated
+                        aria-controls="panel-requirements" id="tab-requirements"
+                        data-target="panel-requirements">Associated
                         Requirements <span class="tab-count">{{requirements_count}}</span></button></li>
                 <li role="presentation"><button type="button" class="tab-btn" role="tab" aria-selected="false"
                         aria-controls="panel-domain" id="tab-domain" data-target="panel-domain">Associated
@@ -1732,10 +1131,19 @@ HTML;
             </ul>
 
             <!-- Tab Sections Real-time Filter Search Bar -->
-            <div class="tab-section-search-box" style="position: relative; width: 320px; max-width: 100%; margin-left: auto;">
-                <svg style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); width: 14px; height: 14px; fill: none; stroke: var(--brand-primary, #0284c7); stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; pointer-events: none;" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-                <input type="text" id="tabSectionSearchInput" placeholder="Search requirements, domain, frameworks..." style="width: 100%; padding: 8px 32px 8px 34px; background: var(--bg-subtle, #f8fafc); border: 1.5px solid var(--border-light, #e2e8f0); border-radius: 8px; font-size: 12px; font-weight: 600; color: var(--text-title, #0f172a); outline: none; transition: all 0.2s ease;" onfocus="this.style.borderColor='var(--brand-primary, #0284c7)'; this.style.background='var(--bg-surface, #ffffff)'; this.style.boxShadow='0 0 0 3px rgba(2, 132, 199, 0.15)';" onblur="this.style.borderColor='var(--border-light, #e2e8f0)'; this.style.background='var(--bg-subtle, #f8fafc)'; this.style.boxShadow='none';">
-                <button type="button" id="tabSectionSearchClear" style="display: none; position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: var(--bg-subtle); border: 1px solid var(--border-light); width: 18px; height: 18px; border-radius: 50%; font-size: 10px; color: var(--text-muted); cursor: pointer; align-items: center; justify-content: center; line-height: 1;">✕</button>
+            <div class="tab-section-search-box"
+                style="position: relative; width: 320px; max-width: 100%; margin-left: auto;">
+                <svg style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); width: 14px; height: 14px; fill: none; stroke: var(--brand-primary, #0284c7); stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; pointer-events: none;"
+                    viewBox="0 0 24 24">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+                <input type="text" id="tabSectionSearchInput" placeholder="Search requirements, domain, frameworks..."
+                    style="width: 100%; padding: 8px 32px 8px 34px; background: var(--bg-subtle, #f8fafc); border: 1.5px solid var(--border-light, #e2e8f0); border-radius: 8px; font-size: 12px; font-weight: 600; color: var(--text-title, #0f172a); outline: none; transition: all 0.2s ease;"
+                    onfocus="this.style.borderColor='var(--brand-primary, #0284c7)'; this.style.background='var(--bg-surface, #ffffff)'; this.style.boxShadow='0 0 0 3px rgba(2, 132, 199, 0.15)';"
+                    onblur="this.style.borderColor='var(--border-light, #e2e8f0)'; this.style.background='var(--bg-subtle, #f8fafc)'; this.style.boxShadow='none';">
+                <button type="button" id="tabSectionSearchClear"
+                    style="display: none; position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: var(--bg-subtle); border: 1px solid var(--border-light); width: 18px; height: 18px; border-radius: 50%; font-size: 10px; color: var(--text-muted); cursor: pointer; align-items: center; justify-content: center; line-height: 1;">✕</button>
             </div>
         </nav>
 
@@ -1745,7 +1153,9 @@ HTML;
                     <h2 class="section-title">Compliance Requirements & Audit Crosswalk</h2><span
                         class="section-badge">{{requirements_count}} Specific Audit Clauses</span>
                 </div>
-                <p style="font-size: 14px; color: var(--text-secondary); margin-bottom: 20px;">The following requirements dictate specific audit evidence criteria and testing steps mapped directly under the controls of this domain.</p>
+                <p style="font-size: 14px; color: var(--text-secondary); margin-bottom: 20px;">The following
+                    requirements dictate specific audit evidence criteria and testing steps mapped directly under the
+                    controls of this domain.</p>
                 {{requirements_table}}
             </div>
         </div>
@@ -1753,8 +1163,8 @@ HTML;
         <div class="tab-panel" id="panel-domain" role="tabpanel" aria-labelledby="tab-domain">
             <div class="section-box">
                 <div class="section-header">
-                    <h2 class="section-title">Parent Domain Context</h2><span
-                        class="section-badge">Governance Domain Baseline</span>
+                    <h2 class="section-title">Parent Domain Context</h2><span class="section-badge">Governance Domain
+                        Baseline</span>
                 </div>
                 <div style="margin-top: 12px; font-size: 14.5px;">
                     <p style="margin-bottom: 12px;"><strong>Domain Name:</strong> {{domain_name}} ({{domain_code}})</p>
@@ -1768,10 +1178,12 @@ HTML;
         <div class="tab-panel" id="panel-frameworks" role="tabpanel" aria-labelledby="tab-frameworks">
             <div class="section-box">
                 <div class="section-header">
-                    <h2 class="section-title">Cross-Mapped Regulatory Frameworks</h2><span
+                    <h2 class="section-title">Mapped Regulatory & Industry Frameworks</h2><span
                         class="section-badge">Harmonized Framework Mappings</span>
                 </div>
-                <div style="margin-top: 12px;">{{framework_badge}}</div>
+                <p style="font-size: 14px; color: var(--text-secondary); margin-bottom: 20px;">The following compliance
+                    and regulatory frameworks map directly to the controls and governance scope of this section.</p>
+                <div>{{related_frameworks_cards}}</div>
             </div>
         </div>
     </main>
@@ -1856,7 +1268,7 @@ HTML;
                             const text = row.textContent.toLowerCase();
                             const words = text.split(/\s+/);
                             const isMatch = !query || words.some(w => w.startsWith(query)) || text.includes(query);
-                            
+
                             if (isMatch) {
                                 row.style.display = '';
                                 visibleCount++;
@@ -1913,7 +1325,7 @@ HTML;
 
                         // Exact title/code match or prefix match from start of title/code
                         const isMatch = (title === query) || (code === query) || (sub === query) ||
-                                        title.startsWith(query) || code.startsWith(query);
+                            title.startsWith(query) || code.startsWith(query);
 
                         card.style.display = isMatch ? 'flex' : 'none';
                         if (isMatch) {
@@ -1959,6 +1371,3 @@ HTML;
 </body>
 
 </html>
-HTML;
-    }
-}

@@ -205,14 +205,502 @@
             box-shadow: var(--shadow-sm);
         }
 
+        /* Nav Menu Styles */
+        .main-nav-wrapper {
+            display: flex;
+            align-items: center;
+            margin-left: auto;
+            margin-right: 16px;
+        }
+
+        .nav-menu-list {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .nav-menu-item {
+            position: relative;
+        }
+
+        .nav-menu-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            padding: 7px 14px;
+            border-radius: var(--radius-full);
+            font-size: 13.5px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .nav-menu-link:hover {
+            color: var(--text-title);
+            background: var(--bg-subtle);
+            text-decoration: none;
+        }
+
+        .nav-menu-link.active {
+            color: var(--brand-primary);
+            font-weight: 700;
+        }
+
+        .nav-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0.85;
+        }
+
+        .dropdown-arrow {
+            font-size: 10px;
+            opacity: 0.6;
+            margin-left: 2px;
+            transition: transform 0.2s ease;
+        }
+
+        .dropdown-parent:hover .dropdown-arrow {
+            transform: rotate(180deg);
+        }
+
+        .dropdown-popover {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            margin-top: 8px;
+            width: 315px;
+            background: var(--bg-surface);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-lg);
+            padding: 12px;
+            box-shadow: var(--shadow-lg);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(8px);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 1100;
+        }
+
+        .dropdown-parent:hover .dropdown-popover,
+        .dropdown-parent:focus-within .dropdown-popover,
+        .dropdown-parent.search-active .dropdown-popover {
+            opacity: 1 !important;
+            visibility: visible !important;
+            transform: translateY(0) !important;
+            pointer-events: auto !important;
+        }
+
+        .dropdown-parent.search-active .nav-menu-link {
+            color: var(--brand-primary);
+            font-weight: 700;
+        }
+
+        .dropdown-popover-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-bottom: 10px;
+            margin-bottom: 12px;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .popover-title {
+            font-size: 12px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            color: var(--brand-primary);
+        }
+
+        .popover-all-link {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--brand-primary);
+            text-decoration: none;
+        }
+
+        .popover-all-link:hover {
+            text-decoration: underline;
+        }
+
+        .dropdown-popover-grid,
+        .dropdown-popover-list {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            max-height: 460px;
+            overflow-y: auto;
+            padding-right: 4px;
+            scroll-behavior: smooth;
+        }
+
+        .dropdown-popover-list::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .dropdown-popover-list::-webkit-scrollbar-track {
+            background: var(--bg-subtle);
+            border-radius: var(--radius-full);
+        }
+
+        .dropdown-popover-list::-webkit-scrollbar-thumb {
+            background: var(--border-light);
+            border-radius: var(--radius-full);
+        }
+
+        .dropdown-popover-list::-webkit-scrollbar-thumb:hover {
+            background: var(--brand-primary);
+        }
+
+        .dropdown-card {
+            display: flex;
+            align-items: center;
+            padding: 8px 12px;
+            background: var(--bg-subtle);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-md);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .dropdown-card:hover {
+            border-color: var(--brand-primary);
+            transform: translateX(4px);
+            background: var(--bg-surface);
+            box-shadow: var(--shadow-sm);
+            text-decoration: none;
+        }
+
+        .dropdown-card-body {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .dropdown-card-title-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+        }
+
+        .card-badge {
+            display: inline-block;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 9.5px;
+            font-weight: 700;
+            padding: 2px 6px;
+            border-radius: 4px;
+            width: fit-content;
+            flex-shrink: 0;
+        }
+
+        .card-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-title);
+            line-height: 1.3;
+        }
+
+        .card-sub {
+            font-size: 11px;
+            color: var(--text-secondary);
+        }
+
+        .nav-taxonomy-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 7px 14px;
+            border-radius: var(--radius-full);
+            font-size: 12.5px;
+            font-weight: 700;
+            background: var(--bg-subtle);
+            border: 1px solid var(--border-light);
+            color: var(--text-title);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .nav-taxonomy-btn:hover {
+            border-color: var(--brand-primary);
+            color: var(--brand-primary);
+            background: var(--bg-surface);
+        }
+
+        /* Taxonomy Drawer / Mega Modal */
+        .taxonomy-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(4px);
+            z-index: 9999;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            padding-top: 80px;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.25s ease;
+        }
+
+        .taxonomy-modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .taxonomy-modal-card {
+            width: 90%;
+            max-width: 1100px;
+            background: var(--bg-surface);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-lg);
+            padding: 28px;
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-20px);
+            transition: transform 0.25s ease;
+            max-height: calc(100vh - 120px);
+            overflow-y: auto;
+        }
+
+        .taxonomy-modal-overlay.active .taxonomy-modal-card {
+            transform: translateY(0);
+        }
+
+        .modal-top-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            padding-bottom: 14px;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .modal-title-wrap {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .modal-title-wrap h2 {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--text-title);
+        }
+
+        .modal-close-btn {
+            background: var(--bg-subtle);
+            border: 1px solid var(--border-light);
+            color: var(--text-muted);
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .modal-close-btn:hover {
+            background: var(--brand-rose-light);
+            color: var(--brand-rose);
+            border-color: var(--brand-rose);
+        }
+
+        .mega-taxonomy-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .taxonomy-column {
+            background: var(--bg-subtle);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-md);
+            padding: 18px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .column-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1.5px solid var(--border-light);
+        }
+
+        .column-title {
+            font-size: 14px;
+            font-weight: 800;
+            color: var(--text-title);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .column-link-all {
+            font-size: 11.5px;
+            font-weight: 700;
+            color: var(--brand-primary);
+        }
+
+        .column-items-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .column-item-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--bg-surface);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-sm);
+            padding: 8px 12px;
+            text-decoration: none;
+            color: var(--text-title);
+            transition: var(--transition);
+        }
+
+        .column-item-card:hover {
+            border-color: var(--brand-primary);
+            transform: translateX(2px);
+            text-decoration: none;
+        }
+
+        .item-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .item-name {
+            font-size: 12.5px;
+            font-weight: 700;
+        }
+
+        .item-code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10.5px;
+            color: var(--text-secondary);
+        }
+
+        @media (max-width: 992px) {
+            .main-nav-wrapper {
+                display: none;
+            }
+
+            .mega-taxonomy-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
         .hero-section {
             padding: 32px 0 20px;
         }
 
         .hero-search-wrapper {
+            position: relative;
             margin: 0 auto 18px auto;
             width: 100%;
             max-width: 580px;
+        }
+
+        .hero-search-results-popover {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            margin-top: 8px;
+            background: var(--bg-surface);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-lg);
+            padding: 14px;
+            box-shadow: 0 12px 32px rgba(15, 23, 42, 0.18);
+            z-index: 1200;
+            max-height: 480px;
+            overflow-y: auto;
+            scroll-behavior: smooth;
+            animation: fadeInDown 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .hero-search-results-popover::-webkit-scrollbar {
+            width: 6px;
+        }
+        .hero-search-results-popover::-webkit-scrollbar-track {
+            background: var(--bg-subtle);
+            border-radius: var(--radius-full);
+        }
+        .hero-search-results-popover::-webkit-scrollbar-thumb {
+            background: var(--border-subtle);
+            border-radius: var(--radius-full);
+        }
+
+        .hero-search-module-block {
+            margin-bottom: 14px;
+        }
+        .hero-search-module-block:last-child {
+            margin-bottom: 0;
+        }
+
+        .hero-module-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-bottom: 6px;
+            margin-bottom: 8px;
+            border-bottom: 1.5px solid var(--border-light);
+        }
+
+        .hero-module-title {
+            font-size: 11.5px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            color: var(--brand-primary);
+        }
+
+        .hero-module-count-badge {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            font-weight: 700;
+            padding: 2px 7px;
+            border-radius: 10px;
+            background: var(--brand-primary-light);
+            color: var(--brand-primary);
+            border: 1px solid rgba(2, 132, 199, 0.2);
+        }
+
+        .hero-module-items-list {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .hero-search-empty-state {
+            padding: 20px 16px;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 13px;
+            font-weight: 500;
         }
 
         .hero-search-bar {
@@ -552,17 +1040,21 @@
             background: var(--bg-surface);
             border: 1px solid var(--border-light);
             border-radius: var(--radius-md);
-            padding: 6px;
+            padding: 6px 12px;
             margin-bottom: 28px;
             box-shadow: var(--shadow-sm);
-            overflow-x: auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            flex-wrap: wrap;
         }
 
         .tabs-nav {
             display: flex;
             gap: 6px;
             list-style: none;
-            min-width: max-content;
+            flex-wrap: wrap;
         }
 
         .tab-btn {
@@ -767,10 +1259,67 @@
                     <span class="logo-text-aspia">ASPIA</span><span class="logo-text-ucl">UCL</span>
                 </a>
             </div>
+
+            <!-- Site Navigation Menu -->
+            <nav class="main-nav-wrapper" aria-label="Main Navigation">
+                <ul class="nav-menu-list">
+                    <!-- Frameworks Menu -->
+                    <li class="nav-menu-item dropdown-parent">
+                        <a href="javascript:void(0)" class="nav-menu-link" onclick="event.preventDefault();">
+                            <span>Frameworks</span>
+                            <span class="dropdown-arrow">▾</span>
+                        </a>
+                        <div class="dropdown-popover">
+                            {{all_frameworks_dropdown_list}}
+                        </div>
+                    </li>
+
+                    <!-- Domains Menu -->
+                    <li class="nav-menu-item dropdown-parent">
+                        <a href="javascript:void(0)" class="nav-menu-link" onclick="event.preventDefault();">
+                            <span>Domains</span>
+                            <span class="dropdown-arrow">▾</span>
+                        </a>
+                        <div class="dropdown-popover">
+                            {{all_domains_dropdown_list}}
+                        </div>
+                    </li>
+
+                    <!-- Controls Menu -->
+                    <li class="nav-menu-item dropdown-parent">
+                        <a href="javascript:void(0)" class="nav-menu-link" onclick="event.preventDefault();">
+                            <span>Controls</span>
+                            <span class="dropdown-arrow">▾</span>
+                        </a>
+                        <div class="dropdown-popover">
+                            {{all_controls_dropdown_list}}
+                        </div>
+                    </li>
+                </ul>
+            </nav>
+
             <div class="header-actions">
                 <div class="theme-switch-container" id="themeSwitch" role="group" aria-label="Color theme switcher">
-                    <button type="button" class="theme-btn active" id="btnThemeLight" aria-pressed="true">Light</button>
-                    <button type="button" class="theme-btn" id="btnThemeDark" aria-pressed="false">Dark</button>
+                    <button type="button" class="theme-btn active" id="btnThemeLight" aria-pressed="true">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="5"></circle>
+                            <line x1="12" y1="1" x2="12" y2="3"></line>
+                            <line x1="12" y1="21" x2="12" y2="23"></line>
+                            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                            <line x1="1" y1="12" x2="3" y2="12"></line>
+                            <line x1="21" y1="12" x2="23" y2="12"></line>
+                            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                        </svg>
+                        <span>Light</span>
+                    </button>
+                    <button type="button" class="theme-btn" id="btnThemeDark" aria-pressed="false">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                        </svg>
+                        <span>Dark</span>
+                    </button>
                 </div>
             </div>
         </div>
@@ -789,9 +1338,50 @@
                     </span>
                     <input type="text" id="globalHeroSearchInput" class="hero-search-input"
                         placeholder="Search controls, frameworks, requirements..."
-                        aria-label="Search controls, frameworks, requirements">
+                        aria-label="Search controls, frameworks, requirements" autocomplete="off">
                     <button type="button" id="clearHeroSearchBtn" class="clear-search-btn" style="display: none;"
                         aria-label="Clear search">✕</button>
+                </div>
+
+                <!-- Hero Search Results Live Dropdown (Categorized by Module) -->
+                <div id="heroSearchResultsDropdown" class="hero-search-results-popover" style="display: none;">
+                    <!-- Frameworks Module -->
+                    <div class="hero-search-module-block" id="heroModuleFrameworks">
+                        <div class="hero-module-header">
+                            <span class="hero-module-title">Frameworks</span>
+                            <span class="hero-module-count-badge" id="heroCountFrameworks">0</span>
+                        </div>
+                        <div class="hero-module-items-list">
+                            {{all_frameworks_dropdown_list}}
+                        </div>
+                    </div>
+
+                    <!-- Domains Module -->
+                    <div class="hero-search-module-block" id="heroModuleDomains">
+                        <div class="hero-module-header">
+                            <span class="hero-module-title">Domains</span>
+                            <span class="hero-module-count-badge" id="heroCountDomains">0</span>
+                        </div>
+                        <div class="hero-module-items-list">
+                            {{all_domains_dropdown_list}}
+                        </div>
+                    </div>
+
+                    <!-- Controls Module -->
+                    <div class="hero-search-module-block" id="heroModuleControls">
+                        <div class="hero-module-header">
+                            <span class="hero-module-title">Controls</span>
+                            <span class="hero-module-count-badge" id="heroCountControls">0</span>
+                        </div>
+                        <div class="hero-module-items-list">
+                            {{all_controls_dropdown_list}}
+                        </div>
+                    </div>
+
+                    <!-- Empty State Notice -->
+                    <div id="heroSearchEmptyState" class="hero-search-empty-state" style="display: none;">
+                        No matching records found.
+                    </div>
                 </div>
             </div>
 
@@ -823,7 +1413,7 @@
                             <div class="excel-val mono" style="color: var(--brand-purple); font-weight: 700;">
                                 {{domain_code}}</div>
                         </div>
-                        <div class="excel-field-card span-2">
+                        <div class="excel-field-card">
                             <div class="excel-label">Domain Name</div>
                             <div class="excel-val" style="font-weight: 700;">{{domain_name}}</div>
                         </div>
@@ -844,7 +1434,7 @@
                             <div class="excel-label">Version</div>
                             <div class="excel-val mono">{{version}}</div>
                         </div>
-                        <div class="excel-field-card full-width">
+                        <div class="excel-field-card">
                             <div class="excel-label">Scope</div>
                             <div class="excel-val">{{scope}}</div>
                         </div>
@@ -931,6 +1521,13 @@
                         aria-controls="panel-frameworks" id="tab-frameworks" data-target="panel-frameworks">Mapped
                         Frameworks</button></li>
             </ul>
+
+            <!-- Tab Sections Real-time Filter Search Bar -->
+            <div class="tab-section-search-box" style="position: relative; width: 320px; max-width: 100%; margin-left: auto;">
+                <svg style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); width: 14px; height: 14px; fill: none; stroke: var(--brand-primary, #0284c7); stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; pointer-events: none;" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                <input type="text" id="tabSectionSearchInput" placeholder="Search controls, requirements, frameworks..." style="width: 100%; padding: 8px 32px 8px 34px; background: var(--bg-subtle, #f8fafc); border: 1.5px solid var(--border-light, #e2e8f0); border-radius: 8px; font-size: 12px; font-weight: 600; color: var(--text-title, #0f172a); outline: none; transition: all 0.2s ease;" onfocus="this.style.borderColor='var(--brand-primary, #0284c7)'; this.style.background='var(--bg-surface, #ffffff)'; this.style.boxShadow='0 0 0 3px rgba(2, 132, 199, 0.15)';" onblur="this.style.borderColor='var(--border-light, #e2e8f0)'; this.style.background='var(--bg-subtle, #f8fafc)'; this.style.boxShadow='none';">
+                <button type="button" id="tabSectionSearchClear" style="display: none; position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: var(--bg-subtle); border: 1px solid var(--border-light); width: 18px; height: 18px; border-radius: 50%; font-size: 10px; color: var(--text-muted); cursor: pointer; align-items: center; justify-content: center; line-height: 1;">✕</button>
+            </div>
         </nav>
 
         <div class="tab-panel active" id="panel-controls" role="tabpanel" aria-labelledby="tab-controls">
@@ -970,13 +1567,6 @@
     <div class="toast" id="toastMessage" role="status" aria-live="polite"><span>✓</span> <span id="toastText">Copied to
             clipboard</span></div>
 
-    <footer class="site-footer" role="contentinfo">
-        <div class="container footer-content">
-            <div>&copy; 2026 <strong>ASPIA Universal Control Library (UCL)</strong>. All rights reserved. &bull; Unified
-                Governance, Risk, and Compliance Engine</div>
-        </div>
-    </footer>
-
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const htmlEl = document.documentElement;
@@ -1011,40 +1601,180 @@
                 });
             });
 
+            // 1. Hero Section Global Search Bar
             const searchInput = document.getElementById('globalHeroSearchInput');
             const clearSearchBtn = document.getElementById('clearHeroSearchBtn');
+            const searchResultsDropdown = document.getElementById('heroSearchResultsDropdown');
+            const emptyState = document.getElementById('heroSearchEmptyState');
+
             if (searchInput) {
                 document.addEventListener('keydown', (e) => {
                     if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); searchInput.focus(); }
                     else if (e.key === '/' && document.activeElement !== searchInput) { e.preventDefault(); searchInput.focus(); }
-                    else if (e.key === 'Escape' && document.activeElement === searchInput) { searchInput.value = ''; filterAllItems(''); searchInput.blur(); }
+                    else if (e.key === 'Escape' && document.activeElement === searchInput) {
+                        searchInput.value = '';
+                        filterHeroGlobalSearch('');
+                        searchInput.blur();
+                    }
                 });
-                searchInput.addEventListener('input', (e) => filterAllItems(e.target.value.trim().toLowerCase()));
+
+                searchInput.addEventListener('input', (e) => filterHeroGlobalSearch(e.target.value.trim().toLowerCase()));
+                searchInput.addEventListener('focus', () => {
+                    const query = searchInput.value.trim().toLowerCase();
+                    if (query) filterHeroGlobalSearch(query);
+                });
+
                 if (clearSearchBtn) {
-                    clearSearchBtn.addEventListener('click', () => { searchInput.value = ''; filterAllItems(''); searchInput.focus(); });
+                    clearSearchBtn.addEventListener('click', () => {
+                        searchInput.value = '';
+                        filterHeroGlobalSearch('');
+                        searchInput.focus();
+                    });
                 }
             }
 
-            function filterAllItems(query) {
+            // Close hero search dropdown when clicking outside
+            document.addEventListener('click', (e) => {
+                const heroSearchWrapper = document.querySelector('.hero-search-wrapper');
+                if (searchResultsDropdown && heroSearchWrapper && !heroSearchWrapper.contains(e.target)) {
+                    searchResultsDropdown.style.display = 'none';
+                }
+            });
+
+            function filterHeroGlobalSearch(query) {
                 if (clearSearchBtn) clearSearchBtn.style.display = query ? 'grid' : 'none';
-                document.querySelectorAll('#panel-controls .card-box, #panel-controls .control-card-box, #panel-controls a[class*="card-box"]').forEach(card => {
-                    card.style.display = (!query || card.innerText.toLowerCase().includes(query)) ? 'flex' : 'none';
-                });
-                document.querySelectorAll('#panel-requirements .req-card-box').forEach(card => {
-                    card.style.display = (!query || card.innerText.toLowerCase().includes(query)) ? 'flex' : 'none';
-                });
-                document.querySelectorAll('#panel-requirements .virtual-scroll-container > div').forEach(group => {
-                    const childCards = group.querySelectorAll('.req-card-box');
-                    if (childCards.length > 0) {
-                        const hasVisibleChild = Array.from(childCards).some(c => c.style.display !== 'none');
-                        group.style.display = (!query || hasVisibleChild) ? 'block' : 'none';
+
+                if (!query) {
+                    if (searchResultsDropdown) searchResultsDropdown.style.display = 'none';
+                    return;
+                }
+
+                if (searchResultsDropdown) searchResultsDropdown.style.display = 'block';
+
+                let totalMatches = 0;
+
+                // Helper to filter dropdown cards by name & code only
+                const filterModuleCards = (moduleId, countBadgeId) => {
+                    const moduleEl = document.getElementById(moduleId);
+                    if (!moduleEl) return 0;
+                    const countBadge = document.getElementById(countBadgeId);
+                    const cards = moduleEl.querySelectorAll('.dropdown-card');
+                    let matchCount = 0;
+
+                    cards.forEach(card => {
+                        const titleEl = card.querySelector('.card-title') || card.querySelector('div > div:first-child');
+                        const badgeEl = card.querySelector('.card-badge');
+                        const titleText = (titleEl?.textContent || '').toLowerCase().trim();
+                        const badgeText = (badgeEl?.textContent || '').toLowerCase().trim();
+                        const nameText = `${badgeText} ${titleText}`.trim();
+
+                        const words = nameText.split(/\s+/);
+                        const isMatch = words.some(w => w.startsWith(query)) || nameText.includes(query);
+                        
+                        card.style.display = isMatch ? 'flex' : 'none';
+                        if (isMatch) matchCount++;
+                    });
+
+                    if (countBadge) countBadge.textContent = matchCount;
+                    moduleEl.style.display = matchCount > 0 ? 'block' : 'none';
+                    return matchCount;
+                };
+
+                // 1. Frameworks Module
+                totalMatches += filterModuleCards('heroModuleFrameworks', 'heroCountFrameworks');
+
+                // 2. Domains Module
+                totalMatches += filterModuleCards('heroModuleDomains', 'heroCountDomains');
+
+                // 3. Controls Module
+                totalMatches += filterModuleCards('heroModuleControls', 'heroCountControls');
+
+                if (emptyState) {
+                    if (totalMatches === 0) {
+                        emptyState.style.display = 'block';
+                        emptyState.textContent = `No records found matching "${query}".`;
+                    } else {
+                        emptyState.style.display = 'none';
                     }
+                }
+            }
+
+
+            // 2. Bottom Tab Sections Search Bar
+            const tabSearchInput = document.getElementById('tabSectionSearchInput');
+            const tabSearchClear = document.getElementById('tabSectionSearchClear');
+
+            if (tabSearchInput) {
+                tabSearchInput.addEventListener('input', (e) => {
+                    const query = e.target.value.trim().toLowerCase();
+                    if (tabSearchClear) {
+                        tabSearchClear.style.display = query.length > 0 ? 'block' : 'none';
+                    }
+                    filterPageTabSections(query);
                 });
-                document.querySelectorAll('#panel-frameworks .framework-card, #panel-frameworks [style*="border-radius"]').forEach(card => {
-                    card.style.display = (!query || card.innerText.toLowerCase().includes(query)) ? 'flex' : 'none';
-                });
-                document.querySelectorAll('.excel-field-card').forEach(card => {
-                    card.style.display = (!query || card.innerText.toLowerCase().includes(query)) ? 'flex' : 'none';
+
+                if (tabSearchClear) {
+                    tabSearchClear.addEventListener('click', () => {
+                        tabSearchInput.value = '';
+                        tabSearchClear.style.display = 'none';
+                        filterPageTabSections('');
+                        tabSearchInput.focus();
+                    });
+                }
+            }
+
+            function filterPageTabSections(query) {
+                ['panel-controls', 'panel-requirements', 'panel-frameworks'].forEach(panelId => {
+                    const panel = document.getElementById(panelId);
+                    if (!panel) return;
+                    const rows = panel.querySelectorAll('table tbody tr');
+                    let visibleCount = 0;
+
+                    rows.forEach(row => {
+                        if (row.classList.contains('no-search-results-row')) return;
+                        
+                        // Extract ONLY item name and ID/code from first 2 columns (ignoring internal summary/description/category)
+                        const titleLink = row.querySelector('td:nth-child(2) a, td:nth-child(2) span[style*="font-weight: 700"], td:nth-child(2) .card-title');
+                        const codeBadge = row.querySelector('td:nth-child(1) span, td:nth-child(1) .req-id-badge, td:nth-child(1)');
+
+                        let nameText = '';
+                        if (titleLink || codeBadge) {
+                            const titleVal = titleLink ? titleLink.textContent : '';
+                            const codeVal = codeBadge ? codeBadge.textContent : '';
+                            nameText = `${codeVal} ${titleVal}`.toLowerCase().trim();
+                        } else {
+                            const cell1 = row.querySelector('td:nth-child(1)')?.textContent || '';
+                            const cell2 = row.querySelector('td:nth-child(2)')?.textContent || '';
+                            nameText = `${cell1} ${cell2}`.toLowerCase().trim();
+                        }
+
+                        const words = nameText.split(/\s+/);
+                        const isMatch = !query || words.some(w => w.startsWith(query)) || nameText.includes(query);
+                        
+                        if (isMatch) {
+                            row.style.display = '';
+                            visibleCount++;
+                        } else {
+                            row.style.display = 'none';
+                        }
+                    });
+
+                    const tbody = panel.querySelector('table tbody');
+                    let noMatchRow = panel.querySelector('.no-search-results-row');
+                    if (tbody) {
+                        if (visibleCount === 0 && rows.length > 0 && query.length > 0) {
+                            if (!noMatchRow) {
+                                noMatchRow = document.createElement('tr');
+                                noMatchRow.className = 'no-search-results-row';
+                                const colCount = panel.querySelectorAll('table thead th').length || 5;
+                                noMatchRow.innerHTML = `<td colspan="${colCount}" style="padding: 24px; text-align: center; color: var(--text-muted, #64748b); font-size: 12px; font-weight: 500;">No matching items found for "${query}".</td>`;
+                                tbody.appendChild(noMatchRow);
+                            }
+                            noMatchRow.style.display = '';
+                        } else if (noMatchRow) {
+                            noMatchRow.style.display = 'none';
+                        }
+                    }
                 });
             }
         });

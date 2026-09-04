@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
 class Framework extends Model
@@ -19,6 +20,7 @@ class Framework extends Model
         'region',
         'industry',
         'framework_type',
+        'related_domains',
         'description',
         'slug',
         'display_order',
@@ -27,9 +29,9 @@ class Framework extends Model
     /**
      * Direct relationship: Framework has many Domains.
      */
-    public function domains(): HasMany
+    public function domains(): BelongsToMany
     {
-        return $this->hasMany(Domain::class, 'framework_id');
+        return $this->belongsToMany(Domain::class, 'framework_domain');
     }
 
     /**
@@ -60,6 +62,18 @@ class Framework extends Model
      */
     public function getMappedRequirements()
     {
+        $mappedDomains = $this->domains()->get();
+        if ($mappedDomains->isNotEmpty()) {
+            $controlIds = Control::whereIn('domain_id', $mappedDomains->pluck('id'))
+                ->pluck('control_id');
+
+            return Requirement::with('control.domain')
+                ->whereIn('control_id', $controlIds)
+                ->orderBy('display_order', 'asc')
+                ->orderBy('id', 'asc')
+                ->get();
+        }
+
         // 1. Direct framework_id in mappings table
         $reqIds = RequirementFrameworkMapping::where('framework_id', $this->id)
             ->pluck('requirement_id')
@@ -135,6 +149,15 @@ class Framework extends Model
      */
     public function getMappedControls()
     {
+        $mappedDomains = $this->domains()->get();
+        if ($mappedDomains->isNotEmpty()) {
+            return Control::with('domain')
+                ->whereIn('domain_id', $mappedDomains->pluck('id'))
+                ->orderBy('display_order', 'asc')
+                ->orderBy('id', 'asc')
+                ->get();
+        }
+
         $requirements = $this->getMappedRequirements();
         $controlIds = $requirements->pluck('control_id')->filter()->unique();
 
@@ -168,6 +191,11 @@ class Framework extends Model
      */
     public function getMappedDomains()
     {
+        $mapped = $this->domains()->with('controls')->get();
+        if ($mapped->isNotEmpty()) {
+            return $mapped->sortBy(fn ($domain) => [$domain->display_order, $domain->id])->values();
+        }
+
         $controls = $this->getMappedControls();
         $domainIds = $controls->pluck('domain_id')->filter()->unique();
         $domainCodes = $controls->pluck('domain_code')->filter()->unique();

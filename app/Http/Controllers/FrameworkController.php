@@ -190,6 +190,10 @@ class FrameworkController extends Controller
                 'string',
                 'max:255',
             ],
+            'related_domains' => [
+                'nullable',
+                'string',
+            ],
         ]);
 
         // Check if matching framework already exists
@@ -322,6 +326,10 @@ class FrameworkController extends Controller
                 'nullable',
                 'string',
                 'max:255',
+            ],
+            'related_domains' => [
+                'nullable',
+                'string',
             ],
         ]);
 
