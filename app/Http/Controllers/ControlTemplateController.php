@@ -80,11 +80,12 @@ class ControlTemplateController extends Controller
         $domainUrl     = $control->domain ? route('domains.show', $control->domain->slug) : '#';
 
         $domainBadge = $control->domain ? <<<HTML
-        <a href="{$domainUrl}" style="display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; background: rgba(139,92,246,0.15); border: 1px solid rgba(139,92,246,0.35); border-radius: 20px; color: #a78bfa; text-decoration: none; font-size: 12px; font-weight: 700; transition: all 0.2s; letter-spacing: 0.5px;">
-            <span>Domain: {$domainCode} ({$domainId})</span>
-            <span style="opacity: 0.7; font-size: 10px;">↗</span>
+        <a href="{$domainUrl}" class="domain-pill-badge" title="Navigate to Parent Domain: {$domainName}" style="display: inline-flex; align-items: center; gap: 7px; padding: 6px 16px; background: linear-gradient(135deg, rgba(124, 58, 237, 0.12) 0%, rgba(168, 85, 247, 0.2) 100%); border: 1.5px solid rgba(124, 58, 237, 0.35); border-radius: 9999px; color: var(--brand-purple, #7c3aed); text-decoration: none; font-size: 12.5px; font-weight: 700; transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 2px 6px rgba(124, 58, 237, 0.1); cursor: pointer;" onmouseover="this.style.transform='translateY(-2px) scale(1.03)'; this.style.boxShadow='0 6px 16px rgba(124, 58, 237, 0.25)';" onmouseout="this.style.transform='none'; this.style.boxShadow='0 2px 6px rgba(124, 58, 237, 0.1)';">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+            <span>View Domain: {$domainCode} ({$domainId})</span>
+            <span style="font-size: 11px; opacity: 0.85;">↗</span>
         </a>
-HTML : ($domainCode ? "<span class=\"badge badge-purple\">Domain: {$domainCode}</span>" : '');
+HTML : ($domainCode ? "<span class=\"badge badge-purple\">View Domain: {$domainCode}</span>" : '');
 
         // Framework Info & Links
         $framework       = $control->framework;
@@ -602,6 +603,11 @@ HTML;
 
     private function getDefaultTemplateHtml(): string
     {
+        $filePath = resource_path('views/aspiaUcl/controls/control_template.html');
+        if (file_exists($filePath)) {
+            return file_get_contents($filePath);
+        }
+
         return <<<'HTML'
 <!DOCTYPE html>
 <html lang="en" data-theme="light">

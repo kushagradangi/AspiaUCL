@@ -425,9 +425,94 @@
         }
 
         .hero-search-wrapper {
+            position: relative;
             margin: 0 auto 18px auto;
             width: 100%;
             max-width: 580px;
+        }
+
+        .hero-search-results-popover {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            margin-top: 8px;
+            background: var(--bg-surface);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-lg);
+            padding: 14px;
+            box-shadow: 0 12px 32px rgba(15, 23, 42, 0.18);
+            z-index: 1200;
+            max-height: 480px;
+            overflow-y: auto;
+            scroll-behavior: smooth;
+            animation: fadeInDown 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .hero-search-results-popover::-webkit-scrollbar {
+            width: 6px;
+        }
+        .hero-search-results-popover::-webkit-scrollbar-track {
+            background: var(--bg-subtle);
+            border-radius: var(--radius-full);
+        }
+        .hero-search-results-popover::-webkit-scrollbar-thumb {
+            background: var(--border-subtle);
+            border-radius: var(--radius-full);
+        }
+
+        .hero-search-module-block {
+            margin-bottom: 14px;
+        }
+        .hero-search-module-block:last-child {
+            margin-bottom: 0;
+        }
+
+        .hero-module-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-bottom: 6px;
+            margin-bottom: 8px;
+            border-bottom: 1.5px solid var(--border-light);
+        }
+
+        .hero-module-title {
+            font-size: 11.5px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            color: var(--brand-primary);
+        }
+
+        .hero-module-count-badge {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            font-weight: 700;
+            padding: 2px 7px;
+            border-radius: 10px;
+            background: var(--brand-primary-light);
+            color: var(--brand-primary);
+            border: 1px solid rgba(2, 132, 199, 0.2);
+        }
+
+        .hero-module-items-list {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .hero-search-empty-state {
+            padding: 20px 16px;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 13px;
+            font-weight: 500;
         }
 
         .hero-search-bar {
@@ -1016,16 +1101,60 @@
                     </span>
                     <input type="text" id="globalHeroSearchInput" class="hero-search-input"
                         placeholder="Search requirements, controls, specifications..."
-                        aria-label="Search requirements, controls, specifications">
+                        aria-label="Search requirements, controls, specifications" autocomplete="off">
                     <button type="button" id="clearHeroSearchBtn" class="clear-search-btn" style="display: none;"
                         aria-label="Clear search">✕</button>
+                </div>
+
+                <!-- Hero Search Results Live Dropdown (Categorized by Module) -->
+                <div id="heroSearchResultsDropdown" class="hero-search-results-popover" style="display: none;">
+                    <!-- Frameworks Module -->
+                    <div class="hero-search-module-block" id="heroModuleFrameworks">
+                        <div class="hero-module-header">
+                            <span class="hero-module-title">Frameworks</span>
+                            <span class="hero-module-count-badge" id="heroCountFrameworks">0</span>
+                        </div>
+                        <div class="hero-module-items-list">
+                            {{all_frameworks_dropdown_list}}
+                        </div>
+                    </div>
+
+                    <!-- Domains Module -->
+                    <div class="hero-search-module-block" id="heroModuleDomains">
+                        <div class="hero-module-header">
+                            <span class="hero-module-title">Domains</span>
+                            <span class="hero-module-count-badge" id="heroCountDomains">0</span>
+                        </div>
+                        <div class="hero-module-items-list">
+                            {{all_domains_dropdown_list}}
+                        </div>
+                    </div>
+
+                    <!-- Controls Module -->
+                    <div class="hero-search-module-block" id="heroModuleControls">
+                        <div class="hero-module-header">
+                            <span class="hero-module-title">Controls</span>
+                            <span class="hero-module-count-badge" id="heroCountControls">0</span>
+                        </div>
+                        <div class="hero-module-items-list">
+                            {{all_controls_dropdown_list}}
+                        </div>
+                    </div>
+
+                    <!-- Empty State Notice -->
+                    <div id="heroSearchEmptyState" class="hero-search-empty-state" style="display: none;">
+                        No matching records found.
+                    </div>
                 </div>
             </div>
 
             <div class="control-hero-card">
                 <div class="badge-bar">
                     <span class="badge badge-purple"><span class="mono">{{control_id}}</span></span>
-                    <span class="badge badge-cyan"><span class="mono">{{domain_code}}</span></span>
+                    <a href="{{domain_url}}" class="badge badge-purple" title="Navigate to Parent Domain: {{domain_name}}" style="text-decoration: none; display: inline-flex; align-items: center; gap: 5px; transition: all 0.2s ease; cursor: pointer;" onmouseover="this.style.transform='translateY(-1px) scale(1.04)';" onmouseout="this.style.transform='none';">
+                        <span class="mono">View Domain: {{domain_code}}</span>
+                        <span style="font-size: 10px; opacity: 0.85;">↗</span>
+                    </a>
                     <span class="badge badge-amber"><span>{{criticality}}</span></span>
                     <span class="badge badge-status-glow">
                         <span class="status-dot"></span>
@@ -1163,8 +1292,8 @@
         <div class="tab-panel" id="panel-domain" role="tabpanel" aria-labelledby="tab-domain">
             <div class="section-box">
                 <div class="section-header">
-                    <h2 class="section-title">Parent Domain Context</h2><span class="section-badge">Governance Domain
-                        Baseline</span>
+                    <h2 class="section-title">Parent Domain Context</h2>
+                    <span class="section-badge">Governance Domain Baseline</span>
                 </div>
                 <div style="margin-top: 12px; font-size: 14.5px;">
                     <p style="margin-bottom: 12px;"><strong>Domain Name:</strong> {{domain_name}} ({{domain_code}})</p>
@@ -1232,21 +1361,106 @@
                 });
             });
 
+            // 1. Hero Section Global Search Bar
             const searchInput = document.getElementById('globalHeroSearchInput');
             const clearSearchBtn = document.getElementById('clearHeroSearchBtn');
+            const searchResultsDropdown = document.getElementById('heroSearchResultsDropdown');
+            const emptyState = document.getElementById('heroSearchEmptyState');
+
             if (searchInput) {
                 document.addEventListener('keydown', (e) => {
                     if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); searchInput.focus(); }
                     else if (e.key === '/' && document.activeElement !== searchInput) { e.preventDefault(); searchInput.focus(); }
-                    else if (e.key === 'Escape' && document.activeElement === searchInput) { searchInput.value = ''; filterAllItems(''); searchInput.blur(); }
+                    else if (e.key === 'Escape' && document.activeElement === searchInput) {
+                        searchInput.value = '';
+                        filterHeroGlobalSearch('');
+                        searchInput.blur();
+                    }
                 });
-                searchInput.addEventListener('input', (e) => filterAllItems(e.target.value.trim().toLowerCase()));
+
+                searchInput.addEventListener('input', (e) => filterHeroGlobalSearch(e.target.value.trim().toLowerCase()));
+                searchInput.addEventListener('focus', () => {
+                    const query = searchInput.value.trim().toLowerCase();
+                    if (query) filterHeroGlobalSearch(query);
+                });
+
                 if (clearSearchBtn) {
-                    clearSearchBtn.addEventListener('click', () => { searchInput.value = ''; filterAllItems(''); searchInput.focus(); });
+                    clearSearchBtn.addEventListener('click', () => {
+                        searchInput.value = '';
+                        filterHeroGlobalSearch('');
+                        searchInput.focus();
+                    });
                 }
             }
 
-            // Tab Sections Real-time Filter Search
+            // Close hero search dropdown when clicking outside
+            document.addEventListener('click', (e) => {
+                const heroSearchWrapper = document.querySelector('.hero-search-wrapper');
+                if (searchResultsDropdown && heroSearchWrapper && !heroSearchWrapper.contains(e.target)) {
+                    searchResultsDropdown.style.display = 'none';
+                }
+            });
+
+            function filterHeroGlobalSearch(query) {
+                if (clearSearchBtn) clearSearchBtn.style.display = query ? 'grid' : 'none';
+
+                if (!query) {
+                    if (searchResultsDropdown) searchResultsDropdown.style.display = 'none';
+                    return;
+                }
+
+                if (searchResultsDropdown) searchResultsDropdown.style.display = 'block';
+
+                let totalMatches = 0;
+
+                // Helper to filter dropdown cards by name & code only
+                const filterModuleCards = (moduleId, countBadgeId) => {
+                    const moduleEl = document.getElementById(moduleId);
+                    if (!moduleEl) return 0;
+                    const countBadge = document.getElementById(countBadgeId);
+                    const cards = moduleEl.querySelectorAll('.dropdown-card');
+                    let matchCount = 0;
+
+                    cards.forEach(card => {
+                        const titleEl = card.querySelector('.card-title') || card.querySelector('div > div:first-child');
+                        const badgeEl = card.querySelector('.card-badge');
+                        const titleText = (titleEl?.textContent || '').toLowerCase().trim();
+                        const badgeText = (badgeEl?.textContent || '').toLowerCase().trim();
+                        const nameText = `${badgeText} ${titleText}`.trim();
+
+                        const words = nameText.split(/\s+/);
+                        const isMatch = words.some(w => w.startsWith(query)) || nameText.includes(query);
+                        
+                        card.style.display = isMatch ? 'flex' : 'none';
+                        if (isMatch) matchCount++;
+                    });
+
+                    if (countBadge) countBadge.textContent = matchCount;
+                    moduleEl.style.display = matchCount > 0 ? 'block' : 'none';
+                    return matchCount;
+                };
+
+                // 1. Frameworks Module
+                totalMatches += filterModuleCards('heroModuleFrameworks', 'heroCountFrameworks');
+
+                // 2. Domains Module
+                totalMatches += filterModuleCards('heroModuleDomains', 'heroCountDomains');
+
+                // 3. Controls Module
+                totalMatches += filterModuleCards('heroModuleControls', 'heroCountControls');
+
+                if (emptyState) {
+                    if (totalMatches === 0) {
+                        emptyState.style.display = 'block';
+                        emptyState.textContent = `No records found matching "${query}".`;
+                    } else {
+                        emptyState.style.display = 'none';
+                    }
+                }
+            }
+
+
+            // 2. Bottom Tab Sections Search Bar
             const tabSearchInput = document.getElementById('tabSectionSearchInput');
             const tabSearchClear = document.getElementById('tabSectionSearchClear');
 
@@ -1256,95 +1470,71 @@
                     if (tabSearchClear) {
                         tabSearchClear.style.display = query.length > 0 ? 'block' : 'none';
                     }
-
-                    ['panel-requirements', 'panel-domain', 'panel-frameworks'].forEach(panelId => {
-                        const panel = document.getElementById(panelId);
-                        if (!panel) return;
-                        const rows = panel.querySelectorAll('table tbody tr, .excel-field-card, .req-card-box');
-                        let visibleCount = 0;
-
-                        rows.forEach(row => {
-                            if (row.classList.contains('no-search-results-row')) return;
-                            const text = row.textContent.toLowerCase();
-                            const words = text.split(/\s+/);
-                            const isMatch = !query || words.some(w => w.startsWith(query)) || text.includes(query);
-
-                            if (isMatch) {
-                                row.style.display = '';
-                                visibleCount++;
-                            } else {
-                                row.style.display = 'none';
-                            }
-                        });
-
-                        const tbody = panel.querySelector('table tbody');
-                        let noMatchRow = panel.querySelector('.no-search-results-row');
-                        if (tbody) {
-                            if (visibleCount === 0 && rows.length > 0 && query.length > 0) {
-                                if (!noMatchRow) {
-                                    noMatchRow = document.createElement('tr');
-                                    noMatchRow.className = 'no-search-results-row';
-                                    const colCount = panel.querySelectorAll('table thead th').length || 5;
-                                    noMatchRow.innerHTML = `<td colspan="${colCount}" style="padding: 24px; text-align: center; color: var(--text-muted, #64748b); font-size: 12px; font-weight: 500;">No matching items found for "${e.target.value}".</td>`;
-                                    tbody.appendChild(noMatchRow);
-                                }
-                                noMatchRow.style.display = '';
-                            } else if (noMatchRow) {
-                                noMatchRow.style.display = 'none';
-                            }
-                        }
-                    });
+                    filterPageTabSections(query);
                 });
 
                 if (tabSearchClear) {
                     tabSearchClear.addEventListener('click', () => {
                         tabSearchInput.value = '';
-                        tabSearchInput.dispatchEvent(new Event('input'));
+                        tabSearchClear.style.display = 'none';
+                        filterPageTabSections('');
                         tabSearchInput.focus();
                     });
                 }
             }
 
-            function filterAllItems(query) {
-                if (clearSearchBtn) clearSearchBtn.style.display = query ? 'grid' : 'none';
+            function filterPageTabSections(query) {
+                ['panel-requirements', 'panel-domain', 'panel-frameworks'].forEach(panelId => {
+                    const panel = document.getElementById(panelId);
+                    if (!panel) return;
+                    const rows = panel.querySelectorAll('table tbody tr');
+                    let visibleCount = 0;
 
-                const dropdownParents = document.querySelectorAll('.main-nav-wrapper .dropdown-parent');
-                dropdownParents.forEach(parent => {
-                    const cards = parent.querySelectorAll('.dropdown-card');
-                    let matchCount = 0;
+                    rows.forEach(row => {
+                        if (row.classList.contains('no-search-results-row')) return;
+                        
+                        // Extract ONLY item name and ID/code from first 2 columns (ignoring internal summary/description)
+                        const titleLink = row.querySelector('td:nth-child(2) a, td:nth-child(2) span[style*="font-weight: 700"], td:nth-child(2) .card-title');
+                        const codeBadge = row.querySelector('td:nth-child(1) span, td:nth-child(1) .req-id-badge, td:nth-child(1)');
 
-                    cards.forEach(card => {
-                        if (!query) {
-                            card.style.display = 'flex';
-                            return;
+                        let nameText = '';
+                        if (titleLink || codeBadge) {
+                            const titleVal = titleLink ? titleLink.textContent : '';
+                            const codeVal = codeBadge ? codeBadge.textContent : '';
+                            nameText = `${codeVal} ${titleVal}`.toLowerCase().trim();
+                        } else {
+                            const cell1 = row.querySelector('td:nth-child(1)')?.textContent || '';
+                            const cell2 = row.querySelector('td:nth-child(2)')?.textContent || '';
+                            nameText = `${cell1} ${cell2}`.toLowerCase().trim();
                         }
 
-                        const title = (card.querySelector('.card-title')?.innerText || card.innerText).trim().toLowerCase();
-                        const code = (card.querySelector('.card-badge')?.innerText || '').trim().toLowerCase();
-                        const sub = (card.querySelector('.card-sub')?.innerText || '').trim().toLowerCase();
-
-                        // Exact title/code match or prefix match from start of title/code
-                        const isMatch = (title === query) || (code === query) || (sub === query) ||
-                            title.startsWith(query) || code.startsWith(query);
-
-                        card.style.display = isMatch ? 'flex' : 'none';
+                        const words = nameText.split(/\s+/);
+                        const isMatch = !query || words.some(w => w.startsWith(query)) || nameText.includes(query);
+                        
                         if (isMatch) {
-                            matchCount++;
+                            row.style.display = '';
+                            visibleCount++;
+                        } else {
+                            row.style.display = 'none';
                         }
                     });
 
-                    if (query && matchCount > 0) {
-                        parent.classList.add('search-active');
-                    } else {
-                        parent.classList.remove('search-active');
+                    const tbody = panel.querySelector('table tbody');
+                    let noMatchRow = panel.querySelector('.no-search-results-row');
+                    if (tbody) {
+                        if (visibleCount === 0 && rows.length > 0 && query.length > 0) {
+                            if (!noMatchRow) {
+                                noMatchRow = document.createElement('tr');
+                                noMatchRow.className = 'no-search-results-row';
+                                const colCount = panel.querySelectorAll('table thead th').length || 5;
+                                noMatchRow.innerHTML = `<td colspan="${colCount}" style="padding: 24px; text-align: center; color: var(--text-muted, #64748b); font-size: 12px; font-weight: 500;">No matching items found for "${query}".</td>`;
+                                tbody.appendChild(noMatchRow);
+                            }
+                            noMatchRow.style.display = '';
+                        } else if (noMatchRow) {
+                            noMatchRow.style.display = 'none';
+                        }
                     }
-                });
-
-                document.querySelectorAll('#panel-requirements tbody tr, #panel-requirements .req-card-box').forEach(card => {
-                    card.style.display = (!query || card.innerText.toLowerCase().includes(query)) ? '' : 'none';
-                });
-                document.querySelectorAll('.excel-field-card').forEach(card => {
-                    card.style.display = (!query || card.innerText.toLowerCase().includes(query)) ? 'flex' : 'none';
                 });
             }
         });
