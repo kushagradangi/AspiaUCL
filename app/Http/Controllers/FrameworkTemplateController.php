@@ -53,6 +53,52 @@ class FrameworkTemplateController extends Controller
 
     /*
     |--------------------------------------------------------------------------
+    | Public Index / All Frameworks Overview Page
+    |--------------------------------------------------------------------------
+    */
+
+    public function publicIndex(Request $request)
+    {
+        $frameworks = Framework::with(['domains.controls', 'controls'])
+            ->orderByRaw('CAST(SUBSTRING_INDEX(framework_id, "-", -1) AS UNSIGNED) ASC, framework_id ASC')
+            ->orderBy('id', 'asc')
+            ->get();
+
+        $totalFrameworks   = $frameworks->count();
+        $totalDomains      = \App\Models\Domain::count();
+        $totalControls     = \App\Models\Control::count();
+        $totalRequirements = \App\Models\Requirement::count();
+
+        $filePath = resource_path('views/aspiaUcl/frameworks/frameworks_overview.html');
+        if (file_exists($filePath)) {
+            $html = file_get_contents($filePath);
+        } else {
+            $html = $this->getDefaultTemplateHtml();
+        }
+
+        $gridHtml = $this->renderFrameworkCards($frameworks);
+
+        $placeholders = [
+            '{{total_frameworks_count}}'       => $totalFrameworks,
+            '{{total_domains_count}}'          => $totalDomains,
+            '{{total_controls_count}}'         => $totalControls,
+            '{{total_requirements_count}}'     => $totalRequirements,
+            '{{all_frameworks_grid}}'          => $gridHtml,
+            '{{all_frameworks_dropdown_list}}' => $this->renderAllFrameworksDropdownList(),
+            '{{all_domains_dropdown_list}}'    => $this->renderAllDomainsDropdownList(),
+            '{{all_controls_dropdown_list}}'   => $this->renderAllControlsDropdownList(),
+        ];
+
+        foreach ($placeholders as $placeholder => $value) {
+            $html = str_ireplace($placeholder, (string) ($value ?? ''), $html);
+        }
+
+        return response($html);
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
     | Show Framework
     |--------------------------------------------------------------------------
     */
@@ -1822,5 +1868,159 @@ HTML;
 </body>
 </html>
 HTML;
+    }
+
+    protected function renderFrameworkCards($frameworks): string
+    {
+        if ($frameworks->isEmpty()) {
+            return '<div class="empty-state"><div class="empty-icon">📁</div><h3>No frameworks available</h3><p>There are currently no frameworks added to the library.</p></div>';
+        }
+
+        $html = '';
+        foreach ($frameworks as $fw) {
+            $slug        = e($fw->slug);
+            $url         = route('frameworks.show', $slug);
+            $fwId        = e($fw->framework_id ?: ('FW-' . sprintf('%03d', $fw->id)));
+            $code        = e($fw->framework_code ?: $fw->framework_family ?: 'FW');
+            $name        = e($fw->name);
+            $version     = e($fw->version ? ":{$fw->version}" : '');
+            $publisher   = e($fw->publisher ?: 'International Standard');
+            $category    = e($fw->category ?: 'Regulatory Framework');
+
+            $domainsCount      = $fw->getMappedDomains()->count();
+            $controlsCount     = $fw->getMappedControls()->count();
+            $requirementsCount = $fw->getMappedRequirements()->count();
+
+            $html .= <<<HTML
+            <div class="framework-card" data-category="{$category}" data-fw-id="{$fwId}">
+                <div class="card-left-column">
+                    <span class="badge-fw-id">{$fwId}</span>
+                    <span class="badge-code">{$code}</span>
+                </div>
+                <div class="card-center-column">
+                    <div class="title-category-row">
+                        <h3 class="framework-title"><a href="{$url}">{$name}{$version}</a></h3>
+                        <span class="badge-cat">{$category}</span>
+                    </div>
+                    <div class="publisher-line">
+                        <i class="fas fa-landmark"></i> <span>{$publisher}</span>
+                    </div>
+                </div>
+                <div class="card-scope-column">
+                    <div class="scope-badges-strip">
+                        <span class="scope-pill"><strong class="num">{$domainsCount}</strong> Domains</span>
+                        <span class="scope-pill">•</span>
+                        <span class="scope-pill"><strong class="num">{$controlsCount}</strong> Controls</span>
+                        <span class="scope-pill">•</span>
+                        <span class="scope-pill"><strong class="num">{$requirementsCount}</strong> Reqs</span>
+                    </div>
+                </div>
+                <div class="card-action-column">
+                    <a href="{$url}" class="btn-explore-framework">
+                        <span>Explore Framework</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+HTML;
+        }
+
+        return $html;
+    }
+
+    protected function renderAllFrameworksDropdownList(): string
+    {
+        $frameworks = \App\Models\Framework::orderBy('name', 'asc')->get();
+        if ($frameworks->isEmpty()) {
+            return '';
+        }
+
+        $html = '<div class="dropdown-popover-list virtual-scroll-container" style="display: flex; flex-direction: column; gap: 0;">';
+        $badges = ['badge-emerald', 'badge-cyan', 'badge-amber', 'badge-purple', 'badge-rose'];
+        $i = 0;
+        foreach ($frameworks as $fw) {
+            $badgeClass = $badges[$i % count($badges)];
+            $i++;
+            $url = route('frameworks.show', $fw->slug);
+            $code = e($fw->framework_code ?: $fw->framework_family ?: 'FW');
+            $name = e($fw->name);
+            $cat  = e($fw->category ?: 'Regulatory Framework');
+
+            $html .= <<<HTML
+            <a href="{$url}" class="dropdown-card" style="display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 8px 10px; border-bottom: 1px solid var(--border-light, #e2e8f0); background: transparent; border-radius: 4px; text-decoration: none; transition: background 0.15s ease;" onmouseover="this.style.background='var(--bg-subtle, #f8fafc)';" onmouseout="this.style.background='transparent';">
+                <div style="flex: 1; min-width: 0;">
+                    <div style="font-size: 12.5px; font-weight: 600; color: var(--text-title, #0f172a); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.3;">{$name}</div>
+                    <div style="font-size: 10.5px; color: var(--text-muted, #64748b); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 1px;">{$cat}</div>
+                </div>
+                <span class="card-badge {$badgeClass}" style="font-family: 'JetBrains Mono', monospace; font-size: 9.5px; font-weight: 700; padding: 2px 6px; border-radius: 4px; flex-shrink: 0;">{$code}</span>
+            </a>
+HTML;
+        }
+        $html .= '</div>';
+        return $html;
+    }
+
+    protected function renderAllDomainsDropdownList(): string
+    {
+        $domains = \App\Models\Domain::orderBy('display_order', 'asc')->get();
+        if ($domains->isEmpty()) {
+            return '';
+        }
+
+        $html = '<div class="dropdown-popover-list virtual-scroll-container" style="display: flex; flex-direction: column; gap: 0;">';
+        $badges = ['badge-purple', 'badge-cyan', 'badge-emerald', 'badge-amber', 'badge-rose'];
+        $i = 0;
+        foreach ($domains as $d) {
+            $badgeClass = $badges[$i % count($badges)];
+            $i++;
+            $url = route('domains.show', $d->slug);
+            $code = e($d->domain_code ?: $d->domain_id ?: 'DOM');
+            $name = e($d->name);
+            $sub  = e($d->short_overview ?: $d->purpose ?: 'Control Domain');
+
+            $html .= <<<HTML
+            <a href="{$url}" class="dropdown-card" style="display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 8px 10px; border-bottom: 1px solid var(--border-light, #e2e8f0); background: transparent; border-radius: 4px; text-decoration: none; transition: background 0.15s ease;" onmouseover="this.style.background='var(--bg-subtle, #f8fafc)';" onmouseout="this.style.background='transparent';">
+                <div style="flex: 1; min-width: 0;">
+                    <div style="font-size: 12.5px; font-weight: 600; color: var(--text-title, #0f172a); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.3;">{$name}</div>
+                    <div style="font-size: 10.5px; color: var(--text-muted, #64748b); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 1px;">{$sub}</div>
+                </div>
+                <span class="card-badge {$badgeClass}" style="font-family: 'JetBrains Mono', monospace; font-size: 9.5px; font-weight: 700; padding: 2px 6px; border-radius: 4px; flex-shrink: 0;">{$code}</span>
+            </a>
+HTML;
+        }
+        $html .= '</div>';
+        return $html;
+    }
+
+    protected function renderAllControlsDropdownList(): string
+    {
+        $controls = \App\Models\Control::orderBy('control_id', 'asc')->get();
+        if ($controls->isEmpty()) {
+            return '';
+        }
+
+        $html = '<div class="dropdown-popover-list virtual-scroll-container" style="display: flex; flex-direction: column; gap: 0;">';
+        $badges = ['badge-cyan', 'badge-purple', 'badge-amber', 'badge-emerald', 'badge-rose'];
+        $i = 0;
+        foreach ($controls as $c) {
+            $badgeClass = $badges[$i % count($badges)];
+            $i++;
+            $url = route('controls.show', $c->control_id);
+            $code = e($c->control_id);
+            $name = e($c->name);
+            $sub  = e($c->control_category ?: $c->description ?: 'Security Control');
+
+            $html .= <<<HTML
+            <a href="{$url}" class="dropdown-card" style="display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 8px 10px; border-bottom: 1px solid var(--border-light, #e2e8f0); background: transparent; border-radius: 4px; text-decoration: none; transition: background 0.15s ease;" onmouseover="this.style.background='var(--bg-subtle, #f8fafc)';" onmouseout="this.style.background='transparent';">
+                <div style="flex: 1; min-width: 0;">
+                    <div style="font-size: 12.5px; font-weight: 600; color: var(--text-title, #0f172a); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.3;">{$name}</div>
+                    <div style="font-size: 10.5px; color: var(--text-muted, #64748b); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 1px;">{$sub}</div>
+                </div>
+                <span class="card-badge {$badgeClass}" style="font-family: 'JetBrains Mono', monospace; font-size: 9.5px; font-weight: 700; padding: 2px 6px; border-radius: 4px; flex-shrink: 0;">{$code}</span>
+            </a>
+HTML;
+        }
+        $html .= '</div>';
+        return $html;
     }
 }

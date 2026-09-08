@@ -1005,9 +1005,123 @@
                 font-size: 24px;
             }
 
-            .excel-field-card.span-2 {
-                grid-column: 1 / -1;
-            }
+        /* INTERACTIVE SEGMENTED THEME SWITCHER */
+        .theme-segmented-switch {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            background: var(--bg-subtle, rgba(241, 245, 249, 0.9));
+            border: 1px solid var(--border-light, #e2e8f0);
+            border-radius: 40px;
+            padding: 3px;
+            user-select: none;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.08);
+            gap: 2px;
+        }
+
+        [data-theme="dark"] .theme-segmented-switch {
+            background: rgba(15, 23, 42, 0.85);
+            border-color: rgba(56, 189, 248, 0.3);
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.5), 0 0 20px rgba(123, 97, 255, 0.2);
+        }
+
+        .theme-sliding-thumb {
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: calc(50% - 3px);
+            height: calc(100% - 6px);
+            background: linear-gradient(135deg, #16C4F4 0%, #0284c7 100%);
+            border-radius: 30px;
+            box-shadow: 0 2px 12px rgba(22, 196, 244, 0.6);
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.4s ease, box-shadow 0.4s ease;
+            z-index: 1;
+        }
+
+        [data-theme="dark"] .theme-sliding-thumb {
+            transform: translateX(100%);
+            background: linear-gradient(135deg, #7B61FF 0%, #6366f1 100%);
+            box-shadow: 0 2px 14px rgba(123, 97, 255, 0.7);
+        }
+
+        .theme-seg-btn {
+            position: relative;
+            z-index: 2;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 12px;
+            border-radius: 30px;
+            border: none;
+            background: transparent;
+            color: var(--text-secondary, #64748b);
+            font-size: 0.8rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: color 0.25s ease, transform 0.15s ease;
+        }
+
+        .theme-seg-btn.active {
+            color: #ffffff;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        .theme-seg-btn:hover {
+            color: var(--text-title, #0f172a);
+        }
+
+        .theme-seg-btn:active {
+            transform: scale(0.92);
+        }
+
+        .theme-icon-sun {
+            transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), color 0.3s ease;
+        }
+
+        .theme-seg-btn.active .theme-icon-sun {
+            transform: rotate(180deg) scale(1.15);
+            color: #fbbf24;
+            filter: drop-shadow(0 0 6px rgba(251, 191, 36, 0.8));
+        }
+
+        .theme-icon-moon {
+            transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), color 0.3s ease;
+        }
+
+        .theme-seg-btn.active .theme-icon-moon {
+            transform: rotate(-20deg) scale(1.15);
+            color: #e0e7ff;
+            filter: drop-shadow(0 0 6px rgba(224, 231, 255, 0.8));
+        }
+
+        /* RADIAL RIPPLE WAVE EFFECT */
+        .theme-ripple-wave {
+            position: fixed;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            pointer-events: none;
+            z-index: 999999;
+            background: radial-gradient(circle, rgba(22, 196, 244, 0.45) 0%, rgba(123, 97, 255, 0.25) 50%, transparent 100%);
+            transition: transform 0.65s cubic-bezier(0.1, 0.8, 0.3, 1), opacity 0.65s ease;
+            opacity: 0.9;
+        }
+
+        [data-theme="dark"] .theme-ripple-wave {
+            background: radial-gradient(circle, rgba(123, 97, 255, 0.55) 0%, rgba(22, 196, 244, 0.25) 50%, transparent 100%);
+        }
+
+        .theme-ripple-wave.animate-expand {
+            transform: translate(-50%, -50%) scale(100);
+            opacity: 0;
+        }
+
+        /* SMOOTH GLOBAL COLOR TRANSITIONS */
+        body, .site-header, .control-hero-card, .section-box, .custom-table, .toast {
+            transition: background-color 0.35s ease, color 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
         }
     </style>
 </head>
@@ -1026,7 +1140,7 @@
                 <ul class="nav-menu-list">
                     <!-- Frameworks Menu -->
                     <li class="nav-menu-item dropdown-parent">
-                        <a href="javascript:void(0)" class="nav-menu-link" onclick="event.preventDefault();">
+                        <a href="/all-frameworks" class="nav-menu-link">
                             <span>Frameworks</span>
                             <span class="dropdown-arrow">▾</span>
                         </a>
@@ -1060,10 +1174,10 @@
             </nav>
 
             <div class="header-actions">
-                <div class="theme-switch-container" id="themeSwitch" role="group" aria-label="Color theme switcher">
-                    <button type="button" class="theme-btn active" id="btnThemeLight" aria-pressed="true">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <div class="theme-segmented-switch" id="themeSegmentedSwitch" title="Toggle Light / Dark Theme (Shift+T)">
+                    <div class="theme-sliding-thumb" id="themeSlidingThumb"></div>
+                    <button type="button" class="theme-seg-btn active" id="segBtnLight" onclick="setTheme('light', true, event)" aria-label="Light Mode">
+                        <svg class="theme-icon-sun" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <circle cx="12" cy="12" r="5"></circle>
                             <line x1="12" y1="1" x2="12" y2="3"></line>
                             <line x1="12" y1="21" x2="12" y2="23"></line>
@@ -1076,9 +1190,8 @@
                         </svg>
                         <span>Light</span>
                     </button>
-                    <button type="button" class="theme-btn" id="btnThemeDark" aria-pressed="false">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <button type="button" class="theme-seg-btn" id="segBtnDark" onclick="setTheme('dark', true, event)" aria-label="Dark Mode">
+                        <svg class="theme-icon-moon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
                         </svg>
                         <span>Dark</span>
@@ -1557,6 +1670,107 @@
                 setTimeout(() => toast.classList.remove('show'), 2600);
             }
         }
+
+        /* INTERACTIVE THEME ENGINE */
+        function playThemeSound(isDark) {
+            try {
+                const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                if (!AudioCtx) return;
+                const ctx = new AudioCtx();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                
+                if (isDark) {
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(523.25, ctx.currentTime);
+                    osc.frequency.exponentialRampToValueAtTime(392.00, ctx.currentTime + 0.12);
+                    gain.gain.setValueAtTime(0.06, ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.12);
+                } else {
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(440.00, ctx.currentTime);
+                    osc.frequency.exponentialRampToValueAtTime(880.00, ctx.currentTime + 0.10);
+                    gain.gain.setValueAtTime(0.05, ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.10);
+                }
+                
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start();
+                osc.stop(ctx.currentTime + 0.12);
+            } catch(e) {}
+        }
+
+        function createThemeRipple(e) {
+            try {
+                const ripple = document.createElement('div');
+                ripple.className = 'theme-ripple-wave';
+                let x = window.innerWidth / 2;
+                let y = 40;
+                if (e && e.clientX && e.clientY) {
+                    x = e.clientX;
+                    y = e.clientY;
+                } else {
+                    const btn = document.getElementById('themeSegmentedSwitch');
+                    if (btn) {
+                        const rect = btn.getBoundingClientRect();
+                        x = rect.left + rect.width / 2;
+                        y = rect.top + rect.height / 2;
+                    }
+                }
+                ripple.style.left = `${x}px`;
+                ripple.style.top = `${y}px`;
+                document.body.appendChild(ripple);
+                requestAnimationFrame(() => ripple.classList.add('animate-expand'));
+                setTimeout(() => { if (ripple.parentNode) ripple.remove(); }, 650);
+            } catch(err) {}
+        }
+
+        function setTheme(theme, playSound = true, evt = null) {
+            const isDark = (theme === 'dark');
+            document.documentElement.setAttribute('data-theme', theme);
+            localStorage.setItem('aspia_theme', theme);
+
+            const btnLight = document.getElementById('segBtnLight');
+            const btnDark  = document.getElementById('segBtnDark');
+
+            if (theme === 'light') {
+                if (btnLight) btnLight.classList.add('active');
+                if (btnDark) btnDark.classList.remove('active');
+            } else {
+                if (btnDark) btnDark.classList.add('active');
+                if (btnLight) btnLight.classList.remove('active');
+            }
+
+            if (playSound) {
+                playThemeSound(isDark);
+                createThemeRipple(evt);
+            }
+        }
+
+        function toggleTheme(evt = null) {
+            const current = document.documentElement.getAttribute('data-theme') || 'light';
+            setTheme(current === 'light' ? 'dark' : 'light', true, evt);
+        }
+
+        document.addEventListener('keydown', function (e) {
+            if (e.shiftKey && e.key.toLowerCase() === 't' && !['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) {
+                e.preventDefault();
+                toggleTheme();
+            }
+        });
+
+        window.addEventListener('storage', function (e) {
+            if (e.key === 'aspia_theme' && e.newValue) {
+                setTheme(e.newValue, false);
+            }
+        });
+
+        (function () {
+            const savedTheme = localStorage.getItem('aspia_theme') || 
+                (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            setTheme(savedTheme, false);
+        })();
     </script>
 </body>
 

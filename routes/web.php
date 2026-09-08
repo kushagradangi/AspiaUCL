@@ -41,6 +41,18 @@ Route::get('/', function () {
 |
 */
 
+// Public Frameworks List / Overview Page (e.g. /all-frameworks or /frameworks-overview)
+Route::get(
+    '/all-frameworks',
+    [FrameworkTemplateController::class, 'publicIndex']
+)->name('frameworks.public_index');
+
+Route::get(
+    '/frameworks-overview',
+    [FrameworkTemplateController::class, 'publicIndex']
+);
+
+
 // Framework Template View (e.g. /frameworks/isoiec-27001)
 Route::get(
     '/frameworks/{slug}',
@@ -48,6 +60,7 @@ Route::get(
 )
     ->where('slug', '[a-z0-9]+(?:-[a-z0-9]+)*')
     ->name('frameworks.show');
+
 
 
 // Domain Template View (e.g. /domains/access-control)

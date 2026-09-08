@@ -1551,7 +1551,7 @@ HTML;
                 <ul class="nav-menu-list">
                     <!-- Frameworks Menu -->
                     <li class="nav-menu-item dropdown-parent">
-                        <a href="javascript:void(0)" class="nav-menu-link" onclick="event.preventDefault();">
+                        <a href="/all-frameworks" class="nav-menu-link">
                             <span>Frameworks</span>
                             <span class="dropdown-arrow">▾</span>
                         </a>
