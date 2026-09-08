@@ -52,6 +52,17 @@ Route::get(
     [FrameworkTemplateController::class, 'publicIndex']
 );
 
+// Public Domains List / Overview Page (e.g. /all-domains or /domains-overview)
+Route::get(
+    '/all-domains',
+    [DomainTemplateController::class, 'publicIndex']
+)->name('domains.public_index');
+
+Route::get(
+    '/domains-overview',
+    [DomainTemplateController::class, 'publicIndex']
+);
+
 
 // Framework Template View (e.g. /frameworks/isoiec-27001)
 Route::get(

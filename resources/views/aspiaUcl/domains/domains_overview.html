@@ -1,61 +1,57 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
-
 <head>
-    <!-- ========== META SECTION FOR SEO ========== -->
+    <!-- ==========================================================================
+         1. SEO META TAGS & STRUCTURED DATA
+         ========================================================================== -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Regulatory & Security Frameworks: Meaning, Types, Mappings & Standards Guide | ASPIA UCL</title>
-    <meta name="description"
-        content="Complete guide to cybersecurity frameworks, regulatory standards, compliance mappings, control domains, audit requirements, and best practices in ASPIA Unified Control Library.">
-    <link rel="canonical" href="https://aspiainfotech.com/frameworks-guide/">
-    <meta property="og:title" content="Regulatory & Security Frameworks: Meaning, Types, Mappings & Standards Guide">
-    <meta property="og:description"
-        content="Complete guide to cybersecurity frameworks, regulatory standards, compliance mappings, control domains, audit requirements, and best practices in ASPIA Unified Control Library.">
-    <meta property="og:type" content="article">
-    <meta property="og:url" content="https://aspiainfotech.com/frameworks-guide/">
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Regulatory & Security Frameworks: Meaning, Types, Mappings & Standards Guide">
-    <meta name="twitter:description"
-        content="Complete guide to cybersecurity frameworks, regulatory standards, compliance mappings, control domains, audit requirements, and best practices in ASPIA Unified Control Library.">
+    <title>Control Domains & Security Categories Guide: Meaning, Types, Mappings & Controls | ASPIA UCL</title>
+    <meta name="description" content="Complete guide to control domains, security categories, policy governance, risk management, and audit crosswalks in ASPIA Unified Control Library.">
+    <meta name="keywords" content="control domains, security categories, governance, risk management, access control, incident response, UCL, ASPIA">
+    <meta name="author" content="ASPIA Unified Control Library">
     <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://aspiainfotech.com/domains-guide/">
 
-    <!-- Article Schema -->
+    <!-- Open Graph (Facebook / LinkedIn) -->
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Control Domains & Security Categories Guide | ASPIA UCL">
+    <meta property="og:description" content="Complete guide to control domains, security categories, policy governance, risk management, and audit crosswalks in ASPIA Unified Control Library.">
+    <meta property="og:url" content="https://aspiainfotech.com/domains-guide/">
+    <meta property="og:site_name" content="ASPIA Unified Control Library">
+
+    <!-- Twitter Cards -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Control Domains & Security Categories Guide | ASPIA UCL">
+    <meta name="twitter:description" content="Complete guide to control domains, security categories, policy governance, risk management, and audit crosswalks in ASPIA Unified Control Library.">
+
+    <!-- Schema.org JSON-LD Structured Data -->
     <script type="application/ld+json">
     {
         "@context": "https://schema.org",
-        "@type": "TechArticle",
-        "headline": "Regulatory & Security Frameworks: Meaning, Types, Mappings & Standards Guide",
-        "description": "Complete guide to cybersecurity frameworks, regulatory standards, compliance mappings, control domains, audit requirements, and best practices in ASPIA Unified Control Library.",
-        "author": {"@type": "Organization", "name": "ASPIA Infotech"},
-        "publisher": {"@type": "Organization", "name": "ASPIA Infotech Pvt. Ltd."},
-        "datePublished": "2026-09-08",
-        "dateModified": "2026-09-08"
+        "@type": "DefinedTermSet",
+        "name": "ASPIA UCL Control Domains",
+        "description": "Standardized control domains and security governance categories mapped under ASPIA Unified Control Library.",
+        "publisher": {
+            "@type": "Organization",
+            "name": "ASPIA Infotech"
+        },
+        "inLanguage": "en"
     }
     </script>
 
-    <!-- FAQ Schema -->
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "mainEntity": [
-            {"@type":"Question","name":"What is a cybersecurity compliance framework?","acceptedAnswer":{"@type":"Answer","text":"A cybersecurity compliance framework is a structured set of guidelines, security controls, and best practices designed to help organizations manage risk and meet regulatory requirements."}},
-            {"@type":"Question","name":"What are the main types of compliance frameworks?","acceptedAnswer":{"@type":"Answer","text":"Frameworks generally fall into three categories: Regulatory Mandates (GDPR, HIPAA, PCI DSS), Industry Standards (ISO/IEC 27001, SOC 2), and Security Benchmarks (NIST CSF, CIS Controls)."}},
-            {"@type":"Question","name":"What is framework crosswalk mapping?","acceptedAnswer":{"@type":"Answer","text":"Crosswalk mapping links controls and requirements from multiple frameworks to a unified baseline, enabling 'test once, comply with many' efficiency."}},
-            {"@type":"Question","name":"How does ASPIA UCL organize frameworks?","acceptedAnswer":{"@type":"Answer","text":"ASPIA UCL maps frameworks into standardized Control Domains, Security Controls, and Auditable Requirements for streamlined governance."}},
-            {"@type":"Question","name":"What is the difference between ISO 27001 and NIST CSF?","acceptedAnswer":{"@type":"Answer","text":"ISO 27001 is an certifiable Information Security Management System (ISMS) standard, while NIST CSF is a voluntary risk-management framework structured around Identify, Protect, Detect, Respond, and Recover functions."}}
-        ]
-    }
-    </script>
-
-    <!-- Google Fonts & Font Awesome -->
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
+        /* ==========================================================================
+           2. ADORABLE DESIGN SYSTEM & CSS VARIABLES
+           ========================================================================== */
         :root {
             /* Light Theme Color Tokens */
             --bg-body: #f8fafd;
@@ -97,7 +93,7 @@
             overflow-x: hidden;
         }
 
-        /* HEADER NAV BAR */
+        /* NAVIGATION HEADER */
         .site-nav-header {
             position: sticky;
             top: 0;
@@ -271,17 +267,6 @@
             transform: rotate(-20deg) scale(1.15);
             color: #e0e7ff;
             filter: drop-shadow(0 0 6px rgba(224, 231, 255, 0.8));
-        }
-
-        .theme-kbd-hint {
-            font-size: 0.65rem;
-            font-weight: 800;
-            padding: 1px 5px;
-            border-radius: 4px;
-            background: rgba(255, 255, 255, 0.2);
-            color: rgba(255, 255, 255, 0.9);
-            margin-left: 2px;
-            letter-spacing: 0.3px;
         }
 
         /* RADIAL RIPPLE WAVE EFFECT */
@@ -481,8 +466,8 @@
             background: #f8fafd;
             border: 1px solid var(--border-color);
             border-radius: 16px;
-            padding: 1.5rem;
-            margin: 2rem 0;
+            padding: 1.2rem 1.5rem;
+            margin: 2rem 0 1rem 0;
             display: flex;
             flex-wrap: wrap;
             align-items: center;
@@ -519,41 +504,6 @@
             outline: none;
         }
 
-        .filter-buttons {
-            display: flex;
-            gap: 0.5rem;
-            flex-wrap: wrap;
-        }
-
-        .filter-btn {
-            padding: 0.5rem 1.2rem;
-            border-radius: 30px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            border: 1px solid var(--border-color);
-            background: var(--bg-body);
-            color: var(--text-main);
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .filter-btn.active,
-        .filter-btn:hover {
-            background: #16C4F4;
-            border-color: #16C4F4;
-            color: #0D1735;
-        }
-
-        /* DYNAMIC FRAMEWORKS CATALOG LAYOUT */
-        .frameworks-cards-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
-            gap: 1.25rem;
-            margin: 1.5rem 0 3rem 0;
-            transition: all 0.3s ease;
-        }
-
-        /* VIRTUAL SCROLL CONTAINER STYLES */
         /* CATALOG LIST WRAPPER & PAGINATION STYLES */
         .catalog-list-wrapper {
             margin-bottom: 1rem;
@@ -634,7 +584,7 @@
             cursor: not-allowed;
         }
 
-        /* CLASSIC & PROFESSIONAL COMPACT LIST FORMAT */
+        /* CLASSIC COMPACT LIST FORMAT */
         .list-table-header-bar {
             display: flex;
             align-items: center;
@@ -699,15 +649,25 @@
         }
 
         .card-left-column .badge-fw-id {
+            font-family: 'JetBrains Mono', monospace;
             font-size: 0.68rem;
+            font-weight: 800;
             padding: 0.15rem 0.45rem;
             border-radius: 4px;
+            background: rgba(22, 196, 244, 0.12);
+            color: #16C4F4;
+            border: 1px solid rgba(22, 196, 244, 0.25);
         }
 
         .card-left-column .badge-code {
+            font-family: 'JetBrains Mono', monospace;
             font-size: 0.65rem;
+            font-weight: 700;
             padding: 0.15rem 0.4rem;
             border-radius: 4px;
+            background: rgba(22, 196, 244, 0.12);
+            color: #16C4F4;
+            border: 1px solid rgba(22, 196, 244, 0.25);
         }
 
         .card-center-column {
@@ -807,189 +767,6 @@
             text-decoration: none;
         }
 
-        @media (max-width: 992px) {
-            .list-table-header-bar {
-                display: none !important;
-            }
-
-            .frameworks-cards-grid.list-layout-view .framework-card {
-                flex-direction: column;
-                align-items: stretch;
-                gap: 0.6rem;
-                padding: 0.8rem;
-            }
-
-            .card-left-column {
-                flex-direction: row;
-                min-width: auto;
-            }
-
-            .card-center-column {
-                margin-left: 0;
-            }
-
-            .card-scope-column {
-                min-width: auto;
-            }
-
-            .scope-badges-strip {
-                justify-content: space-around;
-            }
-
-            .card-action-column {
-                min-width: auto;
-                text-align: stretch;
-            }
-
-            .btn-explore-framework {
-                width: 100%;
-                justify-content: center;
-            }
-        }
-
-        .framework-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 18px;
-            padding: 1.8rem;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
-            box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.04);
-        }
-
-        .framework-card:hover {
-            transform: translateY(-4px);
-            border-color: #16C4F4;
-            box-shadow: 0 12px 30px -4px rgba(22, 196, 244, 0.15);
-        }
-
-        .card-top {
-            margin-bottom: 1rem;
-        }
-
-        .card-badges {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 0.8rem;
-        }
-
-        .badge-fw-id {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.75rem;
-            font-weight: 800;
-            padding: 0.25rem 0.65rem;
-            border-radius: 6px;
-            background: rgba(123, 97, 255, 0.12);
-            color: #7B61FF;
-            border: 1px solid rgba(123, 97, 255, 0.25);
-            letter-spacing: 0.3px;
-        }
-
-        [data-theme="dark"] .badge-fw-id {
-            background: rgba(123, 97, 255, 0.2);
-            color: #a78bfa;
-            border-color: rgba(123, 97, 255, 0.4);
-        }
-
-        .badge-code {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.75rem;
-            font-weight: 700;
-            padding: 0.25rem 0.6rem;
-            border-radius: 6px;
-            background: rgba(22, 196, 244, 0.12);
-            color: #16C4F4;
-            border: 1px solid rgba(22, 196, 244, 0.25);
-        }
-
-        .badge-cat {
-            font-size: 0.7rem;
-            font-weight: 700;
-            padding: 0.25rem 0.6rem;
-            border-radius: 20px;
-            background: var(--bg-body);
-            color: #64748b;
-            border: 1px solid var(--border-color);
-            text-transform: uppercase;
-        }
-
-        .framework-title {
-            font-size: 1.25rem;
-            font-weight: 800;
-            color: var(--text-heading);
-            margin-bottom: 0.4rem;
-        }
-
-        .framework-publisher {
-            font-size: 0.85rem;
-            color: #64748b;
-            margin-bottom: 0.8rem;
-            display: flex;
-            align-items: center;
-            gap: 0.4rem;
-        }
-
-        .framework-desc {
-            font-size: 0.9rem;
-            color: var(--text-main);
-            line-height: 1.6;
-            margin-bottom: 1.2rem;
-            display: -webkit-box;
-            -webkit-line-clamp: 3;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-
-        .card-stats-strip {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 0.5rem;
-            background: var(--bg-body);
-            border-radius: 10px;
-            padding: 0.8rem;
-            margin-bottom: 1.2rem;
-            text-align: center;
-            border: 1px solid var(--border-color);
-        }
-
-        .stat-val {
-            font-size: 1.1rem;
-            font-weight: 800;
-            color: var(--text-heading);
-        }
-
-        .stat-lbl {
-            font-size: 0.65rem;
-            font-weight: 700;
-            color: #64748b;
-            text-transform: uppercase;
-        }
-
-        .btn-view-framework {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            width: 100%;
-            padding: 0.7rem 1rem;
-            border-radius: 10px;
-            font-size: 0.85rem;
-            font-weight: 700;
-            background: rgba(22, 196, 244, 0.1);
-            color: #16C4F4;
-            border: 1px solid rgba(22, 196, 244, 0.25);
-            text-decoration: none;
-            transition: all 0.2s;
-        }
-
-        .btn-view-framework:hover {
-            background: #16C4F4;
-            color: #0D1735;
-        }
-
         /* TABLES */
         .custom-table {
             width: 100%;
@@ -1048,6 +825,7 @@
             font-weight: 600;
         }
 
+        .flow-step-purple,
         .flow-step-cyan {
             background: #16C4F4;
             color: #0D1735;
@@ -1055,7 +833,7 @@
             border-radius: 40px;
             display: inline-block;
             margin: 0.3rem;
-            font-weight: 600;
+            font-weight: 700;
         }
 
         .flow-arrow {
@@ -1224,8 +1002,8 @@
             .hero-card {
                 padding: 2rem 1.5rem;
             }
-            .frameworks-cards-grid {
-                grid-template-columns: 1fr;
+            .list-table-header-bar {
+                display: none !important;
             }
         }
     </style>
@@ -1241,10 +1019,10 @@
 
             <ul class="nav-links">
                 <li>
-                    <a href="/all-frameworks" class="active">Frameworks</a>
+                    <a href="/all-frameworks">Frameworks</a>
                 </li>
                 <li>
-                    <a href="/all-domains">Domains</a>
+                    <a href="/all-domains" class="active">Domains</a>
                 </li>
                 <li class="dropdown-parent">
                     <a href="javascript:void(0)">Controls <i class="fas fa-chevron-down" style="font-size:0.7rem;"></i></a>
@@ -1274,14 +1052,14 @@
         <div class="toc-card">
             <p class="toc-title">In This Guide</p>
             <ol class="toc-grid">
-                <li><a href="#what-are">What Are Compliance Frameworks?</a></li>
-                <li><a href="#why-used">Why Are Frameworks Used in GRC?</a></li>
-                <li><a href="#frameworks-catalog">Explore Integrated Regulatory Frameworks</a></li>
-                <li><a href="#key-terms">Key Terms Used in Framework Architecture</a></li>
-                <li><a href="#framework-types">Types of Security &amp; Regulatory Frameworks</a></li>
-                <li><a href="#crosswalk-mapping">Crosswalk &amp; Control Mapping Architecture</a></li>
-                <li><a href="#implementation-workflow">Framework Implementation &amp; Mapping Workflow</a></li>
-                <li><a href="#checklist">Framework Compliance Readiness Checklist</a></li>
+                <li><a href="#what-are">What Are Control Domains?</a></li>
+                <li><a href="#why-used">Why Structure Security by Control Domains?</a></li>
+                <li><a href="#domains-catalog">Explore Integrated Control Domains</a></li>
+                <li><a href="#key-terms">Key Terms Used in Domain Architecture</a></li>
+                <li><a href="#domain-categories">Domain Architecture &amp; Governance Classification</a></li>
+                <li><a href="#crosswalk-mapping">Crosswalk &amp; Framework Mapping Architecture</a></li>
+                <li><a href="#implementation-workflow">Domain Lifecycle &amp; Governance Workflow</a></li>
+                <li><a href="#checklist">Domain Governance Readiness Checklist</a></li>
                 <li><a href="#faq">Frequently Asked Questions</a></li>
                 <li><a href="#conclusion">Final Takeaway</a></li>
             </ol>
@@ -1289,11 +1067,11 @@
 
         <!-- HERO BANNER -->
         <div class="hero-card">
-            <h1 class="hero-title">Regulatory &amp; Security Frameworks: Meaning, Types, Mappings &amp; Standards</h1>
-            <p class="hero-subtitle">Complete guide to cybersecurity frameworks, regulatory standards, compliance mappings, control domains, audit requirements, and best practices in ASPIA Unified Control Library.</p>
+            <h1 class="hero-title">Control Domains &amp; Security Categories: Meaning, Architecture &amp; Governance</h1>
+            <p class="hero-subtitle">Complete guide to control domains, security governance categories, risk management baselines, policy structures, and compliance mappings in ASPIA Unified Control Library.</p>
             <div class="hero-tags">
-                <span class="hero-tag-pill"><i class="fas fa-shield-alt"></i> Unified Library</span>
-                <span><i class="far fa-clock"></i> 14 min read</span>
+                <span class="hero-tag-pill"><i class="fas fa-cubes"></i> Unified Library</span>
+                <span><i class="far fa-clock"></i> 12 min read</span>
                 <span style="opacity:0.8;"><i class="far fa-calendar-alt"></i> September 2026</span>
                 <span><i class="fas fa-user-edit"></i> ASPIA Editorial</span>
             </div>
@@ -1302,66 +1080,66 @@
         <!-- SHORT ANSWER BOX -->
         <div class="callout-box">
             <p class="callout-title">In Simple Terms:</p>
-            <p class="callout-text">A compliance framework is a set of security rules and guidelines that help organizations protect data. ASPIA UCL connects global standards (like ISO 27001, NIST, SOC 2, and PCI DSS) into one unified system—so you can test your security controls once and satisfy multiple regulations automatically.</p>
+            <p class="callout-text">A control domain is a high-level category that groups related security policies, technical safeguards, and audit controls (such as Access Control, Asset Management, or Incident Response). ASPIA UCL organizes all security requirements under standardized control domains so organizations can manage compliance efficiently across multiple frameworks.</p>
         </div>
 
-        <!-- WHAT ARE FRAMEWORKS -->
-        <h2 id="what-are" class="section-heading">What Are Compliance Frameworks?</h2>
-        <p>A cybersecurity or regulatory compliance framework is a system of standards, guidelines, and controls created by recognized international bodies or regulatory authorities (such as ISO, NIST, AICPA, PCI SSC, EU). Frameworks assist organizations in establishing information security governance, protecting sensitive data, mitigating operational risks, and achieving legal compliance.</p>
-        <p>Rather than designing custom security procedures from scratch, organizations adopt established frameworks to demonstrate compliance, satisfy client requirements, and pass third-party audits.</p>
+        <!-- WHAT ARE DOMAINS -->
+        <h2 id="what-are" class="section-heading">What Are Control Domains?</h2>
+        <p>A control domain is a functional classification in information security and regulatory governance that groups logically related controls, security practices, and risk mitigation safeguards. Control domains provide a structured taxonomy for organizing policies, assigning business owners, and assessing security maturity.</p>
+        <p>Instead of managing hundreds of isolated security controls independently, organizations structure their GRC program into core domains such as Identity &amp; Access Management (IAM), Data Protection (DAT), Risk Management (RSK), and Vulnerability Management (VUL).</p>
 
-        <!-- WHY USED -->
-        <h2 id="why-used" class="section-heading">Why Are Frameworks Used in GRC?</h2>
+        <!-- WHY STRUCTURE BY DOMAINS -->
+        <h2 id="why-used" class="section-heading">Why Structure Security by Control Domains?</h2>
 
         <div class="feature-grid">
+            <div class="feature-card" style="border-top-color: #7B61FF;">
+                <strong>1. Clear Governance Ownership</strong>
+                <p style="font-size:0.85rem;margin:0;">Assigns direct accountability to specific business owners and teams for each security category.</p>
+            </div>
             <div class="feature-card" style="border-top-color: #16C4F4;">
-                <strong>1. Standardizes Security Posture</strong>
-                <p style="font-size:0.85rem;margin:0;">Provides a recognized benchmark that clients, auditors, and regulators understand and trust.</p>
+                <strong>2. Standardized Taxonomy</strong>
+                <p style="font-size:0.85rem;margin:0;">Establishes a common language across technical teams, internal auditors, and executive leadership.</p>
             </div>
             <div class="feature-card" style="border-top-color: #22C55E;">
-                <strong>2. Reduces Audit Fatigue</strong>
-                <p style="font-size:0.85rem;margin:0;">Mapping overlapping frameworks allows testing a single control to fulfill multiple compliance standards.</p>
+                <strong>3. Audit Crosswalk Efficiency</strong>
+                <p style="font-size:0.85rem;margin:0;">Maps controls from ISO 27001, NIST, SOC 2, and PCI DSS into a single domain structure to avoid duplicate testing.</p>
             </div>
             <div class="feature-card" style="border-top-color: #F59E0B;">
-                <strong>3. Drives Risk-Based Governance</strong>
-                <p style="font-size:0.85rem;margin:0;">Aligns security investments directly with identified business risks and compliance liabilities.</p>
-            </div>
-            <div class="feature-card" style="border-top-color: #EF4444;">
-                <strong>4. Demonstrates Due Diligence</strong>
-                <p style="font-size:0.85rem;margin:0;">Provides auditable proof of security controls during vendor assessments and legal reviews.</p>
+                <strong>4. Comprehensive Coverage</strong>
+                <p style="font-size:0.85rem;margin:0;">Ensures no critical area of cybersecurity or regulatory compliance is overlooked during risk assessments.</p>
             </div>
         </div>
 
-        <!-- CATALOG TOOLBAR & DYNAMIC CARDS -->
-        <h2 id="frameworks-catalog" class="section-heading">Explore Integrated Regulatory Frameworks</h2>
-        <p>Browse all regulatory baselines, cybersecurity frameworks, and industry standards mapped within ASPIA UCL. Filter by category or search by framework code, title, publisher, or family.</p>
+        <!-- CATALOG TOOLBAR & DYNAMIC DOMAIN CARDS -->
+        <h2 id="domains-catalog" class="section-heading">Explore Integrated Control Domains</h2>
+        <p>Browse all standardized control domains mapped within ASPIA UCL. Search by domain ID, code, title, business owner, or functional scope.</p>
 
         <div class="catalog-toolbar">
             <div class="search-input-group">
                 <i class="fas fa-search"></i>
-                <input type="text" id="frameworkSearchInput" placeholder="Search frameworks by code, title, publisher, category..." onkeyup="filterFrameworks()">
+                <input type="text" id="domainSearchInput" placeholder="Search domains by ID, code, title, owner, purpose..." onkeyup="filterDomains()">
             </div>
         </div>
 
         <!-- CLASSIC LIST TABLE HEADER STRIP -->
         <div class="list-table-header-bar" id="listTableHeaderBar">
-            <div class="col-hdr col-hdr-id">Framework ID</div>
-            <div class="col-hdr col-hdr-info">Framework Name &amp; Publisher</div>
+            <div class="col-hdr col-hdr-id">Domain ID</div>
+            <div class="col-hdr col-hdr-info">Domain Name &amp; Business Owner</div>
             <div class="col-hdr col-hdr-scope">Mapped Audit Scope</div>
             <div class="col-hdr col-hdr-action">Action</div>
         </div>
 
         <!-- CATALOG CARDS LIST -->
         <div class="catalog-list-wrapper">
-            <div class="frameworks-cards-grid list-layout-view" id="frameworksGrid">
-                {{all_frameworks_grid}}
+            <div class="frameworks-cards-grid list-layout-view" id="domainsGrid">
+                {{all_domains_grid}}
             </div>
         </div>
 
         <!-- PAGINATION BAR -->
-        <div class="pagination-bar" id="frameworksPaginationBar">
+        <div class="pagination-bar" id="domainsPaginationBar">
             <div class="pagination-info" id="paginationInfo">
-                Showing <strong>1</strong> - <strong>10</strong> of <strong>25</strong> Regulatory Frameworks
+                Showing <strong>1</strong> - <strong>10</strong> of <strong>29</strong> Control Domains
             </div>
             <div class="pagination-buttons" id="paginationButtons">
                 <!-- Dynamically populated via JS -->
@@ -1369,7 +1147,7 @@
         </div>
 
         <!-- KEY TERMS TABLE -->
-        <h2 id="key-terms" class="section-heading">Key Terms Used in Framework Architecture</h2>
+        <h2 id="key-terms" class="section-heading">Key Terms Used in Domain Architecture</h2>
 
         <table class="custom-table">
             <thead>
@@ -1380,115 +1158,115 @@
             </thead>
             <tbody>
                 <tr>
-                    <td><strong>Framework</strong></td>
-                    <td>A comprehensive set of security, privacy, or governance requirements published by an authority.</td>
+                    <td><strong>Control Domain</strong></td>
+                    <td>A top-level functional category grouping related security controls and risk mitigation practices.</td>
                 </tr>
                 <tr>
-                    <td><strong>Control Domain</strong></td>
-                    <td>A top-level category grouping related controls (e.g., Access Control, Data Protection, Incident Response).</td>
+                    <td><strong>Domain Code</strong></td>
+                    <td>A standardized short identifier (e.g., IAM, GOV, NET, DAT) used for crosswalk referencing and tags.</td>
+                </tr>
+                <tr>
+                    <td><strong>Business Owner</strong></td>
+                    <td>The designated executive or department accountable for enforcing controls within a domain.</td>
                 </tr>
                 <tr>
                     <td><strong>Security Control</strong></td>
-                    <td>A specific policy, procedure, or technical safeguard designed to mitigate identified risks.</td>
+                    <td>A technical, administrative, or physical safeguard residing within a specific domain.</td>
                 </tr>
                 <tr>
-                    <td><strong>Requirement Clause</strong></td>
-                    <td>An auditable statement or sub-control specifying mandatory testing and evidence criteria.</td>
-                </tr>
-                <tr>
-                    <td><strong>Crosswalk / Mapping</strong></td>
-                    <td>The mathematical and conceptual correlation between controls across different frameworks.</td>
+                    <td><strong>Domain Scope</strong></td>
+                    <td>The operational boundaries and applicable assets covered under a specific domain baseline.</td>
                 </tr>
             </tbody>
         </table>
 
-        <!-- TYPES OF FRAMEWORKS -->
-        <h2 id="framework-types" class="section-heading">Types of Security &amp; Regulatory Frameworks</h2>
+        <!-- DOMAIN CATEGORIES ARCHITECTURE -->
+        <h2 id="domain-categories" class="section-heading">Domain Architecture &amp; Governance Classification</h2>
 
         <div class="feature-grid">
             <div class="feature-card" style="border-left: 4px solid #16C4F4; border-top: none;">
-                <strong>Regulatory Mandates</strong>
-                <p style="font-size:0.85rem;margin:0;">Legally binding laws passed by governments (e.g., GDPR, HIPAA, SOX, NIS2). Failure to comply results in severe financial penalties and legal liability.</p>
+                <strong>Governance &amp; Oversight</strong>
+                <p style="font-size:0.85rem;margin:0;">Foundational oversight domains defining security strategy, policies, risk management, and compliance governance (GOV, POL, RSK, CMP).</p>
+            </div>
+            <div class="feature-card" style="border-left: 4px solid #16C4F4; border-top: none;">
+                <strong>Technical Safeguards</strong>
+                <p style="font-size:0.85rem;margin:0;">Core technical domains protecting infrastructure, endpoints, applications, and networks (IAM, NET, END, CLD, APP, CRY).</p>
             </div>
             <div class="feature-card" style="border-left: 4px solid #22C55E; border-top: none;">
-                <strong>Industry Standards</strong>
-                <p style="font-size:0.85rem;margin:0;">Consensus standards established by international standardization bodies (e.g., ISO/IEC 27001, ISO 27701, PCI DSS) often required for commercial operations.</p>
+                <strong>Operations &amp; Resilience</strong>
+                <p style="font-size:0.85rem;margin:0;">Operational domains ensuring continuous monitoring, incident management, and business continuity (SOC, INC, BCM, OPR, VUL).</p>
             </div>
             <div class="feature-card" style="border-left: 4px solid #F59E0B; border-top: none;">
-                <strong>Security Benchmarks</strong>
-                <p style="font-size:0.85rem;margin:0;">Voluntary risk management frameworks and technical hardening guidelines (e.g., NIST CSF, CIS Controls, SOC 2 Trust Services Criteria).</p>
-            </div>
-            <div class="feature-card" style="border-left: 4px solid #7B61FF; border-top: none;">
-                <strong>Internal Corporate Baselines</strong>
-                <p style="font-size:0.85rem;margin:0;">Custom internal policy frameworks designed to enforce corporate risk appetite, internal controls, and operational governance.</p>
+                <strong>Organization &amp; Third-Party</strong>
+                <p style="font-size:0.85rem;margin:0;">Human resources, vendor risk, physical security, and emerging tech governance (HRS, SAT, TPR, PHY, AIG, AUD).</p>
             </div>
         </div>
 
-        <!-- CROSSWALK & CONTROL MAPPING -->
-        <h2 id="crosswalk-mapping" class="section-heading">Crosswalk &amp; Control Mapping Architecture</h2>
-        <p>Framework crosswalk mapping is the process of correlating security controls, policy requirements, and audit tests across multiple regulatory standards (e.g., mapping NIST CSF 2.0 to ISO/IEC 27001:2022, SOC 2 TSC, and PCI DSS v4.0). By establishing a single source of truth in ASPIA UCL, organizations eliminate redundant testing and achieve "test once, comply with many" audit efficiency.</p>
+        <!-- CROSSWALK & MAPPING -->
+        <h2 id="crosswalk-mapping" class="section-heading">Crosswalk &amp; Framework Mapping Architecture</h2>
+        <p>Control domain crosswalk mapping correlates controls across global security frameworks (ISO 27001, NIST CSF, SOC 2, PCI DSS) to standardized ASPIA UCL domains. By organizing requirements into unified domains, organizations achieve seamless audit mapping and gap analysis.</p>
 
         <div class="feature-grid" style="margin-top: 1.5rem;">
             <div class="feature-card" style="border-top-color: #16C4F4;">
-                <strong>1:1 &amp; Many:1 Mapping Engine</strong>
-                <p style="font-size:0.85rem;margin:0;">Links multiple framework requirement clauses to a central UCL Control Domain, reducing control duplication by up to 70%.</p>
+                <strong>Unified Domain Mapping</strong>
+                <p style="font-size:0.85rem;margin:0;">Maps overlapping framework clauses directly to a central domain, eliminating redundant controls.</p>
             </div>
-            <div class="feature-card" style="border-top-color: #7B61FF;">
-                <strong>Unified Audit Evidence</strong>
-                <p style="font-size:0.85rem;margin:0;">Attach sample evidence and test execution records once to automatically satisfy multiple compliance audits.</p>
+            <div class="feature-card" style="border-top-color: #16C4F4;">
+                <strong>Single Evidence Repository</strong>
+                <p style="font-size:0.85rem;margin:0;">Collect audit evidence once per domain control to satisfy multiple regulatory assessments simultaneously.</p>
             </div>
             <div class="feature-card" style="border-top-color: #22C55E;">
-                <strong>Gap Analysis &amp; Coverage</strong>
-                <p style="font-size:0.85rem;margin:0;">Instantly identify unmapped requirements and regulatory gaps when adopting new compliance frameworks.</p>
+                <strong>Domain Gap Analysis</strong>
+                <p style="font-size:0.85rem;margin:0;">Instantly identify domains with missing controls when adopting new compliance standards.</p>
             </div>
             <div class="feature-card" style="border-top-color: #F59E0B;">
-                <strong>Continuous Compliance Sync</strong>
-                <p style="font-size:0.85rem;margin:0;">Updates to regulatory baselines or internal policies propagate automatically across all mapped framework controls.</p>
+                <strong>Domain Owner Accountability</strong>
+                <p style="font-size:0.85rem;margin:0;">Empowers domain business owners with complete visibility into compliance status across frameworks.</p>
             </div>
         </div>
 
         <div class="callout-box" style="margin-top: 1.5rem;">
             <p class="callout-title">How ASPIA UCL Crosswalk Works:</p>
-            <p class="callout-text">For example, an Access Control policy requirement in ASPIA UCL maps simultaneously to <strong>ISO 27001:A.5.15</strong>, <strong>NIST CSF:PR.AA-01</strong>, <strong>SOC 2:CC6.1</strong>, and <strong>PCI DSS:7.1.1</strong>. Testing this control once validates compliance for all four standards automatically.</p>
+            <p class="callout-text">For example, controls in the <strong>Identity &amp; Access Management (IAM)</strong> domain map directly to <strong>ISO 27001:A.5.15</strong>, <strong>NIST CSF:PR.AA-01</strong>, <strong>SOC 2:CC6.1</strong>, and <strong>PCI DSS:7.1.1</strong>. Testing IAM controls once satisfies all four compliance baselines.</p>
         </div>
 
         <!-- WORKFLOW DIAGRAM -->
-        <h2 id="implementation-workflow" class="section-heading">Framework Implementation &amp; Mapping Workflow</h2>
+        <h2 id="implementation-workflow" class="section-heading">Domain Lifecycle &amp; Governance Workflow</h2>
 
         <div class="workflow-box">
             <div class="workflow-flow">
-                <div class="flow-step-dark">1. Identify Regulatory Scope</div>
+                <div class="flow-step-dark">1. Define Domain Taxonomies &amp; Scope</div>
                 <div class="flow-arrow">↓</div>
-                <div class="flow-step-cyan">2. Select Target Frameworks</div>
+                <div class="flow-step-cyan">2. Assign Business Owners</div>
                 <div class="flow-arrow">↓</div>
-                <div class="flow-step-dark">3. Map Control Domains (ASPIA UCL)</div>
+                <div class="flow-step-dark">3. Map Security Controls to Domains</div>
                 <div class="flow-arrow">↓</div>
-                <div class="flow-step-cyan">4. Define Auditable Requirements</div>
+                <div class="flow-step-cyan">4. Crosswalk Regulatory Requirements</div>
                 <div class="flow-arrow">↓</div>
-                <div class="flow-step-dark">5. Execute Audit Testing &amp; Sampling</div>
+                <div class="flow-step-dark">5. Execute Domain Audit Testing</div>
                 <div class="flow-arrow">↓</div>
-                <div class="flow-step-cyan">6. Track Remediations &amp; Evidence</div>
+                <div class="flow-step-cyan">6. Remediate Control Deficiencies</div>
                 <div class="flow-arrow">↓</div>
-                <div class="flow-step-dark">7. Continuous Compliance Monitoring</div>
+                <div class="flow-step-dark">7. Continuous Domain Risk Monitoring</div>
             </div>
         </div>
 
         <!-- CHECKLIST -->
-        <h2 id="checklist" class="section-heading">Framework Compliance Readiness Checklist</h2>
+        <h2 id="checklist" class="section-heading">Domain Governance Readiness Checklist</h2>
 
         <div class="checklist-grid">
-            <div class="checklist-item"><i class="far fa-check-square" style="color:#16C4F4;"></i> Regulatory applicability scoped</div>
-            <div class="checklist-item"><i class="far fa-check-square" style="color:#16C4F4;"></i> Executive sponsor assigned</div>
-            <div class="checklist-item"><i class="far fa-check-square" style="color:#16C4F4;"></i> Control domains mapped</div>
-            <div class="checklist-item"><i class="far fa-check-square" style="color:#16C4F4;"></i> Asset inventory validated</div>
-            <div class="checklist-item"><i class="far fa-check-square" style="color:#16C4F4;"></i> Policy exceptions logged</div>
-            <div class="checklist-item"><i class="far fa-check-square" style="color:#16C4F4;"></i> Risk assessment documented</div>
-            <div class="checklist-item"><i class="far fa-check-square" style="color:#16C4F4;"></i> Evidence collection automated</div>
-            <div class="checklist-item"><i class="far fa-check-square" style="color:#16C4F4;"></i> Vendor risk reviews complete</div>
-            <div class="checklist-item"><i class="far fa-check-square" style="color:#16C4F4;"></i> Access control reviews run</div>
-            <div class="checklist-item"><i class="far fa-check-square" style="color:#16C4F4;"></i> Audit sampling performed</div>
-            <div class="checklist-item"><i class="far fa-check-square" style="color:#16C4F4;"></i> Corrective action plan ready</div>
-            <div class="checklist-item"><i class="far fa-check-square" style="color:#16C4F4;"></i> Audit trail preserved</div>
+            <div class="checklist-item"><i class="far fa-check-square" style="color:#16C4F4;"></i> Control domain taxonomies established</div>
+            <div class="checklist-item"><i class="far fa-check-square" style="color:#16C4F4;"></i> Domain business owners designated</div>
+            <div class="checklist-item"><i class="far fa-check-square" style="color:#16C4F4;"></i> Domain policy scope defined</div>
+            <div class="checklist-item"><i class="far fa-check-square" style="color:#16C4F4;"></i> Security controls assigned to domains</div>
+            <div class="checklist-item"><i class="far fa-check-square" style="color:#16C4F4;"></i> Regulatory frameworks crosswalked</div>
+            <div class="checklist-item"><i class="far fa-check-square" style="color:#16C4F4;"></i> Domain risk assessments completed</div>
+            <div class="checklist-item"><i class="far fa-check-square" style="color:#16C4F4;"></i> Audit evidence collection automated</div>
+            <div class="checklist-item"><i class="far fa-check-square" style="color:#16C4F4;"></i> Key performance indicators (KPIs) set</div>
+            <div class="checklist-item"><i class="far fa-check-square" style="color:#16C4F4;"></i> Exception tracking workflow active</div>
+            <div class="checklist-item"><i class="far fa-check-square" style="color:#16C4F4;"></i> Executive reporting dashboards ready</div>
+            <div class="checklist-item"><i class="far fa-check-square" style="color:#16C4F4;"></i> Continuous monitoring triggers set</div>
+            <div class="checklist-item"><i class="far fa-check-square" style="color:#16C4F4;"></i> Annual domain reviews scheduled</div>
         </div>
 
         <!-- FAQ SECTION -->
@@ -1496,51 +1274,41 @@
 
         <div class="faq-item">
             <div class="faq-question">
-                <span>What is a cybersecurity compliance framework?</span>
+                <span>What is a control domain in security governance?</span>
                 <span>−</span>
             </div>
             <div class="faq-answer">
-                A cybersecurity compliance framework is a structured set of guidelines, security controls, and best practices designed to help organizations manage risk, protect data assets, and satisfy regulatory obligations.
+                A control domain is a high-level category that groups related security policies, technical controls, and compliance safeguards (e.g., Access Control, Asset Management, Incident Management) to simplify GRC administration.
             </div>
         </div>
 
         <div class="faq-item">
             <div class="faq-question">
-                <span>What are the main types of compliance frameworks?</span>
+                <span>How many control domains are in ASPIA UCL?</span>
                 <span>−</span>
             </div>
             <div class="faq-answer">
-                Frameworks generally fall into three categories: Regulatory Mandates (GDPR, HIPAA, PCI DSS, SOX), Industry Standards (ISO/IEC 27001, ISO 27701), and Security Benchmarks (NIST CSF, CIS Controls, SOC 2).
+                ASPIA UCL features 29 standardized control domains covering Governance, Risk Management, Technical Safeguards, Operations, Privacy, and Emerging Technology governance.
             </div>
         </div>
 
         <div class="faq-item">
             <div class="faq-question">
-                <span>What is framework crosswalk mapping?</span>
+                <span>How do domain crosswalks reduce audit burden?</span>
                 <span>−</span>
             </div>
             <div class="faq-answer">
-                Crosswalk mapping links controls and requirements from multiple frameworks to a single unified baseline, enabling "test once, comply with many" audit efficiency.
-            </div>
-        </div>
-
-        <div class="faq-item">
-            <div class="faq-question">
-                <span>What is the difference between ISO 27001 and NIST CSF?</span>
-                <span>−</span>
-            </div>
-            <div class="faq-answer">
-                ISO 27001 is a certifiable Information Security Management System (ISMS) standard with mandatory clauses, whereas NIST CSF is a flexible risk management framework organized into Identify, Protect, Detect, Respond, and Recover functions.
+                Domain crosswalks link overlapping requirements from ISO 27001, NIST CSF, SOC 2, and PCI DSS to a single domain baseline, enabling "test once, comply with many" efficiency.
             </div>
         </div>
 
         <!-- CONCLUSION & CTA BANNER -->
         <h2 id="conclusion" class="section-heading">Final Takeaway</h2>
-        <p>Effective GRC management relies on unifying disparate compliance mandates under a central framework structure. By standardizing control domains and leveraging crosswalk mappings, organizations drastically reduce audit burden while strengthening their operational security posture.</p>
+        <p>Structuring information security and GRC under standardized control domains provides clarity, ownership, and audit efficiency. ASPIA UCL unifies 29 control domains across global compliance frameworks so organizations can operate securely and pass audits with confidence.</p>
 
         <div class="cta-banner">
-            <h3 class="cta-title">Ready to Streamline Your Framework Compliance &amp; Control Mapping?</h3>
-            <p class="cta-desc">Connect regulatory frameworks with control domains, auditable requirements, and sampling evidence in one centralized unified control library.</p>
+            <h3 class="cta-title">Ready to Streamline Your Control Domains &amp; Compliance Architecture?</h3>
+            <p class="cta-desc">Connect control domains with regulatory frameworks, security controls, and auditable requirements in one centralized unified control library.</p>
             <div class="cta-buttons">
                 <a href="https://aspiainfotech.com/" target="_blank" rel="noopener" class="btn-cta-primary">Explore ASPIA →</a>
                 <a href="https://aspiainfotech.com/request-a-demo/" target="_blank" rel="noopener" class="btn-cta-secondary">Book a Demo</a>
@@ -1554,32 +1322,18 @@
 
     </div>
 
-    <!-- SCRIPTS -->
+    <!-- JAVASCRIPT -->
     <script>
         function playThemeSound(isDark) {
             try {
-                const AudioCtx = window.AudioContext || window.webkitAudioContext;
-                if (!AudioCtx) return;
-                const ctx = new AudioCtx();
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
                 const osc = ctx.createOscillator();
                 const gain = ctx.createGain();
-                
-                if (isDark) {
-                    // Deep nocturnal synth chime (523.25Hz -> 392.00Hz)
-                    osc.type = 'sine';
-                    osc.frequency.setValueAtTime(523.25, ctx.currentTime);
-                    osc.frequency.exponentialRampToValueAtTime(392.00, ctx.currentTime + 0.12);
-                    gain.gain.setValueAtTime(0.06, ctx.currentTime);
-                    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.12);
-                } else {
-                    // Bright sunny chime (440.00Hz -> 880.00Hz)
-                    osc.type = 'triangle';
-                    osc.frequency.setValueAtTime(440.00, ctx.currentTime);
-                    osc.frequency.exponentialRampToValueAtTime(880.00, ctx.currentTime + 0.10);
-                    gain.gain.setValueAtTime(0.05, ctx.currentTime);
-                    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.10);
-                }
-                
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(isDark ? 220 : 520, ctx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(isDark ? 440 : 880, ctx.currentTime + 0.12);
+                gain.gain.setValueAtTime(0.08, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.12);
                 osc.connect(gain);
                 gain.connect(ctx.destination);
                 osc.start();
@@ -1662,74 +1416,24 @@
             }
         });
 
-        // View Layout Switcher (List vs Grid)
-        function setCatalogLayout(mode) {
-            const grid = document.getElementById('frameworksGrid');
-            const hdr  = document.getElementById('listTableHeaderBar');
-            const btnList = document.getElementById('viewBtnList');
-            const btnGrid = document.getElementById('viewBtnGrid');
-            if (!grid) return;
-
-            if (mode === 'list') {
-                grid.classList.add('list-layout-view');
-                if (hdr) hdr.style.display = 'flex';
-                if (btnList) {
-                    btnList.style.background = '#16C4F4';
-                    btnList.style.color = '#0D1735';
-                }
-                if (btnGrid) {
-                    btnGrid.style.background = 'transparent';
-                    btnGrid.style.color = '#64748b';
-                }
-                localStorage.setItem('aspia_catalog_view', 'list');
-            } else {
-                grid.classList.remove('list-layout-view');
-                if (hdr) hdr.style.display = 'none';
-                if (btnGrid) {
-                    btnGrid.style.background = '#16C4F4';
-                    btnGrid.style.color = '#0D1735';
-                }
-                if (btnList) {
-                    btnList.style.background = 'transparent';
-                    btnList.style.color = '#64748b';
-                }
-                localStorage.setItem('aspia_catalog_view', 'grid');
-            }
-        }
-
-        // Initialize Theme & View Layout on page load
+        // Initialize Theme on page load
         (function () {
             const savedTheme = localStorage.getItem('aspia_theme') || 
                 (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
             setTheme(savedTheme, false);
-
-            const savedView = localStorage.getItem('aspia_catalog_view') || 'list';
-            setCatalogLayout(savedView);
         })();
-
-        let currentCategory = 'all';
-
-        function setCategoryFilter(category, btn) {
-            currentCategory = category.toLowerCase();
-            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            filterFrameworks();
-        }
 
         // PAGINATION & FILTER LOGIC
         const PAGE_SIZE = 10;
         let currentPage = 1;
 
         function getMatchingCards() {
-            const query = (document.getElementById('frameworkSearchInput')?.value || '').toLowerCase().trim();
+            const query = (document.getElementById('domainSearchInput')?.value || '').toLowerCase().trim();
             const cards = Array.from(document.querySelectorAll('.framework-card'));
             
             return cards.filter(card => {
                 const text = card.textContent.toLowerCase();
-                const cat = (card.getAttribute('data-category') || '').toLowerCase();
-                const matchesQuery = !query || text.includes(query);
-                const matchesCategory = currentCategory === 'all' || cat.includes(currentCategory);
-                return matchesQuery && matchesCategory;
+                return !query || text.includes(query);
             });
         }
 
@@ -1740,25 +1444,25 @@
 
             allCards.forEach(card => card.style.display = 'none');
 
-            let emptyMsg = document.getElementById('noFrameworksFoundMsg');
+            let emptyMsg = document.getElementById('noDomainsFoundMsg');
             if (totalMatching === 0) {
                 if (!emptyMsg) {
                     emptyMsg = document.createElement('div');
-                    emptyMsg.id = 'noFrameworksFoundMsg';
-                    emptyMsg.style.cssText = 'grid-column: 1 / -1; padding: 40px; text-align: center; color: #94a3b8; font-size: 1rem;';
-                    emptyMsg.innerHTML = '<i class="fas fa-search" style="font-size:2rem;margin-bottom:10px;display:block;"></i>No matching frameworks found.';
-                    const grid = document.getElementById('frameworksGrid');
+                    emptyMsg.id = 'noDomainsFoundMsg';
+                    emptyMsg.style.cssText = 'padding: 40px; text-align: center; color: #94a3b8; font-size: 1rem;';
+                    emptyMsg.innerHTML = '<i class="fas fa-search" style="font-size:2rem;margin-bottom:10px;display:block;"></i>No matching control domains found.';
+                    const grid = document.getElementById('domainsGrid');
                     if (grid) grid.appendChild(emptyMsg);
                 }
                 emptyMsg.style.display = 'block';
 
-                const pagBar = document.getElementById('frameworksPaginationBar');
+                const pagBar = document.getElementById('domainsPaginationBar');
                 if (pagBar) pagBar.style.display = 'none';
                 return;
             }
 
             if (emptyMsg) emptyMsg.style.display = 'none';
-            const pagBar = document.getElementById('frameworksPaginationBar');
+            const pagBar = document.getElementById('domainsPaginationBar');
             if (pagBar) pagBar.style.display = 'flex';
 
             const totalPages = Math.ceil(totalMatching / PAGE_SIZE);
@@ -1776,7 +1480,7 @@
 
             const infoEl = document.getElementById('paginationInfo');
             if (infoEl) {
-                infoEl.innerHTML = `Showing <strong>${startIndex + 1}</strong> - <strong>${endIndex}</strong> of <strong>${totalMatching}</strong> Regulatory Frameworks`;
+                infoEl.innerHTML = `Showing <strong>${startIndex + 1}</strong> - <strong>${endIndex}</strong> of <strong>${totalMatching}</strong> Control Domains`;
             }
 
             const buttonsEl = document.getElementById('paginationButtons');
@@ -1800,13 +1504,13 @@
             currentPage = page;
             renderPagination();
             
-            const header = document.getElementById('listTableHeaderBar') || document.getElementById('frameworkSearchInput');
+            const header = document.getElementById('listTableHeaderBar') || document.getElementById('domainSearchInput');
             if (header) {
                 header.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
             }
         }
 
-        function filterFrameworks() {
+        function filterDomains() {
             currentPage = 1;
             renderPagination();
         }
@@ -1817,5 +1521,4 @@
         renderPagination();
     </script>
 </body>
-
 </html>

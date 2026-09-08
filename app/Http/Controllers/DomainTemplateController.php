@@ -50,6 +50,108 @@ class DomainTemplateController extends Controller
 
     /*
     |--------------------------------------------------------------------------
+    | Public Index / All Domains Overview Page
+    |--------------------------------------------------------------------------
+    */
+
+    public function publicIndex(Request $request)
+    {
+        $domains = Domain::orderByRaw('CAST(SUBSTRING_INDEX(domain_id, "-", -1) AS UNSIGNED) ASC, domain_id ASC')
+            ->orderBy('id', 'asc')
+            ->get();
+
+        $totalFrameworks   = \App\Models\Framework::count();
+        $totalDomains      = $domains->count();
+        $totalControls     = \App\Models\Control::count();
+        $totalRequirements = \App\Models\Requirement::count();
+
+        $filePath = resource_path('views/aspiaUcl/domains/domains_overview.html');
+        if (file_exists($filePath)) {
+            $html = file_get_contents($filePath);
+        } else {
+            $html = $this->getDefaultTemplateHtml();
+        }
+
+        $gridHtml = $this->renderDomainCards($domains);
+
+        $placeholders = [
+            '{{total_frameworks_count}}'       => $totalFrameworks,
+            '{{total_domains_count}}'          => $totalDomains,
+            '{{total_controls_count}}'         => $totalControls,
+            '{{total_requirements_count}}'     => $totalRequirements,
+            '{{all_domains_grid}}'             => $gridHtml,
+            '{{all_frameworks_dropdown_list}}' => $this->renderAllFrameworksDropdownList(),
+            '{{all_domains_dropdown_list}}'    => $this->renderAllDomainsDropdownList(),
+            '{{all_controls_dropdown_list}}'   => $this->renderAllControlsDropdownList(),
+        ];
+
+        foreach ($placeholders as $placeholder => $value) {
+            $html = str_ireplace($placeholder, (string) ($value ?? ''), $html);
+        }
+
+        return response($html);
+    }
+
+    protected function renderDomainCards($domains): string
+    {
+        if ($domains->isEmpty()) {
+            return '<div class="empty-state"><div class="empty-icon">📁</div><h3>No domains available</h3><p>There are currently no control domains added to the library.</p></div>';
+        }
+
+        $html = '';
+        foreach ($domains as $d) {
+            $slug        = e($d->slug);
+            $url         = route('domains.show', $slug);
+            $domId       = e($d->domain_id ?: ('DOM-' . sprintf('%03d', $d->id)));
+            $code        = e($d->domain_code ?: $domId);
+            $name        = e($d->name);
+            $owner       = e($d->business_owner ?: 'Security Governance');
+            $overview    = e($d->short_overview ?: $d->purpose ?: $d->scope ?: 'Control Domain Overview');
+
+            $controls       = $d->getControlsList();
+            $controlsCount  = $controls->count();
+            $controlIds     = $controls->pluck('control_id')->filter();
+            $reqCount       = $controlIds->isNotEmpty() ? \App\Models\Requirement::whereIn('control_id', $controlIds)->count() : 0;
+
+            $html .= <<<HTML
+            <div class="framework-card" data-dom-id="{$domId}">
+                <div class="card-left-column">
+                    <span class="badge-fw-id">{$domId}</span>
+                    <span class="badge-code">{$code}</span>
+                </div>
+                <div class="card-center-column">
+                    <div class="title-category-row">
+                        <h3 class="framework-title"><a href="{$url}">{$name}</a></h3>
+                    </div>
+                    <div class="publisher-line">
+                        <i class="fas fa-user-shield"></i> <span>{$owner}</span>
+                        <span style="opacity:0.4;">|</span>
+                        <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 320px;">{$overview}</span>
+                    </div>
+                </div>
+                <div class="card-scope-column">
+                    <div class="scope-badges-strip">
+                        <span class="scope-pill"><strong class="num">{$controlsCount}</strong> Controls</span>
+                        <span class="scope-pill">•</span>
+                        <span class="scope-pill"><strong class="num">{$reqCount}</strong> Reqs</span>
+                    </div>
+                </div>
+                <div class="card-action-column">
+                    <a href="{$url}" class="btn-explore-framework">
+                        <span>Explore Domain</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+HTML;
+        }
+
+        return $html;
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
     | Show Domain
     |--------------------------------------------------------------------------
     */
