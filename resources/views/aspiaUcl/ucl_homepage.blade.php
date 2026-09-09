@@ -186,6 +186,23 @@
             align-items: center;
         }
 
+        .mobile-menu-toggle {
+            display: none;
+            background: transparent;
+            border: 1.5px solid #d0d8e4;
+            color: #0b1a33;
+            font-size: 1.1rem;
+            padding: 6px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .mobile-menu-toggle:hover {
+            background: #f0f4fa;
+            border-color: #0066cc;
+            color: #0066cc;
+        }
+
         .btn {
             display: inline-flex;
             align-items: center;
@@ -268,11 +285,11 @@
             margin-bottom: 14px;
         }
         .hero-content h1 {
-            font-size: 2.8rem;
+            font-size: clamp(1.75rem, 4vw + 1rem, 2.8rem);
             font-weight: 900;
             color: #0b1a33;
             letter-spacing: -0.03em;
-            line-height: 1.1;
+            line-height: 1.15;
             margin-bottom: 14px;
         }
         .hero-content h1 .highlight {
@@ -304,10 +321,11 @@
 
         .hero-stats {
             display: flex;
-            gap: 32px;
+            gap: clamp(16px, 3vw, 32px);
             margin-top: 28px;
             padding-top: 20px;
             border-top: 1px solid #f0f2f6;
+            flex-wrap: wrap;
         }
         .hero-stats .stat .num {
             font-size: 1.3rem;
@@ -703,12 +721,14 @@
            ============================================================ */
         .compare-table-wrap {
             overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
             background: #f0f6ff;
             border-radius: 12px;
             border: 1px solid #d4e3f7;
         }
         .compare-table-wrap table {
             width: 100%;
+            min-width: 580px;
             border-collapse: collapse;
             font-size: 0.8rem;
         }
@@ -950,38 +970,70 @@
         /* ============================================================
            RESPONSIVE
            ============================================================ */
+        @@media (max-width: 992px) {
+            .hero {
+                gap: 32px;
+            }
+            .hero-content h1 {
+                font-size: 2.3rem;
+            }
+            .domains-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            .framework-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
         @@media (max-width: 768px) {
             .container {
                 padding: 0 16px;
             }
-            .nav {
-                flex-direction: column;
-                align-items: stretch;
-            }
-            .nav-links {
+            .mobile-menu-toggle {
+                display: inline-flex;
+                align-items: center;
                 justify-content: center;
-                gap: 10px;
+            }
+            .nav {
                 flex-wrap: wrap;
+                position: relative;
+                padding: 10px 0;
             }
             .nav-actions {
-                justify-content: center;
+                margin-left: auto;
+                gap: 8px;
+            }
+            .nav-links {
+                display: none;
+                width: 100%;
+                flex-direction: column;
+                gap: 12px;
+                padding: 14px 0 8px 0;
+                border-top: 1px solid #f0f2f6;
+                order: 3;
+                text-align: center;
+            }
+            .nav-links.active {
+                display: flex;
             }
             .hero {
                 padding: 28px 0 20px 0;
                 gap: 24px;
+                flex-direction: column;
             }
             .hero-content h1 {
-                font-size: 2rem;
+                font-size: clamp(1.6rem, 5vw, 2.2rem);
             }
             .hero-content p {
                 font-size: 0.95rem;
             }
             .hero-stats {
-                flex-wrap: wrap;
-                gap: 14px;
+                gap: 16px;
+                justify-content: space-around;
             }
             .hero-visual {
                 padding: 16px 12px;
+                width: 100%;
             }
             .flow-box {
                 font-size: 0.6rem;
@@ -999,12 +1051,13 @@
             }
             .domains-grid {
                 grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
             }
             .controls-grid {
                 grid-template-columns: 1fr;
             }
             .framework-grid {
-                grid-template-columns: 1fr 1fr;
+                grid-template-columns: 1fr;
             }
             .stats-banner {
                 grid-template-columns: repeat(2, 1fr);
@@ -1013,14 +1066,23 @@
             .ucl-flow-wrapper {
                 flex-direction: column;
                 padding: 20px 14px;
+                gap: 12px;
+            }
+            .ucl-step {
+                width: 100%;
+                max-width: 280px;
             }
             .ucl-arrow {
                 transform: rotate(90deg);
+                margin: 4px 0;
+            }
+            .compare-table-wrap table {
+                min-width: 580px;
             }
             .footer {
                 flex-direction: column;
                 text-align: center;
-                gap: 10px;
+                gap: 12px;
             }
             .footer .links {
                 justify-content: center;
@@ -1039,21 +1101,54 @@
             }
         }
 
+        @@media (max-width: 576px) {
+            .filter-chips {
+                justify-content: flex-start;
+                overflow-x: auto;
+                padding-bottom: 6px;
+                flex-wrap: nowrap;
+                -webkit-overflow-scrolling: touch;
+            }
+            .filter-chips::-webkit-scrollbar {
+                display: none;
+            }
+            .filter-chips .chip {
+                flex-shrink: 0;
+            }
+            .free-badge {
+                font-size: 0.75rem;
+                padding: 8px 0;
+            }
+            .free-badge span {
+                display: block;
+                margin-left: 0 !important;
+                margin-top: 2px;
+            }
+        }
+
         @@media (max-width: 480px) {
-            .hero-content h1 {
-                font-size: 1.6rem;
+            .hero-buttons {
+                flex-direction: column;
+                width: 100%;
+            }
+            .hero-buttons .btn {
+                width: 100%;
+                justify-content: center;
             }
             .domains-grid {
-                grid-template-columns: 1fr 1fr;
+                grid-template-columns: repeat(2, 1fr);
             }
-            .framework-grid {
+            .stats-banner {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @@media (max-width: 380px) {
+            .domains-grid {
                 grid-template-columns: 1fr;
             }
             .stats-banner {
-                grid-template-columns: 1fr 1fr;
-            }
-            .compare-table-wrap table {
-                font-size: 0.7rem;
+                grid-template-columns: 1fr;
             }
         }
 
@@ -1550,6 +1645,15 @@
             background: #334155 !important;
             color: #ffffff !important;
         }
+        body.dark-mode .mobile-menu-toggle {
+            border-color: #334155 !important;
+            color: #ffffff !important;
+        }
+        body.dark-mode .mobile-menu-toggle:hover {
+            background: #1e293b !important;
+            border-color: #38bdf8 !important;
+            color: #38bdf8 !important;
+        }
     </style>
 </head>
 <body>
@@ -1563,13 +1667,6 @@
                 ASPIA <span class="accent">UCL</span>
                 <span class="badge">Free Directory</span>
             </a>
-            <ul class="nav-links">
-                <li><a href="{{ route('frameworks.public_index') }}">Frameworks</a></li>
-                <li><a href="{{ route('domains.public_index') }}">Domains</a></li>
-                <li><a href="{{ route('controls.public_index') }}">Controls</a></li>
-                <li><a href="#about-ucl">About UCL</a></li>
-                <li><a href="#blog">Blog</a></li>
-            </ul>
             <div class="nav-actions">
                 <label class="theme-switch" for="themeToggleSwitch" title="Toggle Light/Dark Theme" aria-label="Toggle Theme">
                     <input type="checkbox" id="themeToggleSwitch" />
@@ -1585,7 +1682,17 @@
                     <a href="{{ route('login') }}" class="btn btn-outline" style="padding:6px 16px;font-size:0.8rem;">Sign In</a>
                 @endauth
                 <a href="{{ route('frameworks.public_index') }}" class="btn btn-light" style="padding:6px 16px;font-size:0.8rem;"><i class="fas fa-book-open"></i> Explore</a>
+                <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle Navigation">
+                    <i class="fas fa-bars"></i>
+                </button>
             </div>
+            <ul class="nav-links">
+                <li><a href="{{ route('frameworks.public_index') }}">Frameworks</a></li>
+                <li><a href="{{ route('domains.public_index') }}">Domains</a></li>
+                <li><a href="{{ route('controls.public_index') }}">Controls</a></li>
+                <li><a href="#about-ucl">About UCL</a></li>
+                <li><a href="#blog">Blog</a></li>
+            </ul>
         </nav>
     </div>
 
@@ -2083,6 +2190,23 @@
                     });
                 });
             });
+
+            // Mobile Menu Toggle
+            const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+            const navLinks = document.querySelector('.nav-links');
+            if (mobileMenuToggle && navLinks) {
+                mobileMenuToggle.addEventListener('click', function() {
+                    navLinks.classList.toggle('active');
+                    const icon = this.querySelector('i');
+                    if (icon) {
+                        if (navLinks.classList.contains('active')) {
+                            icon.className = 'fas fa-times';
+                        } else {
+                            icon.className = 'fas fa-bars';
+                        }
+                    }
+                });
+            }
 
             // Light / Dark Theme Switch
             const themeSwitch = document.getElementById('themeToggleSwitch');
