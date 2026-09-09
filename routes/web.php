@@ -13,6 +13,7 @@ use App\Http\Controllers\ControlTemplateController;
 
 use App\Http\Controllers\RequirementController;
 use App\Http\Controllers\RequirementTemplateController;
+use App\Http\Controllers\UclHomepageController;
 
 use Illuminate\Support\Facades\Route;
 
@@ -23,12 +24,9 @@ use Illuminate\Support\Facades\Route;
 |--------------------------------------------------------------------------
 */
 
-Route::get('/', function () {
-    if (auth()->check()) {
-        return redirect()->route('dashboard');
-    }
-    return redirect()->route('login');
-});
+Route::get('/', [UclHomepageController::class, 'index'])->name('home');
+Route::get('/ucl', [UclHomepageController::class, 'index'])->name('ucl.homepage');
+
 
 
 /*
