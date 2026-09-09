@@ -189,12 +189,11 @@
            NAVIGATION
            ============================================================ */
         .nav {
-            display: flex;
+            display: grid;
+            grid-template-columns: auto 1fr auto;
             align-items: center;
-            justify-content: space-between;
             padding: 14px 0;
-            flex-wrap: wrap;
-            gap: 12px;
+            gap: 16px;
             border-bottom: 1px solid #f0f2f6;
         }
 
@@ -207,6 +206,7 @@
             align-items: center;
             gap: 6px;
             text-decoration: none;
+            flex-shrink: 0;
         }
         .nav-logo .accent {
             color: #0066cc;
@@ -224,10 +224,13 @@
 
         .nav-links {
             display: flex;
-            gap: 20px;
+            justify-content: center;
+            gap: 26px;
             list-style: none;
             font-size: 0.85rem;
             font-weight: 500;
+            align-items: center;
+            margin: 0 auto;
         }
         .nav-links a {
             color: #4a5a72;
@@ -242,6 +245,8 @@
             display: flex;
             gap: 10px;
             align-items: center;
+            justify-content: flex-end;
+            flex-shrink: 0;
         }
 
         .mobile-menu-toggle {
@@ -1053,7 +1058,9 @@
                 justify-content: center;
             }
             .nav {
+                display: flex;
                 flex-wrap: wrap;
+                justify-content: space-between;
                 position: relative;
                 padding: 10px 0;
             }
@@ -1726,6 +1733,13 @@
                     ASPIA <span class="accent">UCL</span>
                     <span class="badge">Free Directory</span>
                 </a>
+                <ul class="nav-links">
+                    <li><a href="{{ route('frameworks.public_index') }}" title="Compliance Frameworks">Frameworks</a></li>
+                    <li><a href="{{ route('domains.public_index') }}" title="Governance Domains">Domains</a></li>
+                    <li><a href="{{ route('controls.public_index') }}" title="Unified Controls">Controls</a></li>
+                    <li><a href="#about-ucl" title="About Unified Control Layer">About UCL</a></li>
+                    <li><a href="#blog" title="Resources & Articles">Blog</a></li>
+                </ul>
                 <div class="nav-actions">
                     <label class="theme-switch" for="themeToggleSwitch" title="Toggle Light/Dark Theme" aria-label="Toggle Theme">
                         <input type="checkbox" id="themeToggleSwitch" />
@@ -1745,13 +1759,6 @@
                         <i class="fas fa-bars" aria-hidden="true"></i>
                     </button>
                 </div>
-                <ul class="nav-links">
-                    <li><a href="{{ route('frameworks.public_index') }}" title="Compliance Frameworks">Frameworks</a></li>
-                    <li><a href="{{ route('domains.public_index') }}" title="Governance Domains">Domains</a></li>
-                    <li><a href="{{ route('controls.public_index') }}" title="Unified Controls">Controls</a></li>
-                    <li><a href="#about-ucl" title="About Unified Control Layer">About UCL</a></li>
-                    <li><a href="#blog" title="Resources & Articles">Blog</a></li>
-                </ul>
             </nav>
         </div>
     </header>
