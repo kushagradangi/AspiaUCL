@@ -63,6 +63,17 @@ Route::get(
     [DomainTemplateController::class, 'publicIndex']
 );
 
+// Public Controls List / Overview Page (e.g. /all-controls or /controls-overview)
+Route::get(
+    '/all-controls',
+    [ControlTemplateController::class, 'publicIndex']
+)->name('controls.public_index');
+
+Route::get(
+    '/controls-overview',
+    [ControlTemplateController::class, 'publicIndex']
+);
+
 
 // Framework Template View (e.g. /frameworks/isoiec-27001)
 Route::get(
