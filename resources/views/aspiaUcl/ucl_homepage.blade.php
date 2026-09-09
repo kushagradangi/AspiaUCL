@@ -3,26 +3,84 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <!-- Primary Meta Tags -->
     <title>Unified Control Layer (UCL) — Free Compliance Framework Directory | ASPIA</title>
+    <meta name="title" content="Unified Control Layer (UCL) — Free Compliance Framework Directory | ASPIA" />
     <meta name="description" content="ASPIA UCL is a free, open directory of compliance frameworks — ISO 27001, NIST CSF, PCI DSS, GDPR, DPDP, RBI, and more. View requirements, controls, mappings, and domains — all in one place." />
+    <meta name="keywords" content="compliance frameworks, ISO 27001, NIST CSF, PCI DSS, GDPR, DPDP Act, RBI CSF, unified control layer, GRC, cybersecurity compliance, framework mapping, governance domains, security controls" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <link rel="canonical" href="{{ url()->current() }}" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="{{ url()->current() }}" />
     <meta property="og:title" content="Unified Control Layer (UCL) — Free Compliance Framework Directory | ASPIA" />
     <meta property="og:description" content="Explore compliance frameworks, governance domains, and unified controls — ISO 27001, NIST CSF, PCI DSS, GDPR, DPDP, RBI, and more. Free, open, and always updated." />
-    <meta property="og:type" content="website" />
-    <meta name="robots" content="index, follow" />
-    <meta name="keywords" content="compliance frameworks, ISO 27001, NIST CSF, PCI DSS, GDPR, DPDP Act, RBI CSF, unified control layer, GRC, cybersecurity compliance, framework mapping, governance domains, security controls" />
+    <meta property="og:site_name" content="ASPIA UCL" />
+    <meta property="og:locale" content="en_US" />
 
-    <!-- Schema: WebPage -->
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="{{ url()->current() }}" />
+    <meta name="twitter:title" content="Unified Control Layer (UCL) — Free Compliance Framework Directory | ASPIA" />
+    <meta name="twitter:description" content="Explore compliance frameworks, governance domains, and unified controls — ISO 27001, NIST CSF, PCI DSS, GDPR, DPDP, RBI, and more." />
+    <meta name="twitter:site" content="@infotechaspia" />
+
+    <!-- Schema.org JSON-LD: WebPage & WebSite -->
     <script type="application/ld+json">
     {
         "@@context": "https://schema.org",
         "@@type": "WebPage",
         "name": "Unified Control Layer (UCL) — Free Compliance Framework Directory",
+        "url": "{{ url()->current() }}",
         "description": "ASPIA UCL is a free, open directory of compliance frameworks — ISO 27001, NIST CSF, PCI DSS, GDPR, DPDP, RBI, and more.",
-        "inLanguage": "en"
+        "inLanguage": "en",
+        "isPartOf": {
+            "@@type": "WebSite",
+            "name": "ASPIA UCL",
+            "url": "{{ route('home') }}"
+        }
     }
     </script>
 
-    <!-- Schema: FAQPage -->
+    <!-- Schema.org JSON-LD: Organization -->
+    <script type="application/ld+json">
+    {
+        "@@context": "https://schema.org",
+        "@@type": "Organization",
+        "name": "ASPIA Infotech",
+        "url": "https://aspia.com",
+        "sameAs": [
+            "https://www.linkedin.com/company/aspiainfotech/posts/?feedView=all",
+            "https://x.com/infotechaspia"
+        ]
+    }
+    </script>
+
+    <!-- Schema.org JSON-LD: BreadcrumbList -->
+    <script type="application/ld+json">
+    {
+        "@@context": "https://schema.org",
+        "@@type": "BreadcrumbList",
+        "itemListElement": [
+            {
+                "@@type": "ListItem",
+                "position": 1,
+                "name": "Home",
+                "item": "{{ route('home') }}"
+            },
+            {
+                "@@type": "ListItem",
+                "position": 2,
+                "name": "Unified Control Layer (UCL)",
+                "item": "{{ url()->current() }}"
+            }
+        ]
+    }
+    </script>
+
+    <!-- Schema.org JSON-LD: FAQPage -->
     <script type="application/ld+json">
     {
         "@@context": "https://schema.org",
@@ -1659,66 +1717,73 @@
 <body>
 
     <!-- ============================================================
-    NAVIGATION
+    HEADER & NAVIGATION
     ============================================================ -->
-    <div class="container">
-        <nav class="nav">
-            <a href="{{ route('home') }}" class="nav-logo">
-                ASPIA <span class="accent">UCL</span>
-                <span class="badge">Free Directory</span>
-            </a>
-            <div class="nav-actions">
-                <label class="theme-switch" for="themeToggleSwitch" title="Toggle Light/Dark Theme" aria-label="Toggle Theme">
-                    <input type="checkbox" id="themeToggleSwitch" />
-                    <span class="slider">
-                        <i class="fas fa-sun icon-sun"></i>
-                        <i class="fas fa-moon icon-moon"></i>
-                        <span class="thumb"></span>
-                    </span>
-                </label>
-                @auth
-                    <a href="{{ route('dashboard') }}" class="btn btn-outline" style="padding:6px 16px;font-size:0.8rem;"><i class="fas fa-chart-line"></i> Dashboard</a>
-                @else
-                    <a href="{{ route('login') }}" class="btn btn-outline" style="padding:6px 16px;font-size:0.8rem;">Sign In</a>
-                @endauth
-                <a href="{{ route('frameworks.public_index') }}" class="btn btn-light" style="padding:6px 16px;font-size:0.8rem;"><i class="fas fa-book-open"></i> Explore</a>
-                <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle Navigation">
-                    <i class="fas fa-bars"></i>
-                </button>
-            </div>
-            <ul class="nav-links">
-                <li><a href="{{ route('frameworks.public_index') }}">Frameworks</a></li>
-                <li><a href="{{ route('domains.public_index') }}">Domains</a></li>
-                <li><a href="{{ route('controls.public_index') }}">Controls</a></li>
-                <li><a href="#about-ucl">About UCL</a></li>
-                <li><a href="#blog">Blog</a></li>
-            </ul>
-        </nav>
-    </div>
-
-    <!-- ============================================================
-    FREE BADGE
-    ============================================================ -->
-    <div class="free-badge">
+    <header class="site-header">
         <div class="container">
-            <i class="fas fa-check-circle" style="color:#22c55e;"></i>
-            <strong>Free &amp; Open</strong> — Explore {{ $frameworksCount }}+ frameworks · {{ $domainsCount }} domains · {{ $controlsCount }} unified controls
-            <span style="margin-left:12px;font-size:0.7rem;color:#8a9ab0;">✓ No sign-up required</span>
-            <span style="margin-left:12px;font-size:0.7rem;color:#8a9ab0;">✓ Always updated</span>
+            <nav class="nav" aria-label="Main Navigation">
+                <a href="{{ route('home') }}" class="nav-logo" title="ASPIA UCL Homepage">
+                    ASPIA <span class="accent">UCL</span>
+                    <span class="badge">Free Directory</span>
+                </a>
+                <div class="nav-actions">
+                    <label class="theme-switch" for="themeToggleSwitch" title="Toggle Light/Dark Theme" aria-label="Toggle Theme">
+                        <input type="checkbox" id="themeToggleSwitch" />
+                        <span class="slider">
+                            <i class="fas fa-sun icon-sun" aria-hidden="true"></i>
+                            <i class="fas fa-moon icon-moon" aria-hidden="true"></i>
+                            <span class="thumb"></span>
+                        </span>
+                    </label>
+                    @auth
+                        <a href="{{ route('dashboard') }}" class="btn btn-outline" style="padding:6px 16px;font-size:0.8rem;" title="Go to Dashboard"><i class="fas fa-chart-line" aria-hidden="true"></i> Dashboard</a>
+                    @else
+                        <a href="{{ route('login') }}" class="btn btn-outline" style="padding:6px 16px;font-size:0.8rem;" title="Sign In">Sign In</a>
+                    @endauth
+                    <a href="{{ route('frameworks.public_index') }}" class="btn btn-light" style="padding:6px 16px;font-size:0.8rem;" title="Explore Framework Directory"><i class="fas fa-book-open" aria-hidden="true"></i> Explore</a>
+                    <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle Navigation Menu">
+                        <i class="fas fa-bars" aria-hidden="true"></i>
+                    </button>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="{{ route('frameworks.public_index') }}" title="Compliance Frameworks">Frameworks</a></li>
+                    <li><a href="{{ route('domains.public_index') }}" title="Governance Domains">Domains</a></li>
+                    <li><a href="{{ route('controls.public_index') }}" title="Unified Controls">Controls</a></li>
+                    <li><a href="#about-ucl" title="About Unified Control Layer">About UCL</a></li>
+                    <li><a href="#blog" title="Resources & Articles">Blog</a></li>
+                </ul>
+            </nav>
         </div>
-    </div>
+    </header>
 
     <!-- ============================================================
-    HERO
+    MAIN CONTENT WRAPPER
     ============================================================ -->
-    <div class="container">
-        <section class="hero">
-            <div class="hero-content">
-                <span class="tag"><i class="fas fa-layer-group"></i> Unified Control Layer</span>
-                <h1>
-                    Compliance Frameworks<br />
-                    <span class="highlight">Unified. Simplified.</span>
-                </h1>
+    <main id="main-content" role="main">
+
+        <!-- ============================================================
+        FREE BADGE
+        ============================================================ -->
+        <div class="free-badge">
+            <div class="container">
+                <i class="fas fa-check-circle" style="color:#22c55e;" aria-hidden="true"></i>
+                <strong>Free &amp; Open</strong> — Explore {{ $frameworksCount }}+ frameworks · {{ $domainsCount }} domains · {{ $controlsCount }} unified controls
+                <span style="margin-left:12px;font-size:0.7rem;color:#8a9ab0;">✓ No sign-up required</span>
+                <span style="margin-left:12px;font-size:0.7rem;color:#8a9ab0;">✓ Always updated</span>
+            </div>
+        </div>
+
+        <!-- ============================================================
+        HERO
+        ============================================================ -->
+        <div class="container">
+            <section class="hero" aria-label="Hero Section">
+                <div class="hero-content">
+                    <span class="tag"><i class="fas fa-layer-group" aria-hidden="true"></i> Unified Control Layer</span>
+                    <h1>
+                        Compliance Frameworks<br />
+                        <span class="highlight">Unified. Simplified.</span>
+                    </h1>
                 <p>
                     A free, open directory of cybersecurity, privacy, and regulatory frameworks.
                     Explore domains, controls, requirements, and how they map together — all in one place.
@@ -2126,40 +2191,44 @@
     <!-- ============================================================
     CTA
     ============================================================ -->
-    <div class="section section-alt" style="padding:20px 0 32px 0;">
+    <section class="section section-alt" style="padding:20px 0 32px 0;" aria-label="Explore Call to Action">
         <div class="container">
             <div class="cta-simple">
                 <h3>Explore UCL — Free &amp; Open</h3>
                 <p>No sign-up. No paywall. Just a clean reference for compliance professionals.</p>
-                <a href="{{ route('frameworks.public_index') }}" class="btn btn-accent"><i class="fas fa-sitemap"></i> Browse All Frameworks</a>
+                <a href="{{ route('frameworks.public_index') }}" class="btn btn-accent" title="Browse All Compliance Frameworks"><i class="fas fa-sitemap" aria-hidden="true"></i> Browse All Frameworks</a>
                 <span style="display:block;margin-top:8px;font-size:0.7rem;color:#8a9ab0;">{{ $frameworksCount }}+ frameworks · {{ $domainsCount }} domains · {{ $controlsCount }} unified controls · {{ number_format($requirementsCount) }} requirements</span>
             </div>
         </div>
-    </div>
+    </section>
+
+    </main><!-- END MAIN CONTENT WRAPPER -->
 
     <!-- ============================================================
     FOOTER
     ============================================================ -->
-    <div class="container">
-        <div class="footer">
-            <div>
-                <strong style="color:#0b1a33;">ASPIA UCL</strong> — Unified Control Layer
-                <div class="footer-sub" style="margin-top:3px;font-size:0.65rem;color:#8a9ab0;">Free compliance framework directory</div>
-            </div>
-            <div class="links">
-                <a href="{{ route('frameworks.public_index') }}">Frameworks</a>
-                <a href="{{ route('domains.public_index') }}">Domains</a>
-                <a href="{{ route('controls.public_index') }}">Controls</a>
-                <a href="#about-ucl">About</a>
-                <a href="#blog">Blog</a>
-                <a href="{{ route('login') }}">Sign In</a>
-            </div>
-            <div class="social">
-                <a href="https://www.linkedin.com/company/aspiainfotech/posts/?feedView=all" target="_blank" rel="noopener"><i class="fab fa-linkedin-in"></i></a>
-                <a href="https://x.com/infotechaspia" target="_blank" rel="noopener"><i class="fab fa-x-twitter"></i></a>
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer">
+                <div>
+                    <strong style="color:#0b1a33;">ASPIA UCL</strong> — Unified Control Layer
+                    <div class="footer-sub" style="margin-top:3px;font-size:0.65rem;color:#8a9ab0;">Free compliance framework directory</div>
+                </div>
+                <div class="links">
+                    <a href="{{ route('frameworks.public_index') }}" title="Compliance Frameworks Directory">Frameworks</a>
+                    <a href="{{ route('domains.public_index') }}" title="Governance Domains">Domains</a>
+                    <a href="{{ route('controls.public_index') }}" title="Unified Controls Directory">Controls</a>
+                    <a href="#about-ucl" title="About ASPIA UCL">About</a>
+                    <a href="#blog" title="Compliance Blog & Articles">Blog</a>
+                    <a href="{{ route('login') }}" title="Sign In to ASPIA">Sign In</a>
+                </div>
+                <div class="social">
+                    <a href="https://www.linkedin.com/company/aspiainfotech/posts/?feedView=all" target="_blank" rel="noopener noreferrer" aria-label="ASPIA LinkedIn Profile" title="ASPIA LinkedIn"><i class="fab fa-linkedin-in" aria-hidden="true"></i></a>
+                    <a href="https://x.com/infotechaspia" target="_blank" rel="noopener noreferrer" aria-label="ASPIA X (Twitter) Profile" title="ASPIA X (Twitter)"><i class="fab fa-x-twitter" aria-hidden="true"></i></a>
+                </div>
             </div>
         </div>
-    </div>
+    </footer>
 
     <!-- ============================================================
     JAVASCRIPT
