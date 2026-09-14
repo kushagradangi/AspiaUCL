@@ -581,8 +581,83 @@
            ============================================================ */
         .domains-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            grid-template-columns: repeat(6, 1fr);
             gap: 14px;
+        }
+
+        /* ============================================================
+           DOMAINS PAGINATION STYLES
+           ============================================================ */
+        .domains-pagination {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            margin-top: 24px;
+        }
+
+        .domains-page-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 7px 16px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            font-family: inherit;
+            border: 1px solid #d0d8e4;
+            background: #ffffff;
+            color: #0b1a33;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .domains-page-btn:hover:not(:disabled) {
+            background: #f0f4fa;
+            border-color: #0066cc;
+            color: #0066cc;
+        }
+        .domains-page-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .domains-page-numbers {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+        }
+
+        .domains-page-number {
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            font-family: inherit;
+            border: 1px solid #d0d8e4;
+            background: #ffffff;
+            color: #4a5a72;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+        .domains-page-number:hover:not(.active) {
+            border-color: #0066cc;
+            color: #0066cc;
+            background: #f0f4fa;
+        }
+        .domains-page-number.active {
+            background: #0066cc;
+            color: #ffffff;
+            border-color: #0066cc;
+        }
+
+        .domains-page-info {
+            font-size: 0.75rem;
+            color: #6a7a92;
+            font-weight: 500;
         }
 
         .domain-card {
@@ -1041,7 +1116,7 @@
                 font-size: 2.3rem;
             }
             .domains-grid {
-                grid-template-columns: repeat(3, 1fr);
+                grid-template-columns: repeat(4, 1fr);
             }
             .framework-grid {
                 grid-template-columns: repeat(2, 1fr);
@@ -1462,6 +1537,36 @@
         }
         body.dark-mode .domain-card .count {
             color: #6a7a92 !important;
+        }
+
+        /* Dark mode overrides for Domains Pagination */
+        body.dark-mode .domains-page-btn {
+            background: #1e293b !important;
+            border-color: #334155 !important;
+            color: #f1f5f9 !important;
+        }
+        body.dark-mode .domains-page-btn:hover:not(:disabled) {
+            background: #334155 !important;
+            border-color: #38bdf8 !important;
+            color: #38bdf8 !important;
+        }
+        body.dark-mode .domains-page-number {
+            background: #1e293b !important;
+            border-color: #334155 !important;
+            color: #cbd5e1 !important;
+        }
+        body.dark-mode .domains-page-number:hover:not(.active) {
+            background: #334155 !important;
+            border-color: #38bdf8 !important;
+            color: #38bdf8 !important;
+        }
+        body.dark-mode .domains-page-number.active {
+            background: #0284c7 !important;
+            border-color: #0284c7 !important;
+            color: #ffffff !important;
+        }
+        body.dark-mode .domains-page-info {
+            color: #94a3b8 !important;
         }
 
         /* Control Cards (Light Cream in Dark Theme) */
@@ -1908,7 +2013,7 @@
                 <p>Browse unified controls organized by governance, risk, and compliance domains.</p>
             </div>
 
-            <div class="domains-grid">
+            <div class="domains-grid" id="domainsGrid">
                 @forelse($domains as $domain)
                     <a href="{{ route('domains.show', $domain->slug ?? strtolower(str_replace(' ', '-', $domain->name))) }}" class="domain-card">
                         <div class="icon">
@@ -1941,6 +2046,20 @@
                         <div class="count">89 controls</div>
                     </a>
                 @endforelse
+            </div>
+
+            <!-- DOMAINS PAGINATION -->
+            <div class="domains-pagination" id="domainsPagination">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <button type="button" class="domains-page-btn" id="domainsPrevBtn" aria-label="Previous Page">
+                        <i class="fas fa-chevron-left" aria-hidden="true"></i> Prev
+                    </button>
+                    <div class="domains-page-numbers" id="domainsPageNumbers"></div>
+                    <button type="button" class="domains-page-btn" id="domainsNextBtn" aria-label="Next Page">
+                        Next <i class="fas fa-chevron-right" aria-hidden="true"></i>
+                    </button>
+                </div>
+                <span class="domains-page-info" id="domainsPageInfo"></span>
             </div>
         </div>
     </div>
@@ -2242,6 +2361,114 @@
     ============================================================ -->
     <script>
         (function() {
+            // Domains Section Pagination (Set to 3 rows)
+            const grid = document.getElementById('domainsGrid');
+            if (grid) {
+                const cards = Array.from(grid.querySelectorAll('.domain-card'));
+                if (cards.length > 0) {
+                    const prevBtn = document.getElementById('domainsPrevBtn');
+                    const nextBtn = document.getElementById('domainsNextBtn');
+                    const numbersContainer = document.getElementById('domainsPageNumbers');
+                    const infoSpan = document.getElementById('domainsPageInfo');
+                    const paginationWrap = document.getElementById('domainsPagination');
+
+                    let currentPage = 1;
+
+                    function getCols() {
+                        const w = window.innerWidth;
+                        if (w > 992) return 6;
+                        if (w > 768) return 4;
+                        if (w > 480) return 3;
+                        if (w > 380) return 2;
+                        return 1;
+                    }
+
+                    function render() {
+                        const cols = getCols();
+                        const itemsPerPage = cols * 3; // Set only 3 rows
+                        const totalPages = Math.ceil(cards.length / itemsPerPage);
+
+                        if (totalPages <= 1) {
+                            cards.forEach(card => card.style.display = '');
+                            if (paginationWrap) paginationWrap.style.display = 'none';
+                            return;
+                        } else {
+                            if (paginationWrap) paginationWrap.style.display = 'flex';
+                        }
+
+                        if (currentPage > totalPages) currentPage = totalPages;
+                        if (currentPage < 1) currentPage = 1;
+
+                        const startIdx = (currentPage - 1) * itemsPerPage;
+                        const endIdx = startIdx + itemsPerPage;
+
+                        cards.forEach((card, idx) => {
+                            if (idx >= startIdx && idx < endIdx) {
+                                card.style.display = '';
+                            } else {
+                                card.style.display = 'none';
+                            }
+                        });
+
+                        if (prevBtn) prevBtn.disabled = (currentPage === 1);
+                        if (nextBtn) nextBtn.disabled = (currentPage === totalPages);
+
+                        if (infoSpan) {
+                            const visibleCountEnd = Math.min(endIdx, cards.length);
+                            infoSpan.textContent = `Showing ${startIdx + 1}–${visibleCountEnd} of ${cards.length} domains`;
+                        }
+
+                        if (numbersContainer) {
+                            numbersContainer.innerHTML = '';
+                            for (let i = 1; i <= totalPages; i++) {
+                                const btn = document.createElement('button');
+                                btn.type = 'button';
+                                btn.className = 'domains-page-number' + (i === currentPage ? ' active' : '');
+                                btn.textContent = i;
+                                btn.setAttribute('aria-label', `Page ${i}`);
+                                btn.addEventListener('click', function() {
+                                    currentPage = i;
+                                    render();
+                                    grid.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                                });
+                                numbersContainer.appendChild(btn);
+                            }
+                        }
+                    }
+
+                    if (prevBtn) {
+                        prevBtn.addEventListener('click', function() {
+                            if (currentPage > 1) {
+                                currentPage--;
+                                render();
+                                grid.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                            }
+                        });
+                    }
+
+                    if (nextBtn) {
+                        nextBtn.addEventListener('click', function() {
+                            const cols = getCols();
+                            const itemsPerPage = cols * 3;
+                            const totalPages = Math.ceil(cards.length / itemsPerPage);
+                            if (currentPage < totalPages) {
+                                currentPage++;
+                                render();
+                                grid.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                            }
+                        });
+                    }
+
+                    let resizeTimer;
+                    window.addEventListener('resize', function() {
+                        clearTimeout(resizeTimer);
+                        resizeTimer = setTimeout(render, 100);
+                    });
+
+                    render();
+                }
+            }
+
             // Filter chips logic
             const chips = document.querySelectorAll('.filter-chips .chip');
             const frameworkItems = document.querySelectorAll('.framework-grid .framework-item');
