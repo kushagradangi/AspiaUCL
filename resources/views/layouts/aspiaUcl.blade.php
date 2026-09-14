@@ -26,7 +26,7 @@
 
 
         body {
-            font-family: Arial, Helvetica, sans-serif;
+            font-family: 'Avenir Next', 'Avenir', Arial, Helvetica, sans-serif;
             background: #0e1836;
             color: #ffffff;
         }

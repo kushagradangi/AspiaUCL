@@ -508,10 +508,10 @@ HTML;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-family: 'Inter', 'Segoe UI', 'Roboto', sans-serif;
             background-color: var(--bg-dark);
             color: var(--text-primary);
-            line-height: 1.6;
+            line-height: 1.7;
             padding: 40px 20px;
             min-height: 100vh;
         }

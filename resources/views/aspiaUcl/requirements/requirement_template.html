@@ -164,7 +164,7 @@
         }
 
         body {
-            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: 'Avenir Next', 'Avenir', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background-color: var(--bg-primary);
             color: var(--text-primary);
             line-height: 1.6;
@@ -338,7 +338,12 @@
         }
 
         /* SMOOTH GLOBAL COLOR TRANSITIONS */
-        body, .top-toolbar, .hero-card, .tab-content, .callout-block, .narrative-card {
+        body,
+        .top-toolbar,
+        .hero-card,
+        .tab-content,
+        .callout-block,
+        .narrative-card {
             transition: background-color 0.35s ease, color 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
         }
 
@@ -925,11 +930,13 @@
 
         <div class="theme-segmented-switch" id="themeSegmentedSwitch" title="Toggle Light / Dark Theme (Shift+T)">
             <div class="theme-sliding-thumb" id="themeSlidingThumb"></div>
-            <button type="button" class="theme-seg-btn active" id="segBtnLight" onclick="setTheme('light', true, event)" aria-label="Light Mode">
+            <button type="button" class="theme-seg-btn active" id="segBtnLight" onclick="setTheme('light', true, event)"
+                aria-label="Light Mode">
                 <span class="theme-icon-sun">☀️</span>
                 <span>Light</span>
             </button>
-            <button type="button" class="theme-seg-btn" id="segBtnDark" onclick="setTheme('dark', true, event)" aria-label="Dark Mode">
+            <button type="button" class="theme-seg-btn" id="segBtnDark" onclick="setTheme('dark', true, event)"
+                aria-label="Dark Mode">
                 <span class="theme-icon-moon">🌙</span>
                 <span>Dark</span>
             </button>
@@ -1450,7 +1457,7 @@
                 const ctx = new AudioCtx();
                 const osc = ctx.createOscillator();
                 const gain = ctx.createGain();
-                
+
                 if (isDark) {
                     osc.type = 'sine';
                     osc.frequency.setValueAtTime(523.25, ctx.currentTime);
@@ -1464,12 +1471,12 @@
                     gain.gain.setValueAtTime(0.05, ctx.currentTime);
                     gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.10);
                 }
-                
+
                 osc.connect(gain);
                 gain.connect(ctx.destination);
                 osc.start();
                 osc.stop(ctx.currentTime + 0.12);
-            } catch(e) {}
+            } catch (e) { }
         }
 
         function createThemeRipple(e) {
@@ -1494,7 +1501,7 @@
                 document.body.appendChild(ripple);
                 requestAnimationFrame(() => ripple.classList.add('animate-expand'));
                 setTimeout(() => { if (ripple.parentNode) ripple.remove(); }, 650);
-            } catch(err) {}
+            } catch (err) { }
         }
 
         function setTheme(theme, playSound = true, evt = null) {
@@ -1503,7 +1510,7 @@
             localStorage.setItem('aspia_theme', theme);
 
             const btnLight = document.getElementById('segBtnLight');
-            const btnDark  = document.getElementById('segBtnDark');
+            const btnDark = document.getElementById('segBtnDark');
 
             if (theme === 'light') {
                 if (btnLight) btnLight.classList.add('active');
@@ -1538,7 +1545,7 @@
         });
 
         document.addEventListener('DOMContentLoaded', function () {
-            const savedTheme = localStorage.getItem('aspia_theme') || 
+            const savedTheme = localStorage.getItem('aspia_theme') ||
                 (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
             setTheme(savedTheme, false);
         });

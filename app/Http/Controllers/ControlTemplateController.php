@@ -1641,7 +1641,7 @@ HTML;
     <header class="site-header" role="banner">
         <div class="container header-content">
             <div class="brand-group">
-                <a href="/controls" class="brand-logo-link" aria-label="ASPIA UCL Home">
+                <a href="/all-controls" class="brand-logo-link" aria-label="ASPIA UCL Home">
                     <span class="logo-text-aspia">ASPIA</span><span class="logo-text-ucl">UCL</span>
                 </a>
             </div>
