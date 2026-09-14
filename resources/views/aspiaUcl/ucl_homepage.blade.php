@@ -695,8 +695,83 @@
            ============================================================ */
         .controls-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            grid-template-columns: repeat(4, 1fr);
             gap: 14px;
+        }
+
+        /* ============================================================
+           CONTROLS PAGINATION STYLES
+           ============================================================ */
+        .controls-pagination {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            margin-top: 24px;
+        }
+
+        .controls-page-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 7px 16px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            font-family: inherit;
+            border: 1px solid #d0d8e4;
+            background: #ffffff;
+            color: #0b1a33;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .controls-page-btn:hover:not(:disabled) {
+            background: #f0f4fa;
+            border-color: #0066cc;
+            color: #0066cc;
+        }
+        .controls-page-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .controls-page-numbers {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+        }
+
+        .controls-page-number {
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            font-family: inherit;
+            border: 1px solid #d0d8e4;
+            background: #ffffff;
+            color: #4a5a72;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+        .controls-page-number:hover:not(.active) {
+            border-color: #0066cc;
+            color: #0066cc;
+            background: #f0f4fa;
+        }
+        .controls-page-number.active {
+            background: #0066cc;
+            color: #ffffff;
+            border-color: #0066cc;
+        }
+
+        .controls-page-info {
+            font-size: 0.75rem;
+            color: #6a7a92;
+            font-weight: 500;
         }
 
         .control-card {
@@ -766,8 +841,280 @@
            ============================================================ */
         .framework-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+            grid-template-columns: repeat(5, 1fr);
             gap: 14px;
+        }
+
+        /* ============================================================
+           FRAMEWORKS PAGINATION STYLES
+           ============================================================ */
+        .frameworks-pagination {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            margin-top: 24px;
+        }
+
+        .frameworks-page-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 7px 16px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            font-family: inherit;
+            border: 1px solid #d0d8e4;
+            background: #ffffff;
+            color: #0b1a33;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .frameworks-page-btn:hover:not(:disabled) {
+            background: #f0f4fa;
+            border-color: #0066cc;
+            color: #0066cc;
+        }
+        .frameworks-page-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .frameworks-page-numbers {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+        }
+
+        .frameworks-page-number {
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            font-family: inherit;
+            border: 1px solid #d0d8e4;
+            background: #ffffff;
+            color: #4a5a72;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+        .frameworks-page-number:hover:not(.active) {
+            border-color: #0066cc;
+            color: #0066cc;
+            background: #f0f4fa;
+        }
+        .frameworks-page-number.active {
+            background: #0066cc;
+            color: #ffffff;
+            border-color: #0066cc;
+        }
+
+        .frameworks-page-info {
+            font-size: 0.75rem;
+            color: #6a7a92;
+            font-weight: 500;
+        }
+
+        /* ============================================================
+           FW DOMAINS MAPPING PAGINATION STYLES
+           ============================================================ */
+        .fwdomains-pagination {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .fwdomains-page-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 7px 16px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            font-family: inherit;
+            border: 1px solid #d0d8e4;
+            background: #ffffff;
+            color: #0b1a33;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .fwdomains-page-btn:hover:not(:disabled) {
+            background: #f0f4fa;
+            border-color: #0066cc;
+            color: #0066cc;
+        }
+        .fwdomains-page-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .fwdomains-page-numbers {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+        }
+
+        .fwdomains-page-number {
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            font-family: inherit;
+            border: 1px solid #d0d8e4;
+            background: #ffffff;
+            color: #4a5a72;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+        .fwdomains-page-number:hover:not(.active) {
+            border-color: #0066cc;
+            color: #0066cc;
+            background: #f0f4fa;
+        }
+        .fwdomains-page-number.active {
+            background: #0066cc;
+            color: #ffffff;
+            border-color: #0066cc;
+        }
+
+        .fwdomains-page-info {
+            font-size: 0.75rem;
+            color: #6a7a92;
+            font-weight: 500;
+        }
+
+        /* ============================================================
+           COMPACT SLEEK TABLE & MODAL STYLES
+           ============================================================ */
+        .compare-table-wrap {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            background: #ffffff;
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+        }
+        .compare-table-wrap table {
+            width: 100%;
+            min-width: 600px;
+            border-collapse: collapse;
+            font-size: 0.8rem;
+        }
+        .compare-table-wrap th {
+            text-align: left;
+            padding: 10px 14px;
+            background: #f8fafc;
+            font-weight: 700;
+            color: #334155;
+            border-bottom: 1px solid #e2e8f0;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .compare-table-wrap td {
+            padding: 10px 14px;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        .compare-table-wrap tr:last-child td {
+            border-bottom: none;
+        }
+        .compare-table-wrap tr:hover td {
+            background: #f8fafc;
+        }
+
+        .btn-view-compact {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #0066cc;
+            background: #eef6ff;
+            border: 1px solid #cce3ff;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.15s ease;
+            white-space: nowrap;
+        }
+        .btn-view-compact:hover {
+            background: #0066cc;
+            color: #ffffff;
+            border-color: #0066cc;
+            box-shadow: 0 2px 6px rgba(0, 102, 204, 0.2);
+        }
+
+        .ucl-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(4px);
+            z-index: 99999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+        }
+        .ucl-modal-card {
+            background: #ffffff;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 480px;
+            box-shadow: 0 16px 36px rgba(0, 0, 0, 0.18);
+            border: 1px solid #e2e8f0;
+            overflow: hidden;
+            animation: modalFadeIn 0.15s ease-out;
+        }
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .ucl-modal-header {
+            padding: 12px 18px;
+            background: #f8fafc;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .ucl-modal-close {
+            background: none;
+            border: none;
+            font-size: 1.4rem;
+            color: #64748b;
+            cursor: pointer;
+            line-height: 1;
+            padding: 0 4px;
+        }
+        .ucl-modal-close:hover {
+            color: #0f172a;
+        }
+        .ucl-modal-body {
+            padding: 16px 18px;
+        }
+        .ucl-modal-footer {
+            padding: 10px 18px;
+            background: #f8fafc;
+            border-top: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         .framework-item {
@@ -897,7 +1244,7 @@
            FAQ
            ============================================================ */
         .faq-list {
-            max-width: 800px;
+            max-width: 100%;
             margin: 0 auto;
         }
         .faq-item {
@@ -1119,7 +1466,7 @@
                 grid-template-columns: repeat(4, 1fr);
             }
             .framework-grid {
-                grid-template-columns: repeat(2, 1fr);
+                grid-template-columns: repeat(4, 1fr);
             }
         }
 
@@ -1194,7 +1541,7 @@
                 gap: 10px;
             }
             .controls-grid {
-                grid-template-columns: 1fr;
+                grid-template-columns: repeat(2, 1fr);
             }
             .framework-grid {
                 grid-template-columns: 1fr;
@@ -1605,6 +1952,36 @@
             border: none !important;
         }
 
+        /* Dark mode overrides for Controls Pagination */
+        body.dark-mode .controls-page-btn {
+            background: #1e293b !important;
+            border-color: #334155 !important;
+            color: #f1f5f9 !important;
+        }
+        body.dark-mode .controls-page-btn:hover:not(:disabled) {
+            background: #334155 !important;
+            border-color: #38bdf8 !important;
+            color: #38bdf8 !important;
+        }
+        body.dark-mode .controls-page-number {
+            background: #1e293b !important;
+            border-color: #334155 !important;
+            color: #cbd5e1 !important;
+        }
+        body.dark-mode .controls-page-number:hover:not(.active) {
+            background: #334155 !important;
+            border-color: #38bdf8 !important;
+            color: #38bdf8 !important;
+        }
+        body.dark-mode .controls-page-number.active {
+            background: #0284c7 !important;
+            border-color: #0284c7 !important;
+            color: #ffffff !important;
+        }
+        body.dark-mode .controls-page-info {
+            color: #94a3b8 !important;
+        }
+
         /* Framework Items (Light Cream in Dark Theme) */
         body.dark-mode .framework-item {
             background: #faf8f5 !important;
@@ -1638,6 +2015,36 @@
         }
         body.dark-mode .framework-item .detail-link {
             color: #0066cc !important;
+        }
+
+        /* Dark mode overrides for Frameworks Pagination */
+        body.dark-mode .frameworks-page-btn {
+            background: #1e293b !important;
+            border-color: #334155 !important;
+            color: #f1f5f9 !important;
+        }
+        body.dark-mode .frameworks-page-btn:hover:not(:disabled) {
+            background: #334155 !important;
+            border-color: #38bdf8 !important;
+            color: #38bdf8 !important;
+        }
+        body.dark-mode .frameworks-page-number {
+            background: #1e293b !important;
+            border-color: #334155 !important;
+            color: #cbd5e1 !important;
+        }
+        body.dark-mode .frameworks-page-number:hover:not(.active) {
+            background: #334155 !important;
+            border-color: #38bdf8 !important;
+            color: #38bdf8 !important;
+        }
+        body.dark-mode .frameworks-page-number.active {
+            background: #0284c7 !important;
+            border-color: #0284c7 !important;
+            color: #ffffff !important;
+        }
+        body.dark-mode .frameworks-page-info {
+            color: #94a3b8 !important;
         }
 
         /* Filter Chips */
@@ -1859,7 +2266,6 @@
                     @else
                         <a href="{{ route('login') }}" class="btn btn-outline" style="padding:6px 16px;font-size:0.8rem;" title="Sign In">Sign In</a>
                     @endauth
-                    <a href="{{ route('frameworks.public_index') }}" class="btn btn-light" style="padding:6px 16px;font-size:0.8rem;" title="Explore Framework Directory"><i class="fas fa-book-open" aria-hidden="true"></i> Explore</a>
                     <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle Navigation Menu">
                         <i class="fas fa-bars" aria-hidden="true"></i>
                     </button>
@@ -2075,7 +2481,7 @@
                 <p>Each unified control maps to requirements from multiple frameworks.</p>
             </div>
 
-            <div class="controls-grid">
+            <div class="controls-grid" id="controlsGrid">
                 @forelse($controls as $control)
                     <a href="{{ route('controls.show', $control->control_id ?? $control->id) }}" class="control-card">
                         <div class="top">
@@ -2103,6 +2509,20 @@
                         <div class="frameworks"><span>ISO 27001</span> <span>NIST CSF</span> <span>PCI DSS</span></div>
                     </a>
                 @endforelse
+            </div>
+
+            <!-- CONTROLS PAGINATION -->
+            <div class="controls-pagination" id="controlsPagination">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <button type="button" class="controls-page-btn" id="controlsPrevBtn" aria-label="Previous Page">
+                        <i class="fas fa-chevron-left" aria-hidden="true"></i> Prev
+                    </button>
+                    <div class="controls-page-numbers" id="controlsPageNumbers"></div>
+                    <button type="button" class="controls-page-btn" id="controlsNextBtn" aria-label="Next Page">
+                        Next <i class="fas fa-chevron-right" aria-hidden="true"></i>
+                    </button>
+                </div>
+                <span class="controls-page-info" id="controlsPageInfo"></span>
             </div>
 
             <div style="text-align:center;margin-top:18px;">
@@ -2147,7 +2567,7 @@
                 <span class="chip" data-category="governance">Governance</span>
             </div>
 
-            <div class="framework-grid">
+            <div class="framework-grid" id="frameworksGrid">
                 @forelse($frameworks as $fw)
                     <div class="framework-item" data-cat="{{ strtolower(($fw->region ?? '') . ' ' . ($fw->category ?? '') . ' ' . ($fw->framework_type ?? '')) }}">
                         <div><span class="name">{{ $fw->name }}</span> <span class="ver">{{ $fw->version }}</span></div>
@@ -2168,62 +2588,143 @@
                     </div>
                 @endforelse
             </div>
+
+            <!-- FRAMEWORKS PAGINATION -->
+            <div class="frameworks-pagination" id="frameworksPagination">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <button type="button" class="frameworks-page-btn" id="frameworksPrevBtn" aria-label="Previous Page">
+                        <i class="fas fa-chevron-left" aria-hidden="true"></i> Prev
+                    </button>
+                    <div class="frameworks-page-numbers" id="frameworksPageNumbers"></div>
+                    <button type="button" class="frameworks-page-btn" id="frameworksNextBtn" aria-label="Next Page">
+                        Next <i class="fas fa-chevron-right" aria-hidden="true"></i>
+                    </button>
+                </div>
+                <span class="frameworks-page-info" id="frameworksPageInfo"></span>
+            </div>
         </div>
     </div>
 
     <!-- ============================================================
-    FRAMEWORK COMPARISON (DYNAMIC MATRIX)
+    DOMAINS AND ASSOCIATED CONTROLS (MATCHING REFERENCE DESIGN)
     ============================================================ -->
-    <div class="section section-alt">
+    <div class="section section-alt" id="domainControlsSection">
         <div class="container">
             <div class="section-head">
-                <span class="tag">How They Connect</span>
-                <h2>Framework Mapping to UCL Controls</h2>
-                <p>See how requirements from different frameworks map to the same unified controls.</p>
+                <span class="tag">Governance Domains</span>
+                <h2>Domains and Associated Controls</h2>
+                <p>Browse UCL governance domains and their associated unified controls.</p>
             </div>
 
-            <div class="compare-table-wrap">
-                <table>
+            <div class="compare-table-wrap" style="background: #ffffff; border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02); overflow-x: auto;">
+                <table id="domainControlsTable" style="width: 100%; border-collapse: collapse; font-size: 0.85rem;">
                     <thead>
-                        <tr>
-                            <th>Unified Control</th>
-                            <th>ISO 27001</th>
-                            <th>NIST CSF</th>
-                            <th>PCI DSS</th>
-                            <th>GDPR</th>
+                        <tr style="background: #ffffff; border-bottom: 1px solid #e2e8f0;">
+                            <th style="width: 28%; text-align: left; padding: 14px 20px; font-weight: 700; color: #475569; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em; white-space: nowrap;">GOVERNANCE DOMAIN</th>
+                            <th style="width: 30%; text-align: left; padding: 14px 20px; font-weight: 700; color: #475569; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em;">SCOPE &amp; OVERVIEW</th>
+                            <th style="width: 32%; text-align: left; padding: 14px 20px; font-weight: 700; color: #475569; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em;">ASSOCIATED UNIFIED CONTROLS</th>
+                            <th style="width: 10%; text-align: center; padding: 14px 20px; font-weight: 700; color: #475569; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em; white-space: nowrap;">ACTION</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        @forelse($comparisonControls as $cmpCtrl)
-                            <tr>
-                                <td><strong>{{ $cmpCtrl->control_id }}</strong> {{ $cmpCtrl->name }}</td>
-                                <td>A.5.{{ rand(1, 25) }}</td>
-                                <td>PR.{{ strtoupper(\Illuminate\Support\Str::random(2)) }}</td>
-                                <td>Req {{ rand(1, 12) }}</td>
-                                <td>Art {{ rand(20, 39) }}</td>
+                    <tbody id="domainControlsTableBody">
+                        @foreach($domainsWithControls as $item)
+                            @php
+                                $dom = $item['domain'];
+                                $ctrls = $item['controls'];
+                                $code = $dom->domain_code ?: $dom->domain_id ?: 'DOM';
+                                $overview = $dom->short_overview ?: ($dom->scope ?: ($dom->purpose ?: 'Defines security governance and control requirements for ' . $dom->name . '.'));
+                                $controlsList = $ctrls->map(fn($c) => ['id' => $c->control_id, 'name' => $c->name])->values()->all();
+                                $controlsJson = e(json_encode($controlsList));
+                                $detailUrl = route('domains.show', $dom->slug ?: $dom->id);
+                            @endphp
+                            <tr class="domain-control-row" style="vertical-align: middle; border-bottom: 1px solid #f1f5f9;">
+                                <td style="padding: 14px 20px; white-space: nowrap;">
+                                    <div style="display: inline-flex; align-items: center; gap: 6px; white-space: nowrap;">
+                                        <strong style="color: #0f172a; font-weight: 700;">{{ $code }}</strong>
+                                        <span style="color: #334155; font-weight: 500;">{{ $dom->name }}</span>
+                                    </div>
+                                </td>
+                                <td style="padding: 14px 20px;">
+                                    <span style="color: #475569; font-weight: 400; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;" title="{{ $overview }}">
+                                        {{ $overview }}
+                                    </span>
+                                </td>
+                                <td style="padding: 14px 20px; color: #334155;">
+                                    @if($ctrls->count() > 0)
+                                        <div style="display: flex; flex-direction: column; gap: 4px; line-height: 1.4;">
+                                            @foreach($ctrls->take(1) as $ctrl)
+                                                <div style="display: flex; align-items: flex-start; gap: 6px; font-size: 0.83rem;">
+                                                    <strong style="color: #0f172a; font-weight: 700; flex-shrink: 0;">{{ $ctrl->control_id }}</strong>
+                                                    <span style="color: #334155; flex: 1;">{{ $ctrl->name }}</span>
+                                                </div>
+                                            @endforeach
+                                            @if($ctrls->count() > 1)
+                                                <div style="color: #64748b; font-size: 0.78rem; font-weight: 500; margin-top: 1px;">
+                                                    (+{{ $ctrls->count() - 1 }} more)
+                                                </div>
+                                            @endif
+                                        </div>
+                                    @else
+                                        <span style="color: #94a3b8; font-style: italic;">No controls mapped</span>
+                                    @endif
+                                </td>
+                                <td style="padding: 14px 20px; text-align: center; white-space: nowrap;">
+                                    <button type="button" 
+                                            class="view-domain-btn"
+                                            data-code="{{ $code }}"
+                                            data-name="{{ $dom->name }}"
+                                            data-url="{{ $detailUrl }}"
+                                            data-controls="{{ json_encode($controlsList) }}"
+                                            style="display: inline-flex; align-items: center; justify-content: center; gap: 4px; white-space: nowrap; padding: 6px 14px; background: #f0f6ff; color: #0066cc; border: 1px solid #cce0ff; border-radius: 6px; font-weight: 600; font-size: 0.78rem; cursor: pointer; transition: all 0.15s ease;"
+                                            onmouseover="this.style.background='#0066cc'; this.style.color='#ffffff'; this.style.borderColor='#0066cc';"
+                                            onmouseout="this.style.background='#f0f6ff'; this.style.color='#0066cc'; this.style.borderColor='#cce0ff';">
+                                        <span>View</span> <i class="fas fa-eye" style="font-size: 0.72rem;"></i>
+                                    </button>
+                                </td>
                             </tr>
-                        @empty
-                            <tr>
-                                <td><strong>UCL-001</strong> Access Control</td>
-                                <td>A.5.15</td>
-                                <td>PR.AA</td>
-                                <td>Req 7</td>
-                                <td>Art 32</td>
-                            </tr>
-                            <tr>
-                                <td><strong>UCL-014</strong> Asset Management</td>
-                                <td>A.5.9</td>
-                                <td>ID.AM</td>
-                                <td>Req 9</td>
-                                <td>Art 30</td>
-                            </tr>
-                        @endforelse
+                        @endforeach
                     </tbody>
                 </table>
             </div>
-            <p style="font-size:0.75rem;color:#6a7a92;text-align:center;margin-top:10px;">
-                <i class="fas fa-info-circle"></i> Each unified control satisfies requirements from multiple frameworks — reducing duplicate compliance effort.
+
+            <!-- DOMAIN CONTROLS PAGINATION (5 ROWS PER PAGE) -->
+            <div class="fwdomains-pagination" id="domainControlsPagination" style="margin-top: 20px;">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <button type="button" class="fwdomains-page-btn" id="domainControlsPrevBtn" aria-label="Previous Page">
+                        <i class="fas fa-chevron-left" aria-hidden="true"></i> Prev
+                    </button>
+                    <div class="fwdomains-page-numbers" id="domainControlsPageNumbers"></div>
+                    <button type="button" class="fwdomains-page-btn" id="domainControlsNextBtn" aria-label="Next Page">
+                        Next <i class="fas fa-chevron-right" aria-hidden="true"></i>
+                    </button>
+                </div>
+                <span class="fwdomains-page-info" id="domainControlsPageInfo"></span>
+            </div>
+
+            <p style="font-size: 0.78rem; color: #64748b; text-align: center; margin-top: 14px;">
+                <i class="fas fa-info-circle" style="color: #64748b; margin-right: 4px;"></i> Each governance domain categorizes unified security controls to streamline framework implementation and audit readiness.
             </p>
+        </div>
+    </div>
+
+    <!-- DOMAIN CONTROLS MODAL -->
+    <div id="domainControlsModal" class="ucl-modal-overlay" style="display: none;">
+        <div class="ucl-modal-card">
+            <div class="ucl-modal-header">
+                <div>
+                    <span class="badge-count" id="modalDomainCode" style="font-size: 0.7rem; background: #e8f0fe; color: #0066cc; padding: 2px 10px; border-radius: 12px; font-weight: 700;"></span>
+                    <h3 id="modalDomainTitle" style="font-size: 1.1rem; font-weight: 800; color: #0b1a33; margin-top: 4px;"></h3>
+                </div>
+                <button type="button" class="ucl-modal-close" onclick="closeDomainModal()">&times;</button>
+            </div>
+            <div class="ucl-modal-body">
+                <p style="font-size: 0.8rem; color: #6a7a92; margin-bottom: 12px; font-weight: 600;">Complete List of Associated Unified Controls:</p>
+                <div id="modalControlsList" style="display: flex; flex-direction: column; gap: 8px; max-height: 320px; overflow-y: auto; padding-right: 4px;"></div>
+            </div>
+            <div class="ucl-modal-footer">
+                <a href="#" id="modalDomainLink" class="btn btn-primary" style="font-size: 0.8rem; padding: 8px 16px; border-radius: 8px; text-decoration: none;">View Full Domain Page →</a>
+                <button type="button" class="btn btn-outline" onclick="closeDomainModal()" style="font-size: 0.8rem; padding: 8px 16px; border-radius: 8px; cursor: pointer;">Close</button>
+            </div>
         </div>
     </div>
 
@@ -2276,43 +2777,27 @@
 
             <div class="blog-grid">
                 <div class="blog-card">
-                    <span class="tag">Guide</span>
-                    <h4>ISO 27001:2022 — Complete Implementation Guide</h4>
-                    <p>Step-by-step guide to implementing ISO 27001 with UCL controls.</p>
-                    <a href="{{ route('frameworks.public_index') }}">Read More →</a>
+                    <span class="tag">RBI Audit</span>
+                    <h4>RBI Guidelines For Concurrent Audit Of Banks (2026)</h4>
+                    <p>Complete guide to RBI concurrent audit guidelines for banks covering scope, empanelment, compliance, ITGC, continuous monitoring, and audit readiness.</p>
+                    <a href="https://aspiainfotech.com/2026/06/05/rbi-guidelines-for-concurrent-audit-of-banks/" target="_blank" rel="noopener noreferrer">Read More →</a>
                 </div>
                 <div class="blog-card">
-                    <span class="tag">Comparison</span>
-                    <h4>NIST CSF vs ISO 27001 — Key Differences</h4>
-                    <p>Understand how NIST CSF and ISO 27001 complement each other.</p>
-                    <a href="{{ route('frameworks.public_index') }}">Read More →</a>
+                    <span class="tag">Banking Audit</span>
+                    <h4>RBI Audit For Banks: Complete Cybersecurity, ITGC &amp; Compliance Guide</h4>
+                    <p>Learn how RBI audits work for banks, including cybersecurity audits, audit checklists, evidence requirements, observations, and operational audit readiness.</p>
+                    <a href="https://aspiainfotech.com/2026/05/30/rbi-audit-for-banks-guide/" target="_blank" rel="noopener noreferrer">Read More →</a>
                 </div>
                 <div class="blog-card">
-                    <span class="tag">India</span>
-                    <h4>DPDP Act 2023 — Compliance Checklist</h4>
-                    <p>Everything you need to know about India's new data privacy law.</p>
-                    <a href="{{ route('frameworks.public_index') }}">Read More →</a>
+                    <span class="tag">RBI Cybersecurity</span>
+                    <h4>RBI Cyber Security Framework For Banks: Complete Compliance &amp; Audit Guide</h4>
+                    <p>Learn RBI Cyber Security Framework requirements, security controls, audit expectations, compliance checklists, and how banks automate compliance.</p>
+                    <a href="https://aspiainfotech.com/2026/05/16/rbi-cyber-security-framework-for-banks-guide/" target="_blank" rel="noopener noreferrer">Read More →</a>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- ============================================================
-    SUBSCRIBE
-    ============================================================ -->
-    <div class="section section-light" style="padding:24px 0 32px 0;">
-        <div class="container">
-            <div class="subscribe-box">
-                <h3><i class="fas fa-envelope" style="color:#66b5ff;"></i> Stay Updated</h3>
-                <p>Get notified when we add new frameworks, domains, or update control mappings.</p>
-                <form class="sub-form" onsubmit="event.preventDefault(); alert('Thank you for subscribing to ASPIA UCL updates!');">
-                    <input type="email" placeholder="Enter your email address" required />
-                    <button type="submit" class="btn btn-white">Subscribe <i class="fas fa-arrow-right"></i></button>
-                </form>
-                <p style="font-size:0.65rem;color:#7a9abb;margin-top:8px;">No spam. Unsubscribe anytime.</p>
-            </div>
-        </div>
-    </div>
 
     <!-- ============================================================
     CTA
@@ -2344,7 +2829,7 @@
                     <a href="{{ route('frameworks.public_index') }}" title="Compliance Frameworks Directory">Frameworks</a>
                     <a href="{{ route('domains.public_index') }}" title="Governance Domains">Domains</a>
                     <a href="{{ route('controls.public_index') }}" title="Unified Controls Directory">Controls</a>
-                    <a href="#about-ucl" title="About ASPIA UCL">About</a>
+                    <a href="https://aspiainfotech.com/about-aspia-infotech/" target="_blank" rel="noopener noreferrer" title="About ASPIA Infotech">About Us</a>
                     <a href="#blog" title="Compliance Blog & Articles">Blog</a>
                     <a href="{{ route('login') }}" title="Sign In to ASPIA">Sign In</a>
                 </div>
@@ -2469,30 +2954,405 @@
                 }
             }
 
-            // Filter chips logic
-            const chips = document.querySelectorAll('.filter-chips .chip');
-            const frameworkItems = document.querySelectorAll('.framework-grid .framework-item');
+            // Controls Section Pagination (Set to 3 rows)
+            const controlsGrid = document.getElementById('controlsGrid');
+            if (controlsGrid) {
+                const controlCards = Array.from(controlsGrid.querySelectorAll('.control-card'));
+                if (controlCards.length > 0) {
+                    const prevBtn = document.getElementById('controlsPrevBtn');
+                    const nextBtn = document.getElementById('controlsNextBtn');
+                    const numbersContainer = document.getElementById('controlsPageNumbers');
+                    const infoSpan = document.getElementById('controlsPageInfo');
+                    const paginationWrap = document.getElementById('controlsPagination');
 
-            chips.forEach(chip => {
-                chip.addEventListener('click', function() {
-                    chips.forEach(c => c.classList.remove('active'));
-                    this.classList.add('active');
+                    let currentPage = 1;
 
-                    const category = this.getAttribute('data-category');
-                    frameworkItems.forEach(item => {
-                        if (category === 'all') {
-                            item.style.display = 'flex';
+                    function getCtrlCols() {
+                        const w = window.innerWidth;
+                        if (w > 992) return 4;
+                        if (w > 768) return 3;
+                        if (w > 480) return 2;
+                        return 1;
+                    }
+
+                    function renderControls() {
+                        const cols = getCtrlCols();
+                        const itemsPerPage = cols * 3;
+                        const totalPages = Math.ceil(controlCards.length / itemsPerPage);
+
+                        if (totalPages <= 1) {
+                            controlCards.forEach(card => card.style.display = 'flex');
+                            if (paginationWrap) paginationWrap.style.display = 'none';
+                            return;
                         } else {
-                            const cats = item.getAttribute('data-cat') || '';
-                            if (cats.includes(category)) {
-                                item.style.display = 'flex';
+                            if (paginationWrap) paginationWrap.style.display = 'flex';
+                        }
+
+                        if (currentPage > totalPages) currentPage = totalPages;
+                        if (currentPage < 1) currentPage = 1;
+
+                        const startIdx = (currentPage - 1) * itemsPerPage;
+                        const endIdx = startIdx + itemsPerPage;
+
+                        controlCards.forEach((card, idx) => {
+                            if (idx >= startIdx && idx < endIdx) {
+                                card.style.display = 'flex';
                             } else {
-                                item.style.display = 'none';
+                                card.style.display = 'none';
+                            }
+                        });
+
+                        if (prevBtn) prevBtn.disabled = (currentPage === 1);
+                        if (nextBtn) nextBtn.disabled = (currentPage === totalPages);
+
+                        if (infoSpan) {
+                            const visibleCountEnd = Math.min(endIdx, controlCards.length);
+                            infoSpan.textContent = `Showing ${startIdx + 1}–${visibleCountEnd} of ${controlCards.length} controls`;
+                        }
+
+                        if (numbersContainer) {
+                            numbersContainer.innerHTML = '';
+                            for (let i = 1; i <= totalPages; i++) {
+                                const btn = document.createElement('button');
+                                btn.type = 'button';
+                                btn.className = 'controls-page-number' + (i === currentPage ? ' active' : '');
+                                btn.textContent = i;
+                                btn.setAttribute('aria-label', `Page ${i}`);
+                                btn.addEventListener('click', function() {
+                                    currentPage = i;
+                                    renderControls();
+                                    controlsGrid.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                                });
+                                numbersContainer.appendChild(btn);
                             }
                         }
+                    }
+
+                    if (prevBtn) {
+                        prevBtn.addEventListener('click', function() {
+                            if (currentPage > 1) {
+                                currentPage--;
+                                renderControls();
+                                controlsGrid.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                            }
+                        });
+                    }
+
+                    if (nextBtn) {
+                        nextBtn.addEventListener('click', function() {
+                            const cols = getCtrlCols();
+                            const itemsPerPage = cols * 3;
+                            const totalPages = Math.ceil(controlCards.length / itemsPerPage);
+                            if (currentPage < totalPages) {
+                                currentPage++;
+                                renderControls();
+                                controlsGrid.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                            }
+                        });
+                    }
+
+                    let ctrlResizeTimer;
+                    window.addEventListener('resize', function() {
+                        clearTimeout(ctrlResizeTimer);
+                        ctrlResizeTimer = setTimeout(renderControls, 100);
+                    });
+
+                    renderControls();
+                }
+            }
+
+            // Frameworks Section Pagination + Filter Chips (Set to 3 rows)
+            const frameworkGrid = document.getElementById('frameworksGrid');
+            if (frameworkGrid) {
+                const allFwItems = Array.from(frameworkGrid.querySelectorAll('.framework-item'));
+                const chips = document.querySelectorAll('.filter-chips .chip');
+                const prevBtn = document.getElementById('frameworksPrevBtn');
+                const nextBtn = document.getElementById('frameworksNextBtn');
+                const numbersContainer = document.getElementById('frameworksPageNumbers');
+                const infoSpan = document.getElementById('frameworksPageInfo');
+                const paginationWrap = document.getElementById('frameworksPagination');
+
+                let activeCategory = 'all';
+                let currentPage = 1;
+
+                function getFwCols() {
+                    const w = window.innerWidth;
+                    if (w > 992) return 5;
+                    if (w > 768) return 4;
+                    if (w > 480) return 3;
+                    if (w > 380) return 2;
+                    return 1;
+                }
+
+                function getMatchingItems() {
+                    if (activeCategory === 'all') {
+                        return allFwItems;
+                    }
+                    return allFwItems.filter(item => {
+                        const cats = item.getAttribute('data-cat') || '';
+                        return cats.includes(activeCategory);
+                    });
+                }
+
+                function renderFrameworks() {
+                    const matchingItems = getMatchingItems();
+                    const cols = getFwCols();
+                    const itemsPerPage = cols * 3; // Set only 3 rows
+                    const totalPages = Math.ceil(matchingItems.length / itemsPerPage);
+
+                    allFwItems.forEach(item => item.style.display = 'none');
+
+                    if (matchingItems.length === 0) {
+                        if (paginationWrap) paginationWrap.style.display = 'none';
+                        if (infoSpan) infoSpan.textContent = 'No frameworks found in this category';
+                        return;
+                    }
+
+                    if (totalPages <= 1) {
+                        if (paginationWrap) paginationWrap.style.display = 'none';
+                    } else {
+                        if (paginationWrap) paginationWrap.style.display = 'flex';
+                    }
+
+                    if (currentPage > totalPages) currentPage = totalPages || 1;
+                    if (currentPage < 1) currentPage = 1;
+
+                    const startIdx = (currentPage - 1) * itemsPerPage;
+                    const endIdx = startIdx + itemsPerPage;
+
+                    matchingItems.forEach((item, idx) => {
+                        if (idx >= startIdx && idx < endIdx) {
+                            item.style.display = 'flex';
+                        }
+                    });
+
+                    if (prevBtn) prevBtn.disabled = (currentPage === 1);
+                    if (nextBtn) nextBtn.disabled = (currentPage === totalPages || totalPages === 0);
+
+                    if (infoSpan) {
+                        const visibleCountEnd = Math.min(endIdx, matchingItems.length);
+                        infoSpan.textContent = `Showing ${startIdx + 1}–${visibleCountEnd} of ${matchingItems.length} frameworks`;
+                    }
+
+                    if (numbersContainer) {
+                        numbersContainer.innerHTML = '';
+                        for (let i = 1; i <= totalPages; i++) {
+                            const btn = document.createElement('button');
+                            btn.type = 'button';
+                            btn.className = 'frameworks-page-number' + (i === currentPage ? ' active' : '');
+                            btn.textContent = i;
+                            btn.setAttribute('aria-label', `Page ${i}`);
+                            btn.addEventListener('click', function() {
+                                currentPage = i;
+                                renderFrameworks();
+                                frameworkGrid.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                            });
+                            numbersContainer.appendChild(btn);
+                        }
+                    }
+                }
+
+                chips.forEach(chip => {
+                    chip.addEventListener('click', function() {
+                        chips.forEach(c => c.classList.remove('active'));
+                        this.classList.add('active');
+                        activeCategory = this.getAttribute('data-category');
+                        currentPage = 1;
+                        renderFrameworks();
                     });
                 });
+
+                if (prevBtn) {
+                    prevBtn.addEventListener('click', function() {
+                        if (currentPage > 1) {
+                            currentPage--;
+                            renderFrameworks();
+                            frameworkGrid.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                        }
+                    });
+                }
+
+                if (nextBtn) {
+                    nextBtn.addEventListener('click', function() {
+                        const matchingItems = getMatchingItems();
+                        const cols = getFwCols();
+                        const itemsPerPage = cols * 3;
+                        const totalPages = Math.ceil(matchingItems.length / itemsPerPage);
+                        if (currentPage < totalPages) {
+                            currentPage++;
+                            renderFrameworks();
+                            frameworkGrid.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                        }
+                    });
+                }
+
+                let fwResizeTimer;
+                window.addEventListener('resize', function() {
+                    clearTimeout(fwResizeTimer);
+                    fwResizeTimer = setTimeout(renderFrameworks, 100);
+                });
+
+                renderFrameworks();
+            }
+
+            // Domain Controls Modal Functions
+            window.openDomainControlsModal = function(code, name, linkUrl, controls) {
+                const modal = document.getElementById('domainControlsModal');
+                const codeSpan = document.getElementById('modalDomainCode');
+                const titleHeading = document.getElementById('modalDomainTitle');
+                const listContainer = document.getElementById('modalControlsList');
+                const domainLink = document.getElementById('modalDomainLink');
+
+                if (!modal) return;
+
+                if (codeSpan) codeSpan.textContent = code;
+                if (titleHeading) titleHeading.textContent = name;
+                if (domainLink) domainLink.href = linkUrl;
+
+                if (listContainer) {
+                    listContainer.innerHTML = '';
+                    if (controls && controls.length > 0) {
+                        controls.forEach(function(c) {
+                            const item = document.createElement('div');
+                            item.style.cssText = 'padding: 8px 12px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; font-size: 0.82rem; color: #334155; display: flex; align-items: center; gap: 8px;';
+                            item.innerHTML = `<strong style="color: #0f172a; font-weight: 700; min-width: 70px;">${c.id || ''}</strong><span>${c.name || ''}</span>`;
+                            listContainer.appendChild(item);
+                        });
+                    } else {
+                        listContainer.innerHTML = '<div style="color: #94a3b8; font-style: italic; font-size: 0.82rem; padding: 8px;">No controls mapped for this domain.</div>';
+                    }
+                }
+
+                modal.style.display = 'flex';
+            };
+
+            window.closeDomainModal = function() {
+                const modal = document.getElementById('domainControlsModal');
+                if (modal) modal.style.display = 'none';
+            };
+
+            // Event delegation click handler for view-domain-btn elements
+            document.addEventListener('click', function(e) {
+                const btn = e.target.closest('.view-domain-btn');
+                if (btn) {
+                    e.preventDefault();
+                    const code = btn.getAttribute('data-code') || '';
+                    const name = btn.getAttribute('data-name') || '';
+                    const linkUrl = btn.getAttribute('data-url') || '#';
+                    let controls = [];
+                    try {
+                        const rawControls = btn.getAttribute('data-controls');
+                        if (rawControls) {
+                            controls = JSON.parse(rawControls);
+                        }
+                    } catch(err) {
+                        console.error('Error parsing domain controls:', err);
+                    }
+                    openDomainControlsModal(code, name, linkUrl, controls);
+                }
             });
+
+            // Close modal when clicking on overlay backdrop
+            const modalOverlay = document.getElementById('domainControlsModal');
+            if (modalOverlay) {
+                modalOverlay.addEventListener('click', function(e) {
+                    if (e.target === this) {
+                        closeDomainModal();
+                    }
+                });
+            }
+
+            // Domains & Associated Controls Table Pagination (5 rows per page)
+            const domainControlsTableBody = document.getElementById('domainControlsTableBody');
+            if (domainControlsTableBody) {
+                const rows = Array.from(domainControlsTableBody.querySelectorAll('.domain-control-row'));
+                const prevBtn = document.getElementById('domainControlsPrevBtn');
+                const nextBtn = document.getElementById('domainControlsNextBtn');
+                const numbersContainer = document.getElementById('domainControlsPageNumbers');
+                const infoSpan = document.getElementById('domainControlsPageInfo');
+                const paginationWrap = document.getElementById('domainControlsPagination');
+
+                const rowsPerPage = 5;
+                const totalPages = Math.ceil(rows.length / rowsPerPage);
+                let currentPage = 1;
+
+                function renderDomainControlsPage() {
+                    if (rows.length === 0) {
+                        if (paginationWrap) paginationWrap.style.display = 'none';
+                        return;
+                    }
+
+                    if (totalPages <= 1) {
+                        if (paginationWrap) paginationWrap.style.display = 'none';
+                    } else {
+                        if (paginationWrap) paginationWrap.style.display = 'flex';
+                    }
+
+                    if (currentPage > totalPages) currentPage = totalPages;
+                    if (currentPage < 1) currentPage = 1;
+
+                    const startIdx = (currentPage - 1) * rowsPerPage;
+                    const endIdx = startIdx + rowsPerPage;
+
+                    rows.forEach((row, idx) => {
+                        if (idx >= startIdx && idx < endIdx) {
+                            row.style.display = 'table-row';
+                        } else {
+                            row.style.display = 'none';
+                        }
+                    });
+
+                    if (prevBtn) prevBtn.disabled = (currentPage === 1);
+                    if (nextBtn) nextBtn.disabled = (currentPage === totalPages || totalPages === 0);
+
+                    if (infoSpan) {
+                        const visibleCountEnd = Math.min(endIdx, rows.length);
+                        infoSpan.textContent = `Showing ${startIdx + 1}–${visibleCountEnd} of ${rows.length} domains`;
+                    }
+
+                    if (numbersContainer) {
+                        numbersContainer.innerHTML = '';
+                        for (let i = 1; i <= totalPages; i++) {
+                            const btn = document.createElement('button');
+                            btn.type = 'button';
+                            btn.className = 'fwdomains-page-number' + (i === currentPage ? ' active' : '');
+                            btn.textContent = i;
+                            btn.setAttribute('aria-label', `Page ${i}`);
+                            btn.addEventListener('click', function() {
+                                currentPage = i;
+                                renderDomainControlsPage();
+                                const section = document.getElementById('domainControlsSection');
+                                if (section) section.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                            });
+                            numbersContainer.appendChild(btn);
+                        }
+                    }
+                }
+
+                if (prevBtn) {
+                    prevBtn.addEventListener('click', function() {
+                        if (currentPage > 1) {
+                            currentPage--;
+                            renderDomainControlsPage();
+                            const section = document.getElementById('domainControlsSection');
+                            if (section) section.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                        }
+                    });
+                }
+
+                if (nextBtn) {
+                    nextBtn.addEventListener('click', function() {
+                        if (currentPage < totalPages) {
+                            currentPage++;
+                            renderDomainControlsPage();
+                            const section = document.getElementById('domainControlsSection');
+                            if (section) section.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                        }
+                    });
+                }
+
+                renderDomainControlsPage();
+            }
 
             // Mobile Menu Toggle
             const mobileMenuToggle = document.getElementById('mobileMenuToggle');
