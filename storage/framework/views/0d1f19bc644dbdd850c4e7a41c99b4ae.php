@@ -1360,40 +1360,126 @@
         }
 
         /* ============================================================
-           FAQ
+           FAQ - CARD ACCORDION THEME
            ============================================================ */
+        .faq-section-wrapper {
+            background: #f4f7fb;
+            padding: 56px 0;
+        }
+        .faq-card-container {
+            background: #ffffff;
+            border-radius: 24px;
+            box-shadow: 0 10px 30px rgba(15, 23, 42, 0.04), 0 2px 6px rgba(15, 23, 42, 0.02);
+            width: 100%;
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 36px 48px;
+            border: 1px solid rgba(226, 232, 240, 0.8);
+        }
         .faq-list {
             max-width: 100%;
             margin: 0 auto;
+            display: flex;
+            flex-direction: column;
         }
         .faq-item {
-            border-bottom: 1px solid #f0f2f6;
-            padding: 14px 0;
-            cursor: pointer;
+            border-bottom: 1px solid #eef2f6;
+            padding: 0;
+            transition: background-color 0.2s ease;
         }
         .faq-item:last-child {
             border-bottom: none;
         }
         .faq-item .q {
             font-weight: 700;
-            font-size: 0.95rem;
-            color: #0D1735;
+            font-size: 1.05rem;
+            color: #0d1735;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 16px;
             justify-content: space-between;
+            padding: 22px 0;
+            cursor: pointer;
+            user-select: none;
+            transition: color 0.2s ease;
         }
-        .faq-item .q .icon {
-            color: #16C4F4;
-            font-size: 0.8rem;
+        .faq-item .q:hover .q-text {
+            color: #00a8e8;
+        }
+        .faq-item .q .q-text {
+            line-height: 1.45;
+            flex: 1;
+        }
+        .faq-item .q .faq-toggle-icon {
+            color: #00c2ff;
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .faq-item .q .faq-toggle-icon svg {
+            stroke: #00c2ff;
+            transition: stroke 0.2s ease;
+        }
+        .faq-item.active .q .faq-toggle-icon {
+            transform: rotate(45deg);
+        }
+        
+        /* Smooth Height Transition with CSS Grid */
+        .faq-item .a-wrapper {
+            display: grid;
+            grid-template-rows: 0fr;
+            transition: grid-template-rows 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .faq-item.active .a-wrapper {
+            grid-template-rows: 1fr;
+        }
+        .faq-item .a-inner {
+            overflow: hidden;
         }
         .faq-item .a {
-            font-size: 0.9rem;
-            color: #4a5a72;
-            margin-top: 4px;
-            padding-left: 28px;
+            font-size: 0.95rem;
+            color: #475569;
+            line-height: 1.65;
+            padding-bottom: 22px;
+            padding-top: 2px;
+            margin-top: 0;
+            padding-left: 0;
             display: block;
+            opacity: 0;
+            transform: translateY(-6px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
         }
+        .faq-item.active .a {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .faq-item .a strong {
+            color: #0d1735;
+            font-weight: 700;
+        }
+
+        @media (max-width: 768px) {
+            .faq-section-wrapper {
+                padding: 36px 0;
+            }
+            .faq-card-container {
+                padding: 24px 20px;
+                border-radius: 18px;
+            }
+            .faq-item .q {
+                font-size: 0.95rem;
+                padding: 18px 0;
+            }
+            .faq-item .a {
+                font-size: 0.88rem;
+                padding-bottom: 18px;
+            }
+        }
+
 
         /* ============================================================
            BLOG / RESOURCES
@@ -2312,21 +2398,32 @@
             color: #ffffff !important;
         }
 
-        /* FAQ Accordion */
-        body.dark-mode .faq-item {
-            border-bottom-color: #1e293b !important;
+        /* FAQ Accordion Dark Mode */
+        body.dark-mode .faq-section-wrapper {
+            background: #0b1329 !important;
         }
-        body.dark-mode .faq-item .q {
+        body.dark-mode .faq-card-container {
+            background: #1e293b !important;
+            border-color: #334155 !important;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3) !important;
+        }
+        body.dark-mode .faq-item {
+            border-bottom-color: #334155 !important;
+        }
+        body.dark-mode .faq-item .q .q-text {
             color: #ffffff !important;
         }
-        body.dark-mode .faq-item .q .icon {
+        body.dark-mode .faq-item .q:hover .q-text {
             color: #38bdf8 !important;
         }
-        body.dark-mode .faq-item .q .faq-arrow {
-            color: #94a3b8 !important;
+        body.dark-mode .faq-item .q .faq-toggle-icon svg {
+            stroke: #38bdf8 !important;
         }
         body.dark-mode .faq-item .a {
             color: #cbd5e1 !important;
+        }
+        body.dark-mode .faq-item .a strong {
+            color: #38bdf8 !important;
         }
 
         /* Blog Cards (Light Cream in Dark Theme) */
@@ -2891,7 +2988,7 @@
     <!-- ============================================================
     FAQ
     ============================================================ -->
-    <div class="section section-light">
+    <div class="section faq-section-wrapper" id="faq">
         <div class="container">
             <div class="section-head">
                 <span class="tag">FAQ</span>
@@ -2899,26 +2996,92 @@
                 <p>Quick answers to common questions about UCL and framework mappings.</p>
             </div>
 
-            <div class="faq-list">
-                <div class="faq-item">
-                    <div class="q"><span><span class="icon"><i class="fas fa-question-circle"></i></span> What is the Unified Control Layer (UCL)?</span> <i class="fas fa-chevron-down faq-arrow" style="font-size:0.75rem;color:#8a9ab0;"></i></div>
-                    <div class="a">UCL is a free knowledge base that shows how different compliance frameworks (ISO 27001, NIST, PCI DSS, GDPR, DPDP, etc.) connect through common unified controls.</div>
-                </div>
-                <div class="faq-item">
-                    <div class="q"><span><span class="icon"><i class="fas fa-question-circle"></i></span> Which compliance frameworks are supported in UCL?</span> <i class="fas fa-chevron-down faq-arrow" style="font-size:0.75rem;color:#8a9ab0;"></i></div>
-                    <div class="a">UCL supports 20+ frameworks including ISO 27001, ISO 27002, NIST CSF, NIST 800-53, CIS Controls, PCI DSS, COBIT, SOC 2, ISO 27701, GDPR, ISO 22301, DORA, NIS2, HIPAA, DPDP Act, RBI CSF, CERT-In, SEBI CSF, IRDAI, and NPCI ISR.</div>
-                </div>
-                <div class="faq-item">
-                    <div class="q"><span><span class="icon"><i class="fas fa-question-circle"></i></span> What are the major governance domains in UCL?</span> <i class="fas fa-chevron-down faq-arrow" style="font-size:0.75rem;color:#8a9ab0;"></i></div>
-                    <div class="a">UCL covers <?php echo e($domainsCount); ?> major domains including Information Security, Data Privacy, Cybersecurity, Governance &amp; Compliance, Risk Management, and Business Continuity.</div>
-                </div>
-                <div class="faq-item">
-                    <div class="q"><span><span class="icon"><i class="fas fa-question-circle"></i></span> What is a unified control?</span> <i class="fas fa-chevron-down faq-arrow" style="font-size:0.75rem;color:#8a9ab0;"></i></div>
-                    <div class="a">A unified control is a single control that can satisfy requirements from multiple frameworks. For example, UCL-001 (Access Control) maps to ISO 27001 A.5.15, NIST CSF PR.AA, CIS Control 6, and PCI DSS Requirement 7.</div>
-                </div>
-                <div class="faq-item">
-                    <div class="q"><span><span class="icon"><i class="fas fa-question-circle"></i></span> How are frameworks mapped to UCL controls?</span> <i class="fas fa-chevron-down faq-arrow" style="font-size:0.75rem;color:#8a9ab0;"></i></div>
-                    <div class="a">Each framework requirement is analyzed and mapped to the most relevant unified control. The mapping shows which controls cover which requirements, helping organizations reduce duplicate compliance efforts.</div>
+            <div class="faq-card-container">
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <div class="q" role="button" aria-expanded="false" tabindex="0">
+                            <span class="q-text">What is the Unified Control Layer (UCL)?</span>
+                            <span class="faq-toggle-icon" aria-hidden="true">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                </svg>
+                            </span>
+                        </div>
+                        <div class="a-wrapper">
+                            <div class="a-inner">
+                                <div class="a">UCL is a free knowledge base that shows how different compliance frameworks (ISO 27001, NIST, PCI DSS, GDPR, DPDP, etc.) <strong>connect through common unified controls</strong>.</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="q" role="button" aria-expanded="false" tabindex="0">
+                            <span class="q-text">Which compliance frameworks are supported in UCL?</span>
+                            <span class="faq-toggle-icon" aria-hidden="true">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                </svg>
+                            </span>
+                        </div>
+                        <div class="a-wrapper">
+                            <div class="a-inner">
+                                <div class="a">UCL supports <strong>20+ frameworks</strong> including ISO 27001, ISO 27002, NIST CSF, NIST 800-53, CIS Controls, PCI DSS, COBIT, SOC 2, ISO 27701, GDPR, ISO 22301, DORA, NIS2, HIPAA, DPDP Act, RBI CSF, CERT-In, SEBI CSF, IRDAI, and NPCI ISR.</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="q" role="button" aria-expanded="false" tabindex="0">
+                            <span class="q-text">What are the major governance domains in UCL?</span>
+                            <span class="faq-toggle-icon" aria-hidden="true">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                </svg>
+                            </span>
+                        </div>
+                        <div class="a-wrapper">
+                            <div class="a-inner">
+                                <div class="a">UCL covers <strong><?php echo e($domainsCount); ?> major domains</strong> including Information Security, Data Privacy, Cybersecurity, Governance &amp; Compliance, Risk Management, and Business Continuity.</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="q" role="button" aria-expanded="false" tabindex="0">
+                            <span class="q-text">What is a unified control?</span>
+                            <span class="faq-toggle-icon" aria-hidden="true">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                </svg>
+                            </span>
+                        </div>
+                        <div class="a-wrapper">
+                            <div class="a-inner">
+                                <div class="a">A unified control is a single control that can <strong>satisfy requirements from multiple frameworks</strong>. For example, UCL-001 (Access Control) maps to ISO 27001 A.5.15, NIST CSF PR.AA, CIS Control 6, and PCI DSS Requirement 7.</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="q" role="button" aria-expanded="false" tabindex="0">
+                            <span class="q-text">How are frameworks mapped to UCL controls?</span>
+                            <span class="faq-toggle-icon" aria-hidden="true">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                </svg>
+                            </span>
+                        </div>
+                        <div class="a-wrapper">
+                            <div class="a-inner">
+                                <div class="a">Each framework requirement is analyzed and mapped to the most relevant unified control. The mapping shows which controls cover which requirements, helping organizations <strong>reduce duplicate compliance efforts</strong>.</div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -3526,6 +3689,42 @@
                     if (themeSwitch) themeSwitch.checked = false;
                 }
             }
+
+            // FAQ Accordion Interaction
+            const faqSectionItems = document.querySelectorAll('.faq-item');
+            faqSectionItems.forEach(item => {
+                const q = item.querySelector('.q');
+                if (q) {
+                    const toggleItem = () => {
+                        const isActive = item.classList.contains('active');
+                        
+                        // Close other active items for clean single accordion mode
+                        faqSectionItems.forEach(otherItem => {
+                            if (otherItem !== item && otherItem.classList.contains('active')) {
+                                otherItem.classList.remove('active');
+                                const otherQ = otherItem.querySelector('.q');
+                                if (otherQ) otherQ.setAttribute('aria-expanded', 'false');
+                            }
+                        });
+
+                        if (isActive) {
+                            item.classList.remove('active');
+                            q.setAttribute('aria-expanded', 'false');
+                        } else {
+                            item.classList.add('active');
+                            q.setAttribute('aria-expanded', 'true');
+                        }
+                    };
+
+                    q.addEventListener('click', toggleItem);
+                    q.addEventListener('keydown', (e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault();
+                            toggleItem();
+                        }
+                    });
+                }
+            });
 
             // Homepage defaults to light theme
             applyTheme('light');
