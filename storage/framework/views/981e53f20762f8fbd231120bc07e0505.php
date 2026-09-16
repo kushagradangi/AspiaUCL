@@ -2,7 +2,7 @@
     $headerFrameworks = $headerFrameworks ?? \App\Models\Framework::orderBy('name', 'asc')->get();
     $headerDomains    = $headerDomains    ?? \App\Models\Domain::orderBy('display_order', 'asc')->get();
     $headerControls   = $headerControls   ?? \App\Models\Control::orderBy('control_id', 'asc')->take(50)->get();
-    $badgeClasses     = ['badge-cyan', 'badge-purple', 'badge-emerald', 'badge-amber', 'badge-rose'];
+    $badgeClasses     = ['badge-cyan'];
 ?>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
@@ -241,11 +241,12 @@
         flex-shrink: 0;
         white-space: nowrap;
     }
-    .badge-emerald { background: #ecfdf5; color: #059669; border: 1px solid rgba(5, 150, 105, 0.25); }
+    .badge-navy    { background: #e0f2fe; color: #0284c7; border: 1px solid rgba(2, 132, 199, 0.25); }
+    .badge-emerald { background: #e0f2fe; color: #0284c7; border: 1px solid rgba(2, 132, 199, 0.25); }
     .badge-cyan    { background: #e0f2fe; color: #0284c7; border: 1px solid rgba(2, 132, 199, 0.25); }
-    .badge-amber   { background: #fffbeb; color: #d97706; border: 1px solid rgba(217, 119, 6, 0.25); }
-    .badge-purple  { background: #f5f3ff; color: #7c3aed; border: 1px solid rgba(124, 58, 237, 0.25); }
-    .badge-rose    { background: #fff1f2; color: #e11d48; border: 1px solid rgba(225, 29, 72, 0.25); }
+    .badge-amber   { background: #e0f2fe; color: #0284c7; border: 1px solid rgba(2, 132, 199, 0.25); }
+    .badge-purple  { background: #e0f2fe; color: #0284c7; border: 1px solid rgba(2, 132, 199, 0.25); }
+    .badge-rose    { background: #e0f2fe; color: #0284c7; border: 1px solid rgba(2, 132, 199, 0.25); }
 
     /* Dark Mode Dropdown Overrides */
     [data-theme="dark"] .dropdown-popover,
@@ -734,9 +735,9 @@
         text-transform: uppercase;
     }
 
-    .badge-type-framework { background: #e0f2fe; color: #0284c7; }
-    .badge-type-domain    { background: #f5f3ff; color: #7c3aed; }
-    .badge-type-control   { background: #ecfdf5; color: #059669; }
+    .badge-type-framework { background: #e0f2fe; color: #0284c7; border: 1px solid rgba(2, 132, 199, 0.25); }
+    .badge-type-domain    { background: #e0f2fe; color: #0284c7; border: 1px solid rgba(2, 132, 199, 0.25); }
+    .badge-type-control   { background: #e0f2fe; color: #0284c7; border: 1px solid rgba(2, 132, 199, 0.25); }
 
     /* Demo Form Styles */
     .demo-modal-desc {

@@ -267,7 +267,8 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 24px 0;
+            padding-top: 24px;
+            padding-bottom: 24px;
         }
 
         .hero {

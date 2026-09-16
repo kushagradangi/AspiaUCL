@@ -532,9 +532,10 @@ HTML;
             display: inline-flex; align-items: center; padding: 4px 12px;
             border-radius: 20px; font-size: 12px; font-weight: 700; letter-spacing: 0.5px;
         }
-        .badge-cyan { background: rgba(16, 188, 232, 0.15); border: 1px solid rgba(16, 188, 232, 0.35); color: #10bce8; }
-        .badge-purple { background: rgba(139, 92, 246, 0.15); border: 1px solid rgba(139, 92, 246, 0.35); color: #a78bfa; }
-        .badge-green { background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.35); color: #34d399; }
+        .badge-navy { background: rgba(13, 23, 53, 0.08); border: 1px solid rgba(13, 23, 53, 0.25); color: #0D1735; }
+        .badge-cyan { background: rgba(13, 23, 53, 0.08); border: 1px solid rgba(13, 23, 53, 0.25); color: #0D1735; }
+        .badge-purple { background: rgba(13, 23, 53, 0.08); border: 1px solid rgba(13, 23, 53, 0.25); color: #0D1735; }
+        .badge-green { background: rgba(13, 23, 53, 0.08); border: 1px solid rgba(13, 23, 53, 0.25); color: #0D1735; }
         .title { font-size: 28px; font-weight: 800; color: #fff; margin-bottom: 12px; }
         .description { font-size: 15px; color: var(--text-secondary); max-width: 900px; }
         .stats-grid {
@@ -783,7 +784,7 @@ HTML;
         }
 
         $html = '<div class="dropdown-popover-list virtual-scroll-container" style="display: flex; flex-direction: column; gap: 0;">';
-        $badges = ['badge-emerald', 'badge-cyan', 'badge-amber', 'badge-purple', 'badge-rose'];
+        $badges = ['badge-navy'];
         $i = 0;
         foreach ($frameworks as $fw) {
             $badgeClass = $badges[$i % count($badges)];
@@ -815,7 +816,7 @@ HTML;
         }
 
         $html = '<div class="dropdown-popover-list virtual-scroll-container" style="display: flex; flex-direction: column; gap: 0;">';
-        $badges = ['badge-purple', 'badge-cyan', 'badge-emerald', 'badge-amber', 'badge-rose'];
+        $badges = ['badge-navy'];
         $i = 0;
         foreach ($domains as $d) {
             $badgeClass = $badges[$i % count($badges)];
@@ -847,7 +848,7 @@ HTML;
         }
 
         $html = '<div class="dropdown-popover-list virtual-scroll-container" style="display: flex; flex-direction: column; gap: 0;">';
-        $badges = ['badge-cyan', 'badge-purple', 'badge-amber', 'badge-emerald', 'badge-rose'];
+        $badges = ['badge-navy'];
         $i = 0;
         foreach ($controls as $c) {
             $badgeClass = $badges[$i % count($badges)];

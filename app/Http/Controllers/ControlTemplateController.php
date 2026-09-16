@@ -615,7 +615,7 @@ HTML;
         }
 
         $html = '<div class="dropdown-popover-list virtual-scroll-container" style="display: flex; flex-direction: column; gap: 0;">';
-        $badges = ['badge-emerald', 'badge-cyan', 'badge-amber', 'badge-purple', 'badge-rose'];
+        $badges = ['badge-navy'];
         $i = 0;
         foreach ($frameworks as $fw) {
             $badgeClass = $badges[$i % count($badges)];
@@ -647,7 +647,7 @@ HTML;
         }
 
         $html = '<div class="dropdown-popover-list virtual-scroll-container" style="display: flex; flex-direction: column; gap: 0;">';
-        $badges = ['badge-purple', 'badge-cyan', 'badge-emerald', 'badge-amber', 'badge-rose'];
+        $badges = ['badge-navy'];
         $i = 0;
         foreach ($domains as $d) {
             $badgeClass = $badges[$i % count($badges)];
@@ -679,7 +679,7 @@ HTML;
         }
 
         $html = '<div class="dropdown-popover-list virtual-scroll-container" style="display: flex; flex-direction: column; gap: 0;">';
-        $badges = ['badge-cyan', 'badge-purple', 'badge-amber', 'badge-emerald', 'badge-rose'];
+        $badges = ['badge-navy'];
         $i = 0;
         foreach ($controls as $c) {
             $badgeClass = $badges[$i % count($badges)];
@@ -1257,15 +1257,15 @@ HTML;
         }
 
         .badge-cyan {
-            background: var(--brand-primary-light);
-            color: var(--brand-primary);
-            border: 1px solid rgba(2, 132, 199, 0.2);
+            background: rgba(13, 23, 53, 0.08);
+            color: #0D1735;
+            border: 1px solid rgba(13, 23, 53, 0.25);
         }
 
         .badge-purple {
-            background: var(--brand-purple-light);
-            color: var(--brand-purple);
-            border: 1px solid rgba(124, 58, 237, 0.2);
+            background: rgba(13, 23, 53, 0.08);
+            color: #0D1735;
+            border: 1px solid rgba(13, 23, 53, 0.25);
         }
 
         .badge-amber {

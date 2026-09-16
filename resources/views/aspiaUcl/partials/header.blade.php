@@ -2,7 +2,7 @@
     $headerFrameworks = $headerFrameworks ?? \App\Models\Framework::orderBy('name', 'asc')->get();
     $headerDomains    = $headerDomains    ?? \App\Models\Domain::orderBy('display_order', 'asc')->get();
     $headerControls   = $headerControls   ?? \App\Models\Control::orderBy('control_id', 'asc')->take(50)->get();
-    $badgeClasses     = ['badge-cyan', 'badge-purple', 'badge-emerald', 'badge-amber', 'badge-rose'];
+    $badgeClasses     = ['badge-cyan'];
 @endphp
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
@@ -241,11 +241,12 @@
         flex-shrink: 0;
         white-space: nowrap;
     }
-    .site-header .badge-emerald { background: #ecfdf5; color: #059669; border: 1px solid rgba(5, 150, 105, 0.25); }
+    .site-header .badge-navy    { background: #e0f2fe; color: #0284c7; border: 1px solid rgba(2, 132, 199, 0.25); }
+    .site-header .badge-emerald { background: #e0f2fe; color: #0284c7; border: 1px solid rgba(2, 132, 199, 0.25); }
     .site-header .badge-cyan    { background: #e0f2fe; color: #0284c7; border: 1px solid rgba(2, 132, 199, 0.25); }
-    .site-header .badge-amber   { background: #fffbeb; color: #d97706; border: 1px solid rgba(217, 119, 6, 0.25); }
-    .site-header .badge-purple  { background: #f5f3ff; color: #7c3aed; border: 1px solid rgba(124, 58, 237, 0.25); }
-    .site-header .badge-rose    { background: #fff1f2; color: #e11d48; border: 1px solid rgba(225, 29, 72, 0.25); }
+    .site-header .badge-amber   { background: #e0f2fe; color: #0284c7; border: 1px solid rgba(2, 132, 199, 0.25); }
+    .site-header .badge-purple  { background: #e0f2fe; color: #0284c7; border: 1px solid rgba(2, 132, 199, 0.25); }
+    .site-header .badge-rose    { background: #e0f2fe; color: #0284c7; border: 1px solid rgba(2, 132, 199, 0.25); }
 
     /* Dark Mode Dropdown Overrides */
     [data-theme="dark"] .site-header .dropdown-popover,
@@ -294,11 +295,12 @@
     body.dark-mode .site-header .dropdown-popover-list::-webkit-scrollbar-thumb {
         background: #4b5563 !important;
     }
-    [data-theme="dark"] .site-header .badge-emerald, body.dark-mode .site-header .badge-emerald { background: rgba(5, 150, 105, 0.15) !important; color: #34d399 !important; border-color: rgba(52, 211, 153, 0.3) !important; }
+    [data-theme="dark"] .site-header .badge-navy,    body.dark-mode .site-header .badge-navy    { background: rgba(22, 196, 244, 0.15) !important; color: #16C4F4 !important; border-color: rgba(22, 196, 244, 0.3) !important; }
+    [data-theme="dark"] .site-header .badge-emerald, body.dark-mode .site-header .badge-emerald { background: rgba(22, 196, 244, 0.15) !important; color: #16C4F4 !important; border-color: rgba(22, 196, 244, 0.3) !important; }
     [data-theme="dark"] .site-header .badge-cyan,    body.dark-mode .site-header .badge-cyan    { background: rgba(22, 196, 244, 0.15) !important; color: #16C4F4 !important; border-color: rgba(22, 196, 244, 0.3) !important; }
-    [data-theme="dark"] .site-header .badge-amber,   body.dark-mode .site-header .badge-amber   { background: rgba(251, 191, 36, 0.15) !important; color: #fbbf24 !important; border-color: rgba(251, 191, 36, 0.3) !important; }
-    [data-theme="dark"] .site-header .badge-purple,  body.dark-mode .site-header .badge-purple  { background: rgba(192, 132, 252, 0.15) !important; color: #c084fc !important; border-color: rgba(192, 132, 252, 0.3) !important; }
-    [data-theme="dark"] .site-header .badge-rose,    body.dark-mode .site-header .badge-rose    { background: rgba(251, 113, 133, 0.15) !important; color: #fb7185 !important; border-color: rgba(251, 113, 133, 0.3) !important; }
+    [data-theme="dark"] .site-header .badge-amber,   body.dark-mode .site-header .badge-amber   { background: rgba(22, 196, 244, 0.15) !important; color: #16C4F4 !important; border-color: rgba(22, 196, 244, 0.3) !important; }
+    [data-theme="dark"] .site-header .badge-purple,  body.dark-mode .site-header .badge-purple  { background: rgba(22, 196, 244, 0.15) !important; color: #16C4F4 !important; border-color: rgba(22, 196, 244, 0.3) !important; }
+    [data-theme="dark"] .site-header .badge-rose,    body.dark-mode .site-header .badge-rose    { background: rgba(22, 196, 244, 0.15) !important; color: #16C4F4 !important; border-color: rgba(22, 196, 244, 0.3) !important; }
 
     .site-header .nav-actions {
         display: flex;

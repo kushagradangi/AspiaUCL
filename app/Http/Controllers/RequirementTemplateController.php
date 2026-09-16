@@ -731,8 +731,8 @@ HTML;
             white-space: nowrap !important; word-break: keep-all !important; flex-shrink: 0;
         }
 
-        .chip-cyan { background: var(--accent-cyan-glow); color: var(--accent-cyan); border: 1px solid var(--accent-cyan-border); }
-        .chip-purple { background: var(--accent-purple-glow); color: var(--accent-purple); border: 1px solid var(--accent-purple-border); }
+        .chip-cyan { background: rgba(13, 23, 53, 0.08); color: #0D1735; border: 1px solid rgba(13, 23, 53, 0.25); }
+        .chip-purple { background: rgba(13, 23, 53, 0.08); color: #0D1735; border: 1px solid rgba(13, 23, 53, 0.25); }
         .chip-emerald { background: var(--accent-emerald-glow); color: var(--accent-emerald); border: 1px solid var(--accent-emerald-border); }
         .chip-amber { background: var(--accent-amber-glow); color: var(--accent-amber); border: 1px solid var(--accent-amber-border); }
         .chip-rose { background: var(--accent-rose-glow); color: var(--accent-rose); border: 1px solid var(--accent-rose-border); }

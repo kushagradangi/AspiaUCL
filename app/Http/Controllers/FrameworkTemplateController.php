@@ -1938,7 +1938,7 @@ HTML;
         }
 
         $html = '<div class="dropdown-popover-list virtual-scroll-container" style="display: flex; flex-direction: column; gap: 0;">';
-        $badges = ['badge-emerald', 'badge-cyan', 'badge-amber', 'badge-purple', 'badge-rose'];
+        $badges = ['badge-navy'];
         $i = 0;
         foreach ($frameworks as $fw) {
             $badgeClass = $badges[$i % count($badges)];
@@ -1970,7 +1970,7 @@ HTML;
         }
 
         $html = '<div class="dropdown-popover-list virtual-scroll-container" style="display: flex; flex-direction: column; gap: 0;">';
-        $badges = ['badge-purple', 'badge-cyan', 'badge-emerald', 'badge-amber', 'badge-rose'];
+        $badges = ['badge-navy'];
         $i = 0;
         foreach ($domains as $d) {
             $badgeClass = $badges[$i % count($badges)];
@@ -2002,7 +2002,7 @@ HTML;
         }
 
         $html = '<div class="dropdown-popover-list virtual-scroll-container" style="display: flex; flex-direction: column; gap: 0;">';
-        $badges = ['badge-cyan', 'badge-purple', 'badge-amber', 'badge-emerald', 'badge-rose'];
+        $badges = ['badge-navy'];
         $i = 0;
         foreach ($controls as $c) {
             $badgeClass = $badges[$i % count($badges)];
