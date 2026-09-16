@@ -25,9 +25,14 @@
         }
 
 
+        :root {
+            --aspia-infotech-font-primary: "Inter", sans-serif;
+            --aspia-infotech-font-mono: "JetBrains Mono", "SFMono-Regular", Consolas, monospace;
+        }
+
         body {
-            font-family: 'Avenir Next', 'Avenir', Arial, Helvetica, sans-serif;
-            background: #0e1836;
+            font-family: var(--aspia-infotech-font-primary);
+            background: #0D1735;
             color: #ffffff;
         }
 
@@ -44,7 +49,7 @@
             width: 260px;
             height: 100vh;
 
-            background: #101d3b;
+            background: #172540;
 
             border-right: 1px solid #1c4266;
 
@@ -131,7 +136,7 @@
 
         .menu-link:hover {
 
-            background: #17294a;
+            background: #172540;
 
             color: #ffffff;
         }
@@ -139,11 +144,11 @@
 
         .menu-link.active {
 
-            background: rgba(16,188,232,0.12);
+            background: rgba(22,196,244,0.12);
 
-            color: #10bce8;
+            color: #16C4F4;
 
-            border: 1px solid rgba(16,188,232,0.15);
+            border: 1px solid rgba(22,196,244,0.15);
         }
 
 
@@ -265,11 +270,11 @@
             width: 38px;
             height: 38px;
 
-            background: #173b5a;
+            background: #172540;
 
-            border: 1px solid #10bce8;
+            border: 1px solid #16C4F4;
 
-            color: #10bce8;
+            color: #16C4F4;
 
             border-radius: 50%;
 
@@ -381,7 +386,7 @@
 
             float: right;
 
-            color: #10bce8;
+            color: #16C4F4;
 
             font-size: 22px;
         }
@@ -535,9 +540,9 @@
         }
 
         .alert-info {
-            background: rgba(16,188,232,.12);
-            border: 1px solid rgba(16,188,232,.3);
-            color: #10bce8;
+            background: rgba(22,196,244,.12);
+            border: 1px solid rgba(22,196,244,.3);
+            color: #16C4F4;
             padding: 14px 18px;
             border-radius: 10px;
             margin-bottom: 22px;

@@ -1639,7 +1639,7 @@
         const mobileMenuToggle = document.getElementById('mobileMenuToggle');
         const navLinks = document.querySelector('.nav-links');
         if (mobileMenuToggle && navLinks) {
-            mobileMenuToggle.addEventListener('click', function () {
+            mobileMenuToggle.addEventListener('click', function() {
                 navLinks.classList.toggle('active');
             });
         }
@@ -1661,7 +1661,7 @@
         applySiteTheme(savedTheme);
 
         if (themeSwitch) {
-            themeSwitch.addEventListener('change', function () {
+            themeSwitch.addEventListener('change', function() {
                 const newTheme = this.checked ? 'dark' : 'light';
                 localStorage.setItem('ucl-theme', newTheme);
                 applySiteTheme(newTheme);

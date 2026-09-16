@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="<?php echo e(str_replace('_', '-', app()->getLocale())); ?>">
 
 <head>
 
@@ -9,7 +9,7 @@
 
     <title>aspiaUCL | Dashboard</title>
 
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <?php echo app('Illuminate\Foundation\Vite')(['resources/css/app.css', 'resources/js/app.js']); ?>
 
     <style>
 
@@ -742,7 +742,7 @@
             <div class="topbar-logo">
 
                 <img
-                    src="{{ asset('images/aspia.png') }}"
+                    src="<?php echo e(asset('images/aspia.png')); ?>"
                     alt="ASPIA"
                 >
 
@@ -758,7 +758,8 @@
 
                     <div class="admin-avatar">
 
-                        {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
+                        <?php echo e(strtoupper(substr(Auth::user()->name, 0, 1))); ?>
+
 
                     </div>
 
@@ -767,7 +768,8 @@
 
                         <div class="admin-name">
 
-                            {{ Auth::user()->name }}
+                            <?php echo e(Auth::user()->name); ?>
+
 
                         </div>
 
@@ -786,10 +788,10 @@
 
                 <form
                     method="POST"
-                    action="{{ route('logout') }}"
+                    action="<?php echo e(route('logout')); ?>"
                 >
 
-                    @csrf
+                    <?php echo csrf_field(); ?>
 
                     <button
                         type="submit"
@@ -830,7 +832,7 @@
 
                 <!-- DASHBOARD -->
                 <a
-                    href="{{ route('dashboard') }}"
+                    href="<?php echo e(route('dashboard')); ?>"
                     class="active"
                 >
                     <span class="menu-icon">
@@ -845,7 +847,7 @@
                 </a>
 
                 <!-- FRAMEWORKS -->
-                <a href="{{ route('frameworks.index') }}">
+                <a href="<?php echo e(route('frameworks.index')); ?>">
                     <span class="menu-icon">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="m12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z"/>
@@ -857,7 +859,7 @@
                 </a>
 
                 <!-- DOMAINS -->
-                <a href="{{ route('domains.index') }}">
+                <a href="<?php echo e(route('domains.index')); ?>">
                     <span class="menu-icon">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <circle cx="12" cy="12" r="10"/>
@@ -869,7 +871,7 @@
                 </a>
 
                 <!-- CONTROLS -->
-                <a href="{{ route('controls.index') }}">
+                <a href="<?php echo e(route('controls.index')); ?>">
                     <span class="menu-icon">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/>
@@ -880,7 +882,7 @@
                 </a>
 
                 <!-- REQUIREMENTS -->
-                <a href="{{ route('requirements.index') }}">
+                <a href="<?php echo e(route('requirements.index')); ?>">
                     <span class="menu-icon">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <rect width="8" height="4" x="8" y="2" rx="1" ry="1"/>
@@ -921,7 +923,8 @@
 
 
                     <h1>
-                        Welcome back, {{ Auth::user()->name }}
+                        Welcome back, <?php echo e(Auth::user()->name); ?>
+
                     </h1>
 
 
@@ -934,30 +937,28 @@
                 </section>
 
 
-                {{-- =====================================================
-                     FLASH MESSAGES
-                ====================================================== --}}
+                
 
-                @if(session('success'))
+                <?php if(session('success')): ?>
                     <div class="alert-success">
                         <span style="font-size: 16px; font-weight: bold;">✓</span>
-                        <div>{{ session('success') }}</div>
+                        <div><?php echo e(session('success')); ?></div>
                     </div>
-                @endif
+                <?php endif; ?>
 
-                @if(session('error'))
+                <?php if(session('error')): ?>
                     <div class="alert-error">
                         <span style="font-size: 16px; font-weight: bold;">⚠</span>
-                        <div>{{ session('error') }}</div>
+                        <div><?php echo e(session('error')); ?></div>
                     </div>
-                @endif
+                <?php endif; ?>
 
-                @if(session('info') || session('status'))
+                <?php if(session('info') || session('status')): ?>
                     <div class="alert-info">
                         <span style="font-size: 16px; font-weight: bold;">ℹ</span>
-                        <div>{{ session('info') ?? session('status') }}</div>
+                        <div><?php echo e(session('info') ?? session('status')); ?></div>
                     </div>
-                @endif
+                <?php endif; ?>
 
 
                 <!-- =================================================
@@ -983,7 +984,8 @@
                         </div>
 
                         <div class="stat-number">
-                            {{ $frameworksCount ?? \App\Models\Framework::count() }}
+                            <?php echo e($frameworksCount ?? \App\Models\Framework::count()); ?>
+
                         </div>
                     </div>
 
@@ -1003,7 +1005,8 @@
                         </div>
 
                         <div class="stat-number">
-                            {{ $domainsCount ?? \App\Models\Domain::count() }}
+                            <?php echo e($domainsCount ?? \App\Models\Domain::count()); ?>
+
                         </div>
                     </div>
 
@@ -1022,7 +1025,8 @@
                         </div>
 
                         <div class="stat-number">
-                            {{ $controlsCount ?? \App\Models\Control::count() }}
+                            <?php echo e($controlsCount ?? \App\Models\Control::count()); ?>
+
                         </div>
                     </div>
 
@@ -1044,7 +1048,8 @@
                         </div>
 
                         <div class="stat-number">
-                            {{ $requirementsCount ?? \App\Models\Requirement::count() }}
+                            <?php echo e($requirementsCount ?? \App\Models\Requirement::count()); ?>
+
                         </div>
                     </div>
 
@@ -1072,7 +1077,7 @@
                     </div>
 
 
-                    @forelse($activities as $activity)
+                    <?php $__empty_1 = true; $__currentLoopData = $activities; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $activity): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
 
                         <div class="activity">
 
@@ -1081,19 +1086,20 @@
                             <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
 
                                 <div>
-                                    <strong style="color: #16C4F4; text-transform: uppercase; font-size: 11px; margin-right: 6px; letter-spacing: 0.5px;">[{{ $activity->module }}]</strong>
-                                    <span>{{ $activity->description }}</span>
+                                    <strong style="color: #16C4F4; text-transform: uppercase; font-size: 11px; margin-right: 6px; letter-spacing: 0.5px;">[<?php echo e($activity->module); ?>]</strong>
+                                    <span><?php echo e($activity->description); ?></span>
                                 </div>
 
                                 <span style="font-size: 12px; color: #63728c; white-space: nowrap; margin-left: 12px;">
-                                    {{ $activity->created_at->diffForHumans() }}
+                                    <?php echo e($activity->created_at->diffForHumans()); ?>
+
                                 </span>
 
                             </div>
 
                         </div>
 
-                    @empty
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
 
                         <div class="activity" style="color: #63728c;">
 
@@ -1103,7 +1109,7 @@
 
                         </div>
 
-                    @endforelse
+                    <?php endif; ?>
 
 
                 </section>
@@ -1117,4 +1123,4 @@
 
     </div>
 
-</html>
+</html><?php /**PATH C:\xampp\htdocs\AspiaUCL\resources\views/dashboard.blade.php ENDPATH**/ ?>

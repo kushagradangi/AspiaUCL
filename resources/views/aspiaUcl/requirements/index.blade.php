@@ -71,7 +71,7 @@
     }
 
     .btn-primary-aspia {
-        background: #10bce8;
+        background: #16C4F4;
         color: #07152e;
     }
 
@@ -190,7 +190,7 @@
     .search-input {
         width: 280px;
 
-        background: #0e1836;
+        background: #0D1735;
 
         border: 1px solid #27496b;
 
@@ -205,7 +205,7 @@
 
 
     .search-input:focus {
-        border-color: #10bce8;
+        border-color: #16C4F4;
     }
 
 
@@ -269,7 +269,7 @@
 
 
     .requirement-table tr:hover td {
-        background: rgba(16,188,232,.025);
+        background: rgba(22,196,244,.025);
     }
 
 
@@ -288,7 +288,7 @@
 
 
     .requirement-title-link {
-        color: #10bce8;
+        color: #16C4F4;
         text-decoration: underline;
         text-underline-offset: 3px;
         font-weight: 500;
@@ -340,7 +340,7 @@
 
         border: 1px solid #27496b;
 
-        background: #101d3b;
+        background: #172540;
 
         color: #aebbd0;
     }
@@ -349,7 +349,7 @@
     .action-btn:hover {
         color: #ffffff;
 
-        border-color: #10bce8;
+        border-color: #16C4F4;
     }
 
 
@@ -369,7 +369,7 @@
     .empty-state-icon {
         font-size: 35px;
 
-        color: #10bce8;
+        color: #16C4F4;
 
         margin-bottom: 10px;
     }
@@ -405,7 +405,7 @@
         box-sizing: border-box;
         border-radius: 7px;
         border: 1px solid #27496b;
-        background: #101d3b;
+        background: #172540;
         color: #aebbd0;
         display: inline-flex;
         align-items: center;
@@ -417,13 +417,13 @@
 
     .custom-pagination a:hover {
         color: #ffffff;
-        border-color: #10bce8;
+        border-color: #16C4F4;
         background: #162544;
     }
 
     .custom-pagination .active-page {
-        background: #10bce8;
-        border-color: #10bce8;
+        background: #16C4F4;
+        border-color: #16C4F4;
         color: #07152e;
     }
 
@@ -576,7 +576,7 @@
 
 
     .required-star {
-        color: #10bce8;
+        color: #16C4F4;
     }
 
 
@@ -585,7 +585,7 @@
 
         box-sizing: border-box;
 
-        background: #0e1836;
+        background: #0D1735;
 
         border: 1px solid #27496b;
 
@@ -602,9 +602,9 @@
 
 
     .form-control-aspia:focus {
-        border-color: #10bce8;
+        border-color: #16C4F4;
 
-        box-shadow: 0 0 0 2px rgba(16,188,232,.08);
+        box-shadow: 0 0 0 2px rgba(22,196,244,.08);
     }
 
 
@@ -634,7 +634,7 @@
         min-height: 430px;
         box-sizing: border-box;
 
-        background: #0e1836;
+        background: #0D1735;
 
         border: 1px solid #27496b;
 
@@ -659,9 +659,9 @@
 
 
     .template-editor:focus {
-        border-color: #10bce8;
+        border-color: #16C4F4;
 
-        box-shadow: 0 0 0 2px rgba(16,188,232,.08);
+        box-shadow: 0 0 0 2px rgba(22,196,244,.08);
     }
 
 
@@ -670,7 +670,7 @@
 
         padding: 14px;
 
-        background: #0e1836;
+        background: #0D1735;
 
         border: 1px solid #27496b;
 
@@ -710,11 +710,11 @@
 
 
     .placeholder-btn {
-        border: 1px solid rgba(16,188,232,.25);
+        border: 1px solid rgba(22,196,244,.25);
 
-        background: rgba(16,188,232,.08);
+        background: rgba(22,196,244,.08);
 
-        color: #10bce8;
+        color: #16C4F4;
 
         border-radius: 6px;
 
@@ -729,9 +729,9 @@
 
 
     .placeholder-btn:hover {
-        background: rgba(16,188,232,.16);
+        background: rgba(22,196,244,.16);
 
-        border-color: #10bce8;
+        border-color: #16C4F4;
     }
 
 

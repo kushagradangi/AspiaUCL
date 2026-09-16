@@ -24,7 +24,7 @@
         body {
             margin: 0;
 
-            background: #0e1836;
+            background: #0D1735;
 
             color: #ffffff;
 
@@ -111,7 +111,7 @@
 
         .btn-primary {
 
-            background: #10bce8;
+            background: #16C4F4;
 
             color: #06152d;
         }
@@ -141,11 +141,11 @@
 
         .btn-edit {
 
-            background: rgba(16,188,232,.1);
+            background: rgba(22,196,244,.1);
 
-            border: 1px solid rgba(16,188,232,.2);
+            border: 1px solid rgba(22,196,244,.2);
 
-            color: #10bce8;
+            color: #16C4F4;
 
             padding: 7px 11px;
         }
@@ -169,11 +169,11 @@
 
         .success-message {
 
-            background: rgba(16,188,232,.1);
+            background: rgba(22,196,244,.1);
 
-            border: 1px solid rgba(16,188,232,.2);
+            border: 1px solid rgba(22,196,244,.2);
 
-            color: #10bce8;
+            color: #16C4F4;
 
             padding: 13px 16px;
 
@@ -233,7 +233,7 @@
 
             flex: 1;
 
-            background: #0e1836;
+            background: #0D1735;
 
             border: 1px solid #29476b;
 
@@ -251,7 +251,7 @@
 
         .search-input:focus {
 
-            border-color: #10bce8;
+            border-color: #16C4F4;
         }
 
 
@@ -391,9 +391,9 @@
 
         .activity-badge {
 
-            background: rgba(16,188,232,.1);
+            background: rgba(22,196,244,.1);
 
-            color: #10bce8;
+            color: #16C4F4;
 
             border-radius: 20px;
 
@@ -425,7 +425,7 @@
 
         .activity-action {
 
-            color: #10bce8;
+            color: #16C4F4;
 
             font-weight: 600;
         }
@@ -521,7 +521,7 @@
 
             width: 100%;
 
-            background: #0e1836;
+            background: #0D1735;
 
             border: 1px solid #29476b;
 
@@ -539,7 +539,7 @@
 
         .form-control:focus {
 
-            border-color: #10bce8;
+            border-color: #16C4F4;
         }
 
 

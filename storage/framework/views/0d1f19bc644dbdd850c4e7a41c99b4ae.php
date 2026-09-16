@@ -10,11 +10,11 @@
     <meta name="description" content="ASPIA UCL is a free, open directory of compliance frameworks — ISO 27001, NIST CSF, PCI DSS, GDPR, DPDP, RBI, and more. View requirements, controls, mappings, and domains — all in one place." />
     <meta name="keywords" content="compliance frameworks, ISO 27001, NIST CSF, PCI DSS, GDPR, DPDP Act, RBI CSF, unified control layer, GRC, cybersecurity compliance, framework mapping, governance domains, security controls" />
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
-    <link rel="canonical" href="{{ url()->current() }}" />
+    <link rel="canonical" href="<?php echo e(url()->current()); ?>" />
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="{{ url()->current() }}" />
+    <meta property="og:url" content="<?php echo e(url()->current()); ?>" />
     <meta property="og:title" content="Unified Control Layer (UCL) — Free Compliance Framework Directory | ASPIA" />
     <meta property="og:description" content="Explore compliance frameworks, governance domains, and unified controls — ISO 27001, NIST CSF, PCI DSS, GDPR, DPDP, RBI, and more. Free, open, and always updated." />
     <meta property="og:site_name" content="ASPIA UCL" />
@@ -22,7 +22,7 @@
 
     <!-- Twitter Card Meta Tags -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:url" content="{{ url()->current() }}" />
+    <meta name="twitter:url" content="<?php echo e(url()->current()); ?>" />
     <meta name="twitter:title" content="Unified Control Layer (UCL) — Free Compliance Framework Directory | ASPIA" />
     <meta name="twitter:description" content="Explore compliance frameworks, governance domains, and unified controls — ISO 27001, NIST CSF, PCI DSS, GDPR, DPDP, RBI, and more." />
     <meta name="twitter:site" content="@infotechaspia" />
@@ -30,16 +30,16 @@
     <!-- Schema.org JSON-LD: WebPage & WebSite -->
     <script type="application/ld+json">
     {
-        "@@context": "https://schema.org",
-        "@@type": "WebPage",
+        "@context": "https://schema.org",
+        "@type": "WebPage",
         "name": "Unified Control Layer (UCL) — Free Compliance Framework Directory",
-        "url": "{{ url()->current() }}",
+        "url": "<?php echo e(url()->current()); ?>",
         "description": "ASPIA UCL is a free, open directory of compliance frameworks — ISO 27001, NIST CSF, PCI DSS, GDPR, DPDP, RBI, and more.",
         "inLanguage": "en",
         "isPartOf": {
-            "@@type": "WebSite",
+            "@type": "WebSite",
             "name": "ASPIA UCL",
-            "url": "{{ route('home') }}"
+            "url": "<?php echo e(route('home')); ?>"
         }
     }
     </script>
@@ -47,8 +47,8 @@
     <!-- Schema.org JSON-LD: Organization -->
     <script type="application/ld+json">
     {
-        "@@context": "https://schema.org",
-        "@@type": "Organization",
+        "@context": "https://schema.org",
+        "@type": "Organization",
         "name": "ASPIA Infotech",
         "url": "https://aspia.com",
         "sameAs": [
@@ -61,20 +61,20 @@
     <!-- Schema.org JSON-LD: BreadcrumbList -->
     <script type="application/ld+json">
     {
-        "@@context": "https://schema.org",
-        "@@type": "BreadcrumbList",
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
         "itemListElement": [
             {
-                "@@type": "ListItem",
+                "@type": "ListItem",
                 "position": 1,
                 "name": "Home",
-                "item": "{{ route('home') }}"
+                "item": "<?php echo e(route('home')); ?>"
             },
             {
-                "@@type": "ListItem",
+                "@type": "ListItem",
                 "position": 2,
                 "name": "Unified Control Layer (UCL)",
-                "item": "{{ url()->current() }}"
+                "item": "<?php echo e(url()->current()); ?>"
             }
         ]
     }
@@ -83,46 +83,46 @@
     <!-- Schema.org JSON-LD: FAQPage -->
     <script type="application/ld+json">
     {
-        "@@context": "https://schema.org",
-        "@@type": "FAQPage",
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
         "mainEntity": [
             {
-                "@@type": "Question",
+                "@type": "Question",
                 "name": "What is the Unified Control Layer (UCL)?",
                 "acceptedAnswer": {
-                    "@@type": "Answer",
+                    "@type": "Answer",
                     "text": "UCL is a free knowledge base that shows how different compliance frameworks (ISO 27001, NIST, PCI DSS, GDPR, DPDP, etc.) connect through common unified controls."
                 }
             },
             {
-                "@@type": "Question",
+                "@type": "Question",
                 "name": "Which compliance frameworks are supported in UCL?",
                 "acceptedAnswer": {
-                    "@@type": "Answer",
+                    "@type": "Answer",
                     "text": "UCL supports 20+ frameworks including ISO 27001, ISO 27002, NIST CSF, NIST 800-53, CIS Controls, PCI DSS, COBIT, SOC 2, ISO 27701, GDPR, ISO 22301, DORA, NIS2, HIPAA, DPDP Act, RBI CSF, CERT-In, SEBI CSF, IRDAI, and NPCI ISR."
                 }
             },
             {
-                "@@type": "Question",
+                "@type": "Question",
                 "name": "What are the major governance domains in UCL?",
                 "acceptedAnswer": {
-                    "@@type": "Answer",
+                    "@type": "Answer",
                     "text": "UCL covers major governance domains: Information Security, Data Privacy, Cybersecurity, Governance & Compliance, Risk Management, and Business Continuity."
                 }
             },
             {
-                "@@type": "Question",
+                "@type": "Question",
                 "name": "What is a unified control?",
                 "acceptedAnswer": {
-                    "@@type": "Answer",
+                    "@type": "Answer",
                     "text": "A unified control is a single control that can satisfy requirements from multiple frameworks. For example, UCL-001 (Access Control) maps to ISO 27001 A.5.15, NIST CSF PR.AA, CIS Control 6, and PCI DSS Requirement 7."
                 }
             },
             {
-                "@@type": "Question",
+                "@type": "Question",
                 "name": "How are frameworks mapped to UCL controls?",
                 "acceptedAnswer": {
-                    "@@type": "Answer",
+                    "@type": "Answer",
                     "text": "Each framework requirement is analyzed and mapped to the most relevant unified control. The mapping shows which controls cover which requirements, helping organizations reduce duplicate compliance efforts."
                 }
             }
@@ -1541,7 +1541,7 @@
         /* ============================================================
            RESPONSIVE
            ============================================================ */
-        @@media (max-width: 992px) {
+        @media(max-width: 992px) {
             .hero {
                 gap: 32px;
             }
@@ -1556,7 +1556,7 @@
             }
         }
 
-        @@media (max-width: 768px) {
+        @media(max-width: 768px) {
             .container {
                 padding: 0 16px;
             }
@@ -1664,7 +1664,7 @@
             }
         }
 
-        @@media (max-width: 576px) {
+        @media(max-width: 576px) {
             .filter-chips {
                 justify-content: flex-start;
                 overflow-x: auto;
@@ -1689,7 +1689,7 @@
             }
         }
 
-        @@media (max-width: 480px) {
+        @media(max-width: 480px) {
             .hero-buttons {
                 flex-direction: column;
                 width: 100%;
@@ -1706,7 +1706,7 @@
             }
         }
 
-        @@media (max-width: 380px) {
+        @media(max-width: 380px) {
             .domains-grid {
                 grid-template-columns: 1fr;
             }
@@ -2432,7 +2432,7 @@
     <!-- ============================================================
     HEADER & NAVIGATION
     ============================================================ -->
-    @include('aspiaUcl.partials.homepage_header', ['activeTab' => 'home'])
+    <?php echo $__env->make('aspiaUcl.partials.homepage_header', ['activeTab' => 'home'], array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
 
     <!-- ============================================================
     MAIN CONTENT WRAPPER
@@ -2447,7 +2447,7 @@
             <div class="free-badge">
                 <div class="container">
                     <i class="fas fa-check-circle" style="color:#22c55e;" aria-hidden="true"></i>
-                    <strong>Free &amp; Open</strong> — Explore {{ $frameworksCount }}+ frameworks · {{ $domainsCount }} domains · {{ $controlsCount }} unified controls
+                    <strong>Free &amp; Open</strong> — Explore <?php echo e($frameworksCount); ?>+ frameworks · <?php echo e($domainsCount); ?> domains · <?php echo e($controlsCount); ?> unified controls
                     <span style="margin-left:12px;font-size:0.7rem;color:#7a8fae;">✓ No sign-up required</span>
                     <span style="margin-left:12px;font-size:0.7rem;color:#7a8fae;">✓ Always updated</span>
                 </div>
@@ -2467,13 +2467,13 @@
                             Explore domains, controls, requirements, and how they map together — all in one place.
                         </p>
                         <div class="hero-buttons">
-                            <a href="{{ route('frameworks.public_index') }}" class="btn btn-accent"><i class="fas fa-sitemap"></i> Browse Frameworks</a>
+                            <a href="<?php echo e(route('frameworks.public_index')); ?>" class="btn btn-accent"><i class="fas fa-sitemap"></i> Browse Frameworks</a>
                             <a href="#about-ucl" class="btn btn-outline"><i class="fas fa-info-circle"></i> What is UCL?</a>
                         </div>
                         <div class="hero-stats">
-                            <div class="stat"><span class="num">{{ $frameworksCount }}+</span> <span class="lbl">Frameworks</span></div>
-                            <div class="stat"><span class="num">{{ $domainsCount }}</span> <span class="lbl">Domains</span></div>
-                            <div class="stat"><span class="num">{{ $controlsCount }}</span> <span class="lbl">Unified Controls</span></div>
+                            <div class="stat"><span class="num"><?php echo e($frameworksCount); ?>+</span> <span class="lbl">Frameworks</span></div>
+                            <div class="stat"><span class="num"><?php echo e($domainsCount); ?></span> <span class="lbl">Domains</span></div>
+                            <div class="stat"><span class="num"><?php echo e($controlsCount); ?></span> <span class="lbl">Unified Controls</span></div>
                         </div>
                     </div>
 
@@ -2555,7 +2555,7 @@
             <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px;margin-top:20px;">
                 <div class="info-summary-card" style="display:flex;align-items:center;gap:10px;background:#f0f6ff;border-radius:10px;padding:10px 14px;border:1px solid #d4e3f7;">
                     <div style="font-size:1.2rem;color:#16C4F4;"><i class="fas fa-globe"></i></div>
-                    <div><div class="info-title" style="font-weight:600;font-size:0.8rem;color:#0D1735;">{{ $frameworksCount }}+ Frameworks</div><div class="info-sub" style="font-size:0.65rem;color:#6a7a92;">Global, India, Industry</div></div>
+                    <div><div class="info-title" style="font-weight:600;font-size:0.8rem;color:#0D1735;"><?php echo e($frameworksCount); ?>+ Frameworks</div><div class="info-sub" style="font-size:0.65rem;color:#6a7a92;">Global, India, Industry</div></div>
                 </div>
                 <div class="info-summary-card" style="display:flex;align-items:center;gap:10px;background:#f0f6ff;border-radius:10px;padding:10px 14px;border:1px solid #d4e3f7;">
                     <div style="font-size:1.2rem;color:#16C4F4;"><i class="fas fa-link"></i></div>
@@ -2581,38 +2581,38 @@
             </div>
 
             <div class="domains-grid" id="domainsGrid">
-                @forelse($domains as $domain)
-                    <a href="{{ route('domains.show', $domain->slug ?? strtolower(str_replace(' ', '-', $domain->name))) }}" class="domain-card">
+                <?php $__empty_1 = true; $__currentLoopData = $domains; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $domain): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                    <a href="<?php echo e(route('domains.show', $domain->slug ?? strtolower(str_replace(' ', '-', $domain->name)))); ?>" class="domain-card">
                         <div class="icon">
-                            @if(str_contains(strtolower($domain->name), 'privacy'))
+                            <?php if(str_contains(strtolower($domain->name), 'privacy')): ?>
                                 <i class="fas fa-lock"></i>
-                            @elseif(str_contains(strtolower($domain->name), 'cyber') || str_contains(strtolower($domain->name), 'cloud'))
+                            <?php elseif(str_contains(strtolower($domain->name), 'cyber') || str_contains(strtolower($domain->name), 'cloud')): ?>
                                 <i class="fas fa-cloud"></i>
-                            @elseif(str_contains(strtolower($domain->name), 'risk'))
+                            <?php elseif(str_contains(strtolower($domain->name), 'risk')): ?>
                                 <i class="fas fa-chart-pie"></i>
-                            @elseif(str_contains(strtolower($domain->name), 'continuity') || str_contains(strtolower($domain->name), 'business'))
+                            <?php elseif(str_contains(strtolower($domain->name), 'continuity') || str_contains(strtolower($domain->name), 'business')): ?>
                                 <i class="fas fa-sync-alt"></i>
-                            @elseif(str_contains(strtolower($domain->name), 'governance') || str_contains(strtolower($domain->name), 'compliance'))
+                            <?php elseif(str_contains(strtolower($domain->name), 'governance') || str_contains(strtolower($domain->name), 'compliance')): ?>
                                 <i class="fas fa-gavel"></i>
-                            @else
+                            <?php else: ?>
                                 <i class="fas fa-shield-alt"></i>
-                            @endif
+                            <?php endif; ?>
                         </div>
-                        <div class="name">{{ $domain->name }}</div>
-                        <div class="count">{{ $domain->controls_count ?? 0 }} controls</div>
+                        <div class="name"><?php echo e($domain->name); ?></div>
+                        <div class="count"><?php echo e($domain->controls_count ?? 0); ?> controls</div>
                     </a>
-                @empty
-                    <a href="{{ route('domains.public_index') }}" class="domain-card">
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+                    <a href="<?php echo e(route('domains.public_index')); ?>" class="domain-card">
                         <div class="icon"><i class="fas fa-shield-alt"></i></div>
                         <div class="name">Information Security</div>
                         <div class="count">142 controls</div>
                     </a>
-                    <a href="{{ route('domains.public_index') }}" class="domain-card">
+                    <a href="<?php echo e(route('domains.public_index')); ?>" class="domain-card">
                         <div class="icon"><i class="fas fa-lock"></i></div>
                         <div class="name">Data Privacy</div>
                         <div class="count">89 controls</div>
                     </a>
-                @endforelse
+                <?php endif; ?>
             </div>
 
             <!-- DOMAINS PAGINATION -->
@@ -2643,24 +2643,24 @@
             </div>
 
             <div class="controls-grid" id="controlsGrid">
-                @forelse($controls as $control)
-                    <a href="{{ route('controls.show', $control->control_id ?? $control->id) }}" class="control-card">
+                <?php $__empty_1 = true; $__currentLoopData = $controls; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $control): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                    <a href="<?php echo e(route('controls.show', $control->control_id ?? $control->id)); ?>" class="control-card">
                         <div class="top">
-                            <span class="id">{{ $control->control_id }}</span>
-                            <span class="badge-count">{{ $control->requirements_count ?? $control->requirements->count() }} requirements</span>
+                            <span class="id"><?php echo e($control->control_id); ?></span>
+                            <span class="badge-count"><?php echo e($control->requirements_count ?? $control->requirements->count()); ?> requirements</span>
                         </div>
-                        <div class="name">{{ $control->name }}</div>
-                        <div class="desc">{{ \Illuminate\Support\Str::limit($control->business_description ?? $control->control_summary ?? $control->business_objective ?? 'Manage access, policies, and evidence across systems.', 90) }}</div>
+                        <div class="name"><?php echo e($control->name); ?></div>
+                        <div class="desc"><?php echo e(\Illuminate\Support\Str::limit($control->business_description ?? $control->control_summary ?? $control->business_objective ?? 'Manage access, policies, and evidence across systems.', 90)); ?></div>
                         <div class="frameworks">
-                            @if($control->domain)
-                                <span>{{ $control->domain->name }}</span>
-                            @else
+                            <?php if($control->domain): ?>
+                                <span><?php echo e($control->domain->name); ?></span>
+                            <?php else: ?>
                                 <span>ISO 27001</span> <span>NIST CSF</span> <span>PCI DSS</span>
-                            @endif
+                            <?php endif; ?>
                         </div>
                     </a>
-                @empty
-                    <a href="{{ route('controls.public_index') }}" class="control-card">
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+                    <a href="<?php echo e(route('controls.public_index')); ?>" class="control-card">
                         <div class="top">
                             <span class="id">UCL-001</span>
                             <span class="badge-count">4 frameworks</span>
@@ -2669,7 +2669,7 @@
                         <div class="desc">Manage user access, authentication, and authorization across systems.</div>
                         <div class="frameworks"><span>ISO 27001</span> <span>NIST CSF</span> <span>PCI DSS</span></div>
                     </a>
-                @endforelse
+                <?php endif; ?>
             </div>
 
             <!-- CONTROLS PAGINATION -->
@@ -2687,7 +2687,7 @@
             </div>
 
             <div style="text-align:center;margin-top:18px;">
-                <a href="{{ route('controls.public_index') }}" class="btn btn-outline"><i class="fas fa-list"></i> View All {{ $controlsCount }} Controls</a>
+                <a href="<?php echo e(route('controls.public_index')); ?>" class="btn btn-outline"><i class="fas fa-list"></i> View All <?php echo e($controlsCount); ?> Controls</a>
             </div>
         </div>
     </div>
@@ -2698,11 +2698,11 @@
     <div class="section section-alt" style="padding:20px 0;">
         <div class="container">
             <div class="stats-banner">
-                <div class="stat"><span class="num">{{ $frameworksCount }}</span><div class="lbl">Supported Frameworks</div></div>
-                <div class="stat"><span class="num">{{ $domainsCount }}</span><div class="lbl">Governance Domains</div></div>
-                <div class="stat"><span class="num">{{ $controlsCount }}</span><div class="lbl">Unified Controls</div></div>
-                <div class="stat"><span class="num">{{ number_format($requirementsCount) }}</span><div class="lbl">Framework Requirements</div></div>
-                <div class="stat"><span class="num">{{ number_format($mappedRequirementsCount) }}</span><div class="lbl">Mapped Requirements</div></div>
+                <div class="stat"><span class="num"><?php echo e($frameworksCount); ?></span><div class="lbl">Supported Frameworks</div></div>
+                <div class="stat"><span class="num"><?php echo e($domainsCount); ?></span><div class="lbl">Governance Domains</div></div>
+                <div class="stat"><span class="num"><?php echo e($controlsCount); ?></span><div class="lbl">Unified Controls</div></div>
+                <div class="stat"><span class="num"><?php echo e(number_format($requirementsCount)); ?></span><div class="lbl">Framework Requirements</div></div>
+                <div class="stat"><span class="num"><?php echo e(number_format($mappedRequirementsCount)); ?></span><div class="lbl">Mapped Requirements</div></div>
             </div>
         </div>
     </div>
@@ -2729,25 +2729,25 @@
             </div>
 
             <div class="framework-grid" id="frameworksGrid">
-                @forelse($frameworks as $fw)
-                    <div class="framework-item" data-cat="{{ strtolower(($fw->region ?? '') . ' ' . ($fw->category ?? '') . ' ' . ($fw->framework_type ?? '')) }}">
-                        <div><span class="name">{{ $fw->name }}</span> <span class="ver">{{ $fw->version }}</span></div>
-                        <div class="cat">{{ $fw->category ?? $fw->publisher ?? 'Governance' }} · {{ $fw->region ?? 'Global' }}</div>
+                <?php $__empty_1 = true; $__currentLoopData = $frameworks; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $fw): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                    <div class="framework-item" data-cat="<?php echo e(strtolower(($fw->region ?? '') . ' ' . ($fw->category ?? '') . ' ' . ($fw->framework_type ?? ''))); ?>">
+                        <div><span class="name"><?php echo e($fw->name); ?></span> <span class="ver"><?php echo e($fw->version); ?></span></div>
+                        <div class="cat"><?php echo e($fw->category ?? $fw->publisher ?? 'Governance'); ?> · <?php echo e($fw->region ?? 'Global'); ?></div>
                         <div class="meta">
-                            <span>{{ $fw->display_order ?? 50 }} controls</span>
-                            <span class="controls">{{ $fw->mappings_count ?? 0 }} mapped</span>
+                            <span><?php echo e($fw->display_order ?? 50); ?> controls</span>
+                            <span class="controls"><?php echo e($fw->mappings_count ?? 0); ?> mapped</span>
                         </div>
-                        <a href="{{ route('frameworks.show', $fw->slug ?? $fw->framework_id ?? 'view') }}" class="detail-link">View Details →</a>
+                        <a href="<?php echo e(route('frameworks.show', $fw->slug ?? $fw->framework_id ?? 'view')); ?>" class="detail-link">View Details →</a>
                     </div>
-                @empty
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                     <!-- Global & International Fallbacks -->
                     <div class="framework-item" data-cat="global security">
                         <div><span class="name">ISO/IEC 27001</span><span class="ver">2022</span></div>
                         <div class="cat">Information Security · Global</div>
                         <div class="meta"><span>93 controls</span><span>81 mapped</span></div>
-                        <a href="{{ route('frameworks.show', 'iso-27001') }}" class="detail-link">View Details →</a>
+                        <a href="<?php echo e(route('frameworks.show', 'iso-27001')); ?>" class="detail-link">View Details →</a>
                     </div>
-                @endforelse
+                <?php endif; ?>
             </div>
 
             <!-- FRAMEWORKS PAGINATION -->
@@ -2788,8 +2788,8 @@
                         </tr>
                     </thead>
                     <tbody id="domainControlsTableBody">
-                        @foreach($domainsWithControls as $item)
-                            @php
+                        <?php $__currentLoopData = $domainsWithControls; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <?php
                                 $dom = $item['domain'];
                                 $ctrls = $item['controls'];
                                 $code = $dom->domain_code ?: $dom->domain_id ?: 'DOM';
@@ -2797,50 +2797,51 @@
                                 $controlsList = $ctrls->map(fn($c) => ['id' => $c->control_id, 'name' => $c->name])->values()->all();
                                 $controlsJson = e(json_encode($controlsList));
                                 $detailUrl = route('domains.show', $dom->slug ?: $dom->id);
-                            @endphp
+                            ?>
                             <tr class="domain-control-row dct-row">
                                 <td class="dct-td dct-td-domain">
                                     <div class="dct-domain-meta">
-                                        <strong class="dct-code">{{ $code }}</strong>
-                                        <span class="dct-title">{{ $dom->name }}</span>
+                                        <strong class="dct-code"><?php echo e($code); ?></strong>
+                                        <span class="dct-title"><?php echo e($dom->name); ?></span>
                                     </div>
                                 </td>
                                 <td class="dct-td dct-td-scope">
-                                    <span class="dct-desc" title="{{ $overview }}">
-                                        {{ $overview }}
+                                    <span class="dct-desc" title="<?php echo e($overview); ?>">
+                                        <?php echo e($overview); ?>
+
                                     </span>
                                 </td>
                                 <td class="dct-td dct-td-controls">
-                                    @if($ctrls->count() > 0)
+                                    <?php if($ctrls->count() > 0): ?>
                                         <div class="dct-controls-list">
-                                            @foreach($ctrls->take(1) as $ctrl)
+                                            <?php $__currentLoopData = $ctrls->take(1); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $ctrl): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                                 <div class="dct-control-item">
-                                                    <strong class="dct-ctrl-id">{{ $ctrl->control_id }}</strong>
-                                                    <span class="dct-ctrl-name">{{ $ctrl->name }}</span>
+                                                    <strong class="dct-ctrl-id"><?php echo e($ctrl->control_id); ?></strong>
+                                                    <span class="dct-ctrl-name"><?php echo e($ctrl->name); ?></span>
                                                 </div>
-                                            @endforeach
-                                            @if($ctrls->count() > 1)
+                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                            <?php if($ctrls->count() > 1): ?>
                                                 <div class="dct-more">
-                                                    (+{{ $ctrls->count() - 1 }} more)
+                                                    (+<?php echo e($ctrls->count() - 1); ?> more)
                                                 </div>
-                                            @endif
+                                            <?php endif; ?>
                                         </div>
-                                    @else
+                                    <?php else: ?>
                                         <span class="dct-empty">No controls mapped</span>
-                                    @endif
+                                    <?php endif; ?>
                                 </td>
                                 <td class="dct-td dct-td-action">
                                     <button type="button" 
                                             class="view-domain-btn"
-                                            data-code="{{ $code }}"
-                                            data-name="{{ $dom->name }}"
-                                            data-url="{{ $detailUrl }}"
-                                            data-controls="{{ json_encode($controlsList) }}">
+                                            data-code="<?php echo e($code); ?>"
+                                            data-name="<?php echo e($dom->name); ?>"
+                                            data-url="<?php echo e($detailUrl); ?>"
+                                            data-controls="<?php echo e(json_encode($controlsList)); ?>">
                                         <span>View</span> <i class="fas fa-eye"></i>
                                     </button>
                                 </td>
                             </tr>
-                        @endforeach
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </tbody>
                 </table>
             </div>
@@ -2908,7 +2909,7 @@
                 </div>
                 <div class="faq-item">
                     <div class="q"><span><span class="icon"><i class="fas fa-question-circle"></i></span> What are the major governance domains in UCL?</span> <i class="fas fa-chevron-down faq-arrow" style="font-size:0.75rem;color:#8a9ab0;"></i></div>
-                    <div class="a">UCL covers {{ $domainsCount }} major domains including Information Security, Data Privacy, Cybersecurity, Governance &amp; Compliance, Risk Management, and Business Continuity.</div>
+                    <div class="a">UCL covers <?php echo e($domainsCount); ?> major domains including Information Security, Data Privacy, Cybersecurity, Governance &amp; Compliance, Risk Management, and Business Continuity.</div>
                 </div>
                 <div class="faq-item">
                     <div class="q"><span><span class="icon"><i class="fas fa-question-circle"></i></span> What is a unified control?</span> <i class="fas fa-chevron-down faq-arrow" style="font-size:0.75rem;color:#8a9ab0;"></i></div>
@@ -2965,8 +2966,8 @@
             <div class="cta-simple">
                 <h3 style="font-size:1.75rem;font-weight:800;color:#ffffff;margin-bottom:8px;letter-spacing:-0.02em;">Explore UCL — Free &amp; Open</h3>
                 <p style="font-size:1rem;color:#94a3b8;max-width:560px;margin:0 auto 20px auto;line-height:1.5;">No sign-up. No paywall. Just a clean reference for compliance professionals.</p>
-                <a href="{{ route('frameworks.public_index') }}" class="btn btn-accent" title="Browse All Compliance Frameworks" style="background:#16C4F4;color:#ffffff;font-weight:700;padding:10px 24px;border-radius:8px;box-shadow:0 4px 16px rgba(22, 196, 244, 0.25);"><i class="fas fa-sitemap" aria-hidden="true"></i> Browse All Frameworks</a>
-                <span style="display:block;margin-top:14px;font-size:0.75rem;color:#64748b;font-weight:500;">{{ $frameworksCount }}+ frameworks · {{ $domainsCount }} domains · {{ $controlsCount }} unified controls · {{ number_format($requirementsCount) }} requirements</span>
+                <a href="<?php echo e(route('frameworks.public_index')); ?>" class="btn btn-accent" title="Browse All Compliance Frameworks" style="background:#16C4F4;color:#ffffff;font-weight:700;padding:10px 24px;border-radius:8px;box-shadow:0 4px 16px rgba(22, 196, 244, 0.25);"><i class="fas fa-sitemap" aria-hidden="true"></i> Browse All Frameworks</a>
+                <span style="display:block;margin-top:14px;font-size:0.75rem;color:#64748b;font-weight:500;"><?php echo e($frameworksCount); ?>+ frameworks · <?php echo e($domainsCount); ?> domains · <?php echo e($controlsCount); ?> unified controls · <?php echo e(number_format($requirementsCount)); ?> requirements</span>
             </div>
         </div>
     </section>
@@ -2976,7 +2977,7 @@
     <!-- ============================================================
     FOOTER
     ============================================================ -->
-    @include('aspiaUcl.partials.homepage_footer')
+    <?php echo $__env->make('aspiaUcl.partials.homepage_footer', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
 
     <!-- ============================================================
     JAVASCRIPT
@@ -3540,3 +3541,4 @@
 
 </body>
 </html>
+<?php /**PATH C:\xampp\htdocs\AspiaUCL\resources\views/aspiaUcl/ucl_homepage.blade.php ENDPATH**/ ?>

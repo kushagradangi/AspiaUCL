@@ -19,36 +19,57 @@
         rel="stylesheet">
     <style>
         :root {
-            --bg-page: #f8fafc;
-            --bg-surface: #ffffff;
-            --bg-subtle: #f1f5f9;
+            --aspia-infotech-font-primary: "Inter", sans-serif;
+            --aspia-infotech-font-mono: "JetBrains Mono", "SFMono-Regular", Consolas, monospace;
+
+            /* ASPIA Brand Color Palette */
+            --aspia-primary-cyan: #16C4F4;
+            --aspia-primary-navy: #0D1735;
+            --aspia-secondary-navy: #172540;
+            --aspia-page-bg: #F8FAFD;
+            --aspia-white: #FFFFFF;
+            --aspia-surface: #F4F7FA;
+            --aspia-surface-dark: #EDF2F7;
+            --aspia-critical-risk: #D92D20;
+            --aspia-high-risk: #F04438;
+            --aspia-medium-risk: #F5A524;
+            --aspia-low-risk: #12B76A;
+            --aspia-info: #16C4F4;
+            --aspia-chart-purple: #7C3AED;
+
+            --bg-page: #F8FAFD;
+            --bg-surface: #FFFFFF;
+            --bg-subtle: #F4F7FA;
             --bg-glass: rgba(255, 255, 255, 0.9);
             --border-light: #e2e8f0;
             --border-subtle: #cbd5e1;
             --border-hover: #94a3b8;
-            --text-title: #0f172a;
+            --text-title: #0D1735;
             --text-body: #334155;
             --text-secondary: #64748b;
             --text-muted: #94a3b8;
-            --brand-primary: #0284c7;
-            --brand-primary-light: #e0f2fe;
-            --brand-sapphire: #1e40af;
-            --brand-purple: #7c3aed;
-            --brand-purple-light: #f5f3ff;
-            --brand-emerald: #059669;
-            --brand-emerald-light: #ecfdf5;
-            --brand-amber: #d97706;
-            --brand-amber-light: #fffbeb;
-            --brand-rose: #e11d48;
-            --brand-rose-light: #fff1f2;
-            --shadow-sm: 0 1px 2px 0 rgba(15, 23, 42, 0.05);
-            --shadow-md: 0 4px 6px -1px rgba(15, 23, 42, 0.08), 0 2px 4px -2px rgba(15, 23, 42, 0.04);
-            --shadow-lg: 0 10px 15px -3px rgba(15, 23, 42, 0.08);
-            --radius-sm: 6px;
-            --radius-md: 10px;
-            --radius-lg: 16px;
-            --radius-full: 9999px;
-            --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            --brand-primary: #16C4F4;
+            --brand-primary-light: rgba(22, 196, 244, 0.12);
+            --brand-sapphire: #0D1735;
+            --brand-purple: #7C3AED;
+            --brand-purple-light: rgba(124, 58, 237, 0.12);
+            --brand-emerald: #12B76A;
+            --brand-emerald-light: rgba(18, 183, 106, 0.12);
+            --brand-amber: #F5A524;
+            --brand-amber-light: rgba(245, 165, 36, 0.12);
+            --brand-rose: #F04438;
+            --brand-rose-light: rgba(240, 68, 56, 0.12);
+        }
+
+        --shadow-sm: 0 1px 2px 0 rgba(15, 23, 42, 0.05);
+        --shadow-md: 0 4px 6px -1px rgba(15, 23, 42, 0.08),
+        0 2px 4px -2px rgba(15, 23, 42, 0.04);
+        --shadow-lg: 0 10px 15px -3px rgba(15, 23, 42, 0.08);
+        --radius-sm: 6px;
+        --radius-md: 10px;
+        --radius-lg: 16px;
+        --radius-full: 9999px;
+        --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         [data-theme="dark"] {
@@ -89,7 +110,7 @@
         }
 
         body {
-            font-family: 'Avenir Next', 'Avenir', 'Inter', 'Segoe UI', 'Roboto', sans-serif;
+            font-family: var(--aspia-infotech-font-primary);
             background-color: var(--bg-page);
             color: var(--text-body);
             line-height: 1.7;
@@ -151,7 +172,7 @@
             gap: 5px;
             text-decoration: none;
             padding: 2px 0;
-            font-family: 'Avenir Next', 'Avenir', 'Inter', 'Segoe UI', 'Roboto', sans-serif;
+            font-family: 'Avenir', 'Avenir Next', 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             font-size: 26px;
             font-weight: 900;
             line-height: 1;
@@ -1415,10 +1436,14 @@
                     </li>
 
                     <!-- Controls Menu -->
-                    <li class="nav-menu-item">
+                    <li class="nav-menu-item dropdown-parent">
                         <a href="/all-controls" class="nav-menu-link">
                             <span>Controls</span>
+                            <span class="dropdown-arrow">▾</span>
                         </a>
+                        <div class="dropdown-popover">
+                            {{all_controls_dropdown_list}}
+                        </div>
                     </li>
                 </ul>
             </nav>

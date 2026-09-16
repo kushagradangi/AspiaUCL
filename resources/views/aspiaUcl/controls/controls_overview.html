@@ -33,12 +33,12 @@
     <!-- Schema.org JSON-LD Structured Data -->
     <script type="application/ld+json">
     {
-        "@context": "https://schema.org",
-        "@type": "DefinedTermSet",
+        "@@context": "https://schema.org",
+        "@@type": "DefinedTermSet",
         "name": "ASPIA UCL Security Controls",
         "description": "Standardized security controls and compliance categories mapped under ASPIA Unified Control Library.",
         "publisher": {
-            "@type": "Organization",
+            "@@type": "Organization",
             "name": "ASPIA Infotech"
         },
         "inLanguage": "en"
@@ -53,13 +53,16 @@
         rel="stylesheet">
 
     <!-- FontAwesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
     <style>
         /* ==========================================================================
            2. ADORABLE DESIGN SYSTEM & CSS VARIABLES
            ========================================================================== */
         :root {
+            --aspia-infotech-font-primary: "Inter", sans-serif;
+            --aspia-infotech-font-mono: "JetBrains Mono", "SFMono-Regular", Consolas, monospace;
+
             /* Light Theme Color Tokens */
             --bg-body: #f8fafd;
             --bg-card: #ffffff;
@@ -77,8 +80,8 @@
 
         [data-theme="dark"] {
             /* Dark Theme Color Tokens */
-            --bg-body: #0b1120;
-            --bg-card: #111a2e;
+            --bg-body: #0D1735;
+            --bg-card: #172540;
             --text-main: #94a3b8;
             --text-heading: #f8fafc;
             --border-color: #1e293b;
@@ -93,211 +96,14 @@
         }
 
         body {
-            font-family: 'Avenir Next', 'Avenir', 'Plus Jakarta Sans', sans-serif;
+            font-family: var(--aspia-infotech-font-primary);
             background-color: var(--bg-body);
             color: var(--text-main);
             line-height: 1.6;
             overflow-x: hidden;
         }
 
-        /* NAVIGATION HEADER */
-        .site-nav-header {
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            background: rgba(13, 23, 53, 0.85);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 0.8rem 2.25rem;
-            transition: all 0.3s ease;
-        }
-
-        .nav-container {
-            max-width: 1260px;
-            margin: 0 auto;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .brand-logo {
-            font-size: 1.4rem;
-            font-weight: 800;
-            color: #ffffff;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            letter-spacing: -0.5px;
-        }
-
-        .brand-logo span {
-            color: #16C4F4;
-        }
-
-        .nav-links {
-            display: flex;
-            align-items: center;
-            gap: 2rem;
-            list-style: none;
-        }
-
-        .nav-links a {
-            color: #cbd5e1;
-            text-decoration: none;
-            font-size: 0.92rem;
-            font-weight: 600;
-            transition: color 0.2s;
-        }
-
-        .nav-links a:hover,
-        .nav-links a.active {
-            color: #16C4F4;
-        }
-
-        .dropdown-parent {
-            position: relative;
-        }
-
-        .dropdown-popover {
-            position: absolute;
-            top: 100%;
-            left: 0;
-            width: 320px;
-            max-height: 400px;
-            overflow-y: auto;
-            background: #111a2e;
-            border: 1px solid #1e355b;
-            border-radius: 12px;
-            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
-            padding: 8px;
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(8px);
-            transition: all 0.22s ease;
-            z-index: 200;
-        }
-
-        .dropdown-parent:hover .dropdown-popover {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(4px);
-        }
-
-        /* INTERACTIVE SEGMENTED THEME SWITCHER */
-        .theme-segmented-switch {
-            position: relative;
-            display: inline-flex;
-            align-items: center;
-            background: rgba(255, 255, 255, 0.12);
-            border: 1px solid rgba(255, 255, 255, 0.25);
-            border-radius: 40px;
-            padding: 3px;
-            user-select: none;
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.25), 0 4px 15px rgba(0, 0, 0, 0.1);
-            gap: 2px;
-        }
-
-        [data-theme="dark"] .theme-segmented-switch {
-            background: rgba(15, 23, 42, 0.85);
-            border-color: rgba(56, 189, 248, 0.3);
-            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.5), 0 0 20px rgba(22, 196, 244, 0.2);
-        }
-
-        .theme-sliding-thumb {
-            position: absolute;
-            top: 3px;
-            left: 3px;
-            width: calc(50% - 3px);
-            height: calc(100% - 6px);
-            background: linear-gradient(135deg, #16C4F4 0%, #0284c7 100%);
-            border-radius: 30px;
-            box-shadow: 0 2px 12px rgba(22, 196, 244, 0.6);
-            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.4s ease, box-shadow 0.4s ease;
-            z-index: 1;
-        }
-
-        [data-theme="dark"] .theme-sliding-thumb {
-            transform: translateX(100%);
-            background: linear-gradient(135deg, #16C4F4 0%, #0284c7 100%);
-            box-shadow: 0 2px 14px rgba(22, 196, 244, 0.7);
-        }
-
-        .theme-seg-btn {
-            position: relative;
-            z-index: 2;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 6px 14px;
-            border-radius: 30px;
-            border: none;
-            background: transparent;
-            color: #94a3b8;
-            font-size: 0.82rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: color 0.25s ease, transform 0.15s ease;
-        }
-
-        .theme-seg-btn.active {
-            color: #ffffff;
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-        }
-
-        .theme-seg-btn:hover {
-            color: #e2e8f0;
-        }
-
-        .theme-seg-btn:active {
-            transform: scale(0.92);
-        }
-
-        .theme-icon-sun {
-            transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), color 0.3s ease;
-        }
-
-        .theme-seg-btn.active .theme-icon-sun {
-            transform: rotate(180deg) scale(1.15);
-            color: #fbbf24;
-            filter: drop-shadow(0 0 6px rgba(251, 191, 36, 0.8));
-        }
-
-        .theme-icon-moon {
-            transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), color 0.3s ease;
-        }
-
-        .theme-seg-btn.active .theme-icon-moon {
-            transform: rotate(-20deg) scale(1.15);
-            color: #e0e7ff;
-            filter: drop-shadow(0 0 6px rgba(224, 231, 255, 0.8));
-        }
-
-        /* RADIAL RIPPLE WAVE EFFECT */
-        .theme-ripple-wave {
-            position: fixed;
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            transform: translate(-50%, -50%) scale(0);
-            pointer-events: none;
-            z-index: 999999;
-            background: radial-gradient(circle, rgba(22, 196, 244, 0.45) 0%, rgba(2, 132, 199, 0.25) 50%, transparent 100%);
-            transition: transform 0.65s cubic-bezier(0.1, 0.8, 0.3, 1), opacity 0.65s ease;
-            opacity: 0.9;
-        }
-
-        [data-theme="dark"] .theme-ripple-wave {
-            background: radial-gradient(circle, rgba(22, 196, 244, 0.55) 0%, rgba(2, 132, 199, 0.25) 50%, transparent 100%);
-        }
-
-        .theme-ripple-wave.animate-expand {
-            transform: translate(-50%, -50%) scale(100);
-            opacity: 0;
-        }
+        /* Header & Footer styles managed by shared Blade partials */
 
         /* SMOOTH GLOBAL COLOR TRANSITIONS */
         body,
@@ -384,7 +190,7 @@
         }
 
         [data-theme="dark"] .toc-card {
-            background: #111a2e;
+            background: #172540;
             border-color: #1e355b;
         }
 
@@ -468,7 +274,7 @@
         }
 
         [data-theme="dark"] .feature-card {
-            background: #111a2e;
+            background: #172540;
             border-color: #1e355b;
         }
 
@@ -494,7 +300,7 @@
         }
 
         [data-theme="dark"] .catalog-toolbar {
-            background: #111a2e;
+            background: #172540;
         }
 
         .search-input-group {
@@ -542,7 +348,7 @@
         }
 
         [data-theme="dark"] .pagination-bar {
-            background: #111a2e;
+            background: #172540;
             border-color: #1e355b;
         }
 
@@ -684,11 +490,10 @@
             font-family: 'JetBrains Mono', monospace;
             font-size: 0.68rem;
             font-weight: 800;
-            padding: 0.15rem 0.45rem;
-            border-radius: 4px;
-            background: rgba(22, 196, 244, 0.12);
-            color: #16C4F4;
-            border: 1px solid rgba(22, 196, 244, 0.25);
+            padding: 0 0.2rem 0 0;
+            background: transparent;
+            color: #0D1735;
+            border: none;
         }
 
         .card-left-column .badge-code {
@@ -837,7 +642,7 @@
         }
 
         [data-theme="dark"] .workflow-box {
-            background: #111a2e;
+            background: #172540;
         }
 
         .workflow-flow {
@@ -893,7 +698,7 @@
         }
 
         [data-theme="dark"] .checklist-item {
-            background: #111a2e;
+            background: #172540;
         }
 
         /* FAQ ACCORDION */
@@ -1003,7 +808,7 @@
         }
 
         [data-theme="dark"] .footer-strip {
-            background: #111a2e;
+            background: #172540;
         }
 
         .footer-strip a {
@@ -1047,59 +852,9 @@
 </head>
 
 <body>
-    <!-- Navigation Header -->
-    <header class="site-nav-header">
-        <div class="nav-container">
-            <a href="/all-frameworks" class="brand-logo">
-                ASPIA<span>UCL</span>
-            </a>
-
-            <ul class="nav-links">
-                <li>
-                    <a href="/all-frameworks">Frameworks</a>
-                </li>
-                <li>
-                    <a href="/all-domains">Domains</a>
-                </li>
-                <li>
-                    <a href="/all-controls" class="active">Controls</a>
-                </li>
-            </ul>
-
-            <div class="theme-segmented-switch" id="themeSegmentedSwitch" title="Toggle Light / Dark Theme (Shift+T)">
-                <div class="theme-sliding-thumb" id="themeSlidingThumb"></div>
-                <button type="button" class="theme-seg-btn active" id="segBtnLight"
-                    onclick="setTheme('light', true, event)" aria-label="Light Mode">
-                    <i class="fas fa-sun theme-icon-sun"></i>
-                    <span>Light</span>
-                </button>
-                <button type="button" class="theme-seg-btn" id="segBtnDark" onclick="setTheme('dark', true, event)"
-                    aria-label="Dark Mode">
-                    <i class="fas fa-moon theme-icon-moon"></i>
-                    <span>Dark</span>
-                </button>
-            </div>
-        </div>
-    </header>
+    @include('aspiaUcl.partials.header', ['activeTab' => 'controls'])
 
     <div class="page-wrapper">
-
-        <!-- TABLE OF CONTENTS -->
-        <div class="toc-card">
-            <p class="toc-title">In This Guide</p>
-            <ol class="toc-grid">
-                <li><a href="#what-are">What Are Security Controls?</a></li>
-                <li><a href="#why-used">Why Structure Compliance by Security Controls?</a></li>
-                <li><a href="#controls-catalog">Explore Integrated Security Controls</a></li>
-                <li><a href="#key-terms">Key Terms Used in Control Architecture</a></li>
-                <li><a href="#control-categories">Control Architecture &amp; Safeguard Classification</a></li>
-                <li><a href="#crosswalk-mapping">Crosswalk &amp; Framework Mapping Architecture</a></li>
-                <li><a href="#implementation-workflow">Control Lifecycle &amp; Governance Workflow</a></li>
-                <li><a href="#checklist">Control Governance Readiness Checklist</a></li>
-                <li><a href="#faq">Frequently Asked Questions</a></li>
-                <li><a href="#conclusion">Final Takeaway</a></li>
-            </ol>
-        </div>
 
         <!-- HERO BANNER -->
         <div class="hero-card">
@@ -1137,22 +892,22 @@
         <h2 id="why-used" class="section-heading">Why Structure Compliance by Security Controls?</h2>
 
         <div class="feature-grid">
-            <div class="feature-card" style="border-top-color: #7B61FF;">
+            <div class="feature-card" style="border-top-color: #02CCFF;">
                 <strong>1. Clear Safeguard Accountability</strong>
                 <p style="font-size:0.85rem;margin:0;">Assigns direct operational responsibility to specific technical
                     owners and teams for each control implementation.</p>
             </div>
-            <div class="feature-card" style="border-top-color: #16C4F4;">
+            <div class="feature-card" style="border-top-color: #00B8E6;">
                 <strong>2. Standardized Safeguard Taxonomy</strong>
                 <p style="font-size:0.85rem;margin:0;">Establishes a common security language across engineering teams,
                     internal auditors, and executive leadership.</p>
             </div>
-            <div class="feature-card" style="border-top-color: #22C55E;">
+            <div class="feature-card" style="border-top-color: #1AD4FF;">
                 <strong>3. Audit Crosswalk Efficiency</strong>
                 <p style="font-size:0.85rem;margin:0;">Maps controls from ISO 27001, NIST, SOC 2, and PCI DSS into
                     unified safeguards to eliminate duplicate testing.</p>
             </div>
-            <div class="feature-card" style="border-top-color: #F59E0B;">
+            <div class="feature-card" style="border-top-color: #33D6FF;">
                 <strong>4. Comprehensive Risk Defense</strong>
                 <p style="font-size:0.85rem;margin:0;">Ensures complete coverage across physical, administrative, and
                     technical threat vectors during risk assessments.</p>
@@ -1269,22 +1024,22 @@
             achieve seamless audit mapping and gap analysis.</p>
 
         <div class="feature-grid" style="margin-top: 1.5rem;">
-            <div class="feature-card" style="border-top-color: #16C4F4;">
+            <div class="feature-card" style="border-top-color: #02CCFF;">
                 <strong>Unified Control Mapping</strong>
                 <p style="font-size:0.85rem;margin:0;">Maps overlapping framework clauses directly to a central security
                     control, eliminating redundant testing.</p>
             </div>
-            <div class="feature-card" style="border-top-color: #16C4F4;">
+            <div class="feature-card" style="border-top-color: #00B8E6;">
                 <strong>Single Evidence Repository</strong>
                 <p style="font-size:0.85rem;margin:0;">Collect audit evidence once per control to satisfy multiple
                     regulatory assessments simultaneously.</p>
             </div>
-            <div class="feature-card" style="border-top-color: #22C55E;">
+            <div class="feature-card" style="border-top-color: #1AD4FF;">
                 <strong>Control Gap Analysis</strong>
                 <p style="font-size:0.85rem;margin:0;">Instantly identify missing safeguards when adopting new
                     regulatory frameworks or security benchmarks.</p>
             </div>
-            <div class="feature-card" style="border-top-color: #F59E0B;">
+            <div class="feature-card" style="border-top-color: #33D6FF;">
                 <strong>Control Owner Accountability</strong>
                 <p style="font-size:0.85rem;margin:0;">Empowers control owners with complete visibility into compliance
                     status across frameworks.</p>
@@ -1402,13 +1157,6 @@
                 <a href="https://aspiainfotech.com/request-a-demo/" target="_blank" rel="noopener"
                     class="btn-cta-secondary">Book a Demo</a>
             </div>
-        </div>
-
-        <!-- INTERNAL LINKS FOOTER STRIP -->
-        <div class="footer-strip">
-            <p><strong>ASPIA UCL Series:</strong> <a href="/all-frameworks">Frameworks Overview</a> | <a
-                    href="/all-domains">Domains Overview</a> | <a href="/all-controls">Controls Overview</a> | <a
-                    href="/requirements">Requirements Overview</a></p>
         </div>
 
     </div>
@@ -1610,6 +1358,43 @@
             renderPagination();
         });
         renderPagination();
+    </script>
+
+    @include('aspiaUcl.partials.footer')
+
+    <script>
+        // Mobile Menu Toggle
+        const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+        const navLinks = document.querySelector('.nav-links');
+        if (mobileMenuToggle && navLinks) {
+            mobileMenuToggle.addEventListener('click', function () {
+                navLinks.classList.toggle('active');
+            });
+        }
+
+        // Theme Switch
+        const themeSwitch = document.getElementById('themeToggleSwitch');
+        function applySiteTheme(theme) {
+            if (theme === 'dark') {
+                document.body.classList.add('dark-mode');
+                document.documentElement.setAttribute('data-theme', 'dark');
+                if (themeSwitch) themeSwitch.checked = true;
+            } else {
+                document.body.classList.remove('dark-mode');
+                document.documentElement.setAttribute('data-theme', 'light');
+                if (themeSwitch) themeSwitch.checked = false;
+            }
+        }
+        const savedTheme = localStorage.getItem('ucl-theme') || 'light';
+        applySiteTheme(savedTheme);
+
+        if (themeSwitch) {
+            themeSwitch.addEventListener('change', function () {
+                const newTheme = this.checked ? 'dark' : 'light';
+                localStorage.setItem('ucl-theme', newTheme);
+                applySiteTheme(newTheme);
+            });
+        }
     </script>
 </body>
 

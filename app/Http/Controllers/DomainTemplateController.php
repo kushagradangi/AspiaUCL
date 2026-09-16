@@ -89,6 +89,8 @@ class DomainTemplateController extends Controller
             $html = str_ireplace($placeholder, (string) ($value ?? ''), $html);
         }
 
+        $html = \Illuminate\Support\Facades\Blade::render($html);
+
         return response($html);
     }
 

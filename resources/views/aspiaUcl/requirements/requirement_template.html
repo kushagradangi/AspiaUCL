@@ -129,13 +129,13 @@
         }
 
         [data-theme="dark"] {
-            --bg-primary: #090e1a;
-            --bg-secondary: #111a2e;
-            --bg-card: #15223c;
-            --bg-card-hover: #1b2d50;
-            --border-color: #1e355b;
-            --border-subtle: rgba(255, 255, 255, 0.06);
-            --accent-cyan: #22d3ee;
+            --bg-primary: #0D1735;
+            --bg-secondary: #172540;
+            --bg-card: #172540;
+            --bg-card-hover: #1e2f52;
+            --border-color: rgba(22, 196, 244, 0.25);
+            --border-subtle: rgba(255, 255, 255, 0.08);
+            --accent-cyan: #16C4F4;
             --accent-cyan-glow: rgba(34, 211, 238, 0.18);
             --accent-cyan-border: rgba(34, 211, 238, 0.35);
             --accent-purple: #c084fc;
@@ -153,6 +153,8 @@
             --text-primary: #f8fafc;
             --text-secondary: #cbd5e1;
             --text-muted: #94a3b8;
+            --aspia-infotech-font-primary: "Inter", sans-serif;
+            --aspia-infotech-font-mono: "JetBrains Mono", "SFMono-Regular", Consolas, monospace;
             --shadow-card: 0 12px 35px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.06);
             --shadow-float: 0 20px 45px rgba(0, 0, 0, 0.6);
         }
@@ -164,7 +166,7 @@
         }
 
         body {
-            font-family: 'Avenir Next', 'Avenir', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: var(--aspia-infotech-font-primary);
             background-color: var(--bg-primary);
             color: var(--text-primary);
             line-height: 1.6;
@@ -174,7 +176,7 @@
         }
 
         .font-mono {
-            font-family: 'JetBrains Mono', monospace;
+            font-family: var(--aspia-infotech-font-mono);
             white-space: nowrap !important;
             word-break: keep-all !important;
             hyphens: none !important;
