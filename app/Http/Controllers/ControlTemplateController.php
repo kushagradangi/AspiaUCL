@@ -65,7 +65,7 @@ class ControlTemplateController extends Controller
         $totalControls     = $controls->count();
         $totalRequirements = \App\Models\Requirement::count();
 
-        $filePath = resource_path('views/aspiaUcl/controls/controls_overview.html');
+        $filePath = resource_path('views/aspiaUcl/controls/controls_overview.blade.php');
         if (file_exists($filePath)) {
             $html = file_get_contents($filePath);
         } else {

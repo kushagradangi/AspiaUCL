@@ -23,12 +23,12 @@
     <!-- Article Schema -->
     <script type="application/ld+json">
     {
-        "@context": "https://schema.org",
-        "@type": "TechArticle",
+        "@@context": "https://schema.org",
+        "@@type": "TechArticle",
         "headline": "Regulatory & Security Frameworks: Meaning, Types, Mappings & Standards Guide",
         "description": "Complete guide to cybersecurity frameworks, regulatory standards, compliance mappings, control domains, audit requirements, and best practices in ASPIA Unified Control Library.",
-        "author": {"@type": "Organization", "name": "ASPIA Infotech"},
-        "publisher": {"@type": "Organization", "name": "ASPIA Infotech Pvt. Ltd."},
+        "author": {"@@type": "Organization", "name": "ASPIA Infotech"},
+        "publisher": {"@@type": "Organization", "name": "ASPIA Infotech Pvt. Ltd."},
         "datePublished": "2026-09-08",
         "dateModified": "2026-09-08"
     }
@@ -37,14 +37,14 @@
     <!-- FAQ Schema -->
     <script type="application/ld+json">
     {
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
+        "@@context": "https://schema.org",
+        "@@type": "FAQPage",
         "mainEntity": [
-            {"@type":"Question","name":"What is a cybersecurity compliance framework?","acceptedAnswer":{"@type":"Answer","text":"A cybersecurity compliance framework is a structured set of guidelines, security controls, and best practices designed to help organizations manage risk and meet regulatory requirements."}},
-            {"@type":"Question","name":"What are the main types of compliance frameworks?","acceptedAnswer":{"@type":"Answer","text":"Frameworks generally fall into three categories: Regulatory Mandates (GDPR, HIPAA, PCI DSS), Industry Standards (ISO/IEC 27001, SOC 2), and Security Benchmarks (NIST CSF, CIS Controls)."}},
-            {"@type":"Question","name":"What is framework crosswalk mapping?","acceptedAnswer":{"@type":"Answer","text":"Crosswalk mapping links controls and requirements from multiple frameworks to a unified baseline, enabling 'test once, comply with many' efficiency."}},
-            {"@type":"Question","name":"How does ASPIA UCL organize frameworks?","acceptedAnswer":{"@type":"Answer","text":"ASPIA UCL maps frameworks into standardized Control Domains, Security Controls, and Auditable Requirements for streamlined governance."}},
-            {"@type":"Question","name":"What is the difference between ISO 27001 and NIST CSF?","acceptedAnswer":{"@type":"Answer","text":"ISO 27001 is an certifiable Information Security Management System (ISMS) standard, while NIST CSF is a voluntary risk-management framework structured around Identify, Protect, Detect, Respond, and Recover functions."}}
+            {"@@type":"Question","name":"What is a cybersecurity compliance framework?","acceptedAnswer":{"@@type":"Answer","text":"A cybersecurity compliance framework is a structured set of guidelines, security controls, and best practices designed to help organizations manage risk and meet regulatory requirements."}},
+            {"@@type":"Question","name":"What are the main types of compliance frameworks?","acceptedAnswer":{"@@type":"Answer","text":"Frameworks generally fall into three categories: Regulatory Mandates (GDPR, HIPAA, PCI DSS), Industry Standards (ISO/IEC 27001, SOC 2), and Security Benchmarks (NIST CSF, CIS Controls)."}},
+            {"@@type":"Question","name":"What is framework crosswalk mapping?","acceptedAnswer":{"@@type":"Answer","text":"Crosswalk mapping links controls and requirements from multiple frameworks to a unified baseline, enabling 'test once, comply with many' efficiency."}},
+            {"@@type":"Question","name":"How does ASPIA UCL organize frameworks?","acceptedAnswer":{"@@type":"Answer","text":"ASPIA UCL maps frameworks into standardized Control Domains, Security Controls, and Auditable Requirements for streamlined governance."}},
+            {"@@type":"Question","name":"What is the difference between ISO 27001 and NIST CSF?","acceptedAnswer":{"@@type":"Answer","text":"ISO 27001 is an certifiable Information Security Management System (ISMS) standard, while NIST CSF is a voluntary risk-management framework structured around Identify, Protect, Detect, Respond, and Recover functions."}}
         ]
     }
     </script>
@@ -52,9 +52,7 @@
     <!-- Google Fonts & Font Awesome -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700;800&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800;14..32,900&family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
     <style>
@@ -77,17 +75,6 @@
             --radius-xl: 24px;
         }
 
-        [data-theme="dark"] {
-            /* Dark Theme Color Tokens */
-            --bg-body: #0D1735;
-            --bg-card: #172540;
-            --text-main: #94a3b8;
-            --text-heading: #f8fafc;
-            --border-color: #1e293b;
-            --brand-cyan: #16C4F4;
-            --brand-navy: #0D1735;
-        }
-
         * {
             box-sizing: border-box;
             margin: 0;
@@ -100,6 +87,8 @@
             color: var(--text-main);
             line-height: 1.6;
             overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
         /* Header & Footer styles managed by shared Blade partials */
@@ -127,56 +116,197 @@
             padding: 2.5rem 2.6rem;
         }
 
-        /* HERO STYLES */
-        .hero-card {
-            background: linear-gradient(135deg, #0D1735 0%, #172540 60%, #16C4F4 100%);
-            border-radius: 24px;
-            padding: 3rem 2.5rem;
-            margin-bottom: 2.5rem;
-            color: white;
-            box-shadow: 0 12px 40px rgba(13, 23, 53, 0.25);
+        /* HERO STYLES (FULL VH SCREEN - ADVANCED ISOMETRIC DESIGN) */
+        .hero-section {
+            background: #060B1E;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(22, 196, 244, 0.1) 0%, transparent 40%),
+                radial-gradient(circle at 90% 60%, rgba(22, 196, 244, 0.12) 0%, transparent 50%),
+                linear-gradient(180deg, #09122C 0%, #060B1E 100%);
+            position: relative;
+            color: #ffffff;
+            width: 100%;
+            min-height: calc(100vh - 76px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 3.5rem 2.5rem;
+            margin-bottom: 0;
+            box-sizing: border-box;
+            overflow: hidden;
         }
 
-        .hero-meta {
-            font-size: 0.9rem;
-            opacity: 0.8;
-            margin-bottom: 1.5rem;
+        /* Subtle Dot Grid Overlay */
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: radial-gradient(rgba(22, 196, 244, 0.15) 1px, transparent 1px);
+            background-size: 28px 28px;
+            opacity: 0.35;
+            pointer-events: none;
         }
 
-        .hero-meta a {
-            color: #fff;
-            text-decoration: none;
+        /* Bottom Wave Mesh Decorative Background */
+        .hero-wave-bg {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 180px;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .hero-container {
+            max-width: 1260px;
+            width: 100%;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1.15fr 0.85fr;
+            gap: 2.5rem;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-content {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+
+        .hero-eyebrow {
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: #16C4F4;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
         }
 
         .hero-title {
-            font-size: clamp(2rem, 5vw, 3.2rem);
-            font-weight: 700;
-            margin: 0 0 0.5rem 0;
-            line-height: 1.2;
+            font-size: clamp(2.4rem, 4.2vw, 3.8rem);
+            font-weight: 800;
+            line-height: 1.12;
             color: #ffffff;
+            margin: 0;
+            letter-spacing: -0.02em;
+        }
+
+        .hero-title .highlight {
+            color: #16C4F4;
+            display: block;
         }
 
         .hero-subtitle {
-            font-size: 1.2rem;
-            opacity: 0.9;
-            max-width: 840px;
-            margin-bottom: 1.5rem;
+            font-size: 1.05rem;
+            color: #9ab0cc;
+            line-height: 1.65;
+            max-width: 560px;
+            margin: 0;
         }
 
-        .hero-tags {
+        /* Feature Cards Grid (4 Inline Cards) */
+        .hero-features-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.75rem;
+            margin-top: 0.25rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .hero-feature-card {
+            background: rgba(13, 23, 53, 0.65);
+            border: 1px solid rgba(22, 196, 244, 0.22);
+            border-radius: 12px;
+            padding: 0.7rem 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.65rem;
+            backdrop-filter: blur(10px);
+            transition: transform 0.25s, border-color 0.25s, box-shadow 0.25s;
+        }
+
+        .hero-feature-card:hover {
+            transform: translateY(-2px);
+            border-color: rgba(22, 196, 244, 0.5);
+            box-shadow: 0 8px 24px rgba(22, 196, 244, 0.15);
+        }
+
+        .hero-feature-icon {
+            width: 36px;
+            height: 36px;
+            background: rgba(22, 196, 244, 0.12);
+            border: 1px solid rgba(22, 196, 244, 0.28);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #16C4F4;
+            font-size: 0.95rem;
+            flex-shrink: 0;
+        }
+
+        .hero-feature-text {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.25;
+        }
+
+        .hero-feature-title {
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: #ffffff;
+            white-space: nowrap;
+        }
+
+        .hero-feature-sub {
+            font-size: 0.7rem;
+            color: #9ab0cc;
+            white-space: nowrap;
+        }
+
+        /* Meta Bar */
+        .hero-meta-bar {
             display: flex;
             flex-wrap: wrap;
-            gap: 1.5rem;
             align-items: center;
-            font-size: 0.95rem;
+            gap: 1.25rem;
+            font-size: 0.9rem;
+            color: #cbd5e1;
+            margin-top: 0.25rem;
         }
 
         .hero-tag-pill {
             background: #16C4F4;
-            padding: 0.2rem 1.2rem;
-            border-radius: 40px;
-            font-weight: 600;
             color: #0D1735;
+            padding: 0.35rem 1.25rem;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            box-shadow: 0 4px 16px rgba(22, 196, 244, 0.35);
+        }
+
+        /* Right Column: 3D Visual Container */
+        .hero-visual-wrapper {
+            position: relative;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .hero-isometric-svg {
+            width: 100%;
+            max-width: 620px;
+            height: auto;
+            overflow: visible;
         }
 
         /* TOC STYLES */
@@ -186,11 +316,6 @@
             padding: 1.5rem;
             margin-bottom: 2rem;
             border: 1px solid rgba(22, 196, 244, 0.15);
-        }
-
-        [data-theme="dark"] .toc-card {
-            background: #172540;
-            border-color: #1e355b;
         }
 
         .toc-title {
@@ -225,11 +350,6 @@
             border-radius: 8px;
             padding: 1rem 1.25rem;
             margin-bottom: 2rem;
-        }
-
-        [data-theme="dark"] .callout-box {
-            background: rgba(255, 255, 255, 0.03);
-            border-color: var(--border-color);
         }
 
         .callout-title {
@@ -272,12 +392,6 @@
             border-top: 3px solid #02CCFF;
         }
 
-        [data-theme="dark"] .feature-card {
-            background: #172540;
-            border-color: #1e355b;
-            border-top-color: #02CCFF;
-        }
-
         .feature-card strong {
             color: var(--text-heading);
             font-size: 1.05rem;
@@ -297,10 +411,6 @@
             align-items: center;
             justify-content: space-between;
             gap: 1rem;
-        }
-
-        [data-theme="dark"] .catalog-toolbar {
-            background: #172540;
         }
 
         .search-input-group {
@@ -382,20 +492,6 @@
             font-size: 0.88rem;
         }
 
-        [data-theme="dark"] .pagination-bar {
-            background: #172540;
-            border-color: #1e355b;
-        }
-
-        .pagination-info {
-            color: #64748b;
-            font-weight: 500;
-        }
-
-        [data-theme="dark"] .pagination-info {
-            color: #94a3b8;
-        }
-
         .pagination-info strong {
             color: var(--text-heading);
             font-weight: 700;
@@ -458,11 +554,6 @@
             text-transform: uppercase;
             letter-spacing: 0.5px;
             color: #64748b;
-        }
-
-        [data-theme="dark"] .list-table-header-bar {
-            background: rgba(255, 255, 255, 0.04);
-            color: #94a3b8;
         }
 
         .col-hdr-id {
@@ -711,30 +802,6 @@
             letter-spacing: 0.3px;
         }
 
-        [data-theme="dark"] .badge-fw-id {
-            background: transparent;
-            color: #f8fafc;
-            border: none;
-        }
-
-        .badge-code {
-            font-family: var(--aspia-infotech-font-primary), sans-serif;
-            font-size: 0.75rem;
-            font-weight: 700;
-            padding: 0.25rem 0.6rem;
-            border-radius: 6px;
-            background: rgba(13, 23, 53, 0.08);
-            color: #0D1735;
-            border: 1px solid rgba(13, 23, 53, 0.25);
-        }
-
-        [data-theme="dark"] .badge-code,
-        body.dark-mode .badge-code {
-            background: rgba(13, 23, 53, 0.8) !important;
-            color: #e2e8f0 !important;
-            border-color: rgba(22, 196, 244, 0.4) !important;
-        }
-
         .badge-cat {
             font-size: 0.7rem;
             font-weight: 700;
@@ -857,10 +924,6 @@
             border: 1px solid rgba(22, 196, 244, 0.15);
         }
 
-        [data-theme="dark"] .workflow-box {
-            background: #172540;
-        }
-
         .workflow-flow {
             max-width: 500px;
             margin: 0 auto;
@@ -912,10 +975,6 @@
             gap: 0.6rem;
         }
 
-        [data-theme="dark"] .checklist-item {
-            background: #172540;
-        }
-
         /* FAQ ACCORDION */
         .faq-item {
             margin-bottom: 1rem;
@@ -934,10 +993,6 @@
             cursor: pointer;
             font-weight: 600;
             color: var(--text-heading);
-        }
-
-        [data-theme="dark"] .faq-question {
-            background: #15223c;
         }
 
         .faq-answer {
@@ -1022,10 +1077,6 @@
             margin-top: 2rem;
         }
 
-        [data-theme="dark"] .footer-strip {
-            background: #172540;
-        }
-
         .footer-strip a {
             color: #16C4F4;
             text-decoration: none;
@@ -1055,29 +1106,259 @@
                 columns: 1;
             }
 
-            .hero-card {
+            .hero-section {
                 padding: 2rem 1.5rem;
+                min-height: auto;
             }
+        }
     </style>
 </head>
 
 <body>
-    <?php echo $__env->make('aspiaUcl.partials.header', ['activeTab' => 'frameworks'], array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+    @include('aspiaUcl.partials.header', ['activeTab' => 'frameworks'])
 
-    <div class="page-wrapper">
+    <!-- HERO BANNER (ISOMETRIC DESIGN - FULL VH SCREEN) -->
+    <div class="hero-section">
+        <!-- SVG Bottom Wave Mesh Background -->
+        <svg class="hero-wave-bg" viewBox="0 0 1440 180" preserveAspectRatio="none" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0,80 Q360,180 720,80 T1440,80 L1440,180 L0,180 Z" fill="url(#heroWaveGrad1)" opacity="0.3"/>
+            <path d="M0,110 Q360,30 720,120 T1440,60 L1440,180 L0,180 Z" fill="url(#heroWaveCyanGrad)" opacity="0.2"/>
+            <defs>
+                <linearGradient id="heroWaveGrad1" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="#060B1E"/>
+                    <stop offset="50%" stop-color="#16C4F4"/>
+                    <stop offset="100%" stop-color="#09122C"/>
+                </linearGradient>
+                <linearGradient id="heroWaveCyanGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="#16C4F4"/>
+                    <stop offset="50%" stop-color="#0052A8"/>
+                    <stop offset="100%" stop-color="#16C4F4"/>
+                </linearGradient>
+            </defs>
+        </svg>
 
-        <!-- HERO BANNER -->
-        <div class="hero-card">
-            <h1 class="hero-title">Regulatory &amp; Security Frameworks: Meaning, Types, Mappings &amp; Standards</h1>
-            <p class="hero-subtitle">Complete guide to cybersecurity frameworks, regulatory standards, compliance
-                mappings, control domains, audit requirements, and best practices in ASPIA Unified Control Library.</p>
-            <div class="hero-tags">
-                <span class="hero-tag-pill"><i class="fas fa-shield-alt"></i> Unified Library</span>
-                <span><i class="far fa-clock"></i> 14 min read</span>
-                <span style="opacity:0.8;"><i class="far fa-calendar-alt"></i> September 2026</span>
-                <span><i class="fas fa-user-edit"></i> ASPIA Editorial</span>
+        <div class="hero-container">
+            <!-- Left Column: Content -->
+            <div class="hero-content">
+                <div class="hero-eyebrow">EXPLORE &bull; LEARN &bull; APPLY</div>
+                <h1 class="hero-title">
+                    Regulatory &amp; Security
+                    <span class="highlight">Frameworks</span>
+                </h1>
+                <p class="hero-subtitle">
+                    Complete guide to cybersecurity frameworks, regulatory standards, compliance mappings, control domains, audit requirements, and best practices in the ASPIA Unified Control Library.
+                </p>
+
+                <!-- 4 Feature Cards -->
+                <div class="hero-features-grid">
+                    <div class="hero-feature-card">
+                        <div class="hero-feature-icon">
+                            <i class="fas fa-book-open"></i>
+                        </div>
+                        <div class="hero-feature-text">
+                            <span class="hero-feature-title">Comprehensive</span>
+                            <span class="hero-feature-sub">Coverage</span>
+                        </div>
+                    </div>
+                    <div class="hero-feature-card">
+                        <div class="hero-feature-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <div class="hero-feature-text">
+                            <span class="hero-feature-title">Standards</span>
+                            <span class="hero-feature-sub">&amp; Compliance</span>
+                        </div>
+                    </div>
+                    <div class="hero-feature-card">
+                        <div class="hero-feature-icon">
+                            <i class="fas fa-sitemap"></i>
+                        </div>
+                        <div class="hero-feature-text">
+                            <span class="hero-feature-title">Mappings</span>
+                            <span class="hero-feature-sub">&amp; Relationships</span>
+                        </div>
+                    </div>
+                    <div class="hero-feature-card">
+                        <div class="hero-feature-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="hero-feature-text">
+                            <span class="hero-feature-title">Practical</span>
+                            <span class="hero-feature-sub">Guidance</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Meta Row -->
+                <div class="hero-meta-bar">
+                    <span class="hero-tag-pill"><i class="fas fa-shield-alt"></i> Unified Library</span>
+                    <span><i class="far fa-clock"></i> 14 min read</span>
+                    <span style="opacity:0.8;"><i class="far fa-calendar-alt"></i> September 2026</span>
+                    <span><i class="fas fa-user-edit"></i> ASPIA Editorial</span>
+                </div>
+            </div>
+
+            <!-- Right Column: 3D Isometric Stack Visual -->
+            <div class="hero-visual-wrapper">
+                <svg class="hero-isometric-svg" viewBox="0 0 700 520" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <!-- Top Glowing Card Gradient -->
+                        <linearGradient id="topCardGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#16C4F4"/>
+                            <stop offset="40%" stop-color="#0F52BA"/>
+                            <stop offset="100%" stop-color="#0D1735"/>
+                        </linearGradient>
+
+                        <!-- Layer Card Gradient -->
+                        <linearGradient id="layerGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="rgba(22, 196, 244, 0.28)"/>
+                            <stop offset="100%" stop-color="rgba(13, 23, 53, 0.85)"/>
+                        </linearGradient>
+
+                        <!-- Floating Corner Node Gradient -->
+                        <linearGradient id="nodeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="rgba(13, 23, 53, 0.92)"/>
+                            <stop offset="100%" stop-color="rgba(7, 14, 34, 0.96)"/>
+                        </linearGradient>
+
+                        <!-- Glow Filter -->
+                        <filter id="cyanGlow" x="-30%" y="-30%" width="160%" height="160%">
+                            <feGaussianBlur stdDeviation="8" result="blur"/>
+                            <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+                        </filter>
+
+                        <!-- Drop Shadow Filter -->
+                        <filter id="isometricShadow" x="-30%" y="-30%" width="160%" height="160%">
+                            <feDropShadow dx="0" dy="14" stdDeviation="18" flood-color="#000000" flood-opacity="0.6"/>
+                        </filter>
+                    </defs>
+
+                    <!-- CONNECTING DOTTED ARCS -->
+                    <!-- Top-Left Arc to Standards -->
+                    <path d="M 175 115 Q 265 140 325 185" stroke="#16C4F4" stroke-width="1.8" stroke-dasharray="4 4" opacity="0.65"/>
+                    <circle cx="265" cy="140" r="3.5" fill="#16C4F4" filter="url(#cyanGlow)"/>
+
+                    <!-- Top-Right Arc to Compliance -->
+                    <path d="M 525 115 Q 435 140 375 185" stroke="#16C4F4" stroke-width="1.8" stroke-dasharray="4 4" opacity="0.65"/>
+                    <circle cx="435" cy="140" r="3.5" fill="#16C4F4" filter="url(#cyanGlow)"/>
+
+                    <!-- Bottom-Left Arc to Security -->
+                    <path d="M 175 395 Q 255 350 325 330" stroke="#16C4F4" stroke-width="1.8" stroke-dasharray="4 4" opacity="0.65"/>
+                    <circle cx="255" cy="350" r="3.5" fill="#16C4F4" filter="url(#cyanGlow)"/>
+
+                    <!-- Bottom-Right Arc to Best Practices -->
+                    <path d="M 525 395 Q 445 350 375 330" stroke="#16C4F4" stroke-width="1.8" stroke-dasharray="4 4" opacity="0.65"/>
+                    <circle cx="445" cy="350" r="3.5" fill="#16C4F4" filter="url(#cyanGlow)"/>
+
+                    <!-- ISOMETRIC STACK -->
+                    <!-- Layer 5: Mappings (Bottom) -->
+                    <g transform="translate(350, 355)" filter="url(#isometricShadow)">
+                        <path d="M 0 -35 L 140 35 L 0 105 L -140 35 Z" fill="url(#layerGrad)" stroke="#16C4F4" stroke-width="1.5" stroke-opacity="0.4"/>
+                        <path d="M -140 35 L 0 105 L 0 115 L -140 45 Z" fill="rgba(8,16,38,0.92)" stroke="#16C4F4" stroke-opacity="0.2"/>
+                        <path d="M 0 105 L 140 35 L 140 45 L 0 115 Z" fill="rgba(4,10,26,0.92)" stroke="#16C4F4" stroke-opacity="0.2"/>
+                        <g transform="translate(-40, 35)">
+                            <path d="M -8 -2 L -2 -8 A 4 4 0 0 1 4 -2 L 1 1" stroke="#16C4F4" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+                            <text x="12" y="3" fill="#ffffff" font-size="13" font-family="Inter, sans-serif" font-weight="600">Mappings</text>
+                        </g>
+                    </g>
+
+                    <!-- Layer 4: Requirements -->
+                    <g transform="translate(350, 315)" filter="url(#isometricShadow)">
+                        <path d="M 0 -35 L 140 35 L 0 105 L -140 35 Z" fill="url(#layerGrad)" stroke="#16C4F4" stroke-width="1.5" stroke-opacity="0.5"/>
+                        <path d="M -140 35 L 0 105 L 0 115 L -140 45 Z" fill="rgba(8,16,38,0.92)" stroke="#16C4F4" stroke-opacity="0.3"/>
+                        <path d="M 0 105 L 140 35 L 140 45 L 0 115 Z" fill="rgba(4,10,26,0.92)" stroke="#16C4F4" stroke-opacity="0.3"/>
+                        <g transform="translate(-48, 35)">
+                            <rect x="-10" y="-8" width="12" height="15" rx="2" stroke="#16C4F4" stroke-width="1.6" fill="none"/>
+                            <line x1="-6" y1="-4" x2="-1" y2="-4" stroke="#16C4F4" stroke-width="1.3"/>
+                            <line x1="-6" y1="0" x2="-3" y2="0" stroke="#16C4F4" stroke-width="1.3"/>
+                            <text x="10" y="3" fill="#ffffff" font-size="13" font-family="Inter, sans-serif" font-weight="600">Requirements</text>
+                        </g>
+                    </g>
+
+                    <!-- Layer 3: Controls -->
+                    <g transform="translate(350, 275)" filter="url(#isometricShadow)">
+                        <path d="M 0 -35 L 140 35 L 0 105 L -140 35 Z" fill="url(#layerGrad)" stroke="#16C4F4" stroke-width="1.5" stroke-opacity="0.6"/>
+                        <path d="M -140 35 L 0 105 L 0 115 L -140 45 Z" fill="rgba(8,16,38,0.92)" stroke="#16C4F4" stroke-opacity="0.4"/>
+                        <path d="M 0 105 L 140 35 L 140 45 L 0 115 Z" fill="rgba(4,10,26,0.92)" stroke="#16C4F4" stroke-opacity="0.4"/>
+                        <g transform="translate(-36, 35)">
+                            <circle cx="-6" cy="-2" r="6" stroke="#16C4F4" stroke-width="1.8" fill="none"/>
+                            <text x="12" y="3" fill="#ffffff" font-size="13" font-family="Inter, sans-serif" font-weight="600">Controls</text>
+                        </g>
+                    </g>
+
+                    <!-- Layer 2: Domains -->
+                    <g transform="translate(350, 235)" filter="url(#isometricShadow)">
+                        <path d="M 0 -35 L 140 35 L 0 105 L -140 35 Z" fill="url(#layerGrad)" stroke="#16C4F4" stroke-width="1.5" stroke-opacity="0.75"/>
+                        <path d="M -140 35 L 0 105 L 0 115 L -140 45 Z" fill="rgba(8,16,38,0.92)" stroke="#16C4F4" stroke-opacity="0.5"/>
+                        <path d="M 0 105 L 140 35 L 140 45 L 0 115 Z" fill="rgba(4,10,26,0.92)" stroke="#16C4F4" stroke-opacity="0.5"/>
+                        <g transform="translate(-36, 35)">
+                            <ellipse cx="-6" cy="-6" rx="6" ry="3" stroke="#16C4F4" stroke-width="1.5" fill="none"/>
+                            <ellipse cx="-6" cy="0" rx="6" ry="3" stroke="#16C4F4" stroke-width="1.5" fill="none"/>
+                            <text x="12" y="3" fill="#ffffff" font-size="13" font-family="Inter, sans-serif" font-weight="600">Domains</text>
+                        </g>
+                    </g>
+
+                    <!-- Layer 1: Top Main Card (Glowing Bright Blue/Cyan Gradient) -->
+                    <g transform="translate(350, 185)" filter="url(#cyanGlow)">
+                        <path d="M 0 -45 L 155 35 L 0 115 L -155 35 Z" fill="url(#topCardGrad)" stroke="#00F0FF" stroke-width="2.2"/>
+                        <path d="M -155 35 L 0 115 L 0 128 L -155 48 Z" fill="#0A183C" stroke="#16C4F4" stroke-opacity="0.8"/>
+                        <path d="M 0 115 L 155 35 L 155 48 L 0 128 Z" fill="#050E28" stroke="#16C4F4" stroke-opacity="0.8"/>
+                        
+                        <g transform="translate(0, 15)">
+                            <path d="M 0 -22 L 14 -14 V 2 C 14 12 0 18 0 18 C 0 18 -14 12 -14 2 V -14 Z" stroke="#ffffff" stroke-width="2.2" fill="none"/>
+                            <text x="0" y="32" fill="#ffffff" font-size="15" font-family="Inter, sans-serif" font-weight="800" text-anchor="middle">Regulatory</text>
+                            <text x="0" y="48" fill="#ffffff" font-size="15" font-family="Inter, sans-serif" font-weight="800" text-anchor="middle">Frameworks</text>
+                        </g>
+                    </g>
+
+                    <!-- FLOATING CORNER BADGES -->
+                    <!-- Top Left Badge: Standards -->
+                    <g transform="translate(130, 95)" filter="url(#isometricShadow)">
+                        <rect x="-65" y="-22" width="130" height="44" rx="10" fill="url(#nodeGrad)" stroke="#16C4F4" stroke-width="1.5" stroke-opacity="0.65"/>
+                        <g transform="translate(-42, 4)">
+                            <path d="M -6 -10 H 2 L 6 -6 V 8 H -6 Z" stroke="#16C4F4" stroke-width="1.6" fill="none"/>
+                            <line x1="-2" y1="-4" x2="2" y2="-4" stroke="#16C4F4" stroke-width="1.2"/>
+                            <line x1="-2" y1="0" x2="2" y2="0" stroke="#16C4F4" stroke-width="1.2"/>
+                            <text x="16" y="1" fill="#ffffff" font-size="12" font-family="Inter, sans-serif" font-weight="600">Standards</text>
+                        </g>
+                    </g>
+
+                    <!-- Top Right Badge: Compliance -->
+                    <g transform="translate(570, 95)" filter="url(#isometricShadow)">
+                        <rect x="-65" y="-22" width="130" height="44" rx="10" fill="url(#nodeGrad)" stroke="#16C4F4" stroke-width="1.5" stroke-opacity="0.65"/>
+                        <g transform="translate(-45, 4)">
+                            <circle cx="-4" cy="-1" r="7" stroke="#16C4F4" stroke-width="1.5" fill="none"/>
+                            <ellipse cx="-4" cy="-1" rx="3" ry="7" stroke="#16C4F4" stroke-width="1.2" fill="none"/>
+                            <line x1="-11" y1="-1" x2="3" y2="-1" stroke="#16C4F4" stroke-width="1.2"/>
+                            <text x="14" y="1" fill="#ffffff" font-size="12" font-family="Inter, sans-serif" font-weight="600">Compliance</text>
+                        </g>
+                    </g>
+
+                    <!-- Bottom Left Badge: Security -->
+                    <g transform="translate(130, 415)" filter="url(#isometricShadow)">
+                        <rect x="-65" y="-22" width="130" height="44" rx="10" fill="url(#nodeGrad)" stroke="#16C4F4" stroke-width="1.5" stroke-opacity="0.65"/>
+                        <g transform="translate(-40, 4)">
+                            <path d="M -6 -8 L 2 -4 V 3 C 2 7 -6 10 -6 10 C -6 10 -14 7 -14 3 V -4 Z" stroke="#16C4F4" stroke-width="1.5" fill="none"/>
+                            <text x="14" y="1" fill="#ffffff" font-size="12" font-family="Inter, sans-serif" font-weight="600">Security</text>
+                        </g>
+                    </g>
+
+                    <!-- Bottom Right Badge: Best Practices -->
+                    <g transform="translate(570, 415)" filter="url(#isometricShadow)">
+                        <rect x="-70" y="-22" width="140" height="44" rx="10" fill="url(#nodeGrad)" stroke="#16C4F4" stroke-width="1.5" stroke-opacity="0.65"/>
+                        <g transform="translate(-48, 4)">
+                            <line x1="-10" y1="6" x2="-10" y2="2" stroke="#16C4F4" stroke-width="2.5" stroke-linecap="round"/>
+                            <line x1="-5" y1="6" x2="-5" y2="-2" stroke="#16C4F4" stroke-width="2.5" stroke-linecap="round"/>
+                            <line x1="0" y1="6" x2="0" y2="-6" stroke="#16C4F4" stroke-width="2.5" stroke-linecap="round"/>
+                            <text x="14" y="1" fill="#ffffff" font-size="12" font-family="Inter, sans-serif" font-weight="600">Best Practices</text>
+                        </g>
+                    </g>
+                </svg>
             </div>
         </div>
+    </div>
+
+    <div class="page-wrapper">
 
         <!-- SHORT ANSWER BOX -->
         <div class="callout-box">
@@ -2219,7 +2500,7 @@
         }
     </script>
 
-    <?php echo $__env->make('aspiaUcl.partials.footer', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+    @include('aspiaUcl.partials.footer')
 
     <script>
         // Mobile Menu Toggle
@@ -2257,4 +2538,4 @@
     </script>
 </body>
 
-</html><?php /**PATH C:\xampp\htdocs\AspiaUCL\storage\framework\views/f8cd8bcf467be5895c2f1c01cfa6325e.blade.php ENDPATH**/ ?>
+</html>

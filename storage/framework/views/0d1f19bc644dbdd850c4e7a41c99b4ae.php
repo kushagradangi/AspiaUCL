@@ -2530,7 +2530,7 @@
     <!-- ============================================================
     HEADER & NAVIGATION
     ============================================================ -->
-    <?php echo $__env->make('aspiaUcl.partials.homepage_header', ['activeTab' => 'home'], array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+    <?php echo $__env->make('aspiaUcl.partials.header', ['activeTab' => 'home'], array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
 
     <!-- ============================================================
     MAIN CONTENT WRAPPER

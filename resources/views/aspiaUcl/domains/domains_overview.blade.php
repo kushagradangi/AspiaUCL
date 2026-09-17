@@ -48,9 +48,7 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700;800&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800;14..32,900&family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -78,17 +76,6 @@
             --radius-xl: 24px;
         }
 
-        [data-theme="dark"] {
-            /* Dark Theme Color Tokens */
-            --bg-body: #0D1735;
-            --bg-card: #172540;
-            --text-main: #94a3b8;
-            --text-heading: #f8fafc;
-            --border-color: #1e293b;
-            --brand-cyan: #16C4F4;
-            --brand-navy: #0D1735;
-        }
-
         * {
             box-sizing: border-box;
             margin: 0;
@@ -101,6 +88,8 @@
             color: var(--text-main);
             line-height: 1.7;
             overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
         /* Header & Footer styles managed by shared Blade partials */
@@ -189,11 +178,6 @@
             border: 1px solid rgba(22, 196, 244, 0.15);
         }
 
-        [data-theme="dark"] .toc-card {
-            background: #172540;
-            border-color: #1e355b;
-        }
-
         .toc-title {
             font-weight: 700;
             margin-top: 0;
@@ -226,11 +210,6 @@
             border-radius: 8px;
             padding: 1rem 1.25rem;
             margin-bottom: 2rem;
-        }
-
-        [data-theme="dark"] .callout-box {
-            background: rgba(255, 255, 255, 0.03);
-            border-color: var(--border-color);
         }
 
         .callout-title {
@@ -273,11 +252,6 @@
             border-top: 3px solid #16C4F4;
         }
 
-        [data-theme="dark"] .feature-card {
-            background: #172540;
-            border-color: #1e355b;
-        }
-
         .feature-card strong {
             color: var(--text-heading);
             font-size: 1.05rem;
@@ -297,10 +271,6 @@
             align-items: center;
             justify-content: space-between;
             gap: 1rem;
-        }
-
-        [data-theme="dark"] .catalog-toolbar {
-            background: #172540;
         }
 
         .search-input-group {
@@ -345,20 +315,6 @@
             padding: 0.8rem 1.25rem;
             margin-bottom: 2rem;
             font-size: 0.88rem;
-        }
-
-        [data-theme="dark"] .pagination-bar {
-            background: #172540;
-            border-color: #1e355b;
-        }
-
-        .pagination-info {
-            color: #64748b;
-            font-weight: 500;
-        }
-
-        [data-theme="dark"] .pagination-info {
-            color: #94a3b8;
         }
 
         .pagination-info strong {
@@ -423,11 +379,6 @@
             text-transform: uppercase;
             letter-spacing: 0.5px;
             color: #64748b;
-        }
-
-        [data-theme="dark"] .list-table-header-bar {
-            background: rgba(255, 255, 255, 0.04);
-            color: #94a3b8;
         }
 
         .col-hdr-id {
@@ -641,10 +592,6 @@
             border: 1px solid rgba(22, 196, 244, 0.15);
         }
 
-        [data-theme="dark"] .workflow-box {
-            background: #172540;
-        }
-
         .workflow-flow {
             max-width: 500px;
             margin: 0 auto;
@@ -697,10 +644,6 @@
             gap: 0.6rem;
         }
 
-        [data-theme="dark"] .checklist-item {
-            background: #172540;
-        }
-
         /* FAQ ACCORDION */
         .faq-item {
             margin-bottom: 1rem;
@@ -719,10 +662,6 @@
             cursor: pointer;
             font-weight: 600;
             color: var(--text-heading);
-        }
-
-        [data-theme="dark"] .faq-question {
-            background: #15223c;
         }
 
         .faq-answer {
@@ -805,10 +744,6 @@
             border: 1px solid rgba(22, 196, 244, 0.12);
             font-size: 0.9rem;
             margin-top: 2rem;
-        }
-
-        [data-theme="dark"] .footer-strip {
-            background: #172540;
         }
 
         .footer-strip a {

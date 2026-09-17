@@ -69,7 +69,7 @@ class FrameworkTemplateController extends Controller
         $totalControls     = \App\Models\Control::count();
         $totalRequirements = \App\Models\Requirement::count();
 
-        $filePath = resource_path('views/aspiaUcl/frameworks/frameworks_overview.html');
+        $filePath = resource_path('views/aspiaUcl/frameworks/frameworks_overview.blade.php');
         if (file_exists($filePath)) {
             $html = file_get_contents($filePath);
         } else {

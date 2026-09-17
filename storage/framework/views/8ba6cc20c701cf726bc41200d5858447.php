@@ -23,12 +23,12 @@
     <!-- Article Schema -->
     <script type="application/ld+json">
     {
-        "@@context": "https://schema.org",
-        "@@type": "TechArticle",
+        "@context": "https://schema.org",
+        "@type": "TechArticle",
         "headline": "Regulatory & Security Frameworks: Meaning, Types, Mappings & Standards Guide",
         "description": "Complete guide to cybersecurity frameworks, regulatory standards, compliance mappings, control domains, audit requirements, and best practices in ASPIA Unified Control Library.",
-        "author": {"@@type": "Organization", "name": "ASPIA Infotech"},
-        "publisher": {"@@type": "Organization", "name": "ASPIA Infotech Pvt. Ltd."},
+        "author": {"@type": "Organization", "name": "ASPIA Infotech"},
+        "publisher": {"@type": "Organization", "name": "ASPIA Infotech Pvt. Ltd."},
         "datePublished": "2026-09-08",
         "dateModified": "2026-09-08"
     }
@@ -37,14 +37,14 @@
     <!-- FAQ Schema -->
     <script type="application/ld+json">
     {
-        "@@context": "https://schema.org",
-        "@@type": "FAQPage",
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
         "mainEntity": [
-            {"@@type":"Question","name":"What is a cybersecurity compliance framework?","acceptedAnswer":{"@@type":"Answer","text":"A cybersecurity compliance framework is a structured set of guidelines, security controls, and best practices designed to help organizations manage risk and meet regulatory requirements."}},
-            {"@@type":"Question","name":"What are the main types of compliance frameworks?","acceptedAnswer":{"@@type":"Answer","text":"Frameworks generally fall into three categories: Regulatory Mandates (GDPR, HIPAA, PCI DSS), Industry Standards (ISO/IEC 27001, SOC 2), and Security Benchmarks (NIST CSF, CIS Controls)."}},
-            {"@@type":"Question","name":"What is framework crosswalk mapping?","acceptedAnswer":{"@@type":"Answer","text":"Crosswalk mapping links controls and requirements from multiple frameworks to a unified baseline, enabling 'test once, comply with many' efficiency."}},
-            {"@@type":"Question","name":"How does ASPIA UCL organize frameworks?","acceptedAnswer":{"@@type":"Answer","text":"ASPIA UCL maps frameworks into standardized Control Domains, Security Controls, and Auditable Requirements for streamlined governance."}},
-            {"@@type":"Question","name":"What is the difference between ISO 27001 and NIST CSF?","acceptedAnswer":{"@@type":"Answer","text":"ISO 27001 is an certifiable Information Security Management System (ISMS) standard, while NIST CSF is a voluntary risk-management framework structured around Identify, Protect, Detect, Respond, and Recover functions."}}
+            {"@type":"Question","name":"What is a cybersecurity compliance framework?","acceptedAnswer":{"@type":"Answer","text":"A cybersecurity compliance framework is a structured set of guidelines, security controls, and best practices designed to help organizations manage risk and meet regulatory requirements."}},
+            {"@type":"Question","name":"What are the main types of compliance frameworks?","acceptedAnswer":{"@type":"Answer","text":"Frameworks generally fall into three categories: Regulatory Mandates (GDPR, HIPAA, PCI DSS), Industry Standards (ISO/IEC 27001, SOC 2), and Security Benchmarks (NIST CSF, CIS Controls)."}},
+            {"@type":"Question","name":"What is framework crosswalk mapping?","acceptedAnswer":{"@type":"Answer","text":"Crosswalk mapping links controls and requirements from multiple frameworks to a unified baseline, enabling 'test once, comply with many' efficiency."}},
+            {"@type":"Question","name":"How does ASPIA UCL organize frameworks?","acceptedAnswer":{"@type":"Answer","text":"ASPIA UCL maps frameworks into standardized Control Domains, Security Controls, and Auditable Requirements for streamlined governance."}},
+            {"@type":"Question","name":"What is the difference between ISO 27001 and NIST CSF?","acceptedAnswer":{"@type":"Answer","text":"ISO 27001 is an certifiable Information Security Management System (ISMS) standard, while NIST CSF is a voluntary risk-management framework structured around Identify, Protect, Detect, Respond, and Recover functions."}}
         ]
     }
     </script>
@@ -1321,7 +1321,7 @@
 </head>
 
 <body>
-    @include('aspiaUcl.partials.header', ['activeTab' => 'frameworks'])
+    <?php echo $__env->make('aspiaUcl.partials.header', ['activeTab' => 'frameworks'], array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
 
     <!-- HERO BANNER (ISOMETRIC LOGO DESIGN - FULL VH SCREEN) -->
     <div class="hero-section">
@@ -1388,7 +1388,7 @@
 
             <!-- Right Column: 3D Isometric PNG Graphic -->
             <div class="hero-visual-wrapper">
-                <img src="{{ asset('images/frameworks_hero_graphic.png') }}" alt="Regulatory Frameworks Isometric Graphic" class="hero-isometric-img">
+                <img src="<?php echo e(asset('images/frameworks_hero_graphic.png')); ?>" alt="Regulatory Frameworks Isometric Graphic" class="hero-isometric-img">
             </div>
         </div>
     </div>
@@ -1469,7 +1469,587 @@
             <!-- CATALOG CARDS LIST -->
             <div class="catalog-list-wrapper">
                 <div class="frameworks-cards-grid list-layout-view" id="frameworksGrid">
-                    {{all_frameworks_grid}}
+                                <div class="framework-card" data-category="Information Security" data-fw-id="FW-001">
+                <div class="card-left-column">
+                    <span class="badge-fw-id">FW-001</span>
+                    <span class="badge-code">ISO27001</span>
+                </div>
+                <div class="card-center-column">
+                    <div class="title-category-row">
+                        <h3 class="framework-title"><a href="http://localhost:8000/frameworks/isoiec-27001">ISO/IEC 27001:2022</a></h3>
+                        <span class="badge-cat">Information Security</span>
+                    </div>
+                    <div class="publisher-line">
+                        <i class="fas fa-landmark"></i> <span>ISO</span>
+                    </div>
+                </div>
+                <div class="card-scope-column">
+                    <div class="scope-badges-strip">
+                        <span class="scope-pill"><strong class="num">1</strong> Domains</span>
+                        <span class="scope-pill">•</span>
+                        <span class="scope-pill"><strong class="num">8</strong> Controls</span>
+                        <span class="scope-pill">•</span>
+                        <span class="scope-pill"><strong class="num">96</strong> Reqs</span>
+                    </div>
+                </div>
+                <div class="card-action-column">
+                    <a href="http://localhost:8000/frameworks/isoiec-27001" class="btn-explore-framework">
+                        <span>Explore Framework</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>            <div class="framework-card" data-category="Security Controls" data-fw-id="FW-002">
+                <div class="card-left-column">
+                    <span class="badge-fw-id">FW-002</span>
+                    <span class="badge-code">ISO27002</span>
+                </div>
+                <div class="card-center-column">
+                    <div class="title-category-row">
+                        <h3 class="framework-title"><a href="http://localhost:8000/frameworks/isoiec-27002">ISO/IEC 27002:2022</a></h3>
+                        <span class="badge-cat">Security Controls</span>
+                    </div>
+                    <div class="publisher-line">
+                        <i class="fas fa-landmark"></i> <span>ISO</span>
+                    </div>
+                </div>
+                <div class="card-scope-column">
+                    <div class="scope-badges-strip">
+                        <span class="scope-pill"><strong class="num">1</strong> Domains</span>
+                        <span class="scope-pill">•</span>
+                        <span class="scope-pill"><strong class="num">4</strong> Controls</span>
+                        <span class="scope-pill">•</span>
+                        <span class="scope-pill"><strong class="num">30</strong> Reqs</span>
+                    </div>
+                </div>
+                <div class="card-action-column">
+                    <a href="http://localhost:8000/frameworks/isoiec-27002" class="btn-explore-framework">
+                        <span>Explore Framework</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>            <div class="framework-card" data-category="Cybersecurity" data-fw-id="FW-003">
+                <div class="card-left-column">
+                    <span class="badge-fw-id">FW-003</span>
+                    <span class="badge-code">NIST-CSF</span>
+                </div>
+                <div class="card-center-column">
+                    <div class="title-category-row">
+                        <h3 class="framework-title"><a href="http://localhost:8000/frameworks/nist-cybersecurity-framework-csf">NIST Cybersecurity Framework (CSF):2</a></h3>
+                        <span class="badge-cat">Cybersecurity</span>
+                    </div>
+                    <div class="publisher-line">
+                        <i class="fas fa-landmark"></i> <span>NIST</span>
+                    </div>
+                </div>
+                <div class="card-scope-column">
+                    <div class="scope-badges-strip">
+                        <span class="scope-pill"><strong class="num">1</strong> Domains</span>
+                        <span class="scope-pill">•</span>
+                        <span class="scope-pill"><strong class="num">9</strong> Controls</span>
+                        <span class="scope-pill">•</span>
+                        <span class="scope-pill"><strong class="num">90</strong> Reqs</span>
+                    </div>
+                </div>
+                <div class="card-action-column">
+                    <a href="http://localhost:8000/frameworks/nist-cybersecurity-framework-csf" class="btn-explore-framework">
+                        <span>Explore Framework</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>            <div class="framework-card" data-category="Security Controls" data-fw-id="FW-004">
+                <div class="card-left-column">
+                    <span class="badge-fw-id">FW-004</span>
+                    <span class="badge-code">NIST80053</span>
+                </div>
+                <div class="card-center-column">
+                    <div class="title-category-row">
+                        <h3 class="framework-title"><a href="http://localhost:8000/frameworks/nist-sp-800-53">NIST SP 800-53:Rev. 5</a></h3>
+                        <span class="badge-cat">Security Controls</span>
+                    </div>
+                    <div class="publisher-line">
+                        <i class="fas fa-landmark"></i> <span>NIST</span>
+                    </div>
+                </div>
+                <div class="card-scope-column">
+                    <div class="scope-badges-strip">
+                        <span class="scope-pill"><strong class="num">2</strong> Domains</span>
+                        <span class="scope-pill">•</span>
+                        <span class="scope-pill"><strong class="num">13</strong> Controls</span>
+                        <span class="scope-pill">•</span>
+                        <span class="scope-pill"><strong class="num">130</strong> Reqs</span>
+                    </div>
+                </div>
+                <div class="card-action-column">
+                    <a href="http://localhost:8000/frameworks/nist-sp-800-53" class="btn-explore-framework">
+                        <span>Explore Framework</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>            <div class="framework-card" data-category="Best Practices" data-fw-id="FW-005">
+                <div class="card-left-column">
+                    <span class="badge-fw-id">FW-005</span>
+                    <span class="badge-code">CIS-V8</span>
+                </div>
+                <div class="card-center-column">
+                    <div class="title-category-row">
+                        <h3 class="framework-title"><a href="http://localhost:8000/frameworks/cis-controls">CIS Controls:v8</a></h3>
+                        <span class="badge-cat">Best Practices</span>
+                    </div>
+                    <div class="publisher-line">
+                        <i class="fas fa-landmark"></i> <span>CIS</span>
+                    </div>
+                </div>
+                <div class="card-scope-column">
+                    <div class="scope-badges-strip">
+                        <span class="scope-pill"><strong class="num">0</strong> Domains</span>
+                        <span class="scope-pill">•</span>
+                        <span class="scope-pill"><strong class="num">0</strong> Controls</span>
+                        <span class="scope-pill">•</span>
+                        <span class="scope-pill"><strong class="num">0</strong> Reqs</span>
+                    </div>
+                </div>
+                <div class="card-action-column">
+                    <a href="http://localhost:8000/frameworks/cis-controls" class="btn-explore-framework">
+                        <span>Explore Framework</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>            <div class="framework-card" data-category="Payment Security" data-fw-id="FW-006">
+                <div class="card-left-column">
+                    <span class="badge-fw-id">FW-006</span>
+                    <span class="badge-code">PCI-DSS</span>
+                </div>
+                <div class="card-center-column">
+                    <div class="title-category-row">
+                        <h3 class="framework-title"><a href="http://localhost:8000/frameworks/pci-dss">PCI DSS:4</a></h3>
+                        <span class="badge-cat">Payment Security</span>
+                    </div>
+                    <div class="publisher-line">
+                        <i class="fas fa-landmark"></i> <span>PCI SSC</span>
+                    </div>
+                </div>
+                <div class="card-scope-column">
+                    <div class="scope-badges-strip">
+                        <span class="scope-pill"><strong class="num">10</strong> Domains</span>
+                        <span class="scope-pill">•</span>
+                        <span class="scope-pill"><strong class="num">71</strong> Controls</span>
+                        <span class="scope-pill">•</span>
+                        <span class="scope-pill"><strong class="num">712</strong> Reqs</span>
+                    </div>
+                </div>
+                <div class="card-action-column">
+                    <a href="http://localhost:8000/frameworks/pci-dss" class="btn-explore-framework">
+                        <span>Explore Framework</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>            <div class="framework-card" data-category="IT Governance" data-fw-id="FW-007">
+                <div class="card-left-column">
+                    <span class="badge-fw-id">FW-007</span>
+                    <span class="badge-code">COBIT2019</span>
+                </div>
+                <div class="card-center-column">
+                    <div class="title-category-row">
+                        <h3 class="framework-title"><a href="http://localhost:8000/frameworks/cobit">COBIT:2019</a></h3>
+                        <span class="badge-cat">IT Governance</span>
+                    </div>
+                    <div class="publisher-line">
+                        <i class="fas fa-landmark"></i> <span>ISACA</span>
+                    </div>
+                </div>
+                <div class="card-scope-column">
+                    <div class="scope-badges-strip">
+                        <span class="scope-pill"><strong class="num">1</strong> Domains</span>
+                        <span class="scope-pill">•</span>
+                        <span class="scope-pill"><strong class="num">8</strong> Controls</span>
+                        <span class="scope-pill">•</span>
+                        <span class="scope-pill"><strong class="num">96</strong> Reqs</span>
+                    </div>
+                </div>
+                <div class="card-action-column">
+                    <a href="http://localhost:8000/frameworks/cobit" class="btn-explore-framework">
+                        <span>Explore Framework</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>            <div class="framework-card" data-category="Audit &amp; Assurance" data-fw-id="FW-008">
+                <div class="card-left-column">
+                    <span class="badge-fw-id">FW-008</span>
+                    <span class="badge-code">SOC2</span>
+                </div>
+                <div class="card-center-column">
+                    <div class="title-category-row">
+                        <h3 class="framework-title"><a href="http://localhost:8000/frameworks/soc-2-trust-services-criteria">SOC 2 Trust Services Criteria:Latest</a></h3>
+                        <span class="badge-cat">Audit &amp; Assurance</span>
+                    </div>
+                    <div class="publisher-line">
+                        <i class="fas fa-landmark"></i> <span>AICPA</span>
+                    </div>
+                </div>
+                <div class="card-scope-column">
+                    <div class="scope-badges-strip">
+                        <span class="scope-pill"><strong class="num">1</strong> Domains</span>
+                        <span class="scope-pill">•</span>
+                        <span class="scope-pill"><strong class="num">16</strong> Controls</span>
+                        <span class="scope-pill">•</span>
+                        <span class="scope-pill"><strong class="num">160</strong> Reqs</span>
+                    </div>
+                </div>
+                <div class="card-action-column">
+                    <a href="http://localhost:8000/frameworks/soc-2-trust-services-criteria" class="btn-explore-framework">
+                        <span>Explore Framework</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>            <div class="framework-card" data-category="Privacy" data-fw-id="FW-009">
+                <div class="card-left-column">
+                    <span class="badge-fw-id">FW-009</span>
+                    <span class="badge-code">ISO27701</span>
+                </div>
+                <div class="card-center-column">
+                    <div class="title-category-row">
+                        <h3 class="framework-title"><a href="http://localhost:8000/frameworks/isoiec-27701">ISO/IEC 27701:2019</a></h3>
+                        <span class="badge-cat">Privacy</span>
+                    </div>
+                    <div class="publisher-line">
+                        <i class="fas fa-landmark"></i> <span>ISO</span>
+                    </div>
+                </div>
+                <div class="card-scope-column">
+                    <div class="scope-badges-strip">
+                        <span class="scope-pill"><strong class="num">1</strong> Domains</span>
+                        <span class="scope-pill">•</span>
+                        <span class="scope-pill"><strong class="num">5</strong> Controls</span>
+                        <span class="scope-pill">•</span>
+                        <span class="scope-pill"><strong class="num">50</strong> Reqs</span>
+                    </div>
+                </div>
+                <div class="card-action-column">
+                    <a href="http://localhost:8000/frameworks/isoiec-27701" class="btn-explore-framework">
+                        <span>Explore Framework</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>            <div class="framework-card" data-category="Privacy" data-fw-id="FW-010">
+                <div class="card-left-column">
+                    <span class="badge-fw-id">FW-010</span>
+                    <span class="badge-code">GDPR</span>
+                </div>
+                <div class="card-center-column">
+                    <div class="title-category-row">
+                        <h3 class="framework-title"><a href="http://localhost:8000/frameworks/general-data-protection-regulation-gdpr">General Data Protection Regulation (GDPR):Current</a></h3>
+                        <span class="badge-cat">Privacy</span>
+                    </div>
+                    <div class="publisher-line">
+                        <i class="fas fa-landmark"></i> <span>European Union</span>
+                    </div>
+                </div>
+                <div class="card-scope-column">
+                    <div class="scope-badges-strip">
+                        <span class="scope-pill"><strong class="num">6</strong> Domains</span>
+                        <span class="scope-pill">•</span>
+                        <span class="scope-pill"><strong class="num">44</strong> Controls</span>
+                        <span class="scope-pill">•</span>
+                        <span class="scope-pill"><strong class="num">440</strong> Reqs</span>
+                    </div>
+                </div>
+                <div class="card-action-column">
+                    <a href="http://localhost:8000/frameworks/general-data-protection-regulation-gdpr" class="btn-explore-framework">
+                        <span>Explore Framework</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>            <div class="framework-card" data-category="Privacy" data-fw-id="FW-011">
+                <div class="card-left-column">
+                    <span class="badge-fw-id">FW-011</span>
+                    <span class="badge-code">DPDP</span>
+                </div>
+                <div class="card-center-column">
+                    <div class="title-category-row">
+                        <h3 class="framework-title"><a href="http://localhost:8000/frameworks/digital-personal-data-protection-act">Digital Personal Data Protection Act:2023</a></h3>
+                        <span class="badge-cat">Privacy</span>
+                    </div>
+                    <div class="publisher-line">
+                        <i class="fas fa-landmark"></i> <span>Government of India</span>
+                    </div>
+                </div>
+                <div class="card-scope-column">
+                    <div class="scope-badges-strip">
+                        <span class="scope-pill"><strong class="num">1</strong> Domains</span>
+                        <span class="scope-pill">•</span>
+                        <span class="scope-pill"><strong class="num">6</strong> Controls</span>
+                        <span class="scope-pill">•</span>
+                        <span class="scope-pill"><strong class="num">60</strong> Reqs</span>
+                    </div>
+                </div>
+                <div class="card-action-column">
+                    <a href="http://localhost:8000/frameworks/digital-personal-data-protection-act" class="btn-explore-framework">
+                        <span>Explore Framework</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>            <div class="framework-card" data-category="Business Continuity" data-fw-id="FW-012">
+                <div class="card-left-column">
+                    <span class="badge-fw-id">FW-012</span>
+                    <span class="badge-code">ISO22301</span>
+                </div>
+                <div class="card-center-column">
+                    <div class="title-category-row">
+                        <h3 class="framework-title"><a href="http://localhost:8000/frameworks/isoiec-22301">ISO/IEC 22301:2019</a></h3>
+                        <span class="badge-cat">Business Continuity</span>
+                    </div>
+                    <div class="publisher-line">
+                        <i class="fas fa-landmark"></i> <span>ISO</span>
+                    </div>
+                </div>
+                <div class="card-scope-column">
+                    <div class="scope-badges-strip">
+                        <span class="scope-pill"><strong class="num">1</strong> Domains</span>
+                        <span class="scope-pill">•</span>
+                        <span class="scope-pill"><strong class="num">10</strong> Controls</span>
+                        <span class="scope-pill">•</span>
+                        <span class="scope-pill"><strong class="num">100</strong> Reqs</span>
+                    </div>
+                </div>
+                <div class="card-action-column">
+                    <a href="http://localhost:8000/frameworks/isoiec-22301" class="btn-explore-framework">
+                        <span>Explore Framework</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>            <div class="framework-card" data-category="Operational Resilience" data-fw-id="FW-013">
+                <div class="card-left-column">
+                    <span class="badge-fw-id">FW-013</span>
+                    <span class="badge-code">DORA</span>
+                </div>
+                <div class="card-center-column">
+                    <div class="title-category-row">
+                        <h3 class="framework-title"><a href="http://localhost:8000/frameworks/digital-operational-resilience-act">Digital Operational Resilience Act:Current</a></h3>
+                        <span class="badge-cat">Operational Resilience</span>
+                    </div>
+                    <div class="publisher-line">
+                        <i class="fas fa-landmark"></i> <span>European Union</span>
+                    </div>
+                </div>
+                <div class="card-scope-column">
+                    <div class="scope-badges-strip">
+                        <span class="scope-pill"><strong class="num">4</strong> Domains</span>
+                        <span class="scope-pill">•</span>
+                        <span class="scope-pill"><strong class="num">18</strong> Controls</span>
+                        <span class="scope-pill">•</span>
+                        <span class="scope-pill"><strong class="num">180</strong> Reqs</span>
+                    </div>
+                </div>
+                <div class="card-action-column">
+                    <a href="http://localhost:8000/frameworks/digital-operational-resilience-act" class="btn-explore-framework">
+                        <span>Explore Framework</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>            <div class="framework-card" data-category="Cyber Regulation" data-fw-id="FW-014">
+                <div class="card-left-column">
+                    <span class="badge-fw-id">FW-014</span>
+                    <span class="badge-code">NIS2</span>
+                </div>
+                <div class="card-center-column">
+                    <div class="title-category-row">
+                        <h3 class="framework-title"><a href="http://localhost:8000/frameworks/nis2-directive">NIS2 Directive:Current</a></h3>
+                        <span class="badge-cat">Cyber Regulation</span>
+                    </div>
+                    <div class="publisher-line">
+                        <i class="fas fa-landmark"></i> <span>European Union</span>
+                    </div>
+                </div>
+                <div class="card-scope-column">
+                    <div class="scope-badges-strip">
+                        <span class="scope-pill"><strong class="num">1</strong> Domains</span>
+                        <span class="scope-pill">•</span>
+                        <span class="scope-pill"><strong class="num">0</strong> Controls</span>
+                        <span class="scope-pill">•</span>
+                        <span class="scope-pill"><strong class="num">0</strong> Reqs</span>
+                    </div>
+                </div>
+                <div class="card-action-column">
+                    <a href="http://localhost:8000/frameworks/nis2-directive" class="btn-explore-framework">
+                        <span>Explore Framework</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>            <div class="framework-card" data-category="Indian Banking" data-fw-id="FW-015">
+                <div class="card-left-column">
+                    <span class="badge-fw-id">FW-015</span>
+                    <span class="badge-code">RBI-CSF</span>
+                </div>
+                <div class="card-center-column">
+                    <div class="title-category-row">
+                        <h3 class="framework-title"><a href="http://localhost:8000/frameworks/rbi-cyber-security-framework-master-directions">RBI Cyber Security Framework / Master Directions:Latest</a></h3>
+                        <span class="badge-cat">Indian Banking</span>
+                    </div>
+                    <div class="publisher-line">
+                        <i class="fas fa-landmark"></i> <span>Reserve Bank of India</span>
+                    </div>
+                </div>
+                <div class="card-scope-column">
+                    <div class="scope-badges-strip">
+                        <span class="scope-pill"><strong class="num">1</strong> Domains</span>
+                        <span class="scope-pill">•</span>
+                        <span class="scope-pill"><strong class="num">12</strong> Controls</span>
+                        <span class="scope-pill">•</span>
+                        <span class="scope-pill"><strong class="num">120</strong> Reqs</span>
+                    </div>
+                </div>
+                <div class="card-action-column">
+                    <a href="http://localhost:8000/frameworks/rbi-cyber-security-framework-master-directions" class="btn-explore-framework">
+                        <span>Explore Framework</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>            <div class="framework-card" data-category="Cyber Regulation" data-fw-id="FW-016">
+                <div class="card-left-column">
+                    <span class="badge-fw-id">FW-016</span>
+                    <span class="badge-code">CERT-IN</span>
+                </div>
+                <div class="card-center-column">
+                    <div class="title-category-row">
+                        <h3 class="framework-title"><a href="http://localhost:8000/frameworks/cert-in-directions">CERT-In Directions:2022</a></h3>
+                        <span class="badge-cat">Cyber Regulation</span>
+                    </div>
+                    <div class="publisher-line">
+                        <i class="fas fa-landmark"></i> <span>CERT-In</span>
+                    </div>
+                </div>
+                <div class="card-scope-column">
+                    <div class="scope-badges-strip">
+                        <span class="scope-pill"><strong class="num">1</strong> Domains</span>
+                        <span class="scope-pill">•</span>
+                        <span class="scope-pill"><strong class="num">6</strong> Controls</span>
+                        <span class="scope-pill">•</span>
+                        <span class="scope-pill"><strong class="num">60</strong> Reqs</span>
+                    </div>
+                </div>
+                <div class="card-action-column">
+                    <a href="http://localhost:8000/frameworks/cert-in-directions" class="btn-explore-framework">
+                        <span>Explore Framework</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>            <div class="framework-card" data-category="Securities" data-fw-id="FW-017">
+                <div class="card-left-column">
+                    <span class="badge-fw-id">FW-017</span>
+                    <span class="badge-code">SEBI-CSCRF</span>
+                </div>
+                <div class="card-center-column">
+                    <div class="title-category-row">
+                        <h3 class="framework-title"><a href="http://localhost:8000/frameworks/sebi-cyber-security-cyber-resilience-framework">SEBI Cyber Security &amp; Cyber Resilience Framework:Latest</a></h3>
+                        <span class="badge-cat">Securities</span>
+                    </div>
+                    <div class="publisher-line">
+                        <i class="fas fa-landmark"></i> <span>SEBI</span>
+                    </div>
+                </div>
+                <div class="card-scope-column">
+                    <div class="scope-badges-strip">
+                        <span class="scope-pill"><strong class="num">1</strong> Domains</span>
+                        <span class="scope-pill">•</span>
+                        <span class="scope-pill"><strong class="num">7</strong> Controls</span>
+                        <span class="scope-pill">•</span>
+                        <span class="scope-pill"><strong class="num">70</strong> Reqs</span>
+                    </div>
+                </div>
+                <div class="card-action-column">
+                    <a href="http://localhost:8000/frameworks/sebi-cyber-security-cyber-resilience-framework" class="btn-explore-framework">
+                        <span>Explore Framework</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>            <div class="framework-card" data-category="Insurance" data-fw-id="FW-018">
+                <div class="card-left-column">
+                    <span class="badge-fw-id">FW-018</span>
+                    <span class="badge-code">IRDAI</span>
+                </div>
+                <div class="card-center-column">
+                    <div class="title-category-row">
+                        <h3 class="framework-title"><a href="http://localhost:8000/frameworks/irdai-information-cyber-security-guidelines">IRDAI Information &amp; Cyber Security Guidelines:Latest</a></h3>
+                        <span class="badge-cat">Insurance</span>
+                    </div>
+                    <div class="publisher-line">
+                        <i class="fas fa-landmark"></i> <span>IRDAI</span>
+                    </div>
+                </div>
+                <div class="card-scope-column">
+                    <div class="scope-badges-strip">
+                        <span class="scope-pill"><strong class="num">1</strong> Domains</span>
+                        <span class="scope-pill">•</span>
+                        <span class="scope-pill"><strong class="num">4</strong> Controls</span>
+                        <span class="scope-pill">•</span>
+                        <span class="scope-pill"><strong class="num">40</strong> Reqs</span>
+                    </div>
+                </div>
+                <div class="card-action-column">
+                    <a href="http://localhost:8000/frameworks/irdai-information-cyber-security-guidelines" class="btn-explore-framework">
+                        <span>Explore Framework</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>            <div class="framework-card" data-category="Payment Systems" data-fw-id="FW-019">
+                <div class="card-left-column">
+                    <span class="badge-fw-id">FW-019</span>
+                    <span class="badge-code">NPCI-ISR</span>
+                </div>
+                <div class="card-center-column">
+                    <div class="title-category-row">
+                        <h3 class="framework-title"><a href="http://localhost:8000/frameworks/npci-information-security-requirements">NPCI Information Security Requirements:Latest</a></h3>
+                        <span class="badge-cat">Payment Systems</span>
+                    </div>
+                    <div class="publisher-line">
+                        <i class="fas fa-landmark"></i> <span>NPCI</span>
+                    </div>
+                </div>
+                <div class="card-scope-column">
+                    <div class="scope-badges-strip">
+                        <span class="scope-pill"><strong class="num">1</strong> Domains</span>
+                        <span class="scope-pill">•</span>
+                        <span class="scope-pill"><strong class="num">4</strong> Controls</span>
+                        <span class="scope-pill">•</span>
+                        <span class="scope-pill"><strong class="num">40</strong> Reqs</span>
+                    </div>
+                </div>
+                <div class="card-action-column">
+                    <a href="http://localhost:8000/frameworks/npci-information-security-requirements" class="btn-explore-framework">
+                        <span>Explore Framework</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>            <div class="framework-card" data-category="Healthcare" data-fw-id="FW-020">
+                <div class="card-left-column">
+                    <span class="badge-fw-id">FW-020</span>
+                    <span class="badge-code">HIPAA</span>
+                </div>
+                <div class="card-center-column">
+                    <div class="title-category-row">
+                        <h3 class="framework-title"><a href="http://localhost:8000/frameworks/health-insurance-portability-and-accountability-act">Health Insurance Portability and Accountability Act:Current</a></h3>
+                        <span class="badge-cat">Healthcare</span>
+                    </div>
+                    <div class="publisher-line">
+                        <i class="fas fa-landmark"></i> <span>U.S. Department of Health &amp; Human Services</span>
+                    </div>
+                </div>
+                <div class="card-scope-column">
+                    <div class="scope-badges-strip">
+                        <span class="scope-pill"><strong class="num">5</strong> Domains</span>
+                        <span class="scope-pill">•</span>
+                        <span class="scope-pill"><strong class="num">37</strong> Controls</span>
+                        <span class="scope-pill">•</span>
+                        <span class="scope-pill"><strong class="num">372</strong> Reqs</span>
+                    </div>
+                </div>
+                <div class="card-action-column">
+                    <a href="http://localhost:8000/frameworks/health-insurance-portability-and-accountability-act" class="btn-explore-framework">
+                        <span>Explore Framework</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
                 </div>
             </div>
 
@@ -1720,14 +2300,23 @@
         </div>
     </div>
 
-    <!-- SECTION 7: SUMMARY (LIGHT BAND) -->
+    <!-- SECTION 7: SUMMARY & CTA BANNER (LIGHT BAND) -->
     <div class="section-light">
         <div class="section-container">
             <div class="section-header-block" id="conclusion" style="margin-top: 0;">
                 <span class="section-badge">SUMMARY</span>
                 <h2 class="section-heading">Final Takeaway</h2>
             </div>
-            <p style="text-align: center; max-width: 860px; margin: 0 auto 0 auto; line-height: 1.7;">Effective GRC management relies on unifying disparate compliance mandates under a central framework structure. By standardizing control domains and leveraging crosswalk mappings, organizations drastically reduce audit burden while strengthening their operational security posture.</p>
+            <p style="text-align: center; max-width: 860px; margin: 0 auto 2rem auto; line-height: 1.7;">Effective GRC management relies on unifying disparate compliance mandates under a central framework structure. By standardizing control domains and leveraging crosswalk mappings, organizations drastically reduce audit burden while strengthening their operational security posture.</p>
+
+            <div class="cta-banner" style="margin: 2rem 0 0 0;">
+                <h3 class="cta-title">Ready to Streamline Your Framework Compliance &amp; Control Mapping?</h3>
+                <p class="cta-desc">Connect regulatory frameworks with control domains, auditable requirements, and sampling evidence in one centralized unified control library.</p>
+                <div class="cta-buttons">
+                    <a href="https://aspiainfotech.com/" target="_blank" rel="noopener" class="btn-cta-primary">Explore ASPIA →</a>
+                    <a href="https://aspiainfotech.com/request-a-demo/" target="_blank" rel="noopener" class="btn-cta-secondary">Book a Demo</a>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -1995,18 +2584,8 @@
             renderPagination();
         }
     </script>
-    <!-- UNIFIED DARK NAVY CTA & FOOTER SECTION -->
-    <div class="footer-cta-wrapper" style="background: #0B132B; color: #ffffff; padding-top: 4rem; transition: background 0.35s ease;">
-        <div class="section-container" style="text-align: center; padding-bottom: 2rem;">
-            <h3 style="font-size: 2.15rem; font-weight: 800; color: #ffffff; margin: 0 0 0.8rem 0; letter-spacing: -0.02em;">Ready to Streamline Your Framework Compliance &amp; Control Mapping?</h3>
-            <p style="color: #94a3b8; font-size: 1.05rem; max-width: 720px; margin: 0 auto 2rem auto; line-height: 1.65;">Connect regulatory frameworks with control domains, auditable requirements, and sampling evidence in one centralized unified control library.</p>
-            <div class="cta-buttons" style="display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center;">
-                <a href="https://aspiainfotech.com/" target="_blank" rel="noopener" class="btn-cta-primary">Explore ASPIA →</a>
-                <a href="https://aspiainfotech.com/request-a-demo/" target="_blank" rel="noopener" class="btn-cta-secondary">Book a Demo</a>
-            </div>
-        </div>
-        @include('aspiaUcl.partials.footer')
-    </div>
+
+    <?php echo $__env->make('aspiaUcl.partials.footer', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
 
     <script>
         // Mobile Menu Toggle
@@ -2080,4 +2659,4 @@
     </script>
 </body>
 
-</html>
+</html><?php /**PATH C:\xampp\htdocs\AspiaUCL\storage\framework\views/47590c640cfc22f68ff37fd52aecfb82.blade.php ENDPATH**/ ?>

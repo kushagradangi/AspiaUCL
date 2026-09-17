@@ -52,9 +52,7 @@
     <!-- Google Fonts & Font Awesome -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700;800&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800;14..32,900&family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
     <style>
@@ -77,17 +75,6 @@
             --radius-xl: 24px;
         }
 
-        [data-theme="dark"] {
-            /* Dark Theme Color Tokens */
-            --bg-body: #0D1735;
-            --bg-card: #172540;
-            --text-main: #94a3b8;
-            --text-heading: #f8fafc;
-            --border-color: #1e293b;
-            --brand-cyan: #16C4F4;
-            --brand-navy: #0D1735;
-        }
-
         * {
             box-sizing: border-box;
             margin: 0;
@@ -100,6 +87,8 @@
             color: var(--text-main);
             line-height: 1.6;
             overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
         /* Header & Footer styles managed by shared Blade partials */
@@ -122,61 +111,187 @@
 
         /* MAIN CONTAINER */
         .page-wrapper {
-            max-width: 1260px;
+            max-width: 1240px;
             margin: 0 auto;
-            padding: 2.5rem 2.6rem;
+            padding: 2.5rem 24px;
+            width: 100%;
+            box-sizing: border-box;
         }
 
-        /* HERO STYLES */
-        .hero-card {
-            background: linear-gradient(135deg, #0D1735 0%, #172540 60%, #16C4F4 100%);
-            border-radius: 24px;
-            padding: 3rem 2.5rem;
-            margin-bottom: 2.5rem;
-            color: white;
-            box-shadow: 0 12px 40px rgba(13, 23, 53, 0.25);
+        /* HERO STYLES (FULL VH SCREEN - ISOMETRIC PNG DESIGN) */
+        .hero-section {
+            background: #0D1735;
+            color: #ffffff;
+            width: 100%;
+            min-height: calc(100vh - 76px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 3.5rem 0;
+            margin-bottom: 0;
+            box-sizing: border-box;
+            position: relative;
         }
 
-        .hero-meta {
-            font-size: 0.9rem;
-            opacity: 0.8;
-            margin-bottom: 1.5rem;
+        .hero-container {
+            max-width: 1240px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 0 24px;
+            box-sizing: border-box;
+            display: grid;
+            grid-template-columns: 1.12fr 0.88fr;
+            gap: 2.5rem;
+            align-items: center;
+            position: relative;
+            z-index: 2;
         }
 
-        .hero-meta a {
-            color: #fff;
-            text-decoration: none;
+        .hero-content {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+
+        .hero-eyebrow {
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: #16C4F4;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
         }
 
         .hero-title {
-            font-size: clamp(2rem, 5vw, 3.2rem);
-            font-weight: 700;
-            margin: 0 0 0.5rem 0;
-            line-height: 1.2;
+            font-size: clamp(2.4rem, 4.2vw, 3.8rem);
+            font-weight: 800;
+            line-height: 1.12;
             color: #ffffff;
+            margin: 0;
+            letter-spacing: -0.02em;
+        }
+
+        .hero-title .highlight {
+            color: #16C4F4;
+            display: block;
         }
 
         .hero-subtitle {
-            font-size: 1.2rem;
-            opacity: 0.9;
-            max-width: 840px;
-            margin-bottom: 1.5rem;
+            font-size: 1.05rem;
+            color: #9ab0cc;
+            line-height: 1.65;
+            max-width: 560px;
+            margin: 0;
         }
 
-        .hero-tags {
+        /* Feature Cards Grid (4 Inline Cards) */
+        .hero-features-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.75rem;
+            margin-top: 0.25rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .hero-feature-card {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(22, 196, 244, 0.22);
+            border-radius: 12px;
+            padding: 0.7rem 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.65rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .hero-feature-icon {
+            width: 36px;
+            height: 36px;
+            background: rgba(22, 196, 244, 0.12);
+            border: 1px solid rgba(22, 196, 244, 0.28);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #16C4F4;
+            font-size: 0.95rem;
+            flex-shrink: 0;
+        }
+
+        .hero-feature-text {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.25;
+        }
+
+        .hero-feature-title {
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: #ffffff;
+            white-space: nowrap;
+        }
+
+        .hero-feature-sub {
+            font-size: 0.7rem;
+            color: #9ab0cc;
+            white-space: nowrap;
+        }
+
+        /* Meta Bar */
+        .hero-meta-bar {
             display: flex;
             flex-wrap: wrap;
-            gap: 1.5rem;
             align-items: center;
-            font-size: 0.95rem;
+            gap: 1.25rem;
+            font-size: 0.9rem;
+            color: #cbd5e1;
+            margin-top: 0.25rem;
         }
 
         .hero-tag-pill {
             background: #16C4F4;
-            padding: 0.2rem 1.2rem;
-            border-radius: 40px;
-            font-weight: 600;
             color: #0D1735;
+            padding: 0.35rem 1.25rem;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            box-shadow: 0 4px 16px rgba(22, 196, 244, 0.35);
+        }
+
+        /* Right Column: Isometric Graphic Container */
+        .hero-visual-wrapper {
+            position: relative;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .hero-isometric-img {
+            width: 100%;
+            max-width: 560px;
+            height: auto;
+            object-fit: contain;
+            filter: drop-shadow(0 16px 36px rgba(0, 0, 0, 0.3));
+        }
+
+        @media (max-width: 1100px) {
+            .hero-container {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .hero-features-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 640px) {
+            .hero-features-grid {
+                grid-template-columns: 1fr;
+            }
         }
 
         /* TOC STYLES */
@@ -186,11 +301,6 @@
             padding: 1.5rem;
             margin-bottom: 2rem;
             border: 1px solid rgba(22, 196, 244, 0.15);
-        }
-
-        [data-theme="dark"] .toc-card {
-            background: #172540;
-            border-color: #1e355b;
         }
 
         .toc-title {
@@ -227,11 +337,6 @@
             margin-bottom: 2rem;
         }
 
-        [data-theme="dark"] .callout-box {
-            background: rgba(255, 255, 255, 0.03);
-            border-color: var(--border-color);
-        }
-
         .callout-title {
             margin: 0 0 0.3rem 0;
             font-weight: 700;
@@ -246,14 +351,50 @@
             color: var(--text-main);
         }
 
-        /* SECTION HEADINGS */
-        .section-heading {
-            font-size: 1.9rem;
+        /* SECTION HEADINGS (CENTERED BADGE & TITLE UI) */
+        .section-header-block {
+            text-align: center;
+            margin: 3.5rem 0 1.5rem 0;
+        }
+
+        .section-badge {
+            display: inline-block;
+            background: #e8f0fe;
+            color: #16C4F4;
+            font-size: 0.72rem;
             font-weight: 700;
-            border-left: 5px solid #16C4F4;
-            padding-left: 1rem;
-            margin: 2.5rem 0 1rem 0;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            padding: 5px 18px;
+            border-radius: 20px;
+            margin-bottom: 0.6rem;
+        }
+
+        .section-heading {
+            font-size: clamp(1.8rem, 3.5vw, 2.4rem);
+            font-weight: 800;
             color: var(--text-heading);
+            margin: 0 0 0.5rem 0;
+            line-height: 1.25;
+            text-align: center;
+            border-left: none;
+            padding-left: 0;
+        }
+
+        .section-subtitle {
+            font-size: 1rem;
+            color: var(--text-main);
+            opacity: 0.85;
+            max-width: 720px;
+            margin: 0 auto 1.5rem auto;
+            text-align: center;
+            line-height: 1.6;
+        }
+
+        body.dark-mode .section-badge,
+        [data-theme="dark"] .section-badge {
+            background: rgba(22, 196, 244, 0.15) !important;
+            color: #16C4F4 !important;
         }
 
         /* GRID CARDS */
@@ -270,12 +411,6 @@
             border-radius: 12px;
             border: 1px solid #e6edf4;
             border-top: 3px solid #02CCFF;
-        }
-
-        [data-theme="dark"] .feature-card {
-            background: #172540;
-            border-color: #1e355b;
-            border-top-color: #02CCFF;
         }
 
         .feature-card strong {
@@ -297,10 +432,6 @@
             align-items: center;
             justify-content: space-between;
             gap: 1rem;
-        }
-
-        [data-theme="dark"] .catalog-toolbar {
-            background: #172540;
         }
 
         .search-input-group {
@@ -382,20 +513,6 @@
             font-size: 0.88rem;
         }
 
-        [data-theme="dark"] .pagination-bar {
-            background: #172540;
-            border-color: #1e355b;
-        }
-
-        .pagination-info {
-            color: #64748b;
-            font-weight: 500;
-        }
-
-        [data-theme="dark"] .pagination-info {
-            color: #94a3b8;
-        }
-
         .pagination-info strong {
             color: var(--text-heading);
             font-weight: 700;
@@ -458,11 +575,6 @@
             text-transform: uppercase;
             letter-spacing: 0.5px;
             color: #64748b;
-        }
-
-        [data-theme="dark"] .list-table-header-bar {
-            background: rgba(255, 255, 255, 0.04);
-            color: #94a3b8;
         }
 
         .col-hdr-id {
@@ -711,30 +823,6 @@
             letter-spacing: 0.3px;
         }
 
-        [data-theme="dark"] .badge-fw-id {
-            background: transparent;
-            color: #f8fafc;
-            border: none;
-        }
-
-        .badge-code {
-            font-family: var(--aspia-infotech-font-primary), sans-serif;
-            font-size: 0.75rem;
-            font-weight: 700;
-            padding: 0.25rem 0.6rem;
-            border-radius: 6px;
-            background: rgba(13, 23, 53, 0.08);
-            color: #0D1735;
-            border: 1px solid rgba(13, 23, 53, 0.25);
-        }
-
-        [data-theme="dark"] .badge-code,
-        body.dark-mode .badge-code {
-            background: rgba(13, 23, 53, 0.8) !important;
-            color: #e2e8f0 !important;
-            border-color: rgba(22, 196, 244, 0.4) !important;
-        }
-
         .badge-cat {
             font-size: 0.7rem;
             font-weight: 700;
@@ -857,10 +945,6 @@
             border: 1px solid rgba(22, 196, 244, 0.15);
         }
 
-        [data-theme="dark"] .workflow-box {
-            background: #172540;
-        }
-
         .workflow-flow {
             max-width: 500px;
             margin: 0 auto;
@@ -912,38 +996,172 @@
             gap: 0.6rem;
         }
 
-        [data-theme="dark"] .checklist-item {
-            background: #172540;
+        /* ============================================================
+           FAQ - CARD ACCORDION THEME (Homepage Matching UI)
+           ============================================================ */
+        .faq-card-container {
+            background: #ffffff;
+            border-radius: 24px;
+            box-shadow: 0 10px 30px rgba(15, 23, 42, 0.04), 0 2px 6px rgba(15, 23, 42, 0.02);
+            width: 100%;
+            max-width: 100%;
+            margin: 1.5rem 0 3rem 0;
+            padding: 36px 48px;
+            border: 1px solid rgba(226, 232, 240, 0.8);
         }
 
-        /* FAQ ACCORDION */
-        .faq-item {
-            margin-bottom: 1rem;
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            overflow: hidden;
-            background: var(--bg-card);
-        }
-
-        .faq-question {
-            padding: 1rem 1.5rem;
-            background: #f8fafd;
+        .faq-list {
+            max-width: 100%;
+            margin: 0 auto;
             display: flex;
-            justify-content: space-between;
+            flex-direction: column;
+        }
+
+        .faq-item {
+            border-bottom: 1px solid #eef2f6;
+            padding: 0;
+            margin-bottom: 0;
+            border-radius: 0;
+            overflow: visible;
+            background: transparent;
+            border-top: none;
+            border-left: none;
+            border-right: none;
+            transition: background-color 0.2s ease;
+        }
+
+        .faq-item:last-child {
+            border-bottom: none;
+        }
+
+        .faq-item .q {
+            font-weight: 700;
+            font-size: 1.05rem;
+            color: #0d1735;
+            display: flex;
             align-items: center;
+            gap: 16px;
+            justify-content: space-between;
+            padding: 22px 0;
             cursor: pointer;
-            font-weight: 600;
-            color: var(--text-heading);
+            user-select: none;
+            transition: color 0.2s ease;
         }
 
-        [data-theme="dark"] .faq-question {
-            background: #15223c;
+        .faq-item .q:hover .q-text {
+            color: #00a8e8;
         }
 
-        .faq-answer {
-            padding: 1rem 1.5rem 1.5rem 1.5rem;
+        .faq-item .q .q-text {
+            line-height: 1.45;
+            flex: 1;
+        }
+
+        .faq-item .q .faq-toggle-icon {
+            color: #00c2ff;
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .faq-item .q .faq-toggle-icon svg {
+            stroke: #00c2ff;
+            transition: stroke 0.2s ease;
+        }
+
+        .faq-item.active .q .faq-toggle-icon {
+            transform: rotate(45deg);
+        }
+
+        /* Smooth Height Transition with CSS Grid */
+        .faq-item .a-wrapper {
+            display: grid;
+            grid-template-rows: 0fr;
+            transition: grid-template-rows 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .faq-item.active .a-wrapper {
+            grid-template-rows: 1fr;
+        }
+
+        .faq-item .a-inner {
+            overflow: hidden;
+        }
+
+        .faq-item .a {
             font-size: 0.95rem;
-            line-height: 1.7;
+            color: #475569;
+            line-height: 1.65;
+            padding-bottom: 22px;
+            padding-top: 2px;
+            margin-top: 0;
+            padding-left: 0;
+            display: block;
+            opacity: 0;
+            transform: translateY(-6px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .faq-item.active .a {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .faq-item .a strong {
+            color: #0d1735;
+            font-weight: 700;
+        }
+
+        /* FAQ Accordion Dark Mode */
+        body.dark-mode .faq-card-container {
+            background: #1e293b !important;
+            border-color: #334155 !important;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3) !important;
+        }
+
+        body.dark-mode .faq-item {
+            border-bottom-color: #334155 !important;
+        }
+
+        body.dark-mode .faq-item .q .q-text {
+            color: #ffffff !important;
+        }
+
+        body.dark-mode .faq-item .q:hover .q-text {
+            color: #38bdf8 !important;
+        }
+
+        body.dark-mode .faq-item .q .faq-toggle-icon svg {
+            stroke: #38bdf8 !important;
+        }
+
+        body.dark-mode .faq-item .a {
+            color: #cbd5e1 !important;
+        }
+
+        body.dark-mode .faq-item .a strong {
+            color: #38bdf8 !important;
+        }
+
+        @media (max-width: 768px) {
+            .faq-card-container {
+                padding: 24px 20px;
+                border-radius: 18px;
+            }
+
+            .faq-item .q {
+                font-size: 0.95rem;
+                padding: 18px 0;
+            }
+
+            .faq-item .a {
+                font-size: 0.88rem;
+                padding-bottom: 18px;
+            }
         }
 
         /* CTA BANNER */
@@ -1022,10 +1240,6 @@
             margin-top: 2rem;
         }
 
-        [data-theme="dark"] .footer-strip {
-            background: #172540;
-        }
-
         .footer-strip a {
             color: #16C4F4;
             text-decoration: none;
@@ -1034,50 +1248,113 @@
 
         @media (max-width: 1024px) {
             .site-nav-header {
-                padding: 0.8rem 2rem;
+                padding: 0.8rem 24px;
             }
 
             .page-wrapper {
-                padding: 2rem 2.5rem;
+                padding: 2rem 24px;
             }
         }
 
         @media (max-width: 768px) {
             .site-nav-header {
-                padding: 0.8rem 1.2rem;
+                padding: 0.8rem 16px;
             }
 
             .page-wrapper {
-                padding: 1.5rem 1rem;
+                padding: 1.5rem 16px;
+            }
+
+            .hero-container {
+                padding: 0 16px;
             }
 
             .toc-grid {
                 columns: 1;
             }
 
-            .hero-card {
-                padding: 2rem 1.5rem;
+            .hero-section {
+                padding: 2rem 0;
+                min-height: auto;
             }
+        }
     </style>
 </head>
 
 <body>
     @include('aspiaUcl.partials.header', ['activeTab' => 'frameworks'])
 
-    <div class="page-wrapper">
+    <!-- HERO BANNER (ISOMETRIC LOGO DESIGN - FULL VH SCREEN) -->
+    <div class="hero-section">
+        <div class="hero-container">
+            <!-- Left Column: Content -->
+            <div class="hero-content">
+                <div class="hero-eyebrow">EXPLORE &bull; LEARN &bull; APPLY</div>
+                <h1 class="hero-title">
+                    Regulatory &amp; Security
+                    <span class="highlight">Frameworks</span>
+                </h1>
+                <p class="hero-subtitle">
+                    Complete guide to cybersecurity frameworks, regulatory standards, compliance mappings, control domains, audit requirements, and best practices in the ASPIA Unified Control Library.
+                </p>
 
-        <!-- HERO BANNER -->
-        <div class="hero-card">
-            <h1 class="hero-title">Regulatory &amp; Security Frameworks: Meaning, Types, Mappings &amp; Standards</h1>
-            <p class="hero-subtitle">Complete guide to cybersecurity frameworks, regulatory standards, compliance
-                mappings, control domains, audit requirements, and best practices in ASPIA Unified Control Library.</p>
-            <div class="hero-tags">
-                <span class="hero-tag-pill"><i class="fas fa-shield-alt"></i> Unified Library</span>
-                <span><i class="far fa-clock"></i> 14 min read</span>
-                <span style="opacity:0.8;"><i class="far fa-calendar-alt"></i> September 2026</span>
-                <span><i class="fas fa-user-edit"></i> ASPIA Editorial</span>
+                <!-- 4 Feature Cards -->
+                <div class="hero-features-grid">
+                    <div class="hero-feature-card">
+                        <div class="hero-feature-icon">
+                            <i class="fas fa-book-open"></i>
+                        </div>
+                        <div class="hero-feature-text">
+                            <span class="hero-feature-title">Comprehensive</span>
+                            <span class="hero-feature-sub">Coverage</span>
+                        </div>
+                    </div>
+                    <div class="hero-feature-card">
+                        <div class="hero-feature-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <div class="hero-feature-text">
+                            <span class="hero-feature-title">Standards</span>
+                            <span class="hero-feature-sub">&amp; Compliance</span>
+                        </div>
+                    </div>
+                    <div class="hero-feature-card">
+                        <div class="hero-feature-icon">
+                            <i class="fas fa-sitemap"></i>
+                        </div>
+                        <div class="hero-feature-text">
+                            <span class="hero-feature-title">Mappings</span>
+                            <span class="hero-feature-sub">&amp; Relationships</span>
+                        </div>
+                    </div>
+                    <div class="hero-feature-card">
+                        <div class="hero-feature-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="hero-feature-text">
+                            <span class="hero-feature-title">Practical</span>
+                            <span class="hero-feature-sub">Guidance</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Meta Row -->
+                <div class="hero-meta-bar">
+                    <span class="hero-tag-pill"><i class="fas fa-shield-alt"></i> Unified Library</span>
+                    <span><i class="far fa-clock"></i> 14 min read</span>
+                    <span style="opacity:0.8;"><i class="far fa-calendar-alt"></i> September 2026</span>
+                    <span><i class="fas fa-user-edit"></i> ASPIA Editorial</span>
+                </div>
+            </div>
+
+            <!-- Right Column: 3D Isometric PNG Graphic -->
+            <div class="hero-visual-wrapper">
+                <img src="{{ asset('images/frameworks_hero_graphic.png') }}" alt="Regulatory Frameworks Isometric Graphic" class="hero-isometric-img">
             </div>
         </div>
+    </div>
+
+    <div class="page-wrapper">
 
         <!-- SHORT ANSWER BOX -->
         <div class="callout-box">
@@ -1089,7 +1366,10 @@
         </div>
 
         <!-- WHAT ARE FRAMEWORKS -->
-        <h2 id="what-are" class="section-heading">What Are Compliance Frameworks?</h2>
+        <div class="section-header-block" id="what-are">
+            <span class="section-badge">OVERVIEW</span>
+            <h2 class="section-heading">What Are Compliance Frameworks?</h2>
+        </div>
         <p>A cybersecurity or regulatory compliance framework is a system of standards, guidelines, and controls created
             by recognized international bodies or regulatory authorities (such as ISO, NIST, AICPA, PCI SSC, EU).
             Frameworks assist organizations in establishing information security governance, protecting sensitive data,
@@ -1098,7 +1378,10 @@
             demonstrate compliance, satisfy client requirements, and pass third-party audits.</p>
 
         <!-- WHY USED -->
-        <h2 id="why-used" class="section-heading">Why Are Frameworks Used in GRC?</h2>
+        <div class="section-header-block" id="why-used">
+            <span class="section-badge">BUSINESS VALUE</span>
+            <h2 class="section-heading">Why Are Frameworks Used in GRC?</h2>
+        </div>
 
         <div class="feature-grid">
             <div class="feature-card" style="border-top-color: #02CCFF;">
@@ -1124,9 +1407,11 @@
         </div>
 
         <!-- CATALOG TOOLBAR & DYNAMIC CARDS -->
-        <h2 id="frameworks-catalog" class="section-heading">Explore Integrated Regulatory Frameworks</h2>
-        <p>Browse all regulatory baselines, cybersecurity frameworks, and industry standards mapped within ASPIA UCL.
-            Filter by category or search by framework code, title, publisher, or family.</p>
+        <div class="section-header-block" id="frameworks-catalog">
+            <span class="section-badge">FRAMEWORK DIRECTORY</span>
+            <h2 class="section-heading">Explore Integrated Regulatory Frameworks</h2>
+            <p class="section-subtitle">Browse all regulatory baselines, cybersecurity frameworks, and industry standards mapped within ASPIA UCL. Filter by category or search by framework code, title, publisher, or family.</p>
+        </div>
 
         <div class="catalog-toolbar">
             <div class="search-input-group">
@@ -1742,7 +2027,10 @@
         </div>
 
         <!-- KEY TERMS TABLE -->
-        <h2 id="key-terms" class="section-heading">Key Terms Used in Framework Architecture</h2>
+        <div class="section-header-block" id="key-terms">
+            <span class="section-badge">GLOSSARY &amp; ARCHITECTURE</span>
+            <h2 class="section-heading">Key Terms Used in Framework Architecture</h2>
+        </div>
 
         <table class="custom-table">
             <thead>
@@ -1778,7 +2066,10 @@
         </table>
 
         <!-- TYPES OF FRAMEWORKS -->
-        <h2 id="framework-types" class="section-heading">Types of Security &amp; Regulatory Frameworks</h2>
+        <div class="section-header-block" id="framework-types">
+            <span class="section-badge">FRAMEWORK CATEGORIES</span>
+            <h2 class="section-heading">Types of Security &amp; Regulatory Frameworks</h2>
+        </div>
 
         <div class="feature-grid">
             <div class="feature-card" style="border-top: 3px solid #02CCFF;">
@@ -1804,11 +2095,11 @@
         </div>
 
         <!-- CROSSWALK & CONTROL MAPPING -->
-        <h2 id="crosswalk-mapping" class="section-heading">Crosswalk &amp; Control Mapping Architecture</h2>
-        <p>Framework crosswalk mapping is the process of correlating security controls, policy requirements, and audit
-            tests across multiple regulatory standards (e.g., mapping NIST CSF 2.0 to ISO/IEC 27001:2022, SOC 2 TSC, and
-            PCI DSS v4.0). By establishing a single source of truth in ASPIA UCL, organizations eliminate redundant
-            testing and achieve "test once, comply with many" audit efficiency.</p>
+        <div class="section-header-block" id="crosswalk-mapping">
+            <span class="section-badge">UNIFIED CONTROL MAPPING</span>
+            <h2 class="section-heading">Crosswalk &amp; Control Mapping Architecture</h2>
+            <p class="section-subtitle">Framework crosswalk mapping correlates security controls, policy requirements, and audit tests across multiple regulatory standards (e.g., mapping NIST CSF 2.0 to ISO/IEC 27001:2022, SOC 2 TSC, and PCI DSS v4.0).</p>
+        </div>
 
         <div class="feature-grid" style="margin-top: 1.5rem;">
             <div class="feature-card" style="border-top-color: #02CCFF;">
@@ -1842,7 +2133,10 @@
         </div>
 
         <!-- WORKFLOW DIAGRAM -->
-        <h2 id="implementation-workflow" class="section-heading">Framework Implementation &amp; Mapping Workflow</h2>
+        <div class="section-header-block" id="implementation-workflow">
+            <span class="section-badge">IMPLEMENTATION WORKFLOW</span>
+            <h2 class="section-heading">Framework Implementation &amp; Mapping Workflow</h2>
+        </div>
 
         <div class="workflow-box">
             <div class="workflow-flow">
@@ -1863,7 +2157,10 @@
         </div>
 
         <!-- CHECKLIST -->
-        <h2 id="checklist" class="section-heading">Framework Compliance Readiness Checklist</h2>
+        <div class="section-header-block" id="checklist">
+            <span class="section-badge">AUDIT READINESS</span>
+            <h2 class="section-heading">Framework Compliance Readiness Checklist</h2>
+        </div>
 
         <div class="checklist-grid">
             <div class="checklist-item"><i class="far fa-check-square" style="color:#16C4F4;"></i> Regulatory
@@ -1893,56 +2190,89 @@
         </div>
 
         <!-- FAQ SECTION -->
-        <h2 id="faq" class="section-heading">Frequently Asked Questions</h2>
-
-        <div class="faq-item">
-            <div class="faq-question">
-                <span>What is a cybersecurity compliance framework?</span>
-                <span>−</span>
-            </div>
-            <div class="faq-answer">
-                A cybersecurity compliance framework is a structured set of guidelines, security controls, and best
-                practices designed to help organizations manage risk, protect data assets, and satisfy regulatory
-                obligations.
-            </div>
+        <div class="section-header-block" id="faq">
+            <span class="section-badge">FAQ &amp; SUPPORT</span>
+            <h2 class="section-heading">Frequently Asked Questions</h2>
+            <p class="section-subtitle" style="color: #64748b; font-size: 0.95rem; margin-top: 0.4rem;">Quick answers to common questions about regulatory frameworks and control mapping.</p>
         </div>
 
-        <div class="faq-item">
-            <div class="faq-question">
-                <span>What are the main types of compliance frameworks?</span>
-                <span>−</span>
-            </div>
-            <div class="faq-answer">
-                Frameworks generally fall into three categories: Regulatory Mandates (GDPR, HIPAA, PCI DSS, SOX),
-                Industry Standards (ISO/IEC 27001, ISO 27701), and Security Benchmarks (NIST CSF, CIS Controls, SOC 2).
-            </div>
-        </div>
+        <div class="faq-card-container">
+            <div class="faq-list">
+                <div class="faq-item">
+                    <div class="q" role="button" aria-expanded="false" tabindex="0">
+                        <span class="q-text">What is a cybersecurity compliance framework?</span>
+                        <span class="faq-toggle-icon" aria-hidden="true">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="12" y1="5" x2="12" y2="19"></line>
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                            </svg>
+                        </span>
+                    </div>
+                    <div class="a-wrapper">
+                        <div class="a-inner">
+                            <div class="a">A cybersecurity compliance framework is a structured set of guidelines, security controls, and best practices designed to help organizations manage risk, protect data assets, and satisfy regulatory obligations.</div>
+                        </div>
+                    </div>
+                </div>
 
-        <div class="faq-item">
-            <div class="faq-question">
-                <span>What is framework crosswalk mapping?</span>
-                <span>−</span>
-            </div>
-            <div class="faq-answer">
-                Crosswalk mapping links controls and requirements from multiple frameworks to a single unified baseline,
-                enabling "test once, comply with many" audit efficiency.
-            </div>
-        </div>
+                <div class="faq-item">
+                    <div class="q" role="button" aria-expanded="false" tabindex="0">
+                        <span class="q-text">What are the main types of compliance frameworks?</span>
+                        <span class="faq-toggle-icon" aria-hidden="true">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="12" y1="5" x2="12" y2="19"></line>
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                            </svg>
+                        </span>
+                    </div>
+                    <div class="a-wrapper">
+                        <div class="a-inner">
+                            <div class="a">Frameworks generally fall into three main categories: <strong>Regulatory Mandates</strong> (GDPR, HIPAA, PCI DSS, SOX, NIS2), <strong>Industry Standards</strong> (ISO/IEC 27001, ISO 27701), and <strong>Security Benchmarks</strong> (NIST CSF, CIS Controls, SOC 2).</div>
+                        </div>
+                    </div>
+                </div>
 
-        <div class="faq-item">
-            <div class="faq-question">
-                <span>What is the difference between ISO 27001 and NIST CSF?</span>
-                <span>−</span>
-            </div>
-            <div class="faq-answer">
-                ISO 27001 is a certifiable Information Security Management System (ISMS) standard with mandatory
-                clauses, whereas NIST CSF is a flexible risk management framework organized into Identify, Protect,
-                Detect, Respond, and Recover functions.
+                <div class="faq-item">
+                    <div class="q" role="button" aria-expanded="false" tabindex="0">
+                        <span class="q-text">What is framework crosswalk mapping?</span>
+                        <span class="faq-toggle-icon" aria-hidden="true">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="12" y1="5" x2="12" y2="19"></line>
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                            </svg>
+                        </span>
+                    </div>
+                    <div class="a-wrapper">
+                        <div class="a-inner">
+                            <div class="a">Crosswalk mapping links controls and requirements from multiple frameworks to a single unified baseline, enabling a <strong>"test once, comply with many"</strong> audit strategy.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="q" role="button" aria-expanded="false" tabindex="0">
+                        <span class="q-text">What is the difference between ISO 27001 and NIST CSF?</span>
+                        <span class="faq-toggle-icon" aria-hidden="true">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="12" y1="5" x2="12" y2="19"></line>
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                            </svg>
+                        </span>
+                    </div>
+                    <div class="a-wrapper">
+                        <div class="a-inner">
+                            <div class="a"><strong>ISO 27001</strong> is a certifiable Information Security Management System (ISMS) standard with mandatory clauses, whereas <strong>NIST CSF</strong> is a flexible risk management framework organized into Identify, Protect, Detect, Respond, and Recover functions.</div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
         <!-- CONCLUSION & CTA BANNER -->
-        <h2 id="conclusion" class="section-heading">Final Takeaway</h2>
+        <div class="section-header-block" id="conclusion">
+            <span class="section-badge">SUMMARY</span>
+            <h2 class="section-heading">Final Takeaway</h2>
+        </div>
         <p>Effective GRC management relies on unifying disparate compliance mandates under a central framework
             structure. By standardizing control domains and leveraging crosswalk mappings, organizations drastically
             reduce audit burden while strengthening their operational security posture.</p>
@@ -2254,6 +2584,42 @@
                 applySiteTheme(newTheme);
             });
         }
+
+        // FAQ Accordion Interaction
+        const faqSectionItems = document.querySelectorAll('.faq-item');
+        faqSectionItems.forEach(item => {
+            const q = item.querySelector('.q');
+            if (q) {
+                const toggleItem = () => {
+                    const isActive = item.classList.contains('active');
+                    
+                    // Close other active items for clean single accordion mode
+                    faqSectionItems.forEach(otherItem => {
+                        if (otherItem !== item && otherItem.classList.contains('active')) {
+                            otherItem.classList.remove('active');
+                            const otherQ = otherItem.querySelector('.q');
+                            if (otherQ) otherQ.setAttribute('aria-expanded', 'false');
+                        }
+                    });
+
+                    if (isActive) {
+                        item.classList.remove('active');
+                        q.setAttribute('aria-expanded', 'false');
+                    } else {
+                        item.classList.add('active');
+                        q.setAttribute('aria-expanded', 'true');
+                    }
+                };
+
+                q.addEventListener('click', toggleItem);
+                q.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        toggleItem();
+                    }
+                });
+            }
+        });
     </script>
 </body>
 

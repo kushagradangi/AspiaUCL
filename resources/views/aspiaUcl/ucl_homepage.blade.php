@@ -2530,7 +2530,7 @@
     <!-- ============================================================
     HEADER & NAVIGATION
     ============================================================ -->
-    @include('aspiaUcl.partials.homepage_header', ['activeTab' => 'home'])
+    @include('aspiaUcl.partials.header', ['activeTab' => 'home'])
 
     <!-- ============================================================
     MAIN CONTENT WRAPPER
