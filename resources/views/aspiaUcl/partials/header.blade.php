@@ -990,8 +990,8 @@
                     </div>
                 </li>
 
-                <li><a href="{{ url('/#about-ucl') }}" title="About Unified Control Layer">About UCL</a></li>
-                <li><a href="{{ url('/#blog') }}" title="Resources & Articles">Blog</a></li>
+                <li><a href="https://aspiainfotech.com/about-aspia-infotech/" target="_blank" rel="noopener" title="About Us">About Us</a></li>
+                <li><a href="https://aspiainfotech.com/blog/" target="_blank" rel="noopener" title="Resources & Articles">Blog</a></li>
             </ul>
             <div class="nav-actions">
                 @auth
@@ -1118,8 +1118,8 @@
                     </div>
                 </li>
 
-                <li><a href="{{ url('/#about-ucl') }}" title="About Unified Control Layer">About UCL</a></li>
-                <li><a href="{{ url('/#blog') }}" title="Resources & Articles">Blog</a></li>
+                <li><a href="https://aspiainfotech.com/about-aspia-infotech/" target="_blank" rel="noopener" title="About Us">About Us</a></li>
+                <li><a href="https://aspiainfotech.com/blog/" target="_blank" rel="noopener" title="Resources & Articles">Blog</a></li>
             </ul>
 
             <!-- Actions -->

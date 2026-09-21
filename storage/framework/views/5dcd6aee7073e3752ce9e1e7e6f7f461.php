@@ -23,12 +23,12 @@
     <!-- Article Schema -->
     <script type="application/ld+json">
     {
-        "@@context": "https://schema.org",
-        "@@type": "TechArticle",
+        "@context": "https://schema.org",
+        "@type": "TechArticle",
         "headline": "Regulatory & Security Frameworks: Meaning, Types, Mappings & Standards Guide",
         "description": "Complete guide to cybersecurity frameworks, regulatory standards, compliance mappings, control domains, audit requirements, and best practices in ASPIA Unified Control Library.",
-        "author": {"@@type": "Organization", "name": "ASPIA Infotech"},
-        "publisher": {"@@type": "Organization", "name": "ASPIA Infotech Pvt. Ltd."},
+        "author": {"@type": "Organization", "name": "ASPIA Infotech"},
+        "publisher": {"@type": "Organization", "name": "ASPIA Infotech Pvt. Ltd."},
         "datePublished": "2026-09-08",
         "dateModified": "2026-09-08"
     }
@@ -37,14 +37,14 @@
     <!-- FAQ Schema -->
     <script type="application/ld+json">
     {
-        "@@context": "https://schema.org",
-        "@@type": "FAQPage",
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
         "mainEntity": [
-            {"@@type":"Question","name":"What is a cybersecurity compliance framework?","acceptedAnswer":{"@@type":"Answer","text":"A cybersecurity compliance framework is a structured set of guidelines, security controls, and best practices designed to help organizations manage risk and meet regulatory requirements."}},
-            {"@@type":"Question","name":"What are the main types of compliance frameworks?","acceptedAnswer":{"@@type":"Answer","text":"Frameworks generally fall into three categories: Regulatory Mandates (GDPR, HIPAA, PCI DSS), Industry Standards (ISO/IEC 27001, SOC 2), and Security Benchmarks (NIST CSF, CIS Controls)."}},
-            {"@@type":"Question","name":"What is framework crosswalk mapping?","acceptedAnswer":{"@@type":"Answer","text":"Crosswalk mapping links controls and requirements from multiple frameworks to a unified baseline, enabling 'test once, comply with many' efficiency."}},
-            {"@@type":"Question","name":"How does ASPIA UCL organize frameworks?","acceptedAnswer":{"@@type":"Answer","text":"ASPIA UCL maps frameworks into standardized Control Domains, Security Controls, and Auditable Requirements for streamlined governance."}},
-            {"@@type":"Question","name":"What is the difference between ISO 27001 and NIST CSF?","acceptedAnswer":{"@@type":"Answer","text":"ISO 27001 is an certifiable Information Security Management System (ISMS) standard, while NIST CSF is a voluntary risk-management framework structured around Identify, Protect, Detect, Respond, and Recover functions."}}
+            {"@type":"Question","name":"What is a cybersecurity compliance framework?","acceptedAnswer":{"@type":"Answer","text":"A cybersecurity compliance framework is a structured set of guidelines, security controls, and best practices designed to help organizations manage risk and meet regulatory requirements."}},
+            {"@type":"Question","name":"What are the main types of compliance frameworks?","acceptedAnswer":{"@type":"Answer","text":"Frameworks generally fall into three categories: Regulatory Mandates (GDPR, HIPAA, PCI DSS), Industry Standards (ISO/IEC 27001, SOC 2), and Security Benchmarks (NIST CSF, CIS Controls)."}},
+            {"@type":"Question","name":"What is framework crosswalk mapping?","acceptedAnswer":{"@type":"Answer","text":"Crosswalk mapping links controls and requirements from multiple frameworks to a unified baseline, enabling 'test once, comply with many' efficiency."}},
+            {"@type":"Question","name":"How does ASPIA UCL organize frameworks?","acceptedAnswer":{"@type":"Answer","text":"ASPIA UCL maps frameworks into standardized Control Domains, Security Controls, and Auditable Requirements for streamlined governance."}},
+            {"@type":"Question","name":"What is the difference between ISO 27001 and NIST CSF?","acceptedAnswer":{"@type":"Answer","text":"ISO 27001 is an certifiable Information Security Management System (ISMS) standard, while NIST CSF is a voluntary risk-management framework structured around Identify, Protect, Detect, Respond, and Recover functions."}}
         ]
     }
     </script>
@@ -96,6 +96,8 @@
         /* SMOOTH GLOBAL COLOR TRANSITIONS */
         body,
         .page-wrapper,
+        .section-light,
+        .section-alt,
         .toc-card,
         .feature-card,
         .catalog-toolbar,
@@ -104,12 +106,32 @@
         .workflow-box,
         .checklist-item,
         .faq-item,
-        .faq-question,
         .footer-strip {
             transition: background-color 0.35s ease, color 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
         }
 
-        /* MAIN CONTAINER */
+        /* FULL WIDTH SECTION BANDS (HOMEPAGE MATCHING ALTERNATING SCHEME) */
+        .section-light {
+            background-color: #ffffff;
+            padding: 5rem 0;
+            border-bottom: 1px solid rgba(226, 232, 240, 0.7);
+        }
+
+        .section-alt {
+            background-color: #f4f7fb;
+            padding: 5rem 0;
+            border-bottom: 1px solid rgba(226, 232, 240, 0.7);
+        }
+
+        .section-container {
+            max-width: 1240px;
+            margin: 0 auto;
+            padding: 0 24px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        /* MAIN CONTAINER (Legacy Fallback) */
         .page-wrapper {
             max-width: 1240px;
             margin: 0 auto;
@@ -328,33 +350,34 @@
             text-decoration: underline;
         }
 
-        /* SIMPLE & PROFESSIONAL CALLOUT BLOCK */
+        /* UN-BORDERED CALLOUT BLOCK */
         .callout-box {
-            background: rgba(13, 23, 53, 0.03);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 1rem 1.25rem;
-            margin-bottom: 2rem;
+            background: transparent;
+            border: none;
+            border-radius: 0;
+            padding: 0;
+            margin: 3rem 0 5rem 0;
+            box-shadow: none;
         }
 
         .callout-title {
-            margin: 0 0 0.3rem 0;
-            font-weight: 700;
-            font-size: 0.95rem;
-            color: var(--text-heading);
+            margin: 0 0 0.4rem 0;
+            font-weight: 800;
+            font-size: 1.05rem;
+            color: #16C4F4;
         }
 
         .callout-text {
             margin: 0;
-            font-size: 0.92rem;
-            line-height: 1.6;
+            font-size: 1rem;
+            line-height: 1.7;
             color: var(--text-main);
         }
 
         /* SECTION HEADINGS (CENTERED BADGE & TITLE UI) */
         .section-header-block {
             text-align: center;
-            margin: 3.5rem 0 1.5rem 0;
+            margin: 3.5rem 0 2.25rem 0;
         }
 
         .section-badge {
@@ -401,16 +424,17 @@
         .feature-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 1rem;
-            margin: 1.5rem 0;
+            gap: 1.25rem;
+            margin: 2.25rem 0;
         }
 
         .feature-card {
-            background: #f8fafd;
-            padding: 1.2rem;
+            background: #ffffff;
+            padding: 1.25rem;
             border-radius: 12px;
-            border: 1px solid #e6edf4;
+            border: 1px solid #e2e8f0;
             border-top: 3px solid #02CCFF;
+            box-shadow: 0 4px 14px rgba(15, 23, 42, 0.03);
         }
 
         .feature-card strong {
@@ -422,16 +446,17 @@
 
         /* SEARCH & CATALOG TOOLBAR */
         .catalog-toolbar {
-            background: #f8fafd;
+            background: #ffffff;
             border: 1px solid var(--border-color);
             border-radius: 16px;
             padding: 1.5rem;
-            margin: 2rem 0;
+            margin: 1.5rem 0;
             display: flex;
             flex-wrap: wrap;
             align-items: center;
             justify-content: space-between;
             gap: 1rem;
+            box-shadow: 0 4px 16px rgba(15, 23, 42, 0.03);
         }
 
         .search-input-group {
@@ -505,12 +530,13 @@
             justify-content: space-between;
             flex-wrap: wrap;
             gap: 1rem;
-            background: #f8fafd;
+            background: #ffffff;
             border: 1px solid var(--border-color);
             border-radius: 12px;
             padding: 0.8rem 1.25rem;
             margin-bottom: 2rem;
             font-size: 0.88rem;
+            box-shadow: 0 2px 8px rgba(15, 23, 42, 0.02);
         }
 
         .pagination-info strong {
@@ -815,7 +841,7 @@
         .badge-fw-id {
             font-family: var(--aspia-infotech-font-primary), sans-serif;
             font-size: 0.75rem;
-            font-weight: 800;
+            font-weight: 400;
             padding: 0;
             background: transparent;
             color: #0D1735;
@@ -912,7 +938,7 @@
         .custom-table {
             width: 100%;
             border-collapse: collapse;
-            margin: 1.5rem 0;
+            margin: 2.5rem 0;
             border-radius: 12px;
             overflow: hidden;
             border: 1px solid var(--border-color);
@@ -938,11 +964,12 @@
 
         /* WORKFLOW FLOWCHART */
         .workflow-box {
-            background: #f8fafd;
+            background: #ffffff;
             border-radius: 16px;
-            padding: 2rem 1.5rem;
-            margin: 2rem 0;
-            border: 1px solid rgba(22, 196, 244, 0.15);
+            padding: 2.25rem 1.75rem;
+            margin: 2.75rem 0;
+            border: 1px solid rgba(22, 196, 244, 0.2);
+            box-shadow: 0 4px 20px rgba(15, 23, 42, 0.03);
         }
 
         .workflow-flow {
@@ -981,12 +1008,12 @@
         .checklist-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 0.8rem;
-            margin: 1.5rem 0;
+            gap: 1rem;
+            margin: 2.25rem 0;
         }
 
         .checklist-item {
-            background: #f8fafd;
+            background: #ffffff;
             padding: 0.8rem 1rem;
             border-radius: 10px;
             border: 1px solid var(--border-color);
@@ -994,6 +1021,7 @@
             display: flex;
             align-items: center;
             gap: 0.6rem;
+            box-shadow: 0 2px 6px rgba(15, 23, 42, 0.02);
         }
 
         /* ============================================================
@@ -1005,7 +1033,7 @@
             box-shadow: 0 10px 30px rgba(15, 23, 42, 0.04), 0 2px 6px rgba(15, 23, 42, 0.02);
             width: 100%;
             max-width: 100%;
-            margin: 1.5rem 0 3rem 0;
+            margin: 2.5rem 0 1rem 0;
             padding: 36px 48px;
             border: 1px solid rgba(226, 232, 240, 0.8);
         }
@@ -1147,6 +1175,17 @@
             color: #38bdf8 !important;
         }
 
+        /* Section Bands Dark Mode */
+        body.dark-mode .section-light {
+            background-color: #0b1329 !important;
+            border-bottom-color: rgba(255, 255, 255, 0.05) !important;
+        }
+
+        body.dark-mode .section-alt {
+            background-color: #0f172a !important;
+            border-bottom-color: rgba(255, 255, 255, 0.05) !important;
+        }
+
         @media (max-width: 768px) {
             .faq-card-container {
                 padding: 24px 20px;
@@ -1282,7 +1321,7 @@
 </head>
 
 <body>
-    @include('aspiaUcl.partials.header', ['activeTab' => 'frameworks'])
+    <?php echo $__env->make('aspiaUcl.partials.header', ['activeTab' => 'frameworks'], array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
 
     <!-- HERO BANNER (ISOMETRIC LOGO DESIGN - FULL VH SCREEN) -->
     <div class="hero-section">
@@ -1338,101 +1377,92 @@
                     </div>
                 </div>
 
-                <!-- Meta Row -->
-                <div class="hero-meta-bar">
-                    <span class="hero-tag-pill"><i class="fas fa-shield-alt"></i> Unified Library</span>
-                    <span><i class="far fa-clock"></i> 14 min read</span>
-                    <span style="opacity:0.8;"><i class="far fa-calendar-alt"></i> September 2026</span>
-                    <span><i class="fas fa-user-edit"></i> ASPIA Editorial</span>
-                </div>
             </div>
 
             <!-- Right Column: 3D Isometric PNG Graphic -->
             <div class="hero-visual-wrapper">
-                <img src="{{ asset('images/frameworks_hero_graphic.png') }}" alt="Regulatory Frameworks Isometric Graphic" class="hero-isometric-img">
+                <img src="<?php echo e(asset('images/frameworks_hero_graphic.png')); ?>" alt="Regulatory Frameworks Isometric Graphic" class="hero-isometric-img">
             </div>
         </div>
     </div>
 
-    <div class="page-wrapper">
-
-        <!-- SHORT ANSWER BOX -->
-        <div class="callout-box">
-            <p class="callout-title">In Simple Terms:</p>
-            <p class="callout-text">A compliance framework is a set of security rules and guidelines that help
-                organizations protect data. ASPIA UCL connects global standards (like ISO 27001, NIST, SOC 2, and PCI
-                DSS) into one unified system—so you can test your security controls once and satisfy multiple
-                regulations automatically.</p>
-        </div>
-
-        <!-- WHAT ARE FRAMEWORKS -->
-        <div class="section-header-block" id="what-are">
-            <span class="section-badge">OVERVIEW</span>
-            <h2 class="section-heading">What Are Compliance Frameworks?</h2>
-        </div>
-        <p>A cybersecurity or regulatory compliance framework is a system of standards, guidelines, and controls created
-            by recognized international bodies or regulatory authorities (such as ISO, NIST, AICPA, PCI SSC, EU).
-            Frameworks assist organizations in establishing information security governance, protecting sensitive data,
-            mitigating operational risks, and achieving legal compliance.</p>
-        <p>Rather than designing custom security procedures from scratch, organizations adopt established frameworks to
-            demonstrate compliance, satisfy client requirements, and pass third-party audits.</p>
-
-        <!-- WHY USED -->
-        <div class="section-header-block" id="why-used">
-            <span class="section-badge">BUSINESS VALUE</span>
-            <h2 class="section-heading">Why Are Frameworks Used in GRC?</h2>
-        </div>
-
-        <div class="feature-grid">
-            <div class="feature-card" style="border-top-color: #02CCFF;">
-                <strong>1. Standardizes Security Posture</strong>
-                <p style="font-size:0.85rem;margin:0;">Provides a recognized benchmark that clients, auditors, and
-                    regulators understand and trust.</p>
+    <!-- SECTION 1: OVERVIEW & BUSINESS VALUE (LIGHT BAND) -->
+    <div class="section-light">
+        <div class="section-container">
+            <!-- SHORT ANSWER BOX -->
+            <div class="callout-box" style="margin-top: 1.25rem;">
+                <p class="callout-title">In Simple Terms:</p>
+                <p class="callout-text">A compliance framework is a set of security rules and guidelines that help
+                    organizations protect data. ASPIA UCL connects global standards (like ISO 27001, NIST, SOC 2, and PCI
+                    DSS) into one unified system—so you can test your security controls once and satisfy multiple
+                    regulations automatically.</p>
             </div>
-            <div class="feature-card" style="border-top-color: #00B8E6;">
-                <strong>2. Reduces Audit Fatigue</strong>
-                <p style="font-size:0.85rem;margin:0;">Mapping overlapping frameworks allows testing a single control to
-                    fulfill multiple compliance standards.</p>
+
+            <!-- WHAT ARE FRAMEWORKS -->
+            <div class="section-header-block" id="what-are" style="margin-top: 6.5rem;">
+                <span class="section-badge">OVERVIEW</span>
+                <h2 class="section-heading">What Are Compliance Frameworks?</h2>
             </div>
-            <div class="feature-card" style="border-top-color: #1AD4FF;">
-                <strong>3. Drives Risk-Based Governance</strong>
-                <p style="font-size:0.85rem;margin:0;">Aligns security investments directly with identified business
-                    risks and compliance liabilities.</p>
+            <p style="line-height: 1.7; margin-bottom: 1.75rem;">A cybersecurity or regulatory compliance framework is a system of standards, guidelines, and controls created by recognized international bodies or regulatory authorities (such as ISO, NIST, AICPA, PCI SSC, EU). Frameworks assist organizations in establishing information security governance, protecting sensitive data, mitigating operational risks, and achieving legal compliance.</p>
+            <p style="line-height: 1.7; margin-bottom: 3.5rem;">Rather than designing custom security procedures from scratch, organizations adopt established frameworks to demonstrate compliance, satisfy client requirements, and pass third-party audits.</p>
+
+            <!-- WHY USED -->
+            <div class="section-header-block" id="why-used" style="margin-top: 6.5rem;">
+                <span class="section-badge">BUSINESS VALUE</span>
+                <h2 class="section-heading">Why Are Frameworks Used in GRC?</h2>
             </div>
-            <div class="feature-card" style="border-top-color: #33D6FF;">
-                <strong>4. Demonstrates Due Diligence</strong>
-                <p style="font-size:0.85rem;margin:0;">Provides auditable proof of security controls during vendor
-                    assessments and legal reviews.</p>
+
+            <div class="feature-grid">
+                <div class="feature-card" style="border-top-color: #02CCFF;">
+                    <strong>1. Standardizes Security Posture</strong>
+                    <p style="font-size:0.85rem;margin:0;">Provides a recognized benchmark that clients, auditors, and regulators understand and trust.</p>
+                </div>
+                <div class="feature-card" style="border-top-color: #00B8E6;">
+                    <strong>2. Reduces Audit Fatigue</strong>
+                    <p style="font-size:0.85rem;margin:0;">Mapping overlapping frameworks allows testing a single control to fulfill multiple compliance standards.</p>
+                </div>
+                <div class="feature-card" style="border-top-color: #1AD4FF;">
+                    <strong>3. Drives Risk-Based Governance</strong>
+                    <p style="font-size:0.85rem;margin:0;">Aligns security investments directly with identified business risks and compliance liabilities.</p>
+                </div>
+                <div class="feature-card" style="border-top-color: #33D6FF;">
+                    <strong>4. Demonstrates Due Diligence</strong>
+                    <p style="font-size:0.85rem;margin:0;">Provides auditable proof of security controls during vendor assessments and legal reviews.</p>
+                </div>
             </div>
         </div>
+    </div>
 
-        <!-- CATALOG TOOLBAR & DYNAMIC CARDS -->
-        <div class="section-header-block" id="frameworks-catalog">
-            <span class="section-badge">FRAMEWORK DIRECTORY</span>
-            <h2 class="section-heading">Explore Integrated Regulatory Frameworks</h2>
-            <p class="section-subtitle">Browse all regulatory baselines, cybersecurity frameworks, and industry standards mapped within ASPIA UCL. Filter by category or search by framework code, title, publisher, or family.</p>
-        </div>
-
-        <div class="catalog-toolbar">
-            <div class="search-input-group">
-                <i class="fas fa-search"></i>
-                <input type="text" id="frameworkSearchInput"
-                    placeholder="Search frameworks by code, title, publisher, category..." onkeyup="filterFrameworks()">
+    <!-- SECTION 2: FRAMEWORK DIRECTORY CATALOG (ALT BAND) -->
+    <div class="section-alt">
+        <div class="section-container">
+            <!-- CATALOG TOOLBAR & DYNAMIC CARDS -->
+            <div class="section-header-block" id="frameworks-catalog" style="margin-top: 0;">
+                <span class="section-badge">FRAMEWORK DIRECTORY</span>
+                <h2 class="section-heading">Explore Integrated Regulatory Frameworks</h2>
+                <p class="section-subtitle" style="color: #64748b; font-size: 0.95rem; margin-top: 0.4rem;">Browse all regulatory baselines, cybersecurity frameworks, and industry standards mapped within ASPIA UCL. Filter by category or search by framework code, title, publisher, or family.</p>
             </div>
-        </div>
 
-        <!-- CLASSIC LIST TABLE HEADER STRIP -->
-        <div class="list-table-header-bar" id="listTableHeaderBar">
-            <div class="col-hdr col-hdr-id">Framework ID</div>
-            <div class="col-hdr col-hdr-info">Framework Name &amp; Publisher</div>
-            <div class="col-hdr col-hdr-scope">Mapped Audit Scope</div>
-            <div class="col-hdr col-hdr-action">Action</div>
-        </div>
+            <div class="catalog-toolbar">
+                <div class="search-input-group">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="frameworkSearchInput"
+                        placeholder="Search frameworks by code, title, publisher, category..." onkeyup="filterFrameworks()">
+                </div>
+            </div>
 
-        <!-- CATALOG CARDS LIST -->
-        <div class="catalog-list-wrapper">
-            <div class="frameworks-cards-grid list-layout-view" id="frameworksGrid">
-                            <div class="framework-card" data-category="Information Security" data-fw-id="FW-001">
+            <!-- CLASSIC LIST TABLE HEADER STRIP -->
+            <div class="list-table-header-bar" id="listTableHeaderBar">
+                <div class="col-hdr col-hdr-id">Framework ID</div>
+                <div class="col-hdr col-hdr-info">Framework Name &amp; Publisher</div>
+                <div class="col-hdr col-hdr-scope">Mapped Audit Scope</div>
+                <div class="col-hdr col-hdr-action">Action</div>
+            </div>
+
+            <!-- CATALOG CARDS LIST -->
+            <div class="catalog-list-wrapper">
+                <div class="frameworks-cards-grid list-layout-view" id="frameworksGrid">
+                                <div class="framework-card" data-category="Information Security" data-fw-id="FW-001">
                 <div class="card-left-column">
                     <span class="badge-fw-id">FW-001</span>
                     <span class="badge-code">ISO27001</span>
@@ -2013,282 +2043,265 @@
                     </a>
                 </div>
             </div>
+                </div>
+            </div>
+
+            <!-- PAGINATION BAR -->
+            <div class="pagination-bar" id="frameworksPaginationBar">
+                <div class="pagination-info" id="paginationInfo">
+                    Showing <strong>1</strong> - <strong>10</strong> of <strong>25</strong> Regulatory Frameworks
+                </div>
+                <div class="pagination-buttons" id="paginationButtons">
+                    <!-- Dynamically populated via JS -->
+                </div>
             </div>
         </div>
+    </div>
 
-        <!-- PAGINATION BAR -->
-        <div class="pagination-bar" id="frameworksPaginationBar">
-            <div class="pagination-info" id="paginationInfo">
-                Showing <strong>1</strong> - <strong>10</strong> of <strong>25</strong> Regulatory Frameworks
+    <!-- SECTION 3: ARCHITECTURE & TYPES (LIGHT BAND) -->
+    <div class="section-light">
+        <div class="section-container">
+            <!-- KEY TERMS TABLE -->
+            <div class="section-header-block" id="key-terms" style="margin-top: 0;">
+                <span class="section-badge">GLOSSARY &amp; ARCHITECTURE</span>
+                <h2 class="section-heading">Key Terms Used in Framework Architecture</h2>
             </div>
-            <div class="pagination-buttons" id="paginationButtons">
-                <!-- Dynamically populated via JS -->
-            </div>
-        </div>
 
-        <!-- KEY TERMS TABLE -->
-        <div class="section-header-block" id="key-terms">
-            <span class="section-badge">GLOSSARY &amp; ARCHITECTURE</span>
-            <h2 class="section-heading">Key Terms Used in Framework Architecture</h2>
-        </div>
+            <table class="custom-table">
+                <thead>
+                    <tr>
+                        <th>Term</th>
+                        <th>Meaning</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Framework</strong></td>
+                        <td>A comprehensive set of security, privacy, or governance requirements published by an authority.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Control Domain</strong></td>
+                        <td>A top-level category grouping related controls (e.g., Access Control, Data Protection, Incident Response).</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Security Control</strong></td>
+                        <td>A specific policy, procedure, or technical safeguard designed to mitigate identified risks.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Requirement Clause</strong></td>
+                        <td>An auditable statement or sub-control specifying mandatory testing and evidence criteria.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Crosswalk / Mapping</strong></td>
+                        <td>The mathematical and conceptual correlation between controls across different frameworks.</td>
+                    </tr>
+                </tbody>
+            </table>
 
-        <table class="custom-table">
-            <thead>
-                <tr>
-                    <th>Term</th>
-                    <th>Meaning</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><strong>Framework</strong></td>
-                    <td>A comprehensive set of security, privacy, or governance requirements published by an authority.
-                    </td>
-                </tr>
-                <tr>
-                    <td><strong>Control Domain</strong></td>
-                    <td>A top-level category grouping related controls (e.g., Access Control, Data Protection, Incident
-                        Response).</td>
-                </tr>
-                <tr>
-                    <td><strong>Security Control</strong></td>
-                    <td>A specific policy, procedure, or technical safeguard designed to mitigate identified risks.</td>
-                </tr>
-                <tr>
-                    <td><strong>Requirement Clause</strong></td>
-                    <td>An auditable statement or sub-control specifying mandatory testing and evidence criteria.</td>
-                </tr>
-                <tr>
-                    <td><strong>Crosswalk / Mapping</strong></td>
-                    <td>The mathematical and conceptual correlation between controls across different frameworks.</td>
-                </tr>
-            </tbody>
-        </table>
+            <!-- TYPES OF FRAMEWORKS -->
+            <div class="section-header-block" id="framework-types" style="margin-top: 6.5rem; margin-bottom: 2.25rem;">
+                <span class="section-badge">FRAMEWORK CATEGORIES</span>
+                <h2 class="section-heading">Types of Security &amp; Regulatory Frameworks</h2>
+            </div>
 
-        <!-- TYPES OF FRAMEWORKS -->
-        <div class="section-header-block" id="framework-types">
-            <span class="section-badge">FRAMEWORK CATEGORIES</span>
-            <h2 class="section-heading">Types of Security &amp; Regulatory Frameworks</h2>
-        </div>
-
-        <div class="feature-grid">
-            <div class="feature-card" style="border-top: 3px solid #02CCFF;">
-                <strong>Regulatory Mandates</strong>
-                <p style="font-size:0.85rem;margin:0;">Legally binding laws passed by governments (e.g., GDPR, HIPAA,
-                    SOX, NIS2). Failure to comply results in severe financial penalties and legal liability.</p>
-            </div>
-            <div class="feature-card" style="border-top: 3px solid #00B8E6;">
-                <strong>Industry Standards</strong>
-                <p style="font-size:0.85rem;margin:0;">Consensus standards established by international standardization
-                    bodies (e.g., ISO/IEC 27001, ISO 27701, PCI DSS) often required for commercial operations.</p>
-            </div>
-            <div class="feature-card" style="border-top: 3px solid #1AD4FF;">
-                <strong>Security Benchmarks</strong>
-                <p style="font-size:0.85rem;margin:0;">Voluntary risk management frameworks and technical hardening
-                    guidelines (e.g., NIST CSF, CIS Controls, SOC 2 Trust Services Criteria).</p>
-            </div>
-            <div class="feature-card" style="border-top: 3px solid #33D6FF;">
-                <strong>Internal Corporate Baselines</strong>
-                <p style="font-size:0.85rem;margin:0;">Custom internal policy frameworks designed to enforce corporate
-                    risk appetite, internal controls, and operational governance.</p>
+            <div class="feature-grid">
+                <div class="feature-card" style="border-top: 3px solid #02CCFF;">
+                    <strong>Regulatory Mandates</strong>
+                    <p style="font-size:0.85rem;margin:0;">Legally binding laws passed by governments (e.g., GDPR, HIPAA, SOX, NIS2). Failure to comply results in severe financial penalties and legal liability.</p>
+                </div>
+                <div class="feature-card" style="border-top: 3px solid #00B8E6;">
+                    <strong>Industry Standards</strong>
+                    <p style="font-size:0.85rem;margin:0;">Consensus standards established by international standardization bodies (e.g., ISO/IEC 27001, ISO 27701, PCI DSS) often required for commercial operations.</p>
+                </div>
+                <div class="feature-card" style="border-top: 3px solid #1AD4FF;">
+                    <strong>Security Benchmarks</strong>
+                    <p style="font-size:0.85rem;margin:0;">Voluntary risk management frameworks and technical hardening guidelines (e.g., NIST CSF, CIS Controls, SOC 2 Trust Services Criteria).</p>
+                </div>
+                <div class="feature-card" style="border-top: 3px solid #33D6FF;">
+                    <strong>Internal Corporate Baselines</strong>
+                    <p style="font-size:0.85rem;margin:0;">Custom internal policy frameworks designed to enforce corporate risk appetite, internal controls, and operational governance.</p>
+                </div>
             </div>
         </div>
+    </div>
 
-        <!-- CROSSWALK & CONTROL MAPPING -->
-        <div class="section-header-block" id="crosswalk-mapping">
-            <span class="section-badge">UNIFIED CONTROL MAPPING</span>
-            <h2 class="section-heading">Crosswalk &amp; Control Mapping Architecture</h2>
-            <p class="section-subtitle">Framework crosswalk mapping correlates security controls, policy requirements, and audit tests across multiple regulatory standards (e.g., mapping NIST CSF 2.0 to ISO/IEC 27001:2022, SOC 2 TSC, and PCI DSS v4.0).</p>
-        </div>
-
-        <div class="feature-grid" style="margin-top: 1.5rem;">
-            <div class="feature-card" style="border-top-color: #02CCFF;">
-                <strong>1:1 &amp; Many:1 Mapping Engine</strong>
-                <p style="font-size:0.85rem;margin:0;">Links multiple framework requirement clauses to a central UCL
-                    Control Domain, reducing control duplication by up to 70%.</p>
+    <!-- SECTION 4: UNIFIED CONTROL MAPPING & WORKFLOW (ALT BAND) -->
+    <div class="section-alt">
+        <div class="section-container">
+            <!-- CROSSWALK & CONTROL MAPPING -->
+            <div class="section-header-block" id="crosswalk-mapping" style="margin-top: 0;">
+                <span class="section-badge">UNIFIED CONTROL MAPPING</span>
+                <h2 class="section-heading">Crosswalk &amp; Control Mapping Architecture</h2>
+                <p class="section-subtitle" style="color: #64748b; font-size: 0.95rem; margin-top: 0.4rem;">Framework crosswalk mapping correlates security controls, policy requirements, and audit tests across multiple regulatory standards (e.g., mapping NIST CSF 2.0 to ISO/IEC 27001:2022, SOC 2 TSC, and PCI DSS v4.0).</p>
             </div>
-            <div class="feature-card" style="border-top-color: #00B8E6;">
-                <strong>Unified Audit Evidence</strong>
-                <p style="font-size:0.85rem;margin:0;">Attach sample evidence and test execution records once to
-                    automatically satisfy multiple compliance audits.</p>
-            </div>
-            <div class="feature-card" style="border-top-color: #1AD4FF;">
-                <strong>Gap Analysis &amp; Coverage</strong>
-                <p style="font-size:0.85rem;margin:0;">Instantly identify unmapped requirements and regulatory gaps when
-                    adopting new compliance frameworks.</p>
-            </div>
-            <div class="feature-card" style="border-top-color: #33D6FF;">
-                <strong>Continuous Compliance Sync</strong>
-                <p style="font-size:0.85rem;margin:0;">Updates to regulatory baselines or internal policies propagate
-                    automatically across all mapped framework controls.</p>
-            </div>
-        </div>
 
-        <div class="callout-box" style="margin-top: 1.5rem;">
-            <p class="callout-title">How ASPIA UCL Crosswalk Works:</p>
-            <p class="callout-text">For example, an Access Control policy requirement in ASPIA UCL maps simultaneously
-                to <strong>ISO 27001:A.5.15</strong>, <strong>NIST CSF:PR.AA-01</strong>, <strong>SOC 2:CC6.1</strong>,
-                and <strong>PCI DSS:7.1.1</strong>. Testing this control once validates compliance for all four
-                standards automatically.</p>
-        </div>
+            <div class="feature-grid" style="margin-top: 1.5rem;">
+                <div class="feature-card" style="border-top-color: #02CCFF;">
+                    <strong>1:1 &amp; Many:1 Mapping Engine</strong>
+                    <p style="font-size:0.85rem;margin:0;">Links multiple framework requirement clauses to a central UCL Control Domain, reducing control duplication by up to 70%.</p>
+                </div>
+                <div class="feature-card" style="border-top-color: #00B8E6;">
+                    <strong>Unified Audit Evidence</strong>
+                    <p style="font-size:0.85rem;margin:0;">Attach sample evidence and test execution records once to automatically satisfy multiple compliance audits.</p>
+                </div>
+                <div class="feature-card" style="border-top-color: #1AD4FF;">
+                    <strong>Gap Analysis &amp; Coverage</strong>
+                    <p style="font-size:0.85rem;margin:0;">Instantly identify unmapped requirements and regulatory gaps when adopting new compliance frameworks.</p>
+                </div>
+                <div class="feature-card" style="border-top-color: #33D6FF;">
+                    <strong>Continuous Compliance Sync</strong>
+                    <p style="font-size:0.85rem;margin:0;">Updates to regulatory baselines or internal policies propagate automatically across all mapped framework controls.</p>
+                </div>
+            </div>
 
-        <!-- WORKFLOW DIAGRAM -->
-        <div class="section-header-block" id="implementation-workflow">
-            <span class="section-badge">IMPLEMENTATION WORKFLOW</span>
-            <h2 class="section-heading">Framework Implementation &amp; Mapping Workflow</h2>
-        </div>
+            <div class="callout-box" style="margin-top: 2.75rem; margin-bottom: 2.75rem;">
+                <p class="callout-title">How ASPIA UCL Crosswalk Works:</p>
+                <p class="callout-text">For example, an Access Control policy requirement in ASPIA UCL maps simultaneously to <strong>ISO 27001:A.5.15</strong>, <strong>NIST CSF:PR.AA-01</strong>, <strong>SOC 2:CC6.1</strong>, and <strong>PCI DSS:7.1.1</strong>. Testing this control once validates compliance for all four standards automatically.</p>
+            </div>
 
-        <div class="workflow-box">
-            <div class="workflow-flow">
-                <div class="flow-step-dark">1. Identify Regulatory Scope</div>
-                <div class="flow-arrow">↓</div>
-                <div class="flow-step-cyan">2. Select Target Frameworks</div>
-                <div class="flow-arrow">↓</div>
-                <div class="flow-step-dark">3. Map Control Domains (ASPIA UCL)</div>
-                <div class="flow-arrow">↓</div>
-                <div class="flow-step-cyan">4. Define Auditable Requirements</div>
-                <div class="flow-arrow">↓</div>
-                <div class="flow-step-dark">5. Execute Audit Testing &amp; Sampling</div>
-                <div class="flow-arrow">↓</div>
-                <div class="flow-step-cyan">6. Track Remediations &amp; Evidence</div>
-                <div class="flow-arrow">↓</div>
-                <div class="flow-step-dark">7. Continuous Compliance Monitoring</div>
+            <!-- WORKFLOW DIAGRAM -->
+            <div class="section-header-block" id="implementation-workflow" style="margin-top: 6.5rem; margin-bottom: 2.25rem;">
+                <span class="section-badge">IMPLEMENTATION WORKFLOW</span>
+                <h2 class="section-heading">Framework Implementation &amp; Mapping Workflow</h2>
+            </div>
+
+            <div class="workflow-box">
+                <div class="workflow-flow">
+                    <div class="flow-step-dark">1. Identify Regulatory Scope</div>
+                    <div class="flow-arrow">↓</div>
+                    <div class="flow-step-cyan">2. Select Target Frameworks</div>
+                    <div class="flow-arrow">↓</div>
+                    <div class="flow-step-dark">3. Map Control Domains (ASPIA UCL)</div>
+                    <div class="flow-arrow">↓</div>
+                    <div class="flow-step-cyan">4. Define Auditable Requirements</div>
+                    <div class="flow-arrow">↓</div>
+                    <div class="flow-step-dark">5. Execute Audit Testing &amp; Sampling</div>
+                    <div class="flow-arrow">↓</div>
+                    <div class="flow-step-cyan">6. Track Remediations &amp; Evidence</div>
+                    <div class="flow-arrow">↓</div>
+                    <div class="flow-step-dark">7. Continuous Compliance Monitoring</div>
+                </div>
             </div>
         </div>
+    </div>
 
-        <!-- CHECKLIST -->
-        <div class="section-header-block" id="checklist">
-            <span class="section-badge">AUDIT READINESS</span>
-            <h2 class="section-heading">Framework Compliance Readiness Checklist</h2>
-        </div>
+    <!-- SECTION 5: AUDIT READINESS CHECKLIST (LIGHT BAND) -->
+    <div class="section-light">
+        <div class="section-container">
+            <div class="section-header-block" id="checklist" style="margin-top: 0;">
+                <span class="section-badge">AUDIT READINESS</span>
+                <h2 class="section-heading">Framework Compliance Readiness Checklist</h2>
+            </div>
 
-        <div class="checklist-grid">
-            <div class="checklist-item"><i class="far fa-check-square" style="color:#16C4F4;"></i> Regulatory
-                applicability scoped</div>
-            <div class="checklist-item"><i class="far fa-check-square" style="color:#16C4F4;"></i> Executive sponsor
-                assigned</div>
-            <div class="checklist-item"><i class="far fa-check-square" style="color:#16C4F4;"></i> Control domains
-                mapped</div>
-            <div class="checklist-item"><i class="far fa-check-square" style="color:#16C4F4;"></i> Asset inventory
-                validated</div>
-            <div class="checklist-item"><i class="far fa-check-square" style="color:#16C4F4;"></i> Policy exceptions
-                logged</div>
-            <div class="checklist-item"><i class="far fa-check-square" style="color:#16C4F4;"></i> Risk assessment
-                documented</div>
-            <div class="checklist-item"><i class="far fa-check-square" style="color:#16C4F4;"></i> Evidence collection
-                automated</div>
-            <div class="checklist-item"><i class="far fa-check-square" style="color:#16C4F4;"></i> Vendor risk reviews
-                complete</div>
-            <div class="checklist-item"><i class="far fa-check-square" style="color:#16C4F4;"></i> Access control
-                reviews run</div>
-            <div class="checklist-item"><i class="far fa-check-square" style="color:#16C4F4;"></i> Audit sampling
-                performed</div>
-            <div class="checklist-item"><i class="far fa-check-square" style="color:#16C4F4;"></i> Corrective action
-                plan ready</div>
-            <div class="checklist-item"><i class="far fa-check-square" style="color:#16C4F4;"></i> Audit trail preserved
+            <div class="checklist-grid">
+                <div class="checklist-item"><i class="far fa-check-square" style="color:#16C4F4;"></i> Regulatory applicability scoped</div>
+                <div class="checklist-item"><i class="far fa-check-square" style="color:#16C4F4;"></i> Executive sponsor assigned</div>
+                <div class="checklist-item"><i class="far fa-check-square" style="color:#16C4F4;"></i> Control domains mapped</div>
+                <div class="checklist-item"><i class="far fa-check-square" style="color:#16C4F4;"></i> Asset inventory validated</div>
+                <div class="checklist-item"><i class="far fa-check-square" style="color:#16C4F4;"></i> Policy exceptions logged</div>
+                <div class="checklist-item"><i class="far fa-check-square" style="color:#16C4F4;"></i> Risk assessment documented</div>
+                <div class="checklist-item"><i class="far fa-check-square" style="color:#16C4F4;"></i> Evidence collection automated</div>
+                <div class="checklist-item"><i class="far fa-check-square" style="color:#16C4F4;"></i> Vendor risk reviews complete</div>
+                <div class="checklist-item"><i class="far fa-check-square" style="color:#16C4F4;"></i> Access control reviews run</div>
+                <div class="checklist-item"><i class="far fa-check-square" style="color:#16C4F4;"></i> Audit sampling performed</div>
+                <div class="checklist-item"><i class="far fa-check-square" style="color:#16C4F4;"></i> Corrective action plan ready</div>
+                <div class="checklist-item"><i class="far fa-check-square" style="color:#16C4F4;"></i> Audit trail preserved</div>
             </div>
         </div>
+    </div>
 
-        <!-- FAQ SECTION -->
-        <div class="section-header-block" id="faq">
-            <span class="section-badge">FAQ &amp; SUPPORT</span>
-            <h2 class="section-heading">Frequently Asked Questions</h2>
-            <p class="section-subtitle" style="color: #64748b; font-size: 0.95rem; margin-top: 0.4rem;">Quick answers to common questions about regulatory frameworks and control mapping.</p>
-        </div>
+    <!-- SECTION 6: FAQ SECTION (ALT BAND) -->
+    <div class="section-alt">
+        <div class="section-container">
+            <div class="section-header-block" id="faq" style="margin-top: 0;">
+                <span class="section-badge">FAQ &amp; SUPPORT</span>
+                <h2 class="section-heading">Frequently Asked Questions</h2>
+                <p class="section-subtitle" style="color: #64748b; font-size: 0.95rem; margin-top: 0.4rem;">Quick answers to common questions about regulatory frameworks and control mapping.</p>
+            </div>
 
-        <div class="faq-card-container">
-            <div class="faq-list">
-                <div class="faq-item">
-                    <div class="q" role="button" aria-expanded="false" tabindex="0">
-                        <span class="q-text">What is a cybersecurity compliance framework?</span>
-                        <span class="faq-toggle-icon" aria-hidden="true">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                                <line x1="12" y1="5" x2="12" y2="19"></line>
-                                <line x1="5" y1="12" x2="19" y2="12"></line>
-                            </svg>
-                        </span>
-                    </div>
-                    <div class="a-wrapper">
-                        <div class="a-inner">
-                            <div class="a">A cybersecurity compliance framework is a structured set of guidelines, security controls, and best practices designed to help organizations manage risk, protect data assets, and satisfy regulatory obligations.</div>
+            <div class="faq-card-container" style="margin-bottom: 0;">
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <div class="q" role="button" aria-expanded="false" tabindex="0">
+                            <span class="q-text">What is a cybersecurity compliance framework?</span>
+                            <span class="faq-toggle-icon" aria-hidden="true">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                </svg>
+                            </span>
+                        </div>
+                        <div class="a-wrapper">
+                            <div class="a-inner">
+                                <div class="a">A cybersecurity compliance framework is a structured set of guidelines, security controls, and best practices designed to help organizations manage risk, protect data assets, and satisfy regulatory obligations.</div>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="faq-item">
-                    <div class="q" role="button" aria-expanded="false" tabindex="0">
-                        <span class="q-text">What are the main types of compliance frameworks?</span>
-                        <span class="faq-toggle-icon" aria-hidden="true">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                                <line x1="12" y1="5" x2="12" y2="19"></line>
-                                <line x1="5" y1="12" x2="19" y2="12"></line>
-                            </svg>
-                        </span>
-                    </div>
-                    <div class="a-wrapper">
-                        <div class="a-inner">
-                            <div class="a">Frameworks generally fall into three main categories: <strong>Regulatory Mandates</strong> (GDPR, HIPAA, PCI DSS, SOX, NIS2), <strong>Industry Standards</strong> (ISO/IEC 27001, ISO 27701), and <strong>Security Benchmarks</strong> (NIST CSF, CIS Controls, SOC 2).</div>
+                    <div class="faq-item">
+                        <div class="q" role="button" aria-expanded="false" tabindex="0">
+                            <span class="q-text">What are the main types of compliance frameworks?</span>
+                            <span class="faq-toggle-icon" aria-hidden="true">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                </svg>
+                            </span>
+                        </div>
+                        <div class="a-wrapper">
+                            <div class="a-inner">
+                                <div class="a">Frameworks generally fall into three main categories: <strong>Regulatory Mandates</strong> (GDPR, HIPAA, PCI DSS, SOX, NIS2), <strong>Industry Standards</strong> (ISO/IEC 27001, ISO 27701), and <strong>Security Benchmarks</strong> (NIST CSF, CIS Controls, SOC 2).</div>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="faq-item">
-                    <div class="q" role="button" aria-expanded="false" tabindex="0">
-                        <span class="q-text">What is framework crosswalk mapping?</span>
-                        <span class="faq-toggle-icon" aria-hidden="true">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                                <line x1="12" y1="5" x2="12" y2="19"></line>
-                                <line x1="5" y1="12" x2="19" y2="12"></line>
-                            </svg>
-                        </span>
-                    </div>
-                    <div class="a-wrapper">
-                        <div class="a-inner">
-                            <div class="a">Crosswalk mapping links controls and requirements from multiple frameworks to a single unified baseline, enabling a <strong>"test once, comply with many"</strong> audit strategy.</div>
+                    <div class="faq-item">
+                        <div class="q" role="button" aria-expanded="false" tabindex="0">
+                            <span class="q-text">What is framework crosswalk mapping?</span>
+                            <span class="faq-toggle-icon" aria-hidden="true">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                </svg>
+                            </span>
+                        </div>
+                        <div class="a-wrapper">
+                            <div class="a-inner">
+                                <div class="a">Crosswalk mapping links controls and requirements from multiple frameworks to a single unified baseline, enabling a <strong>"test once, comply with many"</strong> audit strategy.</div>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="faq-item">
-                    <div class="q" role="button" aria-expanded="false" tabindex="0">
-                        <span class="q-text">What is the difference between ISO 27001 and NIST CSF?</span>
-                        <span class="faq-toggle-icon" aria-hidden="true">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                                <line x1="12" y1="5" x2="12" y2="19"></line>
-                                <line x1="5" y1="12" x2="19" y2="12"></line>
-                            </svg>
-                        </span>
-                    </div>
-                    <div class="a-wrapper">
-                        <div class="a-inner">
-                            <div class="a"><strong>ISO 27001</strong> is a certifiable Information Security Management System (ISMS) standard with mandatory clauses, whereas <strong>NIST CSF</strong> is a flexible risk management framework organized into Identify, Protect, Detect, Respond, and Recover functions.</div>
+                    <div class="faq-item">
+                        <div class="q" role="button" aria-expanded="false" tabindex="0">
+                            <span class="q-text">What is the difference between ISO 27001 and NIST CSF?</span>
+                            <span class="faq-toggle-icon" aria-hidden="true">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                </svg>
+                            </span>
+                        </div>
+                        <div class="a-wrapper">
+                            <div class="a-inner">
+                                <div class="a"><strong>ISO 27001</strong> is a certifiable Information Security Management System (ISMS) standard with mandatory clauses, whereas <strong>NIST CSF</strong> is a flexible risk management framework organized into Identify, Protect, Detect, Respond, and Recover functions.</div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
 
-        <!-- CONCLUSION & CTA BANNER -->
-        <div class="section-header-block" id="conclusion">
-            <span class="section-badge">SUMMARY</span>
-            <h2 class="section-heading">Final Takeaway</h2>
-        </div>
-        <p>Effective GRC management relies on unifying disparate compliance mandates under a central framework
-            structure. By standardizing control domains and leveraging crosswalk mappings, organizations drastically
-            reduce audit burden while strengthening their operational security posture.</p>
-
-        <div class="cta-banner">
-            <h3 class="cta-title">Ready to Streamline Your Framework Compliance &amp; Control Mapping?</h3>
-            <p class="cta-desc">Connect regulatory frameworks with control domains, auditable requirements, and sampling
-                evidence in one centralized unified control library.</p>
-            <div class="cta-buttons">
-                <a href="https://aspiainfotech.com/" target="_blank" rel="noopener" class="btn-cta-primary">Explore
-                    ASPIA →</a>
-                <a href="https://aspiainfotech.com/request-a-demo/" target="_blank" rel="noopener"
-                    class="btn-cta-secondary">Book a Demo</a>
+    <!-- SECTION 7: SUMMARY (LIGHT BAND) -->
+    <div class="section-light">
+        <div class="section-container">
+            <div class="section-header-block" id="conclusion" style="margin-top: 0;">
+                <span class="section-badge">SUMMARY</span>
+                <h2 class="section-heading">Final Takeaway</h2>
             </div>
+            <p style="line-height: 1.7; margin: 0;">Effective GRC management relies on unifying disparate compliance mandates under a central framework structure. By standardizing control domains and leveraging crosswalk mappings, organizations drastically reduce audit burden while strengthening their operational security posture.</p>
         </div>
-
     </div>
 
     <!-- SCRIPTS -->
@@ -2459,7 +2472,7 @@
 
         function getMatchingCards() {
             const query = (document.getElementById('frameworkSearchInput')?.value || '').toLowerCase().trim();
-            const cards = Array.from(document.querySelectorAll('.framework-card'));
+            const cards = Array.from(document.querySelectorAll('#frameworksGrid .framework-card'));
 
             return cards.filter(card => {
                 const text = card.textContent.toLowerCase();
@@ -2471,7 +2484,7 @@
         }
 
         function renderPagination() {
-            const allCards = Array.from(document.querySelectorAll('.framework-card'));
+            const allCards = Array.from(document.querySelectorAll('#frameworksGrid .framework-card'));
             const matchingCards = getMatchingCards();
             const totalMatching = matchingCards.length;
 
@@ -2507,7 +2520,7 @@
 
             for (let i = startIndex; i < endIndex; i++) {
                 if (matchingCards[i]) {
-                    matchingCards[i].style.display = 'flex';
+                    matchingCards[i].style.display = '';
                 }
             }
 
@@ -2522,9 +2535,29 @@
 
                 btnsHtml += `<button type="button" class="page-btn" ${currentPage === 1 ? 'disabled' : ''} onclick="goToPage(${currentPage - 1})" aria-label="Previous Page"><i class="fas fa-chevron-left"></i></button>`;
 
-                for (let p = 1; p <= totalPages; p++) {
-                    const activeClass = p === currentPage ? ' active' : '';
-                    btnsHtml += `<button type="button" class="page-btn${activeClass}" onclick="goToPage(${p})">${p}</button>`;
+                if (totalPages <= 7) {
+                    for (let p = 1; p <= totalPages; p++) {
+                        const activeClass = p === currentPage ? ' active' : '';
+                        btnsHtml += `<button type="button" class="page-btn${activeClass}" onclick="goToPage(${p})">${p}</button>`;
+                    }
+                } else {
+                    let pagesToDisplay = [];
+                    if (currentPage <= 4) {
+                        pagesToDisplay = [1, 2, 3, 4, 5, '...', totalPages];
+                    } else if (currentPage >= totalPages - 3) {
+                        pagesToDisplay = [1, '...', totalPages - 4, totalPages - 3, totalPages - 2, totalPages - 1, totalPages];
+                    } else {
+                        pagesToDisplay = [1, '...', currentPage - 1, currentPage, currentPage + 1, '...', totalPages];
+                    }
+
+                    pagesToDisplay.forEach(item => {
+                        if (item === '...') {
+                            btnsHtml += `<span class="page-btn disabled" style="cursor:default;border:none;background:transparent;opacity:0.6;">...</span>`;
+                        } else {
+                            const activeClass = item === currentPage ? ' active' : '';
+                            btnsHtml += `<button type="button" class="page-btn${activeClass}" onclick="goToPage(${item})">${item}</button>`;
+                        }
+                    });
                 }
 
                 btnsHtml += `<button type="button" class="page-btn" ${currentPage === totalPages ? 'disabled' : ''} onclick="goToPage(${currentPage + 1})" aria-label="Next Page"><i class="fas fa-chevron-right"></i></button>`;
@@ -2547,9 +2580,26 @@
             currentPage = 1;
             renderPagination();
         }
-    </script>
 
-    @include('aspiaUcl.partials.footer')
+        // Initialize pagination on page load
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', renderPagination);
+        } else {
+            renderPagination();
+        }
+    </script>
+    <!-- UNIFIED DARK NAVY CTA & FOOTER SECTION -->
+    <div class="footer-cta-wrapper" style="background: #0B132B; color: #ffffff; padding-top: 4rem; transition: background 0.35s ease;">
+        <div class="section-container" style="text-align: center; padding-bottom: 2rem;">
+            <h3 style="font-size: 2.15rem; font-weight: 800; color: #ffffff; margin: 0 0 0.8rem 0; letter-spacing: -0.02em;">Ready to Streamline Your Framework Compliance &amp; Control Mapping?</h3>
+            <p style="color: #94a3b8; font-size: 1.05rem; margin: 0 auto 2rem auto; line-height: 1.65;">Connect regulatory frameworks with control domains, auditable requirements, and sampling evidence in one centralized unified control library.</p>
+            <div class="cta-buttons" style="display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center;">
+                <a href="https://aspiainfotech.com/" target="_blank" rel="noopener" class="btn-cta-primary">Explore ASPIA →</a>
+                <a href="https://aspiainfotech.com/request-a-demo/" target="_blank" rel="noopener" class="btn-cta-secondary">Book a Demo</a>
+            </div>
+        </div>
+        <?php echo $__env->make('aspiaUcl.partials.footer', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+    </div>
 
     <script>
         // Mobile Menu Toggle
@@ -2623,4 +2673,4 @@
     </script>
 </body>
 
-</html>
+</html><?php /**PATH C:\xampp\htdocs\AspiaUCL\storage\framework\views/53ff32bbb0aa2887e1946c94a0ee004b.blade.php ENDPATH**/ ?>

@@ -169,9 +169,16 @@ HTML;
 
         $template = ControlTemplate::latest('updated_at')->first() ?? ControlTemplate::first();
 
-        $html = ($template && !empty(trim($template->html_content)))
-            ? $template->html_content
-            : $this->getDefaultTemplateHtml();
+        if (!$template || empty(trim($template->html_content ?? ''))) {
+            return redirect()
+                ->route('controls.index')
+                ->with(
+                    'error',
+                    "Template for control is not present. Please add its template in 'Add Control Template'."
+                );
+        }
+
+        $html = $template->html_content;
 
         // Domain Info & Links
         $domainId      = $control->domain?->domain_id ?? '';
@@ -705,11 +712,6 @@ HTML;
 
     private function getDefaultTemplateHtml(): string
     {
-        $filePath = resource_path('views/aspiaUcl/controls/control_template.html');
-        if (file_exists($filePath)) {
-            return file_get_contents($filePath);
-        }
-
         return <<<'HTML'
 <!DOCTYPE html>
 <html lang="en" data-theme="light">

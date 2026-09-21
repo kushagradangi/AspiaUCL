@@ -66,9 +66,16 @@ class RequirementTemplateController extends Controller
 
         $template = RequirementTemplate::latest('updated_at')->first() ?? RequirementTemplate::first();
 
-        $html = ($template && !empty(trim($template->html_content)))
-            ? $template->html_content
-            : $this->getDefaultTemplateHtml();
+        if (!$template || empty(trim($template->html_content ?? ''))) {
+            return redirect()
+                ->route('requirements.index')
+                ->with(
+                    'error',
+                    "Template for requirement is not present. Please add its template in 'Add Requirement Template'."
+                );
+        }
+
+        $html = $template->html_content;
 
         // Control Info & Links
         $control                  = $requirement->control;

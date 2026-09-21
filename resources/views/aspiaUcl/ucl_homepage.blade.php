@@ -737,66 +737,158 @@
             font-weight: 500;
         }
 
+        .controls-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+        }
+
+        @media (max-width: 1200px) {
+            .controls-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        @media (max-width: 900px) {
+            .controls-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        @media (max-width: 600px) {
+            .controls-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
         .control-card {
-            background: #f0f6ff;
-            border-radius: 12px;
-            padding: 14px 16px;
-            border: 1px solid #d4e3f7;
-            transition: 0.2s;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 20px;
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
             text-decoration: none;
             color: #0D1735;
             display: flex;
             flex-direction: column;
+            justify-content: space-between;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+            position: relative;
         }
+
         .control-card:hover {
-            border-color: #16C4F4;
-            box-shadow: 0 4px 16px rgba(0, 102, 204, 0.12);
-            transform: translateY(-2px);
+            border-color: #cbd5e1;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.03);
+            transform: translateY(-3px);
         }
-        .control-card .top {
+
+        .control-card-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .control-icon-box {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.15rem;
+        }
+
+        .control-header-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .control-top-row {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 4px;
+            gap: 8px;
+            margin-bottom: 3px;
         }
-        .control-card .id {
+
+        .control-id {
+            font-size: 0.82rem;
             font-weight: 700;
-            font-size: 0.75rem;
-            color: #16C4F4;
-            font-family: monospace;
+            color: #1e293b;
+            letter-spacing: -0.01em;
         }
-        .control-card .badge-count {
-            font-size: 0.6rem;
-            background: #e8f0fe;
-            color: #16C4F4;
-            padding: 1px 10px;
-            border-radius: 12px;
+
+        .control-req-badge {
+            font-size: 0.72rem;
             font-weight: 600;
+            color: #0284c7;
+            background: #e0f2fe;
+            padding: 2px 10px;
+            border-radius: 20px;
+            white-space: nowrap;
         }
-        .control-card .name {
-            font-weight: 600;
-            font-size: 0.85rem;
-            color: #0D1735;
+
+        .control-name {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #0f172a;
+            line-height: 1.35;
+            margin: 0;
         }
-        .control-card .desc {
-            font-size: 0.75rem;
-            color: #5a6a82;
-            margin: 4px 0 8px 0;
+
+        .control-desc {
+            font-size: 0.8rem;
+            color: #475569;
+            line-height: 1.5;
+            margin: 0 0 16px 0;
             flex: 1;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
         }
-        .control-card .frameworks {
-            font-size: 0.65rem;
-            color: #6a7a92;
-            border-top: 1px solid #f0f2f6;
-            padding-top: 6px;
+
+        .control-card-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-top: auto;
+            padding-top: 4px;
         }
-        .control-card .frameworks span {
-            background: #e1edfc;
-            padding: 1px 8px;
-            border-radius: 4px;
-            margin-right: 4px;
-            font-weight: 500;
+
+        .control-tags {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .control-tag {
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 3px 9px;
+            border-radius: 6px;
+            white-space: nowrap;
+        }
+
+        .tag-blue { background: #eff6ff; color: #1d4ed8; }
+        .tag-cyan { background: #ecfeff; color: #0284c7; }
+        .tag-teal { background: #e6f7f2; color: #0f766e; }
+        .tag-emerald { background: #f0fdf4; color: #15803d; }
+        .tag-purple { background: #f5f3ff; color: #6d28d9; }
+        .tag-neutral { background: #f1f5f9; color: #475569; }
+
+        .control-arrow {
+            color: #94a3b8;
+            font-size: 0.85rem;
+            transition: all 0.2s ease;
+            flex-shrink: 0;
+        }
+
+        .control-card:hover .control-arrow {
             color: #16C4F4;
+            transform: translateX(4px);
         }
 
         /* ============================================================
@@ -2097,41 +2189,50 @@
             color: #94a3b8 !important;
         }
 
-        /* Control Cards (Light Cream in Dark Theme) */
+        /* Control Cards Dark Theme Overrides */
         body.dark-mode .control-card {
-            background: #faf8f5 !important;
-            border: 1px solid #ede7db !important;
-            color: #0D1735 !important;
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25) !important;
+            background: #0f172a !important;
+            border-color: #1e293b !important;
+            color: #f8fafc !important;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4) !important;
         }
+
         body.dark-mode .control-card:hover {
-            border-color: #16C4F4 !important;
-            box-shadow: 0 8px 24px rgba(0, 102, 204, 0.25) !important;
-            transform: translateY(-2px);
+            border-color: #334155 !important;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5) !important;
         }
-        body.dark-mode .control-card .id {
-            color: #16C4F4 !important;
+
+        body.dark-mode .control-id {
+            color: #cbd5e1 !important;
         }
-        body.dark-mode .control-card .badge-count {
-            background: #e8f0fe !important;
-            color: #16C4F4 !important;
-            border: none !important;
+
+        body.dark-mode .control-req-badge {
+            background: rgba(56, 189, 248, 0.15) !important;
+            color: #38bdf8 !important;
         }
-        body.dark-mode .control-card .name {
-            color: #0D1735 !important;
+
+        body.dark-mode .control-name {
+            color: #ffffff !important;
         }
-        body.dark-mode .control-card .desc {
-            color: #5a6a82 !important;
+
+        body.dark-mode .control-desc {
+            color: #94a3b8 !important;
         }
-        body.dark-mode .control-card .frameworks {
-            border-top-color: #e6e0d4 !important;
-            color: #6a7a92 !important;
+
+        body.dark-mode .control-arrow {
+            color: #64748b !important;
         }
-        body.dark-mode .control-card .frameworks span {
-            background: #f3eee3 !important;
-            color: #4a5a72 !important;
-            border: none !important;
+
+        body.dark-mode .control-card:hover .control-arrow {
+            color: #38bdf8 !important;
         }
+
+        body.dark-mode .tag-blue { background: rgba(37, 99, 235, 0.2) !important; color: #93c5fd !important; border: 1px solid rgba(59, 130, 246, 0.3); }
+        body.dark-mode .tag-cyan { background: rgba(14, 165, 233, 0.2) !important; color: #7dd3fc !important; border: 1px solid rgba(14, 165, 233, 0.3); }
+        body.dark-mode .tag-teal { background: rgba(16, 185, 129, 0.2) !important; color: #6ee7b7 !important; border: 1px solid rgba(16, 185, 129, 0.3); }
+        body.dark-mode .tag-emerald { background: rgba(34, 197, 94, 0.2) !important; color: #86efac !important; border: 1px solid rgba(34, 197, 94, 0.3); }
+        body.dark-mode .tag-purple { background: rgba(168, 85, 247, 0.2) !important; color: #d8b4fe !important; border: 1px solid rgba(168, 85, 247, 0.3); }
+        body.dark-mode .tag-neutral { background: rgba(148, 163, 184, 0.2) !important; color: #cbd5e1 !important; border: 1px solid rgba(148, 163, 184, 0.3); }
 
         /* Dark mode overrides for Controls Pagination */
         body.dark-mode .controls-page-btn {
@@ -2740,33 +2841,293 @@
                 <p>Each unified control maps to requirements from multiple frameworks.</p>
             </div>
 
+            @php
+                $getControlThemeData = function($controlId, $controlName) {
+                    $id = strtoupper($controlId ?? '');
+                    $name = strtolower($controlName ?? '');
+
+                    if (str_contains($id, 'GOV') || str_contains($name, 'governance')) {
+                        return [
+                            'icon' => 'fas fa-shield-alt',
+                            'bg' => 'rgba(37, 99, 235, 0.08)',
+                            'color' => '#2563eb',
+                            'tags' => ['ISO 27001', 'NIST CSF', 'RBI CSF', '+2']
+                        ];
+                    } elseif (str_contains($id, 'POL') || str_contains($name, 'policy')) {
+                        return [
+                            'icon' => 'fas fa-file-alt',
+                            'bg' => 'rgba(124, 58, 237, 0.08)',
+                            'color' => '#7c3aed',
+                            'tags' => ['ISO 27001', 'NIST CSF', 'PCI DSS', '+1']
+                        ];
+                    } elseif (str_contains($id, 'RSK') || str_contains($name, 'risk')) {
+                        return [
+                            'icon' => 'fas fa-exclamation-triangle',
+                            'bg' => 'rgba(249, 115, 22, 0.08)',
+                            'color' => '#ea580c',
+                            'tags' => ['ISO 31000', 'NIST CSF', 'RBI CSF', '+2']
+                        ];
+                    } elseif (str_contains($id, 'CMP') || str_contains($name, 'compliance')) {
+                        return [
+                            'icon' => 'fas fa-clipboard-check',
+                            'bg' => 'rgba(16, 185, 129, 0.08)',
+                            'color' => '#059669',
+                            'tags' => ['RBI CSF', 'PCI DSS', 'DORA', '+3']
+                        ];
+                    } elseif (str_contains($id, 'IAM') || str_contains($name, 'identity') || str_contains($name, 'access')) {
+                        return [
+                            'icon' => 'fas fa-user-shield',
+                            'bg' => 'rgba(79, 70, 229, 0.08)',
+                            'color' => '#4f46e5',
+                            'tags' => ['ISO 27001', 'NIST CSF', 'CIS Controls', '+1']
+                        ];
+                    } elseif (str_contains($id, 'AST') || str_contains($name, 'asset')) {
+                        return [
+                            'icon' => 'fas fa-server',
+                            'bg' => 'rgba(6, 182, 212, 0.08)',
+                            'color' => '#0891b2',
+                            'tags' => ['ISO 27001', 'CIS Controls', 'NIST CSF']
+                        ];
+                    } elseif (str_contains($id, 'DAT') || str_contains($name, 'data') || str_contains($name, 'privacy')) {
+                        return [
+                            'icon' => 'fas fa-lock',
+                            'bg' => 'rgba(225, 29, 72, 0.08)',
+                            'color' => '#e11d48',
+                            'tags' => ['ISO 27701', 'GDPR', 'DPDP', '+2']
+                        ];
+                    } elseif (str_contains($id, 'CRY') || str_contains($name, 'crypto')) {
+                        return [
+                            'icon' => 'fas fa-key',
+                            'bg' => 'rgba(147, 51, 234, 0.08)',
+                            'color' => '#9333ea',
+                            'tags' => ['NIST CSF', 'FIPS 140-2', 'CIS Controls']
+                        ];
+                    } elseif (str_contains($id, 'NET') || str_contains($name, 'network')) {
+                        return [
+                            'icon' => 'fas fa-network-wired',
+                            'bg' => 'rgba(2, 132, 199, 0.08)',
+                            'color' => '#0284c7',
+                            'tags' => ['NIST CSF', 'CIS Controls', 'ISO 27001']
+                        ];
+                    } elseif (str_contains($id, 'END') || str_contains($name, 'endpoint')) {
+                        return [
+                            'icon' => 'fas fa-laptop',
+                            'bg' => 'rgba(13, 148, 136, 0.08)',
+                            'color' => '#0d9488',
+                            'tags' => ['CIS Controls', 'NIST CSF', 'ISO 27001']
+                        ];
+                    } elseif (str_contains($id, 'CLD') || str_contains($name, 'cloud')) {
+                        return [
+                            'icon' => 'fas fa-cloud',
+                            'bg' => 'rgba(3, 105, 161, 0.08)',
+                            'color' => '#0369a1',
+                            'tags' => ['NIST CSF', 'CIS Controls', 'ISO 27017', '+1']
+                        ];
+                    } elseif (str_contains($id, 'CFG') || str_contains($name, 'config')) {
+                        return [
+                            'icon' => 'fas fa-cog',
+                            'bg' => 'rgba(71, 85, 105, 0.08)',
+                            'color' => '#475569',
+                            'tags' => ['CIS Controls', 'NIST CSF', 'ISO 27001']
+                        ];
+                    } elseif (str_contains($id, 'VUL') || str_contains($name, 'vulnerab')) {
+                        return [
+                            'icon' => 'fas fa-bug',
+                            'bg' => 'rgba(220, 38, 38, 0.08)',
+                            'color' => '#dc2626',
+                            'tags' => ['NIST CSF', 'PCI DSS', 'ISO 27001']
+                        ];
+                    } elseif (str_contains($id, 'APP') || str_contains($name, 'application')) {
+                        return [
+                            'icon' => 'fas fa-code',
+                            'bg' => 'rgba(5, 150, 105, 0.08)',
+                            'color' => '#059669',
+                            'tags' => ['OWASP Top 10', 'PCI DSS', 'NIST CSF']
+                        ];
+                    } elseif (str_contains($id, 'INC') || str_contains($name, 'incident')) {
+                        return [
+                            'icon' => 'fas fa-bell',
+                            'bg' => 'rgba(217, 119, 6, 0.08)',
+                            'color' => '#d97706',
+                            'tags' => ['ISO 27001', 'NIST CSF', 'GDPR', '+1']
+                        ];
+                    } elseif (str_contains($id, 'BCM') || str_contains($name, 'continuity')) {
+                        return [
+                            'icon' => 'fas fa-sync-alt',
+                            'bg' => 'rgba(13, 148, 136, 0.08)',
+                            'color' => '#0d9488',
+                            'tags' => ['ISO 22301', 'NIST CSF', 'RBI CSF']
+                        ];
+                    } elseif (str_contains($id, 'TPR') || str_contains($name, 'third-party') || str_contains($name, 'vendor')) {
+                        return [
+                            'icon' => 'fas fa-truck-loading',
+                            'bg' => 'rgba(109, 40, 217, 0.08)',
+                            'color' => '#6d28d9',
+                            'tags' => ['ISO 27001', 'NIST CSF', 'DORA', '+2']
+                        ];
+                    } else {
+                        return [
+                            'icon' => 'fas fa-shield-alt',
+                            'bg' => 'rgba(37, 99, 235, 0.08)',
+                            'color' => '#2563eb',
+                            'tags' => ['ISO 27001', 'NIST CSF', 'PCI DSS', '+1']
+                        ];
+                    }
+                };
+
+                $getControlTagClass = function($tagName) {
+                    $tag = strtoupper(trim($tagName));
+                    if (str_starts_with($tag, '+')) {
+                        return 'tag-neutral';
+                    } elseif (str_contains($tag, 'ISO')) {
+                        return 'tag-blue';
+                    } elseif (str_contains($tag, 'NIST')) {
+                        return 'tag-teal';
+                    } elseif (str_contains($tag, 'RBI') || str_contains($tag, 'FIPS')) {
+                        return 'tag-emerald';
+                    } elseif (str_contains($tag, 'PCI') || str_contains($tag, 'CIS')) {
+                        return 'tag-cyan';
+                    } elseif (str_contains($tag, 'GDPR') || str_contains($tag, 'DPDP') || str_contains($tag, 'DORA') || str_contains($tag, 'HIPAA') || str_contains($tag, 'COBIT')) {
+                        return 'tag-purple';
+                    } else {
+                        return 'tag-blue';
+                    }
+                };
+
+                $getDynamicTagsForControl = function($control, $defaultTags) {
+                    if (!$control) return $defaultTags;
+
+                    $rawTags = collect();
+
+                    // 1. Dynamic Domain Frameworks (pivot relationship)
+                    if ($control->domain && $control->domain->frameworks && $control->domain->frameworks->count() > 0) {
+                        foreach ($control->domain->frameworks as $fw) {
+                            $rawTags->push($fw->short_name ?: $fw->name ?: $fw->code);
+                        }
+                    }
+
+                    // 2. Requirement mappings (if populated)
+                    if ($control->requirements) {
+                        $reqIds = $control->requirements->pluck('requirement_id')->filter();
+                        if ($reqIds->isNotEmpty()) {
+                            $mappings = \App\Models\RequirementFrameworkMapping::whereIn('requirement_id', $reqIds)->get();
+                            foreach ($mappings as $m) {
+                                $rawTags->push($m->framework_code ?: $m->framework_name);
+                            }
+                        }
+                    }
+
+                    $aliasMap = [
+                        'General Data Protection Regulation (GDPR)' => 'GDPR',
+                        'General Data Protection Regulation' => 'GDPR',
+                        'Health Insurance Portability and Accountability Act' => 'HIPAA',
+                        'Health Insurance Portability and Accountability Act (HIPAA)' => 'HIPAA',
+                        'Digital Operational Resilience Act' => 'DORA',
+                        'Digital Operational Resilience Act (DORA)' => 'DORA',
+                        'Payment Card Industry Data Security Standard' => 'PCI DSS',
+                        'PCI DSS' => 'PCI DSS',
+                        'ISO/IEC 27001' => 'ISO 27001',
+                        'NIST Cybersecurity Framework' => 'NIST CSF',
+                        'Control Objectives for Information and Related Technologies' => 'COBIT',
+                    ];
+
+                    $formatted = $rawTags->filter()->map(function($t) use ($aliasMap) {
+                        return $aliasMap[$t] ?? $t;
+                    })->unique()->values();
+
+                    if ($formatted->count() > 0) {
+                        $display = $formatted->take(3)->all();
+                        $remaining = $formatted->count() - 3;
+                        if ($remaining > 0) {
+                            $display[] = '+' . $remaining;
+                        }
+                        return $display;
+                    }
+
+                    return $defaultTags;
+                };
+            @endphp
+
             <div class="controls-grid" id="controlsGrid">
                 @forelse($controls as $control)
+                    @php
+                        $theme = $getControlThemeData($control->control_id ?? '', $control->name ?? '');
+                        $reqCount = $control->requirements_count ?? ($control->requirements ? $control->requirements->count() : 10);
+                        $description = $control->business_description ?? $control->control_summary ?? $control->business_objective ?? 'Establish, govern, operate, monitor, and continually improve enterprise security.';
+                        $cardTags = $getDynamicTagsForControl($control, $theme['tags']);
+                    @endphp
                     <a href="{{ route('controls.show', $control->control_id ?? $control->id) }}" class="control-card">
-                        <div class="top">
-                            <span class="id">{{ $control->control_id }}</span>
-                            <span class="badge-count">{{ $control->requirements_count ?? $control->requirements->count() }} requirements</span>
+                        <div class="control-card-header">
+                            <div class="control-icon-box" style="background: {{ $theme['bg'] }}; color: {{ $theme['color'] }};">
+                                <i class="{{ $theme['icon'] }}"></i>
+                            </div>
+                            <div class="control-header-info">
+                                <div class="control-top-row">
+                                    <span class="control-id">{{ $control->control_id }}</span>
+                                    <span class="control-req-badge">{{ $reqCount }} Requirements</span>
+                                </div>
+                                <h3 class="control-name">{{ $control->name }}</h3>
+                            </div>
                         </div>
-                        <div class="name">{{ $control->name }}</div>
-                        <div class="desc">{{ \Illuminate\Support\Str::limit($control->business_description ?? $control->control_summary ?? $control->business_objective ?? 'Manage access, policies, and evidence across systems.', 90) }}</div>
-                        <div class="frameworks">
-                            @if($control->domain)
-                                <span>{{ $control->domain->name }}</span>
-                            @else
-                                <span>ISO 27001</span> <span>NIST CSF</span> <span>PCI DSS</span>
-                            @endif
+                        <p class="control-desc">{{ \Illuminate\Support\Str::limit($description, 115) }}</p>
+                        <div class="control-card-footer">
+                            <div class="control-tags">
+                                @foreach($cardTags as $tag)
+                                    <span class="control-tag {{ $getControlTagClass($tag) }}">{{ $tag }}</span>
+                                @endforeach
+                            </div>
+                            <span class="control-arrow">
+                                <i class="fas fa-arrow-right"></i>
+                            </span>
                         </div>
                     </a>
                 @empty
-                    <a href="{{ route('controls.public_index') }}" class="control-card">
-                        <div class="top">
-                            <span class="id">UCL-001</span>
-                            <span class="badge-count">4 frameworks</span>
-                        </div>
-                        <div class="name">Access Control</div>
-                        <div class="desc">Manage user access, authentication, and authorization across systems.</div>
-                        <div class="frameworks"><span>ISO 27001</span> <span>NIST CSF</span> <span>PCI DSS</span></div>
-                    </a>
+                    @php
+                        $fallbackControls = [
+                            ['id' => 'GOV-001', 'name' => 'Information Security Governance', 'req' => '12 Requirements', 'desc' => 'Establish, govern, operate, monitor, and continually improve an enterprise information security program.', 'tags' => ['ISO 27001', 'NIST CSF', 'RBI CSF', '+2']],
+                            ['id' => 'POL-001', 'name' => 'Policy Management', 'req' => '8 Requirements', 'desc' => 'Define, maintain, and manage the lifecycle of security, privacy, and compliance policies.', 'tags' => ['ISO 27001', 'NIST CSF', 'PCI DSS', '+1']],
+                            ['id' => 'RSK-001', 'name' => 'Risk Management Framework', 'req' => '10 Requirements', 'desc' => 'Establish and maintain a framework for identifying, assessing, treating, and monitoring risks.', 'tags' => ['ISO 31000', 'NIST CSF', 'RBI CSF', '+2']],
+                            ['id' => 'CMP-001', 'name' => 'Compliance Program Management', 'req' => '10 Requirements', 'desc' => 'Establish and maintain a program to identify, manage, and monitor adherence to all applicable regulatory requirements.', 'tags' => ['RBI CSF', 'PCI DSS', 'DORA', '+3']],
+                            ['id' => 'IAM-001', 'name' => 'Identity & Account Lifecycle Management', 'req' => '12 Requirements', 'desc' => 'Manage the entire lifecycle of digital identities, including creation, modification, and deprovisioning.', 'tags' => ['ISO 27001', 'NIST CSF', 'CIS Controls', '+1']],
+                            ['id' => 'AST-001', 'name' => 'Asset Inventory Management', 'req' => '10 Requirements', 'desc' => 'Establish, maintain, and govern a comprehensive inventory of all technology assets, including hardware, software, and cloud assets.', 'tags' => ['ISO 27001', 'CIS Controls', 'NIST CSF']],
+                            ['id' => 'DAT-001', 'name' => 'Data Protection & Privacy Strategy', 'req' => '10 Requirements', 'desc' => 'Establish, implement, and maintain an enterprise data protection and privacy strategy.', 'tags' => ['ISO 27701', 'GDPR', 'DPDP', '+2']],
+                            ['id' => 'CRY-001', 'name' => 'Cryptographic Governance', 'req' => '10 Requirements', 'desc' => 'Establish and maintain an enterprise cryptographic governance framework defining the use, management, and lifecycle of cryptographic controls.', 'tags' => ['NIST CSF', 'FIPS 140-2', 'CIS Controls']],
+                            ['id' => 'NET-001', 'name' => 'Secure Network Architecture', 'req' => '10 Requirements', 'desc' => 'Establish and maintain a secure network architecture incorporating defense-in-depth, Zero Trust principles, and network monitoring.', 'tags' => ['NIST CSF', 'CIS Controls', 'ISO 27001']],
+                            ['id' => 'END-001', 'name' => 'Endpoint Protection', 'req' => '10 Requirements', 'desc' => 'Establish and maintain endpoint protection capabilities to prevent, detect, and mitigate malware and other threats.', 'tags' => ['CIS Controls', 'NIST CSF', 'ISO 27001']],
+                            ['id' => 'CLD-001', 'name' => 'Cloud Security Governance', 'req' => '10 Requirements', 'desc' => 'Establish and maintain an enterprise cloud security governance framework, strategy, and policies.', 'tags' => ['NIST CSF', 'CIS Controls', 'ISO 27017', '+1']],
+                            ['id' => 'CFG-001', 'name' => 'Secure Configuration Baseline', 'req' => '10 Requirements', 'desc' => 'Establish, maintain, and govern secure configuration baselines for systems, applications, and infrastructure.', 'tags' => ['CIS Controls', 'NIST CSF', 'ISO 27001']],
+                        ];
+                    @endphp
+                    @foreach($fallbackControls as $fb)
+                        @php
+                            $theme = $getControlThemeData($fb['id'], $fb['name']);
+                        @endphp
+                        <a href="{{ route('controls.public_index') }}" class="control-card">
+                            <div class="control-card-header">
+                                <div class="control-icon-box" style="background: {{ $theme['bg'] }}; color: {{ $theme['color'] }};">
+                                    <i class="{{ $theme['icon'] }}"></i>
+                                </div>
+                                <div class="control-header-info">
+                                    <div class="control-top-row">
+                                        <span class="control-id">{{ $fb['id'] }}</span>
+                                        <span class="control-req-badge">{{ $fb['req'] }}</span>
+                                    </div>
+                                    <h3 class="control-name">{{ $fb['name'] }}</h3>
+                                </div>
+                            </div>
+                            <p class="control-desc">{{ $fb['desc'] }}</p>
+                            <div class="control-card-footer">
+                                <div class="control-tags">
+                                    @foreach($fb['tags'] as $tag)
+                                        <span class="control-tag {{ $getControlTagClass($tag) }}">{{ $tag }}</span>
+                                    @endforeach
+                                </div>
+                                <span class="control-arrow">
+                                    <i class="fas fa-arrow-right"></i>
+                                </span>
+                            </div>
+                        </a>
+                    @endforeach
                 @endforelse
             </div>
 

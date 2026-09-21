@@ -96,6 +96,8 @@
         /* SMOOTH GLOBAL COLOR TRANSITIONS */
         body,
         .page-wrapper,
+        .section-light,
+        .section-alt,
         .toc-card,
         .feature-card,
         .catalog-toolbar,
@@ -104,69 +106,63 @@
         .workflow-box,
         .checklist-item,
         .faq-item,
-        .faq-question,
         .footer-strip {
             transition: background-color 0.35s ease, color 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
         }
 
-        /* MAIN CONTAINER */
-        .page-wrapper {
-            max-width: 1260px;
-            margin: 0 auto;
-            padding: 2.5rem 2.6rem;
+        /* FULL WIDTH SECTION BANDS (HOMEPAGE MATCHING ALTERNATING SCHEME) */
+        .section-light {
+            background-color: #ffffff;
+            padding: 5rem 0;
+            border-bottom: 1px solid rgba(226, 232, 240, 0.7);
         }
 
-        /* HERO STYLES (FULL VH SCREEN - ADVANCED ISOMETRIC DESIGN) */
+        .section-alt {
+            background-color: #f4f7fb;
+            padding: 5rem 0;
+            border-bottom: 1px solid rgba(226, 232, 240, 0.7);
+        }
+
+        .section-container {
+            max-width: 1240px;
+            margin: 0 auto;
+            padding: 0 24px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        /* MAIN CONTAINER (Legacy Fallback) */
+        .page-wrapper {
+            max-width: 1240px;
+            margin: 0 auto;
+            padding: 2.5rem 24px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        /* HERO STYLES (FULL VH SCREEN - ISOMETRIC PNG DESIGN) */
         .hero-section {
-            background: #060B1E;
-            background-image: 
-                radial-gradient(circle at 10% 20%, rgba(22, 196, 244, 0.1) 0%, transparent 40%),
-                radial-gradient(circle at 90% 60%, rgba(22, 196, 244, 0.12) 0%, transparent 50%),
-                linear-gradient(180deg, #09122C 0%, #060B1E 100%);
-            position: relative;
+            background: #0D1735;
             color: #ffffff;
             width: 100%;
             min-height: calc(100vh - 76px);
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 3.5rem 2.5rem;
+            padding: 3.5rem 0;
             margin-bottom: 0;
             box-sizing: border-box;
-            overflow: hidden;
-        }
-
-        /* Subtle Dot Grid Overlay */
-        .hero-section::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-image: radial-gradient(rgba(22, 196, 244, 0.15) 1px, transparent 1px);
-            background-size: 28px 28px;
-            opacity: 0.35;
-            pointer-events: none;
-        }
-
-        /* Bottom Wave Mesh Decorative Background */
-        .hero-wave-bg {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 180px;
-            pointer-events: none;
-            z-index: 1;
+            position: relative;
         }
 
         .hero-container {
-            max-width: 1260px;
+            max-width: 1240px;
             width: 100%;
             margin: 0 auto;
+            padding: 0 24px;
+            box-sizing: border-box;
             display: grid;
-            grid-template-columns: 1.15fr 0.85fr;
+            grid-template-columns: 1.12fr 0.88fr;
             gap: 2.5rem;
             align-items: center;
             position: relative;
@@ -219,7 +215,7 @@
         }
 
         .hero-feature-card {
-            background: rgba(13, 23, 53, 0.65);
+            background: rgba(255, 255, 255, 0.04);
             border: 1px solid rgba(22, 196, 244, 0.22);
             border-radius: 12px;
             padding: 0.7rem 0.75rem;
@@ -227,13 +223,6 @@
             align-items: center;
             gap: 0.65rem;
             backdrop-filter: blur(10px);
-            transition: transform 0.25s, border-color 0.25s, box-shadow 0.25s;
-        }
-
-        .hero-feature-card:hover {
-            transform: translateY(-2px);
-            border-color: rgba(22, 196, 244, 0.5);
-            box-shadow: 0 8px 24px rgba(22, 196, 244, 0.15);
         }
 
         .hero-feature-icon {
@@ -293,7 +282,7 @@
             box-shadow: 0 4px 16px rgba(22, 196, 244, 0.35);
         }
 
-        /* Right Column: 3D Visual Container */
+        /* Right Column: Isometric Graphic Container */
         .hero-visual-wrapper {
             position: relative;
             width: 100%;
@@ -302,11 +291,29 @@
             justify-content: center;
         }
 
-        .hero-isometric-svg {
+        .hero-isometric-img {
             width: 100%;
-            max-width: 620px;
+            max-width: 560px;
             height: auto;
-            overflow: visible;
+            object-fit: contain;
+            filter: drop-shadow(0 16px 36px rgba(0, 0, 0, 0.3));
+        }
+
+        @media (max-width: 1100px) {
+            .hero-container {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .hero-features-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 640px) {
+            .hero-features-grid {
+                grid-template-columns: 1fr;
+            }
         }
 
         /* TOC STYLES */
@@ -343,53 +350,91 @@
             text-decoration: underline;
         }
 
-        /* SIMPLE & PROFESSIONAL CALLOUT BLOCK */
+        /* UN-BORDERED CALLOUT BLOCK */
         .callout-box {
-            background: rgba(13, 23, 53, 0.03);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 1rem 1.25rem;
-            margin-bottom: 2rem;
+            background: transparent;
+            border: none;
+            border-radius: 0;
+            padding: 0;
+            margin: 3rem 0 5rem 0;
+            box-shadow: none;
         }
 
         .callout-title {
-            margin: 0 0 0.3rem 0;
-            font-weight: 700;
-            font-size: 0.95rem;
-            color: var(--text-heading);
+            margin: 0 0 0.4rem 0;
+            font-weight: 800;
+            font-size: 1.05rem;
+            color: #16C4F4;
         }
 
         .callout-text {
             margin: 0;
-            font-size: 0.92rem;
-            line-height: 1.6;
+            font-size: 1rem;
+            line-height: 1.7;
             color: var(--text-main);
         }
 
-        /* SECTION HEADINGS */
-        .section-heading {
-            font-size: 1.9rem;
+        /* SECTION HEADINGS (CENTERED BADGE & TITLE UI) */
+        .section-header-block {
+            text-align: center;
+            margin: 3.5rem 0 2.25rem 0;
+        }
+
+        .section-badge {
+            display: inline-block;
+            background: #e8f0fe;
+            color: #16C4F4;
+            font-size: 0.72rem;
             font-weight: 700;
-            border-left: 5px solid #16C4F4;
-            padding-left: 1rem;
-            margin: 2.5rem 0 1rem 0;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            padding: 5px 18px;
+            border-radius: 20px;
+            margin-bottom: 0.6rem;
+        }
+
+        .section-heading {
+            font-size: clamp(1.8rem, 3.5vw, 2.4rem);
+            font-weight: 800;
             color: var(--text-heading);
+            margin: 0 0 0.5rem 0;
+            line-height: 1.25;
+            text-align: center;
+            border-left: none;
+            padding-left: 0;
+        }
+
+        .section-subtitle {
+            font-size: 1rem;
+            color: var(--text-main);
+            opacity: 0.85;
+            max-width: 720px;
+            margin: 0 auto 1.5rem auto;
+            text-align: center;
+            line-height: 1.6;
+        }
+
+        body.dark-mode .section-badge,
+        [data-theme="dark"] .section-badge {
+            background: rgba(22, 196, 244, 0.15) !important;
+            color: #16C4F4 !important;
         }
 
         /* GRID CARDS */
         .feature-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 1rem;
-            margin: 1.5rem 0;
+            gap: 1.25rem;
+            margin: 2.25rem 0;
         }
 
         .feature-card {
-            background: #f8fafd;
-            padding: 1.2rem;
+            background: #ffffff;
+            padding: 1.25rem;
             border-radius: 12px;
-            border: 1px solid #e6edf4;
+            border: 1px solid #e2e8f0;
             border-top: 3px solid #02CCFF;
+            box-shadow: 0 4px 14px rgba(15, 23, 42, 0.03);
         }
 
         .feature-card strong {
@@ -401,16 +446,17 @@
 
         /* SEARCH & CATALOG TOOLBAR */
         .catalog-toolbar {
-            background: #f8fafd;
+            background: #ffffff;
             border: 1px solid var(--border-color);
             border-radius: 16px;
             padding: 1.5rem;
-            margin: 2rem 0;
+            margin: 1.5rem 0;
             display: flex;
             flex-wrap: wrap;
             align-items: center;
             justify-content: space-between;
             gap: 1rem;
+            box-shadow: 0 4px 16px rgba(15, 23, 42, 0.03);
         }
 
         .search-input-group {
@@ -484,12 +530,13 @@
             justify-content: space-between;
             flex-wrap: wrap;
             gap: 1rem;
-            background: #f8fafd;
+            background: #ffffff;
             border: 1px solid var(--border-color);
             border-radius: 12px;
             padding: 0.8rem 1.25rem;
             margin-bottom: 2rem;
             font-size: 0.88rem;
+            box-shadow: 0 2px 8px rgba(15, 23, 42, 0.02);
         }
 
         .pagination-info strong {
@@ -794,7 +841,7 @@
         .badge-fw-id {
             font-family: var(--aspia-infotech-font-primary), sans-serif;
             font-size: 0.75rem;
-            font-weight: 800;
+            font-weight: 400;
             padding: 0;
             background: transparent;
             color: #0D1735;
@@ -891,7 +938,7 @@
         .custom-table {
             width: 100%;
             border-collapse: collapse;
-            margin: 1.5rem 0;
+            margin: 2.5rem 0;
             border-radius: 12px;
             overflow: hidden;
             border: 1px solid var(--border-color);
@@ -917,11 +964,12 @@
 
         /* WORKFLOW FLOWCHART */
         .workflow-box {
-            background: #f8fafd;
+            background: #ffffff;
             border-radius: 16px;
-            padding: 2rem 1.5rem;
-            margin: 2rem 0;
-            border: 1px solid rgba(22, 196, 244, 0.15);
+            padding: 2.25rem 1.75rem;
+            margin: 2.75rem 0;
+            border: 1px solid rgba(22, 196, 244, 0.2);
+            box-shadow: 0 4px 20px rgba(15, 23, 42, 0.03);
         }
 
         .workflow-flow {
@@ -960,12 +1008,12 @@
         .checklist-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 0.8rem;
-            margin: 1.5rem 0;
+            gap: 1rem;
+            margin: 2.25rem 0;
         }
 
         .checklist-item {
-            background: #f8fafd;
+            background: #ffffff;
             padding: 0.8rem 1rem;
             border-radius: 10px;
             border: 1px solid var(--border-color);
@@ -973,32 +1021,186 @@
             display: flex;
             align-items: center;
             gap: 0.6rem;
+            box-shadow: 0 2px 6px rgba(15, 23, 42, 0.02);
         }
 
-        /* FAQ ACCORDION */
-        .faq-item {
-            margin-bottom: 1rem;
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            overflow: hidden;
-            background: var(--bg-card);
+        /* ============================================================
+           FAQ - CARD ACCORDION THEME (Homepage Matching UI)
+           ============================================================ */
+        .faq-card-container {
+            background: #ffffff;
+            border-radius: 24px;
+            box-shadow: 0 10px 30px rgba(15, 23, 42, 0.04), 0 2px 6px rgba(15, 23, 42, 0.02);
+            width: 100%;
+            max-width: 100%;
+            margin: 2.5rem 0 1rem 0;
+            padding: 36px 48px;
+            border: 1px solid rgba(226, 232, 240, 0.8);
         }
 
-        .faq-question {
-            padding: 1rem 1.5rem;
-            background: #f8fafd;
+        .faq-list {
+            max-width: 100%;
+            margin: 0 auto;
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            cursor: pointer;
-            font-weight: 600;
-            color: var(--text-heading);
+            flex-direction: column;
         }
 
-        .faq-answer {
-            padding: 1rem 1.5rem 1.5rem 1.5rem;
+        .faq-item {
+            border-bottom: 1px solid #eef2f6;
+            padding: 0;
+            margin-bottom: 0;
+            border-radius: 0;
+            overflow: visible;
+            background: transparent;
+            border-top: none;
+            border-left: none;
+            border-right: none;
+            transition: background-color 0.2s ease;
+        }
+
+        .faq-item:last-child {
+            border-bottom: none;
+        }
+
+        .faq-item .q {
+            font-weight: 700;
+            font-size: 1.05rem;
+            color: #0d1735;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            justify-content: space-between;
+            padding: 22px 0;
+            cursor: pointer;
+            user-select: none;
+            transition: color 0.2s ease;
+        }
+
+        .faq-item .q:hover .q-text {
+            color: #00a8e8;
+        }
+
+        .faq-item .q .q-text {
+            line-height: 1.45;
+            flex: 1;
+        }
+
+        .faq-item .q .faq-toggle-icon {
+            color: #00c2ff;
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .faq-item .q .faq-toggle-icon svg {
+            stroke: #00c2ff;
+            transition: stroke 0.2s ease;
+        }
+
+        .faq-item.active .q .faq-toggle-icon {
+            transform: rotate(45deg);
+        }
+
+        /* Smooth Height Transition with CSS Grid */
+        .faq-item .a-wrapper {
+            display: grid;
+            grid-template-rows: 0fr;
+            transition: grid-template-rows 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .faq-item.active .a-wrapper {
+            grid-template-rows: 1fr;
+        }
+
+        .faq-item .a-inner {
+            overflow: hidden;
+        }
+
+        .faq-item .a {
             font-size: 0.95rem;
-            line-height: 1.7;
+            color: #475569;
+            line-height: 1.65;
+            padding-bottom: 22px;
+            padding-top: 2px;
+            margin-top: 0;
+            padding-left: 0;
+            display: block;
+            opacity: 0;
+            transform: translateY(-6px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .faq-item.active .a {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .faq-item .a strong {
+            color: #0d1735;
+            font-weight: 700;
+        }
+
+        /* FAQ Accordion Dark Mode */
+        body.dark-mode .faq-card-container {
+            background: #1e293b !important;
+            border-color: #334155 !important;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3) !important;
+        }
+
+        body.dark-mode .faq-item {
+            border-bottom-color: #334155 !important;
+        }
+
+        body.dark-mode .faq-item .q .q-text {
+            color: #ffffff !important;
+        }
+
+        body.dark-mode .faq-item .q:hover .q-text {
+            color: #38bdf8 !important;
+        }
+
+        body.dark-mode .faq-item .q .faq-toggle-icon svg {
+            stroke: #38bdf8 !important;
+        }
+
+        body.dark-mode .faq-item .a {
+            color: #cbd5e1 !important;
+        }
+
+        body.dark-mode .faq-item .a strong {
+            color: #38bdf8 !important;
+        }
+
+        /* Section Bands Dark Mode */
+        body.dark-mode .section-light {
+            background-color: #0b1329 !important;
+            border-bottom-color: rgba(255, 255, 255, 0.05) !important;
+        }
+
+        body.dark-mode .section-alt {
+            background-color: #0f172a !important;
+            border-bottom-color: rgba(255, 255, 255, 0.05) !important;
+        }
+
+        @media (max-width: 768px) {
+            .faq-card-container {
+                padding: 24px 20px;
+                border-radius: 18px;
+            }
+
+            .faq-item .q {
+                font-size: 0.95rem;
+                padding: 18px 0;
+            }
+
+            .faq-item .a {
+                font-size: 0.88rem;
+                padding-bottom: 18px;
+            }
         }
 
         /* CTA BANNER */
@@ -1085,21 +1287,25 @@
 
         @media (max-width: 1024px) {
             .site-nav-header {
-                padding: 0.8rem 2rem;
+                padding: 0.8rem 24px;
             }
 
             .page-wrapper {
-                padding: 2rem 2.5rem;
+                padding: 2rem 24px;
             }
         }
 
         @media (max-width: 768px) {
             .site-nav-header {
-                padding: 0.8rem 1.2rem;
+                padding: 0.8rem 16px;
             }
 
             .page-wrapper {
-                padding: 1.5rem 1rem;
+                padding: 1.5rem 16px;
+            }
+
+            .hero-container {
+                padding: 0 16px;
             }
 
             .toc-grid {
@@ -1107,7 +1313,7 @@
             }
 
             .hero-section {
-                padding: 2rem 1.5rem;
+                padding: 2rem 0;
                 min-height: auto;
             }
         }
@@ -1117,26 +1323,8 @@
 <body>
     @include('aspiaUcl.partials.header', ['activeTab' => 'frameworks'])
 
-    <!-- HERO BANNER (ISOMETRIC DESIGN - FULL VH SCREEN) -->
+    <!-- HERO BANNER (ISOMETRIC LOGO DESIGN - FULL VH SCREEN) -->
     <div class="hero-section">
-        <!-- SVG Bottom Wave Mesh Background -->
-        <svg class="hero-wave-bg" viewBox="0 0 1440 180" preserveAspectRatio="none" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M0,80 Q360,180 720,80 T1440,80 L1440,180 L0,180 Z" fill="url(#heroWaveGrad1)" opacity="0.3"/>
-            <path d="M0,110 Q360,30 720,120 T1440,60 L1440,180 L0,180 Z" fill="url(#heroWaveCyanGrad)" opacity="0.2"/>
-            <defs>
-                <linearGradient id="heroWaveGrad1" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" stop-color="#060B1E"/>
-                    <stop offset="50%" stop-color="#16C4F4"/>
-                    <stop offset="100%" stop-color="#09122C"/>
-                </linearGradient>
-                <linearGradient id="heroWaveCyanGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" stop-color="#16C4F4"/>
-                    <stop offset="50%" stop-color="#0052A8"/>
-                    <stop offset="100%" stop-color="#16C4F4"/>
-                </linearGradient>
-            </defs>
-        </svg>
-
         <div class="hero-container">
             <!-- Left Column: Content -->
             <div class="hero-content">
@@ -1189,246 +1377,92 @@
                     </div>
                 </div>
 
-                <!-- Meta Row -->
-                <div class="hero-meta-bar">
-                    <span class="hero-tag-pill"><i class="fas fa-shield-alt"></i> Unified Library</span>
-                    <span><i class="far fa-clock"></i> 14 min read</span>
-                    <span style="opacity:0.8;"><i class="far fa-calendar-alt"></i> September 2026</span>
-                    <span><i class="fas fa-user-edit"></i> ASPIA Editorial</span>
-                </div>
             </div>
 
-            <!-- Right Column: 3D Isometric Stack Visual -->
+            <!-- Right Column: 3D Isometric PNG Graphic -->
             <div class="hero-visual-wrapper">
-                <svg class="hero-isometric-svg" viewBox="0 0 700 520" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <defs>
-                        <!-- Top Glowing Card Gradient -->
-                        <linearGradient id="topCardGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop offset="0%" stop-color="#16C4F4"/>
-                            <stop offset="40%" stop-color="#0F52BA"/>
-                            <stop offset="100%" stop-color="#0D1735"/>
-                        </linearGradient>
-
-                        <!-- Layer Card Gradient -->
-                        <linearGradient id="layerGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop offset="0%" stop-color="rgba(22, 196, 244, 0.28)"/>
-                            <stop offset="100%" stop-color="rgba(13, 23, 53, 0.85)"/>
-                        </linearGradient>
-
-                        <!-- Floating Corner Node Gradient -->
-                        <linearGradient id="nodeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop offset="0%" stop-color="rgba(13, 23, 53, 0.92)"/>
-                            <stop offset="100%" stop-color="rgba(7, 14, 34, 0.96)"/>
-                        </linearGradient>
-
-                        <!-- Glow Filter -->
-                        <filter id="cyanGlow" x="-30%" y="-30%" width="160%" height="160%">
-                            <feGaussianBlur stdDeviation="8" result="blur"/>
-                            <feComposite in="SourceGraphic" in2="blur" operator="over"/>
-                        </filter>
-
-                        <!-- Drop Shadow Filter -->
-                        <filter id="isometricShadow" x="-30%" y="-30%" width="160%" height="160%">
-                            <feDropShadow dx="0" dy="14" stdDeviation="18" flood-color="#000000" flood-opacity="0.6"/>
-                        </filter>
-                    </defs>
-
-                    <!-- CONNECTING DOTTED ARCS -->
-                    <!-- Top-Left Arc to Standards -->
-                    <path d="M 175 115 Q 265 140 325 185" stroke="#16C4F4" stroke-width="1.8" stroke-dasharray="4 4" opacity="0.65"/>
-                    <circle cx="265" cy="140" r="3.5" fill="#16C4F4" filter="url(#cyanGlow)"/>
-
-                    <!-- Top-Right Arc to Compliance -->
-                    <path d="M 525 115 Q 435 140 375 185" stroke="#16C4F4" stroke-width="1.8" stroke-dasharray="4 4" opacity="0.65"/>
-                    <circle cx="435" cy="140" r="3.5" fill="#16C4F4" filter="url(#cyanGlow)"/>
-
-                    <!-- Bottom-Left Arc to Security -->
-                    <path d="M 175 395 Q 255 350 325 330" stroke="#16C4F4" stroke-width="1.8" stroke-dasharray="4 4" opacity="0.65"/>
-                    <circle cx="255" cy="350" r="3.5" fill="#16C4F4" filter="url(#cyanGlow)"/>
-
-                    <!-- Bottom-Right Arc to Best Practices -->
-                    <path d="M 525 395 Q 445 350 375 330" stroke="#16C4F4" stroke-width="1.8" stroke-dasharray="4 4" opacity="0.65"/>
-                    <circle cx="445" cy="350" r="3.5" fill="#16C4F4" filter="url(#cyanGlow)"/>
-
-                    <!-- ISOMETRIC STACK -->
-                    <!-- Layer 5: Mappings (Bottom) -->
-                    <g transform="translate(350, 355)" filter="url(#isometricShadow)">
-                        <path d="M 0 -35 L 140 35 L 0 105 L -140 35 Z" fill="url(#layerGrad)" stroke="#16C4F4" stroke-width="1.5" stroke-opacity="0.4"/>
-                        <path d="M -140 35 L 0 105 L 0 115 L -140 45 Z" fill="rgba(8,16,38,0.92)" stroke="#16C4F4" stroke-opacity="0.2"/>
-                        <path d="M 0 105 L 140 35 L 140 45 L 0 115 Z" fill="rgba(4,10,26,0.92)" stroke="#16C4F4" stroke-opacity="0.2"/>
-                        <g transform="translate(-40, 35)">
-                            <path d="M -8 -2 L -2 -8 A 4 4 0 0 1 4 -2 L 1 1" stroke="#16C4F4" stroke-width="1.8" stroke-linecap="round" fill="none"/>
-                            <text x="12" y="3" fill="#ffffff" font-size="13" font-family="Inter, sans-serif" font-weight="600">Mappings</text>
-                        </g>
-                    </g>
-
-                    <!-- Layer 4: Requirements -->
-                    <g transform="translate(350, 315)" filter="url(#isometricShadow)">
-                        <path d="M 0 -35 L 140 35 L 0 105 L -140 35 Z" fill="url(#layerGrad)" stroke="#16C4F4" stroke-width="1.5" stroke-opacity="0.5"/>
-                        <path d="M -140 35 L 0 105 L 0 115 L -140 45 Z" fill="rgba(8,16,38,0.92)" stroke="#16C4F4" stroke-opacity="0.3"/>
-                        <path d="M 0 105 L 140 35 L 140 45 L 0 115 Z" fill="rgba(4,10,26,0.92)" stroke="#16C4F4" stroke-opacity="0.3"/>
-                        <g transform="translate(-48, 35)">
-                            <rect x="-10" y="-8" width="12" height="15" rx="2" stroke="#16C4F4" stroke-width="1.6" fill="none"/>
-                            <line x1="-6" y1="-4" x2="-1" y2="-4" stroke="#16C4F4" stroke-width="1.3"/>
-                            <line x1="-6" y1="0" x2="-3" y2="0" stroke="#16C4F4" stroke-width="1.3"/>
-                            <text x="10" y="3" fill="#ffffff" font-size="13" font-family="Inter, sans-serif" font-weight="600">Requirements</text>
-                        </g>
-                    </g>
-
-                    <!-- Layer 3: Controls -->
-                    <g transform="translate(350, 275)" filter="url(#isometricShadow)">
-                        <path d="M 0 -35 L 140 35 L 0 105 L -140 35 Z" fill="url(#layerGrad)" stroke="#16C4F4" stroke-width="1.5" stroke-opacity="0.6"/>
-                        <path d="M -140 35 L 0 105 L 0 115 L -140 45 Z" fill="rgba(8,16,38,0.92)" stroke="#16C4F4" stroke-opacity="0.4"/>
-                        <path d="M 0 105 L 140 35 L 140 45 L 0 115 Z" fill="rgba(4,10,26,0.92)" stroke="#16C4F4" stroke-opacity="0.4"/>
-                        <g transform="translate(-36, 35)">
-                            <circle cx="-6" cy="-2" r="6" stroke="#16C4F4" stroke-width="1.8" fill="none"/>
-                            <text x="12" y="3" fill="#ffffff" font-size="13" font-family="Inter, sans-serif" font-weight="600">Controls</text>
-                        </g>
-                    </g>
-
-                    <!-- Layer 2: Domains -->
-                    <g transform="translate(350, 235)" filter="url(#isometricShadow)">
-                        <path d="M 0 -35 L 140 35 L 0 105 L -140 35 Z" fill="url(#layerGrad)" stroke="#16C4F4" stroke-width="1.5" stroke-opacity="0.75"/>
-                        <path d="M -140 35 L 0 105 L 0 115 L -140 45 Z" fill="rgba(8,16,38,0.92)" stroke="#16C4F4" stroke-opacity="0.5"/>
-                        <path d="M 0 105 L 140 35 L 140 45 L 0 115 Z" fill="rgba(4,10,26,0.92)" stroke="#16C4F4" stroke-opacity="0.5"/>
-                        <g transform="translate(-36, 35)">
-                            <ellipse cx="-6" cy="-6" rx="6" ry="3" stroke="#16C4F4" stroke-width="1.5" fill="none"/>
-                            <ellipse cx="-6" cy="0" rx="6" ry="3" stroke="#16C4F4" stroke-width="1.5" fill="none"/>
-                            <text x="12" y="3" fill="#ffffff" font-size="13" font-family="Inter, sans-serif" font-weight="600">Domains</text>
-                        </g>
-                    </g>
-
-                    <!-- Layer 1: Top Main Card (Glowing Bright Blue/Cyan Gradient) -->
-                    <g transform="translate(350, 185)" filter="url(#cyanGlow)">
-                        <path d="M 0 -45 L 155 35 L 0 115 L -155 35 Z" fill="url(#topCardGrad)" stroke="#00F0FF" stroke-width="2.2"/>
-                        <path d="M -155 35 L 0 115 L 0 128 L -155 48 Z" fill="#0A183C" stroke="#16C4F4" stroke-opacity="0.8"/>
-                        <path d="M 0 115 L 155 35 L 155 48 L 0 128 Z" fill="#050E28" stroke="#16C4F4" stroke-opacity="0.8"/>
-                        
-                        <g transform="translate(0, 15)">
-                            <path d="M 0 -22 L 14 -14 V 2 C 14 12 0 18 0 18 C 0 18 -14 12 -14 2 V -14 Z" stroke="#ffffff" stroke-width="2.2" fill="none"/>
-                            <text x="0" y="32" fill="#ffffff" font-size="15" font-family="Inter, sans-serif" font-weight="800" text-anchor="middle">Regulatory</text>
-                            <text x="0" y="48" fill="#ffffff" font-size="15" font-family="Inter, sans-serif" font-weight="800" text-anchor="middle">Frameworks</text>
-                        </g>
-                    </g>
-
-                    <!-- FLOATING CORNER BADGES -->
-                    <!-- Top Left Badge: Standards -->
-                    <g transform="translate(130, 95)" filter="url(#isometricShadow)">
-                        <rect x="-65" y="-22" width="130" height="44" rx="10" fill="url(#nodeGrad)" stroke="#16C4F4" stroke-width="1.5" stroke-opacity="0.65"/>
-                        <g transform="translate(-42, 4)">
-                            <path d="M -6 -10 H 2 L 6 -6 V 8 H -6 Z" stroke="#16C4F4" stroke-width="1.6" fill="none"/>
-                            <line x1="-2" y1="-4" x2="2" y2="-4" stroke="#16C4F4" stroke-width="1.2"/>
-                            <line x1="-2" y1="0" x2="2" y2="0" stroke="#16C4F4" stroke-width="1.2"/>
-                            <text x="16" y="1" fill="#ffffff" font-size="12" font-family="Inter, sans-serif" font-weight="600">Standards</text>
-                        </g>
-                    </g>
-
-                    <!-- Top Right Badge: Compliance -->
-                    <g transform="translate(570, 95)" filter="url(#isometricShadow)">
-                        <rect x="-65" y="-22" width="130" height="44" rx="10" fill="url(#nodeGrad)" stroke="#16C4F4" stroke-width="1.5" stroke-opacity="0.65"/>
-                        <g transform="translate(-45, 4)">
-                            <circle cx="-4" cy="-1" r="7" stroke="#16C4F4" stroke-width="1.5" fill="none"/>
-                            <ellipse cx="-4" cy="-1" rx="3" ry="7" stroke="#16C4F4" stroke-width="1.2" fill="none"/>
-                            <line x1="-11" y1="-1" x2="3" y2="-1" stroke="#16C4F4" stroke-width="1.2"/>
-                            <text x="14" y="1" fill="#ffffff" font-size="12" font-family="Inter, sans-serif" font-weight="600">Compliance</text>
-                        </g>
-                    </g>
-
-                    <!-- Bottom Left Badge: Security -->
-                    <g transform="translate(130, 415)" filter="url(#isometricShadow)">
-                        <rect x="-65" y="-22" width="130" height="44" rx="10" fill="url(#nodeGrad)" stroke="#16C4F4" stroke-width="1.5" stroke-opacity="0.65"/>
-                        <g transform="translate(-40, 4)">
-                            <path d="M -6 -8 L 2 -4 V 3 C 2 7 -6 10 -6 10 C -6 10 -14 7 -14 3 V -4 Z" stroke="#16C4F4" stroke-width="1.5" fill="none"/>
-                            <text x="14" y="1" fill="#ffffff" font-size="12" font-family="Inter, sans-serif" font-weight="600">Security</text>
-                        </g>
-                    </g>
-
-                    <!-- Bottom Right Badge: Best Practices -->
-                    <g transform="translate(570, 415)" filter="url(#isometricShadow)">
-                        <rect x="-70" y="-22" width="140" height="44" rx="10" fill="url(#nodeGrad)" stroke="#16C4F4" stroke-width="1.5" stroke-opacity="0.65"/>
-                        <g transform="translate(-48, 4)">
-                            <line x1="-10" y1="6" x2="-10" y2="2" stroke="#16C4F4" stroke-width="2.5" stroke-linecap="round"/>
-                            <line x1="-5" y1="6" x2="-5" y2="-2" stroke="#16C4F4" stroke-width="2.5" stroke-linecap="round"/>
-                            <line x1="0" y1="6" x2="0" y2="-6" stroke="#16C4F4" stroke-width="2.5" stroke-linecap="round"/>
-                            <text x="14" y="1" fill="#ffffff" font-size="12" font-family="Inter, sans-serif" font-weight="600">Best Practices</text>
-                        </g>
-                    </g>
-                </svg>
+                <img src="{{ asset('images/frameworks_hero_graphic.png') }}" alt="Regulatory Frameworks Isometric Graphic" class="hero-isometric-img">
             </div>
         </div>
     </div>
 
-    <div class="page-wrapper">
-
-        <!-- SHORT ANSWER BOX -->
-        <div class="callout-box">
-            <p class="callout-title">In Simple Terms:</p>
-            <p class="callout-text">A compliance framework is a set of security rules and guidelines that help
-                organizations protect data. ASPIA UCL connects global standards (like ISO 27001, NIST, SOC 2, and PCI
-                DSS) into one unified system—so you can test your security controls once and satisfy multiple
-                regulations automatically.</p>
-        </div>
-
-        <!-- WHAT ARE FRAMEWORKS -->
-        <h2 id="what-are" class="section-heading">What Are Compliance Frameworks?</h2>
-        <p>A cybersecurity or regulatory compliance framework is a system of standards, guidelines, and controls created
-            by recognized international bodies or regulatory authorities (such as ISO, NIST, AICPA, PCI SSC, EU).
-            Frameworks assist organizations in establishing information security governance, protecting sensitive data,
-            mitigating operational risks, and achieving legal compliance.</p>
-        <p>Rather than designing custom security procedures from scratch, organizations adopt established frameworks to
-            demonstrate compliance, satisfy client requirements, and pass third-party audits.</p>
-
-        <!-- WHY USED -->
-        <h2 id="why-used" class="section-heading">Why Are Frameworks Used in GRC?</h2>
-
-        <div class="feature-grid">
-            <div class="feature-card" style="border-top-color: #02CCFF;">
-                <strong>1. Standardizes Security Posture</strong>
-                <p style="font-size:0.85rem;margin:0;">Provides a recognized benchmark that clients, auditors, and
-                    regulators understand and trust.</p>
+    <!-- SECTION 1: OVERVIEW & BUSINESS VALUE (LIGHT BAND) -->
+    <div class="section-light">
+        <div class="section-container">
+            <!-- SHORT ANSWER BOX -->
+            <div class="callout-box" style="margin-top: 1.25rem;">
+                <p class="callout-title">In Simple Terms:</p>
+                <p class="callout-text">A compliance framework is a set of security rules and guidelines that help
+                    organizations protect data. ASPIA UCL connects global standards (like ISO 27001, NIST, SOC 2, and PCI
+                    DSS) into one unified system—so you can test your security controls once and satisfy multiple
+                    regulations automatically.</p>
             </div>
-            <div class="feature-card" style="border-top-color: #00B8E6;">
-                <strong>2. Reduces Audit Fatigue</strong>
-                <p style="font-size:0.85rem;margin:0;">Mapping overlapping frameworks allows testing a single control to
-                    fulfill multiple compliance standards.</p>
-            </div>
-            <div class="feature-card" style="border-top-color: #1AD4FF;">
-                <strong>3. Drives Risk-Based Governance</strong>
-                <p style="font-size:0.85rem;margin:0;">Aligns security investments directly with identified business
-                    risks and compliance liabilities.</p>
-            </div>
-            <div class="feature-card" style="border-top-color: #33D6FF;">
-                <strong>4. Demonstrates Due Diligence</strong>
-                <p style="font-size:0.85rem;margin:0;">Provides auditable proof of security controls during vendor
-                    assessments and legal reviews.</p>
-            </div>
-        </div>
 
-        <!-- CATALOG TOOLBAR & DYNAMIC CARDS -->
-        <h2 id="frameworks-catalog" class="section-heading">Explore Integrated Regulatory Frameworks</h2>
-        <p>Browse all regulatory baselines, cybersecurity frameworks, and industry standards mapped within ASPIA UCL.
-            Filter by category or search by framework code, title, publisher, or family.</p>
+            <!-- WHAT ARE FRAMEWORKS -->
+            <div class="section-header-block" id="what-are" style="margin-top: 6.5rem;">
+                <span class="section-badge">OVERVIEW</span>
+                <h2 class="section-heading">What Are Compliance Frameworks?</h2>
+            </div>
+            <p style="line-height: 1.7; margin-bottom: 1.75rem;">A cybersecurity or regulatory compliance framework is a system of standards, guidelines, and controls created by recognized international bodies or regulatory authorities (such as ISO, NIST, AICPA, PCI SSC, EU). Frameworks assist organizations in establishing information security governance, protecting sensitive data, mitigating operational risks, and achieving legal compliance.</p>
+            <p style="line-height: 1.7; margin-bottom: 3.5rem;">Rather than designing custom security procedures from scratch, organizations adopt established frameworks to demonstrate compliance, satisfy client requirements, and pass third-party audits.</p>
 
-        <div class="catalog-toolbar">
-            <div class="search-input-group">
-                <i class="fas fa-search"></i>
-                <input type="text" id="frameworkSearchInput"
-                    placeholder="Search frameworks by code, title, publisher, category..." onkeyup="filterFrameworks()">
+            <!-- WHY USED -->
+            <div class="section-header-block" id="why-used" style="margin-top: 6.5rem;">
+                <span class="section-badge">BUSINESS VALUE</span>
+                <h2 class="section-heading">Why Are Frameworks Used in GRC?</h2>
+            </div>
+
+            <div class="feature-grid">
+                <div class="feature-card" style="border-top-color: #02CCFF;">
+                    <strong>1. Standardizes Security Posture</strong>
+                    <p style="font-size:0.85rem;margin:0;">Provides a recognized benchmark that clients, auditors, and regulators understand and trust.</p>
+                </div>
+                <div class="feature-card" style="border-top-color: #00B8E6;">
+                    <strong>2. Reduces Audit Fatigue</strong>
+                    <p style="font-size:0.85rem;margin:0;">Mapping overlapping frameworks allows testing a single control to fulfill multiple compliance standards.</p>
+                </div>
+                <div class="feature-card" style="border-top-color: #1AD4FF;">
+                    <strong>3. Drives Risk-Based Governance</strong>
+                    <p style="font-size:0.85rem;margin:0;">Aligns security investments directly with identified business risks and compliance liabilities.</p>
+                </div>
+                <div class="feature-card" style="border-top-color: #33D6FF;">
+                    <strong>4. Demonstrates Due Diligence</strong>
+                    <p style="font-size:0.85rem;margin:0;">Provides auditable proof of security controls during vendor assessments and legal reviews.</p>
+                </div>
             </div>
         </div>
+    </div>
 
-        <!-- CLASSIC LIST TABLE HEADER STRIP -->
-        <div class="list-table-header-bar" id="listTableHeaderBar">
-            <div class="col-hdr col-hdr-id">Framework ID</div>
-            <div class="col-hdr col-hdr-info">Framework Name &amp; Publisher</div>
-            <div class="col-hdr col-hdr-scope">Mapped Audit Scope</div>
-            <div class="col-hdr col-hdr-action">Action</div>
-        </div>
+    <!-- SECTION 2: FRAMEWORK DIRECTORY CATALOG (ALT BAND) -->
+    <div class="section-alt">
+        <div class="section-container">
+            <!-- CATALOG TOOLBAR & DYNAMIC CARDS -->
+            <div class="section-header-block" id="frameworks-catalog" style="margin-top: 0;">
+                <span class="section-badge">FRAMEWORK DIRECTORY</span>
+                <h2 class="section-heading">Explore Integrated Regulatory Frameworks</h2>
+                <p class="section-subtitle" style="color: #64748b; font-size: 0.95rem; margin-top: 0.4rem;">Browse all regulatory baselines, cybersecurity frameworks, and industry standards mapped within ASPIA UCL. Filter by category or search by framework code, title, publisher, or family.</p>
+            </div>
 
-        <!-- CATALOG CARDS LIST -->
-        <div class="catalog-list-wrapper">
-            <div class="frameworks-cards-grid list-layout-view" id="frameworksGrid">
-                            <div class="framework-card" data-category="Information Security" data-fw-id="FW-001">
+            <div class="catalog-toolbar">
+                <div class="search-input-group">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="frameworkSearchInput"
+                        placeholder="Search frameworks by code, title, publisher, category..." onkeyup="filterFrameworks()">
+                </div>
+            </div>
+
+            <!-- CLASSIC LIST TABLE HEADER STRIP -->
+            <div class="list-table-header-bar" id="listTableHeaderBar">
+                <div class="col-hdr col-hdr-id">Framework ID</div>
+                <div class="col-hdr col-hdr-info">Framework Name &amp; Publisher</div>
+                <div class="col-hdr col-hdr-scope">Mapped Audit Scope</div>
+                <div class="col-hdr col-hdr-action">Action</div>
+            </div>
+
+            <!-- CATALOG CARDS LIST -->
+            <div class="catalog-list-wrapper">
+                <div class="frameworks-cards-grid list-layout-view" id="frameworksGrid">
+                                <div class="framework-card" data-category="Information Security" data-fw-id="FW-001">
                 <div class="card-left-column">
                     <span class="badge-fw-id">FW-001</span>
                     <span class="badge-code">ISO27001</span>
@@ -2009,237 +2043,265 @@
                     </a>
                 </div>
             </div>
+                </div>
+            </div>
+
+            <!-- PAGINATION BAR -->
+            <div class="pagination-bar" id="frameworksPaginationBar">
+                <div class="pagination-info" id="paginationInfo">
+                    Showing <strong>1</strong> - <strong>10</strong> of <strong>25</strong> Regulatory Frameworks
+                </div>
+                <div class="pagination-buttons" id="paginationButtons">
+                    <!-- Dynamically populated via JS -->
+                </div>
             </div>
         </div>
+    </div>
 
-        <!-- PAGINATION BAR -->
-        <div class="pagination-bar" id="frameworksPaginationBar">
-            <div class="pagination-info" id="paginationInfo">
-                Showing <strong>1</strong> - <strong>10</strong> of <strong>25</strong> Regulatory Frameworks
+    <!-- SECTION 3: ARCHITECTURE & TYPES (LIGHT BAND) -->
+    <div class="section-light">
+        <div class="section-container">
+            <!-- KEY TERMS TABLE -->
+            <div class="section-header-block" id="key-terms" style="margin-top: 0;">
+                <span class="section-badge">GLOSSARY &amp; ARCHITECTURE</span>
+                <h2 class="section-heading">Key Terms Used in Framework Architecture</h2>
             </div>
-            <div class="pagination-buttons" id="paginationButtons">
-                <!-- Dynamically populated via JS -->
+
+            <table class="custom-table">
+                <thead>
+                    <tr>
+                        <th>Term</th>
+                        <th>Meaning</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Framework</strong></td>
+                        <td>A comprehensive set of security, privacy, or governance requirements published by an authority.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Control Domain</strong></td>
+                        <td>A top-level category grouping related controls (e.g., Access Control, Data Protection, Incident Response).</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Security Control</strong></td>
+                        <td>A specific policy, procedure, or technical safeguard designed to mitigate identified risks.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Requirement Clause</strong></td>
+                        <td>An auditable statement or sub-control specifying mandatory testing and evidence criteria.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Crosswalk / Mapping</strong></td>
+                        <td>The mathematical and conceptual correlation between controls across different frameworks.</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- TYPES OF FRAMEWORKS -->
+            <div class="section-header-block" id="framework-types" style="margin-top: 6.5rem; margin-bottom: 2.25rem;">
+                <span class="section-badge">FRAMEWORK CATEGORIES</span>
+                <h2 class="section-heading">Types of Security &amp; Regulatory Frameworks</h2>
+            </div>
+
+            <div class="feature-grid">
+                <div class="feature-card" style="border-top: 3px solid #02CCFF;">
+                    <strong>Regulatory Mandates</strong>
+                    <p style="font-size:0.85rem;margin:0;">Legally binding laws passed by governments (e.g., GDPR, HIPAA, SOX, NIS2). Failure to comply results in severe financial penalties and legal liability.</p>
+                </div>
+                <div class="feature-card" style="border-top: 3px solid #00B8E6;">
+                    <strong>Industry Standards</strong>
+                    <p style="font-size:0.85rem;margin:0;">Consensus standards established by international standardization bodies (e.g., ISO/IEC 27001, ISO 27701, PCI DSS) often required for commercial operations.</p>
+                </div>
+                <div class="feature-card" style="border-top: 3px solid #1AD4FF;">
+                    <strong>Security Benchmarks</strong>
+                    <p style="font-size:0.85rem;margin:0;">Voluntary risk management frameworks and technical hardening guidelines (e.g., NIST CSF, CIS Controls, SOC 2 Trust Services Criteria).</p>
+                </div>
+                <div class="feature-card" style="border-top: 3px solid #33D6FF;">
+                    <strong>Internal Corporate Baselines</strong>
+                    <p style="font-size:0.85rem;margin:0;">Custom internal policy frameworks designed to enforce corporate risk appetite, internal controls, and operational governance.</p>
+                </div>
             </div>
         </div>
+    </div>
 
-        <!-- KEY TERMS TABLE -->
-        <h2 id="key-terms" class="section-heading">Key Terms Used in Framework Architecture</h2>
-
-        <table class="custom-table">
-            <thead>
-                <tr>
-                    <th>Term</th>
-                    <th>Meaning</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><strong>Framework</strong></td>
-                    <td>A comprehensive set of security, privacy, or governance requirements published by an authority.
-                    </td>
-                </tr>
-                <tr>
-                    <td><strong>Control Domain</strong></td>
-                    <td>A top-level category grouping related controls (e.g., Access Control, Data Protection, Incident
-                        Response).</td>
-                </tr>
-                <tr>
-                    <td><strong>Security Control</strong></td>
-                    <td>A specific policy, procedure, or technical safeguard designed to mitigate identified risks.</td>
-                </tr>
-                <tr>
-                    <td><strong>Requirement Clause</strong></td>
-                    <td>An auditable statement or sub-control specifying mandatory testing and evidence criteria.</td>
-                </tr>
-                <tr>
-                    <td><strong>Crosswalk / Mapping</strong></td>
-                    <td>The mathematical and conceptual correlation between controls across different frameworks.</td>
-                </tr>
-            </tbody>
-        </table>
-
-        <!-- TYPES OF FRAMEWORKS -->
-        <h2 id="framework-types" class="section-heading">Types of Security &amp; Regulatory Frameworks</h2>
-
-        <div class="feature-grid">
-            <div class="feature-card" style="border-top: 3px solid #02CCFF;">
-                <strong>Regulatory Mandates</strong>
-                <p style="font-size:0.85rem;margin:0;">Legally binding laws passed by governments (e.g., GDPR, HIPAA,
-                    SOX, NIS2). Failure to comply results in severe financial penalties and legal liability.</p>
+    <!-- SECTION 4: UNIFIED CONTROL MAPPING & WORKFLOW (ALT BAND) -->
+    <div class="section-alt">
+        <div class="section-container">
+            <!-- CROSSWALK & CONTROL MAPPING -->
+            <div class="section-header-block" id="crosswalk-mapping" style="margin-top: 0;">
+                <span class="section-badge">UNIFIED CONTROL MAPPING</span>
+                <h2 class="section-heading">Crosswalk &amp; Control Mapping Architecture</h2>
+                <p class="section-subtitle" style="color: #64748b; font-size: 0.95rem; margin-top: 0.4rem;">Framework crosswalk mapping correlates security controls, policy requirements, and audit tests across multiple regulatory standards (e.g., mapping NIST CSF 2.0 to ISO/IEC 27001:2022, SOC 2 TSC, and PCI DSS v4.0).</p>
             </div>
-            <div class="feature-card" style="border-top: 3px solid #00B8E6;">
-                <strong>Industry Standards</strong>
-                <p style="font-size:0.85rem;margin:0;">Consensus standards established by international standardization
-                    bodies (e.g., ISO/IEC 27001, ISO 27701, PCI DSS) often required for commercial operations.</p>
+
+            <div class="feature-grid" style="margin-top: 1.5rem;">
+                <div class="feature-card" style="border-top-color: #02CCFF;">
+                    <strong>1:1 &amp; Many:1 Mapping Engine</strong>
+                    <p style="font-size:0.85rem;margin:0;">Links multiple framework requirement clauses to a central UCL Control Domain, reducing control duplication by up to 70%.</p>
+                </div>
+                <div class="feature-card" style="border-top-color: #00B8E6;">
+                    <strong>Unified Audit Evidence</strong>
+                    <p style="font-size:0.85rem;margin:0;">Attach sample evidence and test execution records once to automatically satisfy multiple compliance audits.</p>
+                </div>
+                <div class="feature-card" style="border-top-color: #1AD4FF;">
+                    <strong>Gap Analysis &amp; Coverage</strong>
+                    <p style="font-size:0.85rem;margin:0;">Instantly identify unmapped requirements and regulatory gaps when adopting new compliance frameworks.</p>
+                </div>
+                <div class="feature-card" style="border-top-color: #33D6FF;">
+                    <strong>Continuous Compliance Sync</strong>
+                    <p style="font-size:0.85rem;margin:0;">Updates to regulatory baselines or internal policies propagate automatically across all mapped framework controls.</p>
+                </div>
             </div>
-            <div class="feature-card" style="border-top: 3px solid #1AD4FF;">
-                <strong>Security Benchmarks</strong>
-                <p style="font-size:0.85rem;margin:0;">Voluntary risk management frameworks and technical hardening
-                    guidelines (e.g., NIST CSF, CIS Controls, SOC 2 Trust Services Criteria).</p>
+
+            <div class="callout-box" style="margin-top: 2.75rem; margin-bottom: 2.75rem;">
+                <p class="callout-title">How ASPIA UCL Crosswalk Works:</p>
+                <p class="callout-text">For example, an Access Control policy requirement in ASPIA UCL maps simultaneously to <strong>ISO 27001:A.5.15</strong>, <strong>NIST CSF:PR.AA-01</strong>, <strong>SOC 2:CC6.1</strong>, and <strong>PCI DSS:7.1.1</strong>. Testing this control once validates compliance for all four standards automatically.</p>
             </div>
-            <div class="feature-card" style="border-top: 3px solid #33D6FF;">
-                <strong>Internal Corporate Baselines</strong>
-                <p style="font-size:0.85rem;margin:0;">Custom internal policy frameworks designed to enforce corporate
-                    risk appetite, internal controls, and operational governance.</p>
+
+            <!-- WORKFLOW DIAGRAM -->
+            <div class="section-header-block" id="implementation-workflow" style="margin-top: 6.5rem; margin-bottom: 2.25rem;">
+                <span class="section-badge">IMPLEMENTATION WORKFLOW</span>
+                <h2 class="section-heading">Framework Implementation &amp; Mapping Workflow</h2>
+            </div>
+
+            <div class="workflow-box">
+                <div class="workflow-flow">
+                    <div class="flow-step-dark">1. Identify Regulatory Scope</div>
+                    <div class="flow-arrow">↓</div>
+                    <div class="flow-step-cyan">2. Select Target Frameworks</div>
+                    <div class="flow-arrow">↓</div>
+                    <div class="flow-step-dark">3. Map Control Domains (ASPIA UCL)</div>
+                    <div class="flow-arrow">↓</div>
+                    <div class="flow-step-cyan">4. Define Auditable Requirements</div>
+                    <div class="flow-arrow">↓</div>
+                    <div class="flow-step-dark">5. Execute Audit Testing &amp; Sampling</div>
+                    <div class="flow-arrow">↓</div>
+                    <div class="flow-step-cyan">6. Track Remediations &amp; Evidence</div>
+                    <div class="flow-arrow">↓</div>
+                    <div class="flow-step-dark">7. Continuous Compliance Monitoring</div>
+                </div>
             </div>
         </div>
+    </div>
 
-        <!-- CROSSWALK & CONTROL MAPPING -->
-        <h2 id="crosswalk-mapping" class="section-heading">Crosswalk &amp; Control Mapping Architecture</h2>
-        <p>Framework crosswalk mapping is the process of correlating security controls, policy requirements, and audit
-            tests across multiple regulatory standards (e.g., mapping NIST CSF 2.0 to ISO/IEC 27001:2022, SOC 2 TSC, and
-            PCI DSS v4.0). By establishing a single source of truth in ASPIA UCL, organizations eliminate redundant
-            testing and achieve "test once, comply with many" audit efficiency.</p>
+    <!-- SECTION 5: AUDIT READINESS CHECKLIST (LIGHT BAND) -->
+    <div class="section-light">
+        <div class="section-container">
+            <div class="section-header-block" id="checklist" style="margin-top: 0;">
+                <span class="section-badge">AUDIT READINESS</span>
+                <h2 class="section-heading">Framework Compliance Readiness Checklist</h2>
+            </div>
 
-        <div class="feature-grid" style="margin-top: 1.5rem;">
-            <div class="feature-card" style="border-top-color: #02CCFF;">
-                <strong>1:1 &amp; Many:1 Mapping Engine</strong>
-                <p style="font-size:0.85rem;margin:0;">Links multiple framework requirement clauses to a central UCL
-                    Control Domain, reducing control duplication by up to 70%.</p>
-            </div>
-            <div class="feature-card" style="border-top-color: #00B8E6;">
-                <strong>Unified Audit Evidence</strong>
-                <p style="font-size:0.85rem;margin:0;">Attach sample evidence and test execution records once to
-                    automatically satisfy multiple compliance audits.</p>
-            </div>
-            <div class="feature-card" style="border-top-color: #1AD4FF;">
-                <strong>Gap Analysis &amp; Coverage</strong>
-                <p style="font-size:0.85rem;margin:0;">Instantly identify unmapped requirements and regulatory gaps when
-                    adopting new compliance frameworks.</p>
-            </div>
-            <div class="feature-card" style="border-top-color: #33D6FF;">
-                <strong>Continuous Compliance Sync</strong>
-                <p style="font-size:0.85rem;margin:0;">Updates to regulatory baselines or internal policies propagate
-                    automatically across all mapped framework controls.</p>
+            <div class="checklist-grid">
+                <div class="checklist-item"><i class="far fa-check-square" style="color:#16C4F4;"></i> Regulatory applicability scoped</div>
+                <div class="checklist-item"><i class="far fa-check-square" style="color:#16C4F4;"></i> Executive sponsor assigned</div>
+                <div class="checklist-item"><i class="far fa-check-square" style="color:#16C4F4;"></i> Control domains mapped</div>
+                <div class="checklist-item"><i class="far fa-check-square" style="color:#16C4F4;"></i> Asset inventory validated</div>
+                <div class="checklist-item"><i class="far fa-check-square" style="color:#16C4F4;"></i> Policy exceptions logged</div>
+                <div class="checklist-item"><i class="far fa-check-square" style="color:#16C4F4;"></i> Risk assessment documented</div>
+                <div class="checklist-item"><i class="far fa-check-square" style="color:#16C4F4;"></i> Evidence collection automated</div>
+                <div class="checklist-item"><i class="far fa-check-square" style="color:#16C4F4;"></i> Vendor risk reviews complete</div>
+                <div class="checklist-item"><i class="far fa-check-square" style="color:#16C4F4;"></i> Access control reviews run</div>
+                <div class="checklist-item"><i class="far fa-check-square" style="color:#16C4F4;"></i> Audit sampling performed</div>
+                <div class="checklist-item"><i class="far fa-check-square" style="color:#16C4F4;"></i> Corrective action plan ready</div>
+                <div class="checklist-item"><i class="far fa-check-square" style="color:#16C4F4;"></i> Audit trail preserved</div>
             </div>
         </div>
+    </div>
 
-        <div class="callout-box" style="margin-top: 1.5rem;">
-            <p class="callout-title">How ASPIA UCL Crosswalk Works:</p>
-            <p class="callout-text">For example, an Access Control policy requirement in ASPIA UCL maps simultaneously
-                to <strong>ISO 27001:A.5.15</strong>, <strong>NIST CSF:PR.AA-01</strong>, <strong>SOC 2:CC6.1</strong>,
-                and <strong>PCI DSS:7.1.1</strong>. Testing this control once validates compliance for all four
-                standards automatically.</p>
-        </div>
+    <!-- SECTION 6: FAQ SECTION (ALT BAND) -->
+    <div class="section-alt">
+        <div class="section-container">
+            <div class="section-header-block" id="faq" style="margin-top: 0;">
+                <span class="section-badge">FAQ &amp; SUPPORT</span>
+                <h2 class="section-heading">Frequently Asked Questions</h2>
+                <p class="section-subtitle" style="color: #64748b; font-size: 0.95rem; margin-top: 0.4rem;">Quick answers to common questions about regulatory frameworks and control mapping.</p>
+            </div>
 
-        <!-- WORKFLOW DIAGRAM -->
-        <h2 id="implementation-workflow" class="section-heading">Framework Implementation &amp; Mapping Workflow</h2>
+            <div class="faq-card-container" style="margin-bottom: 0;">
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <div class="q" role="button" aria-expanded="false" tabindex="0">
+                            <span class="q-text">What is a cybersecurity compliance framework?</span>
+                            <span class="faq-toggle-icon" aria-hidden="true">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                </svg>
+                            </span>
+                        </div>
+                        <div class="a-wrapper">
+                            <div class="a-inner">
+                                <div class="a">A cybersecurity compliance framework is a structured set of guidelines, security controls, and best practices designed to help organizations manage risk, protect data assets, and satisfy regulatory obligations.</div>
+                            </div>
+                        </div>
+                    </div>
 
-        <div class="workflow-box">
-            <div class="workflow-flow">
-                <div class="flow-step-dark">1. Identify Regulatory Scope</div>
-                <div class="flow-arrow">↓</div>
-                <div class="flow-step-cyan">2. Select Target Frameworks</div>
-                <div class="flow-arrow">↓</div>
-                <div class="flow-step-dark">3. Map Control Domains (ASPIA UCL)</div>
-                <div class="flow-arrow">↓</div>
-                <div class="flow-step-cyan">4. Define Auditable Requirements</div>
-                <div class="flow-arrow">↓</div>
-                <div class="flow-step-dark">5. Execute Audit Testing &amp; Sampling</div>
-                <div class="flow-arrow">↓</div>
-                <div class="flow-step-cyan">6. Track Remediations &amp; Evidence</div>
-                <div class="flow-arrow">↓</div>
-                <div class="flow-step-dark">7. Continuous Compliance Monitoring</div>
+                    <div class="faq-item">
+                        <div class="q" role="button" aria-expanded="false" tabindex="0">
+                            <span class="q-text">What are the main types of compliance frameworks?</span>
+                            <span class="faq-toggle-icon" aria-hidden="true">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                </svg>
+                            </span>
+                        </div>
+                        <div class="a-wrapper">
+                            <div class="a-inner">
+                                <div class="a">Frameworks generally fall into three main categories: <strong>Regulatory Mandates</strong> (GDPR, HIPAA, PCI DSS, SOX, NIS2), <strong>Industry Standards</strong> (ISO/IEC 27001, ISO 27701), and <strong>Security Benchmarks</strong> (NIST CSF, CIS Controls, SOC 2).</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="q" role="button" aria-expanded="false" tabindex="0">
+                            <span class="q-text">What is framework crosswalk mapping?</span>
+                            <span class="faq-toggle-icon" aria-hidden="true">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                </svg>
+                            </span>
+                        </div>
+                        <div class="a-wrapper">
+                            <div class="a-inner">
+                                <div class="a">Crosswalk mapping links controls and requirements from multiple frameworks to a single unified baseline, enabling a <strong>"test once, comply with many"</strong> audit strategy.</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="q" role="button" aria-expanded="false" tabindex="0">
+                            <span class="q-text">What is the difference between ISO 27001 and NIST CSF?</span>
+                            <span class="faq-toggle-icon" aria-hidden="true">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                </svg>
+                            </span>
+                        </div>
+                        <div class="a-wrapper">
+                            <div class="a-inner">
+                                <div class="a"><strong>ISO 27001</strong> is a certifiable Information Security Management System (ISMS) standard with mandatory clauses, whereas <strong>NIST CSF</strong> is a flexible risk management framework organized into Identify, Protect, Detect, Respond, and Recover functions.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
+    </div>
 
-        <!-- CHECKLIST -->
-        <h2 id="checklist" class="section-heading">Framework Compliance Readiness Checklist</h2>
-
-        <div class="checklist-grid">
-            <div class="checklist-item"><i class="far fa-check-square" style="color:#16C4F4;"></i> Regulatory
-                applicability scoped</div>
-            <div class="checklist-item"><i class="far fa-check-square" style="color:#16C4F4;"></i> Executive sponsor
-                assigned</div>
-            <div class="checklist-item"><i class="far fa-check-square" style="color:#16C4F4;"></i> Control domains
-                mapped</div>
-            <div class="checklist-item"><i class="far fa-check-square" style="color:#16C4F4;"></i> Asset inventory
-                validated</div>
-            <div class="checklist-item"><i class="far fa-check-square" style="color:#16C4F4;"></i> Policy exceptions
-                logged</div>
-            <div class="checklist-item"><i class="far fa-check-square" style="color:#16C4F4;"></i> Risk assessment
-                documented</div>
-            <div class="checklist-item"><i class="far fa-check-square" style="color:#16C4F4;"></i> Evidence collection
-                automated</div>
-            <div class="checklist-item"><i class="far fa-check-square" style="color:#16C4F4;"></i> Vendor risk reviews
-                complete</div>
-            <div class="checklist-item"><i class="far fa-check-square" style="color:#16C4F4;"></i> Access control
-                reviews run</div>
-            <div class="checklist-item"><i class="far fa-check-square" style="color:#16C4F4;"></i> Audit sampling
-                performed</div>
-            <div class="checklist-item"><i class="far fa-check-square" style="color:#16C4F4;"></i> Corrective action
-                plan ready</div>
-            <div class="checklist-item"><i class="far fa-check-square" style="color:#16C4F4;"></i> Audit trail preserved
+    <!-- SECTION 7: SUMMARY (LIGHT BAND) -->
+    <div class="section-light">
+        <div class="section-container">
+            <div class="section-header-block" id="conclusion" style="margin-top: 0;">
+                <span class="section-badge">SUMMARY</span>
+                <h2 class="section-heading">Final Takeaway</h2>
             </div>
+            <p style="line-height: 1.7; margin: 0;">Effective GRC management relies on unifying disparate compliance mandates under a central framework structure. By standardizing control domains and leveraging crosswalk mappings, organizations drastically reduce audit burden while strengthening their operational security posture.</p>
         </div>
-
-        <!-- FAQ SECTION -->
-        <h2 id="faq" class="section-heading">Frequently Asked Questions</h2>
-
-        <div class="faq-item">
-            <div class="faq-question">
-                <span>What is a cybersecurity compliance framework?</span>
-                <span>−</span>
-            </div>
-            <div class="faq-answer">
-                A cybersecurity compliance framework is a structured set of guidelines, security controls, and best
-                practices designed to help organizations manage risk, protect data assets, and satisfy regulatory
-                obligations.
-            </div>
-        </div>
-
-        <div class="faq-item">
-            <div class="faq-question">
-                <span>What are the main types of compliance frameworks?</span>
-                <span>−</span>
-            </div>
-            <div class="faq-answer">
-                Frameworks generally fall into three categories: Regulatory Mandates (GDPR, HIPAA, PCI DSS, SOX),
-                Industry Standards (ISO/IEC 27001, ISO 27701), and Security Benchmarks (NIST CSF, CIS Controls, SOC 2).
-            </div>
-        </div>
-
-        <div class="faq-item">
-            <div class="faq-question">
-                <span>What is framework crosswalk mapping?</span>
-                <span>−</span>
-            </div>
-            <div class="faq-answer">
-                Crosswalk mapping links controls and requirements from multiple frameworks to a single unified baseline,
-                enabling "test once, comply with many" audit efficiency.
-            </div>
-        </div>
-
-        <div class="faq-item">
-            <div class="faq-question">
-                <span>What is the difference between ISO 27001 and NIST CSF?</span>
-                <span>−</span>
-            </div>
-            <div class="faq-answer">
-                ISO 27001 is a certifiable Information Security Management System (ISMS) standard with mandatory
-                clauses, whereas NIST CSF is a flexible risk management framework organized into Identify, Protect,
-                Detect, Respond, and Recover functions.
-            </div>
-        </div>
-
-        <!-- CONCLUSION & CTA BANNER -->
-        <h2 id="conclusion" class="section-heading">Final Takeaway</h2>
-        <p>Effective GRC management relies on unifying disparate compliance mandates under a central framework
-            structure. By standardizing control domains and leveraging crosswalk mappings, organizations drastically
-            reduce audit burden while strengthening their operational security posture.</p>
-
-        <div class="cta-banner">
-            <h3 class="cta-title">Ready to Streamline Your Framework Compliance &amp; Control Mapping?</h3>
-            <p class="cta-desc">Connect regulatory frameworks with control domains, auditable requirements, and sampling
-                evidence in one centralized unified control library.</p>
-            <div class="cta-buttons">
-                <a href="https://aspiainfotech.com/" target="_blank" rel="noopener" class="btn-cta-primary">Explore
-                    ASPIA →</a>
-                <a href="https://aspiainfotech.com/request-a-demo/" target="_blank" rel="noopener"
-                    class="btn-cta-secondary">Book a Demo</a>
-            </div>
-        </div>
-
     </div>
 
     <!-- SCRIPTS -->
@@ -2410,7 +2472,7 @@
 
         function getMatchingCards() {
             const query = (document.getElementById('frameworkSearchInput')?.value || '').toLowerCase().trim();
-            const cards = Array.from(document.querySelectorAll('.framework-card'));
+            const cards = Array.from(document.querySelectorAll('#frameworksGrid .framework-card'));
 
             return cards.filter(card => {
                 const text = card.textContent.toLowerCase();
@@ -2422,7 +2484,7 @@
         }
 
         function renderPagination() {
-            const allCards = Array.from(document.querySelectorAll('.framework-card'));
+            const allCards = Array.from(document.querySelectorAll('#frameworksGrid .framework-card'));
             const matchingCards = getMatchingCards();
             const totalMatching = matchingCards.length;
 
@@ -2458,7 +2520,7 @@
 
             for (let i = startIndex; i < endIndex; i++) {
                 if (matchingCards[i]) {
-                    matchingCards[i].style.display = 'flex';
+                    matchingCards[i].style.display = '';
                 }
             }
 
@@ -2473,9 +2535,29 @@
 
                 btnsHtml += `<button type="button" class="page-btn" ${currentPage === 1 ? 'disabled' : ''} onclick="goToPage(${currentPage - 1})" aria-label="Previous Page"><i class="fas fa-chevron-left"></i></button>`;
 
-                for (let p = 1; p <= totalPages; p++) {
-                    const activeClass = p === currentPage ? ' active' : '';
-                    btnsHtml += `<button type="button" class="page-btn${activeClass}" onclick="goToPage(${p})">${p}</button>`;
+                if (totalPages <= 7) {
+                    for (let p = 1; p <= totalPages; p++) {
+                        const activeClass = p === currentPage ? ' active' : '';
+                        btnsHtml += `<button type="button" class="page-btn${activeClass}" onclick="goToPage(${p})">${p}</button>`;
+                    }
+                } else {
+                    let pagesToDisplay = [];
+                    if (currentPage <= 4) {
+                        pagesToDisplay = [1, 2, 3, 4, 5, '...', totalPages];
+                    } else if (currentPage >= totalPages - 3) {
+                        pagesToDisplay = [1, '...', totalPages - 4, totalPages - 3, totalPages - 2, totalPages - 1, totalPages];
+                    } else {
+                        pagesToDisplay = [1, '...', currentPage - 1, currentPage, currentPage + 1, '...', totalPages];
+                    }
+
+                    pagesToDisplay.forEach(item => {
+                        if (item === '...') {
+                            btnsHtml += `<span class="page-btn disabled" style="cursor:default;border:none;background:transparent;opacity:0.6;">...</span>`;
+                        } else {
+                            const activeClass = item === currentPage ? ' active' : '';
+                            btnsHtml += `<button type="button" class="page-btn${activeClass}" onclick="goToPage(${item})">${item}</button>`;
+                        }
+                    });
                 }
 
                 btnsHtml += `<button type="button" class="page-btn" ${currentPage === totalPages ? 'disabled' : ''} onclick="goToPage(${currentPage + 1})" aria-label="Next Page"><i class="fas fa-chevron-right"></i></button>`;
@@ -2498,9 +2580,26 @@
             currentPage = 1;
             renderPagination();
         }
-    </script>
 
-    @include('aspiaUcl.partials.footer')
+        // Initialize pagination on page load
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', renderPagination);
+        } else {
+            renderPagination();
+        }
+    </script>
+    <!-- UNIFIED DARK NAVY CTA & FOOTER SECTION -->
+    <div class="footer-cta-wrapper" style="background: #0B132B; color: #ffffff; padding-top: 4rem; transition: background 0.35s ease;">
+        <div class="section-container" style="text-align: center; padding-bottom: 2rem;">
+            <h3 style="font-size: 2.15rem; font-weight: 800; color: #ffffff; margin: 0 0 0.8rem 0; letter-spacing: -0.02em;">Ready to Streamline Your Framework Compliance &amp; Control Mapping?</h3>
+            <p style="color: #94a3b8; font-size: 1.05rem; margin: 0 auto 2rem auto; line-height: 1.65;">Connect regulatory frameworks with control domains, auditable requirements, and sampling evidence in one centralized unified control library.</p>
+            <div class="cta-buttons" style="display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center;">
+                <a href="https://aspiainfotech.com/" target="_blank" rel="noopener" class="btn-cta-primary">Explore ASPIA →</a>
+                <a href="https://aspiainfotech.com/request-a-demo/" target="_blank" rel="noopener" class="btn-cta-secondary">Book a Demo</a>
+            </div>
+        </div>
+        @include('aspiaUcl.partials.footer')
+    </div>
 
     <script>
         // Mobile Menu Toggle
@@ -2535,6 +2634,42 @@
                 applySiteTheme(newTheme);
             });
         }
+
+        // FAQ Accordion Interaction
+        const faqSectionItems = document.querySelectorAll('.faq-item');
+        faqSectionItems.forEach(item => {
+            const q = item.querySelector('.q');
+            if (q) {
+                const toggleItem = () => {
+                    const isActive = item.classList.contains('active');
+                    
+                    // Close other active items for clean single accordion mode
+                    faqSectionItems.forEach(otherItem => {
+                        if (otherItem !== item && otherItem.classList.contains('active')) {
+                            otherItem.classList.remove('active');
+                            const otherQ = otherItem.querySelector('.q');
+                            if (otherQ) otherQ.setAttribute('aria-expanded', 'false');
+                        }
+                    });
+
+                    if (isActive) {
+                        item.classList.remove('active');
+                        q.setAttribute('aria-expanded', 'false');
+                    } else {
+                        item.classList.add('active');
+                        q.setAttribute('aria-expanded', 'true');
+                    }
+                };
+
+                q.addEventListener('click', toggleItem);
+                q.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        toggleItem();
+                    }
+                });
+            }
+        });
     </script>
 </body>
 

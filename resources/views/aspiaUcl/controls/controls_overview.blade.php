@@ -2,61 +2,60 @@
 <html lang="en" data-theme="light">
 
 <head>
-    <!-- ==========================================================================
-         1. SEO META TAGS & STRUCTURED DATA
-         ========================================================================== -->
+    <!-- ========== META SECTION FOR SEO ========== -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Security Controls & Safeguards Guide: Meaning, Types, Mappings & Controls | ASPIA UCL</title>
+    <title>Security Controls & Baseline Safeguards: Meaning, Types, Mappings & Standards Guide | ASPIA UCL</title>
     <meta name="description"
-        content="Complete guide to security controls, baseline safeguards, risk management baselines, policy structures, and compliance mappings in ASPIA Unified Control Library.">
-    <meta name="keywords"
-        content="security controls, safeguards, governance, risk management, access control, incident response, UCL, ASPIA">
-    <meta name="author" content="ASPIA Unified Control Library">
-    <meta name="robots" content="index, follow">
+        content="Complete guide to security controls, baseline safeguards, risk management baselines, policy structures, and compliance crosswalks in ASPIA Unified Control Library.">
     <link rel="canonical" href="https://aspiainfotech.com/controls-guide/">
-
-    <!-- Open Graph (Facebook / LinkedIn) -->
-    <meta property="og:type" content="article">
-    <meta property="og:title" content="Security Controls & Safeguards Guide | ASPIA UCL">
+    <meta property="og:title" content="Security Controls & Baseline Safeguards: Meaning, Types, Mappings & Standards Guide">
     <meta property="og:description"
-        content="Complete guide to security controls, baseline safeguards, risk management baselines, policy structures, and compliance mappings in ASPIA Unified Control Library.">
+        content="Complete guide to security controls, baseline safeguards, risk management baselines, policy structures, and compliance crosswalks in ASPIA Unified Control Library.">
+    <meta property="og:type" content="article">
     <meta property="og:url" content="https://aspiainfotech.com/controls-guide/">
-    <meta property="og:site_name" content="ASPIA Unified Control Library">
-
-    <!-- Twitter Cards -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Security Controls & Safeguards Guide | ASPIA UCL">
+    <meta name="twitter:title" content="Security Controls & Baseline Safeguards: Meaning, Types, Mappings & Standards Guide">
     <meta name="twitter:description"
-        content="Complete guide to security controls, baseline safeguards, risk management baselines, policy structures, and compliance mappings in ASPIA Unified Control Library.">
+        content="Complete guide to security controls, baseline safeguards, risk management baselines, policy structures, and compliance crosswalks in ASPIA Unified Control Library.">
+    <meta name="robots" content="index, follow">
 
-    <!-- Schema.org JSON-LD Structured Data -->
+    <!-- Article Schema -->
     <script type="application/ld+json">
     {
         "@@context": "https://schema.org",
-        "@@type": "DefinedTermSet",
-        "name": "ASPIA UCL Security Controls",
-        "description": "Standardized security controls and compliance categories mapped under ASPIA Unified Control Library.",
-        "publisher": {
-            "@@type": "Organization",
-            "name": "ASPIA Infotech"
-        },
-        "inLanguage": "en"
+        "@@type": "TechArticle",
+        "headline": "Security Controls & Baseline Safeguards: Meaning, Types, Mappings & Standards Guide",
+        "description": "Complete guide to security controls, baseline safeguards, risk management baselines, policy structures, and compliance crosswalks in ASPIA Unified Control Library.",
+        "author": {"@@type": "Organization", "name": "ASPIA Infotech"},
+        "publisher": {"@@type": "Organization", "name": "ASPIA Infotech Pvt. Ltd."},
+        "datePublished": "2026-09-08",
+        "dateModified": "2026-09-08"
     }
     </script>
 
-    <!-- Google Fonts -->
+    <!-- FAQ Schema -->
+    <script type="application/ld+json">
+    {
+        "@@context": "https://schema.org",
+        "@@type": "FAQPage",
+        "mainEntity": [
+            {"@@type":"Question","name":"What is a security control in ASPIA UCL?","acceptedAnswer":{"@@type":"Answer","text":"A security control is a standardized safeguard or policy requirement (such as Access Control or Cryptographic Protection) that protects organizational data and satisfies compliance requirements across multiple frameworks."}},
+            {"@@type":"Question","name":"How do unified controls reduce audit burden?","acceptedAnswer":{"@@type":"Answer","text":"Unified controls map to overlapping requirements across ISO 27001, NIST CSF, PCI DSS, SOC 2, and GDPR. By testing a single control once, organizations validate compliance for multiple regulations simultaneously."}},
+            {"@@type":"Question","name":"What is the difference between preventive and detective controls?","acceptedAnswer":{"@@type":"Answer","text":"Preventive controls block unauthorized actions before they occur (e.g., MFA or firewalls), while detective controls monitor and alert on unauthorized activity that has taken place (e.g., SIEM logging or IDS)."}},
+            {"@@type":"Question","name":"How are controls categorized in ASPIA UCL?","acceptedAnswer":{"@@type":"Answer","text":"Controls in ASPIA UCL are categorized by Control Domain (e.g., Access Control, Asset Management) and Control Type (Preventive, Detective, Corrective, Administrative, Technical)."}},
+            {"@@type":"Question","name":"Can I add custom controls to ASPIA UCL?","acceptedAnswer":{"@@type":"Answer","text":"Yes, ASPIA UCL supports custom internal controls and policies while allowing seamless crosswalk mapping to standard regulatory frameworks."}}
+        ]
+    }
+    </script>
+
+    <!-- Google Fonts & Font Awesome -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800;14..32,900&family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
-    <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
     <style>
-        /* ==========================================================================
-           2. ADORABLE DESIGN SYSTEM & CSS VARIABLES
-           ========================================================================== */
         :root {
             --aspia-infotech-font-primary: "Inter", sans-serif;
             --aspia-infotech-font-mono: "JetBrains Mono", "SFMono-Regular", Consolas, monospace;
@@ -97,6 +96,8 @@
         /* SMOOTH GLOBAL COLOR TRANSITIONS */
         body,
         .page-wrapper,
+        .section-light,
+        .section-alt,
         .toc-card,
         .feature-card,
         .catalog-toolbar,
@@ -105,68 +106,214 @@
         .workflow-box,
         .checklist-item,
         .faq-item,
-        .faq-question,
         .footer-strip {
             transition: background-color 0.35s ease, color 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
         }
 
-        /* MAIN CONTAINER */
-        .page-wrapper {
-            max-width: 1260px;
+        /* FULL WIDTH SECTION BANDS (HOMEPAGE MATCHING ALTERNATING SCHEME) */
+        .section-light {
+            background-color: #ffffff;
+            padding: 5rem 0;
+            border-bottom: 1px solid rgba(226, 232, 240, 0.7);
+        }
+
+        .section-alt {
+            background-color: #f4f7fb;
+            padding: 5rem 0;
+            border-bottom: 1px solid rgba(226, 232, 240, 0.7);
+        }
+
+        .section-container {
+            max-width: 1240px;
             margin: 0 auto;
-            padding: 2.5rem 2.6rem;
+            padding: 0 24px;
+            width: 100%;
+            box-sizing: border-box;
         }
 
-        /* HERO STYLES */
-        .hero-card {
-            background: linear-gradient(135deg, #0D1735 0%, #172540 60%, #16C4F4 100%);
-            border-radius: 24px;
-            padding: 3rem 2.5rem;
-            margin-bottom: 2.5rem;
-            color: white;
-            box-shadow: 0 12px 40px rgba(13, 23, 53, 0.25);
+        /* MAIN CONTAINER (Legacy Fallback) */
+        .page-wrapper {
+            max-width: 1240px;
+            margin: 0 auto;
+            padding: 2.5rem 24px;
+            width: 100%;
+            box-sizing: border-box;
         }
 
-        .hero-meta {
-            font-size: 0.9rem;
-            opacity: 0.8;
-            margin-bottom: 1.5rem;
+        /* HERO STYLES (FULL VH SCREEN - ISOMETRIC PNG DESIGN) */
+        .hero-section {
+            background: #0D1735;
+            color: #ffffff;
+            width: 100%;
+            min-height: calc(100vh - 76px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 3.5rem 0;
+            margin-bottom: 0;
+            box-sizing: border-box;
+            position: relative;
         }
 
-        .hero-meta a {
-            color: #fff;
-            text-decoration: none;
+        .hero-container {
+            max-width: 1240px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 0 24px;
+            box-sizing: border-box;
+            display: grid;
+            grid-template-columns: 1.12fr 0.88fr;
+            gap: 2.5rem;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-content {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+
+        .hero-eyebrow {
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: #16C4F4;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
         }
 
         .hero-title {
-            font-size: clamp(2rem, 5vw, 3.2rem);
-            font-weight: 700;
-            margin: 0 0 0.5rem 0;
-            line-height: 1.2;
+            font-size: clamp(2.4rem, 4.2vw, 3.8rem);
+            font-weight: 800;
+            line-height: 1.12;
             color: #ffffff;
+            margin: 0;
+            letter-spacing: -0.02em;
+        }
+
+        .hero-title .highlight {
+            color: #16C4F4;
+            display: block;
         }
 
         .hero-subtitle {
-            font-size: 1.2rem;
-            opacity: 0.9;
-            max-width: 840px;
-            margin-bottom: 1.5rem;
+            font-size: 1.05rem;
+            color: #9ab0cc;
+            line-height: 1.65;
+            max-width: 560px;
+            margin: 0;
         }
 
-        .hero-tags {
+        /* Feature Cards Grid (4 Inline Cards) */
+        .hero-features-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.75rem;
+            margin-top: 0.25rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .hero-feature-card {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(22, 196, 244, 0.22);
+            border-radius: 12px;
+            padding: 0.7rem 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.65rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .hero-feature-icon {
+            width: 36px;
+            height: 36px;
+            background: rgba(22, 196, 244, 0.12);
+            border: 1px solid rgba(22, 196, 244, 0.28);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #16C4F4;
+            font-size: 0.95rem;
+            flex-shrink: 0;
+        }
+
+        .hero-feature-text {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.25;
+        }
+
+        .hero-feature-title {
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: #ffffff;
+            white-space: nowrap;
+        }
+
+        .hero-feature-sub {
+            font-size: 0.7rem;
+            color: #9ab0cc;
+            white-space: nowrap;
+        }
+
+        /* Meta Bar */
+        .hero-meta-bar {
             display: flex;
             flex-wrap: wrap;
-            gap: 1.5rem;
             align-items: center;
-            font-size: 0.95rem;
+            gap: 1.25rem;
+            font-size: 0.9rem;
+            color: #cbd5e1;
+            margin-top: 0.25rem;
         }
 
         .hero-tag-pill {
             background: #16C4F4;
-            padding: 0.2rem 1.2rem;
-            border-radius: 40px;
-            font-weight: 600;
             color: #0D1735;
+            padding: 0.35rem 1.25rem;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            box-shadow: 0 4px 16px rgba(22, 196, 244, 0.35);
+        }
+
+        /* Right Column: Isometric Graphic Container */
+        .hero-visual-wrapper {
+            position: relative;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .hero-isometric-img {
+            width: 100%;
+            max-width: 560px;
+            height: auto;
+            object-fit: contain;
+            filter: drop-shadow(0 16px 36px rgba(0, 0, 0, 0.3));
+        }
+
+        @media (max-width: 1100px) {
+            .hero-container {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .hero-features-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 640px) {
+            .hero-features-grid {
+                grid-template-columns: 1fr;
+            }
         }
 
         /* TOC STYLES */
@@ -203,53 +350,91 @@
             text-decoration: underline;
         }
 
-        /* SIMPLE & PROFESSIONAL CALLOUT BLOCK */
+        /* UN-BORDERED CALLOUT BLOCK */
         .callout-box {
-            background: rgba(13, 23, 53, 0.03);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 1rem 1.25rem;
-            margin-bottom: 2rem;
+            background: transparent;
+            border: none;
+            border-radius: 0;
+            padding: 0;
+            margin: 3rem 0 5rem 0;
+            box-shadow: none;
         }
 
         .callout-title {
-            margin: 0 0 0.3rem 0;
-            font-weight: 700;
-            font-size: 0.95rem;
-            color: var(--text-heading);
+            margin: 0 0 0.4rem 0;
+            font-weight: 800;
+            font-size: 1.05rem;
+            color: #16C4F4;
         }
 
         .callout-text {
             margin: 0;
-            font-size: 0.92rem;
-            line-height: 1.6;
+            font-size: 1rem;
+            line-height: 1.7;
             color: var(--text-main);
         }
 
-        /* SECTION HEADINGS */
-        .section-heading {
-            font-size: 1.9rem;
+        /* SECTION HEADINGS (CENTERED BADGE & TITLE UI) */
+        .section-header-block {
+            text-align: center;
+            margin: 3.5rem 0 2.25rem 0;
+        }
+
+        .section-badge {
+            display: inline-block;
+            background: #e8f0fe;
+            color: #16C4F4;
+            font-size: 0.72rem;
             font-weight: 700;
-            border-left: 5px solid #16C4F4;
-            padding-left: 1rem;
-            margin: 2.5rem 0 1rem 0;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            padding: 5px 18px;
+            border-radius: 20px;
+            margin-bottom: 0.6rem;
+        }
+
+        .section-heading {
+            font-size: clamp(1.8rem, 3.5vw, 2.4rem);
+            font-weight: 800;
             color: var(--text-heading);
+            margin: 0 0 0.5rem 0;
+            line-height: 1.25;
+            text-align: center;
+            border-left: none;
+            padding-left: 0;
+        }
+
+        .section-subtitle {
+            font-size: 1rem;
+            color: var(--text-main);
+            opacity: 0.85;
+            max-width: 720px;
+            margin: 0 auto 1.5rem auto;
+            text-align: center;
+            line-height: 1.6;
+        }
+
+        body.dark-mode .section-badge,
+        [data-theme="dark"] .section-badge {
+            background: rgba(22, 196, 244, 0.15) !important;
+            color: #16C4F4 !important;
         }
 
         /* GRID CARDS */
         .feature-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 1rem;
-            margin: 1.5rem 0;
+            gap: 1.25rem;
+            margin: 2.25rem 0;
         }
 
         .feature-card {
-            background: #f8fafd;
-            padding: 1.2rem;
+            background: #ffffff;
+            padding: 1.25rem;
             border-radius: 12px;
-            border: 1px solid #e6edf4;
-            border-top: 3px solid #16C4F4;
+            border: 1px solid #e2e8f0;
+            border-top: 3px solid #02CCFF;
+            box-shadow: 0 4px 14px rgba(15, 23, 42, 0.03);
         }
 
         .feature-card strong {
@@ -261,16 +446,17 @@
 
         /* SEARCH & CATALOG TOOLBAR */
         .catalog-toolbar {
-            background: #f8fafd;
+            background: #ffffff;
             border: 1px solid var(--border-color);
             border-radius: 16px;
-            padding: 1.2rem 1.5rem;
-            margin: 2rem 0 1rem 0;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
             display: flex;
             flex-wrap: wrap;
             align-items: center;
             justify-content: space-between;
             gap: 1rem;
+            box-shadow: 0 4px 16px rgba(15, 23, 42, 0.03);
         }
 
         .search-input-group {
@@ -298,6 +484,40 @@
             outline: none;
         }
 
+        .filter-buttons {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 0.5rem 1.2rem;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            border: 1px solid var(--border-color);
+            background: var(--bg-body);
+            color: var(--text-main);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .filter-btn.active,
+        .filter-btn:hover {
+            background: #16C4F4;
+            border-color: #16C4F4;
+            color: #0D1735;
+        }
+
+        /* DYNAMIC CONTROLS CATALOG LAYOUT */
+        .frameworks-cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+            gap: 1.25rem;
+            margin: 1.5rem 0 3rem 0;
+            transition: all 0.3s ease;
+        }
+
         /* CATALOG LIST WRAPPER & PAGINATION STYLES */
         .catalog-list-wrapper {
             margin-bottom: 1rem;
@@ -309,12 +529,13 @@
             justify-content: space-between;
             flex-wrap: wrap;
             gap: 1rem;
-            background: #f8fafd;
+            background: #ffffff;
             border: 1px solid var(--border-color);
             border-radius: 12px;
             padding: 0.8rem 1.25rem;
             margin-bottom: 2rem;
             font-size: 0.88rem;
+            box-shadow: 0 2px 8px rgba(15, 23, 42, 0.02);
         }
 
         .pagination-info strong {
@@ -364,7 +585,7 @@
             cursor: not-allowed;
         }
 
-        /* CLASSIC COMPACT LIST FORMAT */
+        /* CLASSIC & PROFESSIONAL COMPACT LIST FORMAT */
         .list-table-header-bar {
             display: flex;
             align-items: center;
@@ -438,24 +659,16 @@
         }
 
         .card-left-column .badge-fw-id {
-            font-family: 'JetBrains Mono', monospace;
             font-size: 0.68rem;
-            font-weight: 800;
             padding: 0 0.2rem 0 0;
             background: transparent;
-            color: #0D1735;
             border: none;
         }
 
         .card-left-column .badge-code {
-            font-family: 'JetBrains Mono', monospace;
             font-size: 0.65rem;
-            font-weight: 700;
             padding: 0.15rem 0.4rem;
             border-radius: 4px;
-            background: rgba(22, 196, 244, 0.12);
-            color: #16C4F4;
-            border: 1px solid rgba(22, 196, 244, 0.25);
         }
 
         .card-center-column {
@@ -555,11 +768,69 @@
             text-decoration: none;
         }
 
+        @media (max-width: 992px) {
+            .list-table-header-bar {
+                display: none !important;
+            }
+
+            .frameworks-cards-grid.list-layout-view .framework-card {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 0.6rem;
+                padding: 0.8rem;
+            }
+
+            .card-left-column {
+                flex-direction: row;
+                min-width: auto;
+            }
+
+            .card-center-column {
+                margin-left: 0;
+            }
+
+            .card-scope-column {
+                min-width: auto;
+            }
+
+            .scope-badges-strip {
+                justify-content: space-around;
+            }
+
+            .card-action-column {
+                min-width: auto;
+                text-align: stretch;
+            }
+
+            .btn-explore-framework {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        .framework-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 18px;
+            padding: 1.8rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.04);
+        }
+
+        .framework-card:hover {
+            transform: translateY(-4px);
+            border-color: #16C4F4;
+            box-shadow: 0 12px 30px -4px rgba(22, 196, 244, 0.15);
+        }
+
         /* TABLES */
         .custom-table {
             width: 100%;
             border-collapse: collapse;
-            margin: 1.5rem 0;
+            margin: 2.5rem 0;
             border-radius: 12px;
             overflow: hidden;
             border: 1px solid var(--border-color);
@@ -585,11 +856,12 @@
 
         /* WORKFLOW FLOWCHART */
         .workflow-box {
-            background: #f8fafd;
+            background: #ffffff;
             border-radius: 16px;
-            padding: 2rem 1.5rem;
-            margin: 2rem 0;
-            border: 1px solid rgba(22, 196, 244, 0.15);
+            padding: 2.25rem 1.75rem;
+            margin: 2.75rem 0;
+            border: 1px solid rgba(22, 196, 244, 0.2);
+            box-shadow: 0 4px 20px rgba(15, 23, 42, 0.03);
         }
 
         .workflow-flow {
@@ -609,7 +881,6 @@
             font-weight: 600;
         }
 
-        .flow-step-purple,
         .flow-step-cyan {
             background: #16C4F4;
             color: #0D1735;
@@ -617,7 +888,7 @@
             border-radius: 40px;
             display: inline-block;
             margin: 0.3rem;
-            font-weight: 700;
+            font-weight: 600;
         }
 
         .flow-arrow {
@@ -629,12 +900,12 @@
         .checklist-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 0.8rem;
-            margin: 1.5rem 0;
+            gap: 1rem;
+            margin: 2.25rem 0;
         }
 
         .checklist-item {
-            background: #f8fafd;
+            background: #ffffff;
             padding: 0.8rem 1rem;
             border-radius: 10px;
             border: 1px solid var(--border-color);
@@ -642,32 +913,186 @@
             display: flex;
             align-items: center;
             gap: 0.6rem;
+            box-shadow: 0 2px 6px rgba(15, 23, 42, 0.02);
         }
 
-        /* FAQ ACCORDION */
-        .faq-item {
-            margin-bottom: 1rem;
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            overflow: hidden;
-            background: var(--bg-card);
+        /* ============================================================
+           FAQ - CARD ACCORDION THEME (Homepage Matching UI)
+           ============================================================ */
+        .faq-card-container {
+            background: #ffffff;
+            border-radius: 24px;
+            box-shadow: 0 10px 30px rgba(15, 23, 42, 0.04), 0 2px 6px rgba(15, 23, 42, 0.02);
+            width: 100%;
+            max-width: 100%;
+            margin: 2.5rem 0 1rem 0;
+            padding: 36px 48px;
+            border: 1px solid rgba(226, 232, 240, 0.8);
         }
 
-        .faq-question {
-            padding: 1rem 1.5rem;
-            background: #f8fafd;
+        .faq-list {
+            max-width: 100%;
+            margin: 0 auto;
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            cursor: pointer;
-            font-weight: 600;
-            color: var(--text-heading);
+            flex-direction: column;
         }
 
-        .faq-answer {
-            padding: 1rem 1.5rem 1.5rem 1.5rem;
+        .faq-item {
+            border-bottom: 1px solid #eef2f6;
+            padding: 0;
+            margin-bottom: 0;
+            border-radius: 0;
+            overflow: visible;
+            background: transparent;
+            border-top: none;
+            border-left: none;
+            border-right: none;
+            transition: background-color 0.2s ease;
+        }
+
+        .faq-item:last-child {
+            border-bottom: none;
+        }
+
+        .faq-item .q {
+            font-weight: 700;
+            font-size: 1.05rem;
+            color: #0d1735;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            justify-content: space-between;
+            padding: 22px 0;
+            cursor: pointer;
+            user-select: none;
+            transition: color 0.2s ease;
+        }
+
+        .faq-item .q:hover .q-text {
+            color: #00a8e8;
+        }
+
+        .faq-item .q .q-text {
+            line-height: 1.45;
+            flex: 1;
+        }
+
+        .faq-item .q .faq-toggle-icon {
+            color: #00c2ff;
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .faq-item .q .faq-toggle-icon svg {
+            stroke: #00c2ff;
+            transition: stroke 0.2s ease;
+        }
+
+        .faq-item.active .q .faq-toggle-icon {
+            transform: rotate(45deg);
+        }
+
+        /* Smooth Height Transition with CSS Grid */
+        .faq-item .a-wrapper {
+            display: grid;
+            grid-template-rows: 0fr;
+            transition: grid-template-rows 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .faq-item.active .a-wrapper {
+            grid-template-rows: 1fr;
+        }
+
+        .faq-item .a-inner {
+            overflow: hidden;
+        }
+
+        .faq-item .a {
             font-size: 0.95rem;
-            line-height: 1.7;
+            color: #475569;
+            line-height: 1.65;
+            padding-bottom: 22px;
+            padding-top: 2px;
+            margin-top: 0;
+            padding-left: 0;
+            display: block;
+            opacity: 0;
+            transform: translateY(-6px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .faq-item.active .a {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .faq-item .a strong {
+            color: #0d1735;
+            font-weight: 700;
+        }
+
+        /* FAQ Accordion Dark Mode */
+        body.dark-mode .faq-card-container {
+            background: #1e293b !important;
+            border-color: #334155 !important;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3) !important;
+        }
+
+        body.dark-mode .faq-item {
+            border-bottom-color: #334155 !important;
+        }
+
+        body.dark-mode .faq-item .q .q-text {
+            color: #ffffff !important;
+        }
+
+        body.dark-mode .faq-item .q:hover .q-text {
+            color: #38bdf8 !important;
+        }
+
+        body.dark-mode .faq-item .q .faq-toggle-icon svg {
+            stroke: #38bdf8 !important;
+        }
+
+        body.dark-mode .faq-item .a {
+            color: #cbd5e1 !important;
+        }
+
+        body.dark-mode .faq-item .a strong {
+            color: #38bdf8 !important;
+        }
+
+        /* Section Bands Dark Mode */
+        body.dark-mode .section-light {
+            background-color: #0b1329 !important;
+            border-bottom-color: rgba(255, 255, 255, 0.05) !important;
+        }
+
+        body.dark-mode .section-alt {
+            background-color: #0f172a !important;
+            border-bottom-color: rgba(255, 255, 255, 0.05) !important;
+        }
+
+        @media (max-width: 768px) {
+            .faq-card-container {
+                padding: 24px 20px;
+                border-radius: 18px;
+            }
+
+            .faq-item .q {
+                font-size: 0.95rem;
+                padding: 18px 0;
+            }
+
+            .faq-item .a {
+                font-size: 0.88rem;
+                padding-bottom: 18px;
+            }
         }
 
         /* CTA BANNER */
@@ -754,33 +1179,34 @@
 
         @media (max-width: 1024px) {
             .site-nav-header {
-                padding: 0.8rem 2rem;
+                padding: 0.8rem 24px;
             }
 
             .page-wrapper {
-                padding: 2rem 2.5rem;
+                padding: 2rem 24px;
             }
         }
 
         @media (max-width: 768px) {
             .site-nav-header {
-                padding: 0.8rem 1.2rem;
+                padding: 0.8rem 16px;
             }
 
             .page-wrapper {
-                padding: 1.5rem 1rem;
+                padding: 1.5rem 16px;
+            }
+
+            .hero-container {
+                padding: 0 16px;
             }
 
             .toc-grid {
                 columns: 1;
             }
 
-            .hero-card {
-                padding: 2rem 1.5rem;
-            }
-
-            .list-table-header-bar {
-                display: none !important;
+            .hero-section {
+                padding: 2rem 0;
+                min-height: auto;
             }
         }
     </style>
@@ -789,325 +1215,445 @@
 <body>
     @include('aspiaUcl.partials.header', ['activeTab' => 'controls'])
 
-    <div class="page-wrapper">
+    <!-- HERO BANNER (ISOMETRIC LOGO DESIGN - FULL VH SCREEN) -->
+    <div class="hero-section">
+        <div class="hero-container">
+            <!-- Left Column: Content -->
+            <div class="hero-content">
+                <div class="hero-eyebrow">EXPLORE &bull; LEARN &bull; APPLY</div>
+                <h1 class="hero-title">
+                    Security Controls &amp;
+                    <span class="highlight">Baseline Safeguards</span>
+                </h1>
+                <p class="hero-subtitle">
+                    Complete guide to unified security controls, baseline safeguards, risk management baselines, policy structures, and compliance crosswalks in the ASPIA Unified Control Library.
+                </p>
 
-        <!-- HERO BANNER -->
-        <div class="hero-card">
-            <h1 class="hero-title">Security Controls &amp; Safeguards: Meaning, Architecture &amp; Governance</h1>
-            <p class="hero-subtitle">Complete guide to security controls, baseline safeguards, risk management
-                baselines, policy structures, and compliance mappings in ASPIA Unified Control Library.</p>
-            <div class="hero-tags">
-                <span class="hero-tag-pill"><i class="fas fa-cubes"></i> Unified Library</span>
-                <span><i class="far fa-clock"></i> 12 min read</span>
-                <span style="opacity:0.8;"><i class="far fa-calendar-alt"></i> September 2026</span>
-                <span><i class="fas fa-user-edit"></i> ASPIA Editorial</span>
+                <!-- 4 Feature Cards -->
+                <div class="hero-features-grid">
+                    <div class="hero-feature-card">
+                        <div class="hero-feature-icon">
+                            <i class="fas fa-shield-halved"></i>
+                        </div>
+                        <div class="hero-feature-text">
+                            <span class="hero-feature-title">Unified Controls</span>
+                            <span class="hero-feature-sub">Baseline Safeguards</span>
+                        </div>
+                    </div>
+                    <div class="hero-feature-card">
+                        <div class="hero-feature-icon">
+                            <i class="fas fa-sitemap"></i>
+                        </div>
+                        <div class="hero-feature-text">
+                            <span class="hero-feature-title">Multi-Framework</span>
+                            <span class="hero-feature-sub">Crosswalk Mapping</span>
+                        </div>
+                    </div>
+                    <div class="hero-feature-card">
+                        <div class="hero-feature-icon">
+                            <i class="fas fa-list-check"></i>
+                        </div>
+                        <div class="hero-feature-text">
+                            <span class="hero-feature-title">Auditable Scope</span>
+                            <span class="hero-feature-sub">Evidence Testing</span>
+                        </div>
+                    </div>
+                    <div class="hero-feature-card">
+                        <div class="hero-feature-icon">
+                            <i class="fas fa-sliders"></i>
+                        </div>
+                        <div class="hero-feature-text">
+                            <span class="hero-feature-title">Risk Mitigation</span>
+                            <span class="hero-feature-sub">Governance</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Right Column: 3D Isometric PNG Graphic -->
+            <div class="hero-visual-wrapper">
+                <img src="{{ asset('images/frameworks_hero_graphic.png') }}" alt="Security Controls Isometric Graphic" class="hero-isometric-img">
             </div>
         </div>
-
-        <!-- SHORT ANSWER BOX -->
-        <div class="callout-box">
-            <p class="callout-title">In Simple Terms:</p>
-            <p class="callout-text">A security control is a high-level technical, administrative, or physical safeguard
-                (such as Multi-Factor Authentication, Access Control, Encryption, or Incident Response) designed to
-                protect assets and manage risk. ASPIA UCL organizes all controls into standardized baselines so
-                organizations can manage compliance efficiently across multiple frameworks.</p>
-        </div>
-
-        <!-- WHAT ARE CONTROLS -->
-        <h2 id="what-are" class="section-heading">What Are Security Controls?</h2>
-        <p>A security control is a functional safeguard or countermeasure in information security and regulatory
-            governance that mitigates specific security risks, protects organizational assets, and satisfies compliance
-            mandates. Security controls provide a structured baseline for operationalizing policies and preventing
-            security incidents.</p>
-        <p>Instead of managing disparate compliance tasks independently, organizations structure their GRC and
-            cybersecurity programs around core security controls such as Multi-Factor Authentication (IAM-001), Secure
-            Configuration Baseline (CFG-001), Vulnerability Scanning (VUL-001), and Incident Response (INC-001).</p>
-
-        <!-- WHY STRUCTURE BY CONTROLS -->
-        <h2 id="why-used" class="section-heading">Why Structure Compliance by Security Controls?</h2>
-
-        <div class="feature-grid">
-            <div class="feature-card" style="border-top-color: #02CCFF;">
-                <strong>1. Clear Safeguard Accountability</strong>
-                <p style="font-size:0.85rem;margin:0;">Assigns direct operational responsibility to specific technical
-                    owners and teams for each control implementation.</p>
-            </div>
-            <div class="feature-card" style="border-top-color: #00B8E6;">
-                <strong>2. Standardized Safeguard Taxonomy</strong>
-                <p style="font-size:0.85rem;margin:0;">Establishes a common security language across engineering teams,
-                    internal auditors, and executive leadership.</p>
-            </div>
-            <div class="feature-card" style="border-top-color: #1AD4FF;">
-                <strong>3. Audit Crosswalk Efficiency</strong>
-                <p style="font-size:0.85rem;margin:0;">Maps controls from ISO 27001, NIST, SOC 2, and PCI DSS into
-                    unified safeguards to eliminate duplicate testing.</p>
-            </div>
-            <div class="feature-card" style="border-top-color: #33D6FF;">
-                <strong>4. Comprehensive Risk Defense</strong>
-                <p style="font-size:0.85rem;margin:0;">Ensures complete coverage across physical, administrative, and
-                    technical threat vectors during risk assessments.</p>
-            </div>
-        </div>
-
-        <!-- CATALOG TOOLBAR & DYNAMIC CONTROL CARDS -->
-        <h2 id="controls-catalog" class="section-heading">Explore Integrated Security Controls</h2>
-        <p>Browse all standardized security controls mapped within ASPIA UCL. Search by control ID, code, title, domain,
-            or functional scope.</p>
-
-        <div class="catalog-toolbar">
-            <div class="search-input-group">
-                <i class="fas fa-search"></i>
-                <input type="text" id="controlSearchInput"
-                    placeholder="Search controls by ID, code, title, domain, purpose..." onkeyup="filterControls()">
-            </div>
-        </div>
-
-        <!-- CLASSIC LIST TABLE HEADER STRIP -->
-        <div class="list-table-header-bar" id="listTableHeaderBar">
-            <div class="col-hdr col-hdr-id">Control ID</div>
-            <div class="col-hdr col-hdr-info">Control Name &amp; Category Overview</div>
-            <div class="col-hdr col-hdr-scope">Mapped Domain Scope</div>
-            <div class="col-hdr col-hdr-action">Action</div>
-        </div>
-
-        <!-- CATALOG CARDS LIST -->
-        <div class="catalog-list-wrapper">
-            <div class="frameworks-cards-grid list-layout-view" id="controlsGrid">
-                {{all_controls_grid}}
-            </div>
-        </div>
-
-        <!-- PAGINATION BAR -->
-        <div class="pagination-bar" id="controlsPaginationBar">
-            <div class="pagination-info" id="paginationInfo">
-                Showing <strong>1</strong> - <strong>10</strong> of <strong>{{total_controls_count}}</strong> Security
-                Controls
-            </div>
-            <div class="pagination-buttons" id="paginationButtons">
-                <!-- Dynamically populated via JS -->
-            </div>
-        </div>
-
-        <!-- KEY TERMS TABLE -->
-        <h2 id="key-terms" class="section-heading">Key Terms Used in Control Architecture</h2>
-
-        <table class="custom-table">
-            <thead>
-                <tr>
-                    <th>Term</th>
-                    <th>Meaning</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><strong>Security Control</strong></td>
-                    <td>A technical, administrative, or physical safeguard designed to prevent, detect, or correct
-                        security risks.</td>
-                </tr>
-                <tr>
-                    <td><strong>Control ID</strong></td>
-                    <td>A standardized unique identifier (e.g., IAM-001, NET-002, CRY-001) used for crosswalk
-                        referencing and tags.</td>
-                </tr>
-                <tr>
-                    <td><strong>Control Category</strong></td>
-                    <td>The functional classification of a safeguard (Preventative, Detective, Corrective, Governance).
-                    </td>
-                </tr>
-                <tr>
-                    <td><strong>Requirement Specification</strong></td>
-                    <td>The detailed technical or procedural implementation task required to satisfy the control.</td>
-                </tr>
-                <tr>
-                    <td><strong>Audit Evidence</strong></td>
-                    <td>The documentation, log files, or configurations collected to demonstrate control effectiveness.
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-
-        <!-- CONTROL CATEGORIES ARCHITECTURE -->
-        <h2 id="control-categories" class="section-heading">Control Architecture &amp; Safeguard Classification</h2>
-
-        <div class="feature-grid">
-            <div class="feature-card" style="border-left: 4px solid #16C4F4; border-top: none;">
-                <strong>Governance &amp; Administrative</strong>
-                <p style="font-size:0.85rem;margin:0;">Policies, standards, awareness training, and risk management
-                    oversight defining operational boundaries (GOV, POL, RSK, CMP).</p>
-            </div>
-            <div class="feature-card" style="border-left: 4px solid #16C4F4; border-top: none;">
-                <strong>Technical Safeguards</strong>
-                <p style="font-size:0.85rem;margin:0;">Core technical mechanisms protecting infrastructure, endpoints,
-                    cloud, and data (IAM, NET, END, CLD, APP, CRY).</p>
-            </div>
-            <div class="feature-card" style="border-left: 4px solid #22C55E; border-top: none;">
-                <strong>Operations &amp; Detection</strong>
-                <p style="font-size:0.85rem;margin:0;">Operational controls ensuring threat detection, SIEM monitoring,
-                    vulnerability management, and incident response (SOC, INC, VUL, BCM).</p>
-            </div>
-            <div class="feature-card" style="border-left: 4px solid #F59E0B; border-top: none;">
-                <strong>Physical &amp; Emerging Tech</strong>
-                <p style="font-size:0.85rem;margin:0;">Environmental safeguards, physical access, vendor security, and
-                    artificial intelligence governance (PHY, TPR, AIG, AUD).</p>
-            </div>
-        </div>
-
-        <!-- CROSSWALK & MAPPING -->
-        <h2 id="crosswalk-mapping" class="section-heading">Crosswalk &amp; Framework Mapping Architecture</h2>
-        <p>Control crosswalk mapping correlates security safeguards across global standards (ISO 27001, NIST CSF, SOC 2,
-            PCI DSS) to standardized ASPIA UCL controls. By organizing requirements into unified controls, organizations
-            achieve seamless audit mapping and gap analysis.</p>
-
-        <div class="feature-grid" style="margin-top: 1.5rem;">
-            <div class="feature-card" style="border-top-color: #02CCFF;">
-                <strong>Unified Control Mapping</strong>
-                <p style="font-size:0.85rem;margin:0;">Maps overlapping framework clauses directly to a central security
-                    control, eliminating redundant testing.</p>
-            </div>
-            <div class="feature-card" style="border-top-color: #00B8E6;">
-                <strong>Single Evidence Repository</strong>
-                <p style="font-size:0.85rem;margin:0;">Collect audit evidence once per control to satisfy multiple
-                    regulatory assessments simultaneously.</p>
-            </div>
-            <div class="feature-card" style="border-top-color: #1AD4FF;">
-                <strong>Control Gap Analysis</strong>
-                <p style="font-size:0.85rem;margin:0;">Instantly identify missing safeguards when adopting new
-                    regulatory frameworks or security benchmarks.</p>
-            </div>
-            <div class="feature-card" style="border-top-color: #33D6FF;">
-                <strong>Control Owner Accountability</strong>
-                <p style="font-size:0.85rem;margin:0;">Empowers control owners with complete visibility into compliance
-                    status across frameworks.</p>
-            </div>
-        </div>
-
-        <div class="callout-box" style="margin-top: 1.5rem;">
-            <p class="callout-title">How ASPIA UCL Crosswalk Works:</p>
-            <p class="callout-text">For example, the control <strong>Multi-Factor Authentication (IAM-001)</strong> maps
-                directly to <strong>ISO 27001:A.5.15</strong>, <strong>NIST CSF:PR.AA-01</strong>, <strong>SOC
-                    2:CC6.1</strong>, and <strong>PCI DSS:8.3.1</strong>. Testing IAM-001 once satisfies all four
-                compliance baselines.</p>
-        </div>
-
-        <!-- WORKFLOW DIAGRAM -->
-        <h2 id="implementation-workflow" class="section-heading">Control Lifecycle &amp; Governance Workflow</h2>
-
-        <div class="workflow-box">
-            <div class="workflow-flow">
-                <div class="flow-step-dark">1. Define Control Taxonomies &amp; Objectives</div>
-                <div class="flow-arrow">↓</div>
-                <div class="flow-step-cyan">2. Assign Control Owners</div>
-                <div class="flow-arrow">↓</div>
-                <div class="flow-step-dark">3. Map Security Controls to Frameworks</div>
-                <div class="flow-arrow">↓</div>
-                <div class="flow-step-cyan">4. Define Technical Requirements &amp; Tests</div>
-                <div class="flow-arrow">↓</div>
-                <div class="flow-step-dark">5. Execute Control Audit Testing</div>
-                <div class="flow-arrow">↓</div>
-                <div class="flow-step-cyan">6. Remediate Control Deficiencies</div>
-                <div class="flow-arrow">↓</div>
-                <div class="flow-step-dark">7. Continuous Control Risk Monitoring</div>
-            </div>
-        </div>
-
-        <!-- CHECKLIST -->
-        <h2 id="checklist" class="section-heading">Control Governance Readiness Checklist</h2>
-
-        <div class="checklist-grid">
-            <div class="checklist-item"><i class="far fa-check-square" style="color:#16C4F4;"></i> Security control
-                catalog established</div>
-            <div class="checklist-item"><i class="far fa-check-square" style="color:#16C4F4;"></i> Control business
-                owners designated</div>
-            <div class="checklist-item"><i class="far fa-check-square" style="color:#16C4F4;"></i> Control baseline
-                scope defined</div>
-            <div class="checklist-item"><i class="far fa-check-square" style="color:#16C4F4;"></i> Security controls
-                assigned to domains</div>
-            <div class="checklist-item"><i class="far fa-check-square" style="color:#16C4F4;"></i> Regulatory frameworks
-                crosswalked</div>
-            <div class="checklist-item"><i class="far fa-check-square" style="color:#16C4F4;"></i> Control risk
-                assessments completed</div>
-            <div class="checklist-item"><i class="far fa-check-square" style="color:#16C4F4;"></i> Audit evidence
-                collection automated</div>
-            <div class="checklist-item"><i class="far fa-check-square" style="color:#16C4F4;"></i> Key performance
-                indicators (KPIs) set</div>
-            <div class="checklist-item"><i class="far fa-check-square" style="color:#16C4F4;"></i> Deficiency tracking
-                workflow active</div>
-            <div class="checklist-item"><i class="far fa-check-square" style="color:#16C4F4;"></i> Executive reporting
-                dashboards ready</div>
-            <div class="checklist-item"><i class="far fa-check-square" style="color:#16C4F4;"></i> Continuous monitoring
-                triggers set</div>
-            <div class="checklist-item"><i class="far fa-check-square" style="color:#16C4F4;"></i> Annual control
-                reviews scheduled</div>
-        </div>
-
-        <!-- FAQ SECTION -->
-        <h2 id="faq" class="section-heading">Frequently Asked Questions</h2>
-
-        <div class="faq-item">
-            <div class="faq-question">
-                <span>What is a security control in governance?</span>
-                <span>−</span>
-            </div>
-            <div class="faq-answer">
-                A security control is a discrete safeguard, countermeasure, or policy requirement (e.g., Access Control,
-                Asset Management, Incident Management) designed to protect confidentiality, integrity, and availability.
-            </div>
-        </div>
-
-        <div class="faq-item">
-            <div class="faq-question">
-                <span>How many security controls are in ASPIA UCL?</span>
-                <span>−</span>
-            </div>
-            <div class="faq-answer">
-                ASPIA UCL features baseline controls spanning 29 standardized domains covering Governance, Risk
-                Management, Technical Safeguards, Operations, Privacy, and Emerging Technology governance.
-            </div>
-        </div>
-
-        <div class="faq-item">
-            <div class="faq-question">
-                <span>How do control crosswalks reduce audit burden?</span>
-                <span>−</span>
-            </div>
-            <div class="faq-answer">
-                Control crosswalks link overlapping requirements from ISO 27001, NIST CSF, SOC 2, and PCI DSS to a
-                single baseline control, enabling "test once, comply with many" efficiency.
-            </div>
-        </div>
-
-        <!-- CONCLUSION & CTA BANNER -->
-        <h2 id="conclusion" class="section-heading">Final Takeaway</h2>
-        <p>Structuring information security and GRC under standardized security controls provides operational clarity,
-            ownership, and audit efficiency. ASPIA UCL unifies controls across global compliance frameworks so
-            organizations can operate securely and pass audits with confidence.</p>
-
-        <div class="cta-banner">
-            <h3 class="cta-title">Ready to Streamline Your Security Controls &amp; Compliance Architecture?</h3>
-            <p class="cta-desc">Connect security controls with regulatory frameworks, control domains, and auditable
-                requirements in one centralized unified control library.</p>
-            <div class="cta-buttons">
-                <a href="https://aspiainfotech.com/" target="_blank" rel="noopener" class="btn-cta-primary">Explore
-                    ASPIA →</a>
-                <a href="https://aspiainfotech.com/request-a-demo/" target="_blank" rel="noopener"
-                    class="btn-cta-secondary">Book a Demo</a>
-            </div>
-        </div>
-
     </div>
 
-    <!-- JAVASCRIPT -->
+    <!-- SECTION 1: OVERVIEW & BUSINESS VALUE (LIGHT BAND) -->
+    <div class="section-light">
+        <div class="section-container">
+            <!-- SHORT ANSWER BOX -->
+            <div class="callout-box" style="margin-top: 1.25rem;">
+                <p class="callout-title">In Simple Terms:</p>
+                <p class="callout-text">A security control is a specific policy, technical safeguard, or administrative procedure designed to protect data and mitigate risk. ASPIA UCL consolidates hundreds of overlapping framework requirements into a single unified control baseline—enforcing security controls once across all regulations.</p>
+            </div>
+
+            <!-- WHAT ARE CONTROLS -->
+            <div class="section-header-block" id="what-are" style="margin-top: 6.5rem;">
+                <span class="section-badge">OVERVIEW</span>
+                <h2 class="section-heading">What Are Security Controls?</h2>
+            </div>
+            <p style="line-height: 1.7; margin-bottom: 1.75rem;">Security controls are targeted technical, administrative, and physical safeguards implemented to maintain confidentiality, integrity, and availability (CIA triad) across organizational assets. In modern GRC architecture, controls serve as the actionable link between high-level regulatory mandates (like ISO 27001 or NIST CSF) and day-to-day security operations.</p>
+            <p style="line-height: 1.7; margin-bottom: 3.5rem;">Rather than implementing separate procedures for every compliance mandate, unified controls allow organizations to deploy standardized safeguards that fulfill multiple framework requirements simultaneously.</p>
+
+            <!-- WHY USED -->
+            <div class="section-header-block" id="why-used" style="margin-top: 6.5rem;">
+                <span class="section-badge">BUSINESS VALUE</span>
+                <h2 class="section-heading">Why Are Unified Controls Essential in GRC?</h2>
+            </div>
+
+            <div class="feature-grid">
+                <div class="feature-card" style="border-top-color: #02CCFF;">
+                    <strong>1. Eliminates Redundant Effort</strong>
+                    <p style="font-size:0.85rem;margin:0;">Consolidates overlapping requirement clauses into single unified controls.</p>
+                </div>
+                <div class="feature-card" style="border-top-color: #00B8E6;">
+                    <strong>2. Standardizes Safeguards</strong>
+                    <p style="font-size:0.85rem;margin:0;">Enforces consistent security practices across enterprise infrastructure.</p>
+                </div>
+                <div class="feature-card" style="border-top-color: #1AD4FF;">
+                    <strong>3. Streamlines Audit Testing</strong>
+                    <p style="font-size:0.85rem;margin:0;">Evaluates a control once to fulfill multiple compliance audits simultaneously.</p>
+                </div>
+                <div class="feature-card" style="border-top-color: #33D6FF;">
+                    <strong>4. Reduces Operational Risk</strong>
+                    <p style="font-size:0.85rem;margin:0;">Maps controls directly to identified threat vectors and regulatory obligations.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SECTION 2: CONTROLS DIRECTORY CATALOG (ALT BAND) -->
+    <div class="section-alt">
+        <div class="section-container">
+            <!-- CATALOG TOOLBAR & DYNAMIC CARDS -->
+            <div class="section-header-block" id="controls-catalog" style="margin-top: 0;">
+                <span class="section-badge">CONTROLS DIRECTORY</span>
+                <h2 class="section-heading">Explore Integrated Security Controls</h2>
+                <p class="section-subtitle" style="color: #64748b; font-size: 0.95rem; margin-top: 0.4rem;">Browse all standardized security controls and safeguards in ASPIA UCL. Filter by search or browse control IDs, domain categories, and mapped requirements.</p>
+            </div>
+
+            <div class="catalog-toolbar">
+                <div class="search-input-group">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="controlSearchInput"
+                        placeholder="Search controls by ID, title, domain, category..." onkeyup="filterControls()">
+                </div>
+            </div>
+
+            <!-- CLASSIC LIST TABLE HEADER STRIP -->
+            <div class="list-table-header-bar" id="listTableHeaderBar">
+                <div class="col-hdr col-hdr-id">Control ID</div>
+                <div class="col-hdr col-hdr-info">Control Title &amp; Governance Scope</div>
+                <div class="col-hdr col-hdr-scope">Mapped Requirements &amp; Category</div>
+                <div class="col-hdr col-hdr-action">Action</div>
+            </div>
+
+            <!-- CATALOG CARDS LIST -->
+            <div class="catalog-list-wrapper">
+                <div class="frameworks-cards-grid list-layout-view" id="controlsGrid">
+                    {{all_controls_grid}}
+                </div>
+            </div>
+
+            <!-- PAGINATION BAR -->
+            <div class="pagination-bar" id="controlsPaginationBar">
+                <div class="pagination-info" id="paginationInfo">
+                    Showing <strong>1</strong> - <strong>10</strong> of <strong>{{total_controls_count}}</strong> Security Controls
+                </div>
+                <div class="pagination-buttons" id="paginationButtons">
+                    <!-- Dynamically populated via JS -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SECTION 3: ARCHITECTURE & TYPES (LIGHT BAND) -->
+    <div class="section-light">
+        <div class="section-container">
+            <!-- KEY TERMS TABLE -->
+            <div class="section-header-block" id="key-terms" style="margin-top: 0;">
+                <span class="section-badge">GLOSSARY &amp; ARCHITECTURE</span>
+                <h2 class="section-heading">Key Terms in Control Architecture</h2>
+            </div>
+
+            <table class="custom-table">
+                <thead>
+                    <tr>
+                        <th>Term</th>
+                        <th>Meaning</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Security Control</strong></td>
+                        <td>A specific policy, technical safeguard, or administrative procedure that mitigates risk.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Control ID</strong></td>
+                        <td>Unique identifier (e.g., UCL-001, AC-01) assigned to each unified control.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Control Category</strong></td>
+                        <td>Classification of control type (e.g., Preventive, Detective, Corrective, Administrative, Technical).</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Control Domain</strong></td>
+                        <td>Parent category grouping related controls (e.g., Access Control, Cryptography).</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Auditable Requirement</strong></td>
+                        <td>Specific testable criteria or framework clause mapped to the control.</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- TYPES OF CONTROLS -->
+            <div class="section-header-block" id="control-types" style="margin-top: 6.5rem; margin-bottom: 2.25rem;">
+                <span class="section-badge">CONTROL CATEGORIES</span>
+                <h2 class="section-heading">Types of Security Controls &amp; Safeguards</h2>
+            </div>
+
+            <div class="feature-grid">
+                <div class="feature-card" style="border-top: 3px solid #02CCFF;">
+                    <strong>Preventive Controls</strong>
+                    <p style="font-size:0.85rem;margin:0;">Safeguards designed to deter or prevent security incidents before they occur (e.g., Multi-Factor Authentication, Firewalls, Access Restrictions).</p>
+                </div>
+                <div class="feature-card" style="border-top: 3px solid #00B8E6;">
+                    <strong>Detective Controls</strong>
+                    <p style="font-size:0.85rem;margin:0;">Mechanisms that identify and alert on security violations or anomalous events in real time (e.g., SIEM Logging, Intrusion Detection, File Integrity Monitoring).</p>
+                </div>
+                <div class="feature-card" style="border-top: 3px solid #1AD4FF;">
+                    <strong>Corrective Controls</strong>
+                    <p style="font-size:0.85rem;margin:0;">Procedures and automation designed to remediate threats and restore operations post-incident (e.g., Patch Management, Data Restores, Incident Playbooks).</p>
+                </div>
+                <div class="feature-card" style="border-top: 3px solid #33D6FF;">
+                    <strong>Directive &amp; Administrative</strong>
+                    <p style="font-size:0.85rem;margin:0;">Organizational policies, employee training, vendor risk reviews, and governance guidelines directing compliant behavior.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SECTION 4: UNIFIED CONTROL MAPPING & WORKFLOW (ALT BAND) -->
+    <div class="section-alt">
+        <div class="section-container">
+            <!-- CROSSWALK & CONTROL MAPPING -->
+            <div class="section-header-block" id="crosswalk-mapping" style="margin-top: 0;">
+                <span class="section-badge">UNIFIED CONTROL MAPPING</span>
+                <h2 class="section-heading">Control Crosswalk &amp; Mapping Architecture</h2>
+                <p class="section-subtitle" style="color: #64748b; font-size: 0.95rem; margin-top: 0.4rem;">Unified control mapping links individual security safeguards directly to requirement clauses in ISO 27001, NIST CSF 2.0, PCI DSS v4.0, SOC 2, and GDPR.</p>
+            </div>
+
+            <div class="feature-grid" style="margin-top: 1.5rem;">
+                <div class="feature-card" style="border-top-color: #02CCFF;">
+                    <strong>1:Many Requirement Mapping</strong>
+                    <p style="font-size:0.85rem;margin:0;">Maps a single UCL control to multiple regulatory requirement clauses.</p>
+                </div>
+                <div class="feature-card" style="border-top-color: #00B8E6;">
+                    <strong>Single Audit Evidence</strong>
+                    <p style="font-size:0.85rem;margin:0;">Attach evidence once to validate compliance across all mapped framework standards.</p>
+                </div>
+                <div class="feature-card" style="border-top-color: #1AD4FF;">
+                    <strong>Automated Gap Analysis</strong>
+                    <p style="font-size:0.85rem;margin:0;">Identifies missing safeguards and unassigned controls across your compliance scope.</p>
+                </div>
+                <div class="feature-card" style="border-top-color: #33D6FF;">
+                    <strong>Continuous Synchronization</strong>
+                    <p style="font-size:0.85rem;margin:0;">Updates to control specifications automatically sync across all mapped frameworks.</p>
+                </div>
+            </div>
+
+            <div class="callout-box" style="margin-top: 2.75rem; margin-bottom: 2.75rem;">
+                <p class="callout-title">How ASPIA UCL Control Mapping Works:</p>
+                <p class="callout-text">For example, Unified Control UCL-001 (Multi-Factor Authentication) maps directly to <strong>ISO 27001:A.5.17</strong>, <strong>NIST CSF:PR.AA-03</strong>, <strong>SOC 2:CC6.1</strong>, and <strong>PCI DSS Requirement 8.3</strong>. Implementing MFA once satisfies all four standards.</p>
+            </div>
+
+            <!-- WORKFLOW DIAGRAM -->
+            <div class="section-header-block" id="implementation-workflow" style="margin-top: 6.5rem; margin-bottom: 2.25rem;">
+                <span class="section-badge">IMPLEMENTATION WORKFLOW</span>
+                <h2 class="section-heading">Control Implementation &amp; Audit Workflow</h2>
+            </div>
+
+            <div class="workflow-box">
+                <div class="workflow-flow">
+                    <div class="flow-step-dark">1. Select Unified Controls</div>
+                    <div class="flow-arrow">&darr;</div>
+                    <div class="flow-step-cyan">2. Map Framework Requirements</div>
+                    <div class="flow-arrow">&darr;</div>
+                    <div class="flow-step-dark">3. Configure Safeguards</div>
+                    <div class="flow-arrow">&darr;</div>
+                    <div class="flow-step-cyan">4. Collect Test Evidence</div>
+                    <div class="flow-arrow">&darr;</div>
+                    <div class="flow-step-dark">5. Validate Audit Sampling</div>
+                    <div class="flow-arrow">&darr;</div>
+                    <div class="flow-step-cyan">6. Remediate Control Gaps</div>
+                    <div class="flow-arrow">&darr;</div>
+                    <div class="flow-step-dark">7. Continuous Control Monitoring</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SECTION 5: AUDIT READINESS CHECKLIST (LIGHT BAND) -->
+    <div class="section-light">
+        <div class="section-container">
+            <div class="section-header-block" id="checklist" style="margin-top: 0;">
+                <span class="section-badge">AUDIT READINESS</span>
+                <h2 class="section-heading">Security Control Readiness Checklist</h2>
+            </div>
+
+            <div class="checklist-grid">
+                <div class="checklist-item"><i class="far fa-check-square" style="color:#16C4F4;"></i> Control baseline defined &amp; scoped</div>
+                <div class="checklist-item"><i class="far fa-check-square" style="color:#16C4F4;"></i> Control ownership assigned</div>
+                <div class="checklist-item"><i class="far fa-check-square" style="color:#16C4F4;"></i> Technical policies published</div>
+                <div class="checklist-item"><i class="far fa-check-square" style="color:#16C4F4;"></i> Safeguards deployed &amp; verified</div>
+                <div class="checklist-item"><i class="far fa-check-square" style="color:#16C4F4;"></i> Multi-framework mappings linked</div>
+                <div class="checklist-item"><i class="far fa-check-square" style="color:#16C4F4;"></i> Audit sampling evidence collected</div>
+                <div class="checklist-item"><i class="far fa-check-square" style="color:#16C4F4;"></i> Automated logging enabled</div>
+                <div class="checklist-item"><i class="far fa-check-square" style="color:#16C4F4;"></i> Access review schedules set</div>
+                <div class="checklist-item"><i class="far fa-check-square" style="color:#16C4F4;"></i> Incident playbooks tested</div>
+                <div class="checklist-item"><i class="far fa-check-square" style="color:#16C4F4;"></i> Policy exceptions logged</div>
+                <div class="checklist-item"><i class="far fa-check-square" style="color:#16C4F4;"></i> Vendor controls evaluated</div>
+                <div class="checklist-item"><i class="far fa-check-square" style="color:#16C4F4;"></i> Continuous monitoring active</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SECTION 6: FAQ SECTION (ALT BAND) -->
+    <div class="section-alt">
+        <div class="section-container">
+            <div class="section-header-block" id="faq" style="margin-top: 0;">
+                <span class="section-badge">FAQ &amp; SUPPORT</span>
+                <h2 class="section-heading">Frequently Asked Questions</h2>
+                <p class="section-subtitle" style="color: #64748b; font-size: 0.95rem; margin-top: 0.4rem;">Quick answers to common questions about security controls, baseline safeguards, and crosswalk mapping.</p>
+            </div>
+
+            <div class="faq-card-container" style="margin-bottom: 0;">
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <div class="q" role="button" aria-expanded="false" tabindex="0">
+                            <span class="q-text">What is a security control in ASPIA UCL?</span>
+                            <span class="faq-toggle-icon" aria-hidden="true">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                </svg>
+                            </span>
+                        </div>
+                        <div class="a-wrapper">
+                            <div class="a-inner">
+                                <div class="a">A security control is a standardized safeguard or policy requirement (such as Access Control or Cryptographic Protection) that protects organizational data and satisfies compliance requirements across multiple frameworks.</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="q" role="button" aria-expanded="false" tabindex="0">
+                            <span class="q-text">How do unified controls reduce audit burden?</span>
+                            <span class="faq-toggle-icon" aria-hidden="true">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                </svg>
+                            </span>
+                        </div>
+                        <div class="a-wrapper">
+                            <div class="a-inner">
+                                <div class="a">Unified controls map to overlapping requirements across ISO 27001, NIST CSF, PCI DSS, SOC 2, and GDPR. By testing a single control once, organizations validate compliance for multiple regulations simultaneously.</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="q" role="button" aria-expanded="false" tabindex="0">
+                            <span class="q-text">What is the difference between preventive and detective controls?</span>
+                            <span class="faq-toggle-icon" aria-hidden="true">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                </svg>
+                            </span>
+                        </div>
+                        <div class="a-wrapper">
+                            <div class="a-inner">
+                                <div class="a">Preventive controls block unauthorized actions before they occur (e.g., MFA or firewalls), while detective controls monitor and alert on unauthorized activity that has taken place (e.g., SIEM logging or IDS).</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="q" role="button" aria-expanded="false" tabindex="0">
+                            <span class="q-text">How are controls categorized in ASPIA UCL?</span>
+                            <span class="faq-toggle-icon" aria-hidden="true">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                </svg>
+                            </span>
+                        </div>
+                        <div class="a-wrapper">
+                            <div class="a-inner">
+                                <div class="a">Controls in ASPIA UCL are categorized by Control Domain (e.g., Access Control, Asset Management) and Control Type (Preventive, Detective, Corrective, Administrative, Technical).</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="q" role="button" aria-expanded="false" tabindex="0">
+                            <span class="q-text">Can I add custom controls to ASPIA UCL?</span>
+                            <span class="faq-toggle-icon" aria-hidden="true">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                </svg>
+                            </span>
+                        </div>
+                        <div class="a-wrapper">
+                            <div class="a-inner">
+                                <div class="a">Yes, ASPIA UCL supports custom internal controls and policies while allowing seamless crosswalk mapping to standard regulatory frameworks.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SECTION 7: SUMMARY (LIGHT BAND) -->
+    <div class="section-light">
+        <div class="section-container">
+            <div class="section-header-block" id="conclusion" style="margin-top: 0;">
+                <span class="section-badge">SUMMARY</span>
+                <h2 class="section-heading">Final Takeaway</h2>
+            </div>
+            <p style="line-height: 1.7; margin: 0;">Implementing a unified security control framework streamlines governance, eliminates duplicate testing efforts, and provides verifiable evidence of security posture across all global compliance mandates.</p>
+        </div>
+    </div>
+
+    <!-- SCRIPTS -->
     <script>
         function playThemeSound(isDark) {
             try {
-                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                if (!AudioCtx) return;
+                const ctx = new AudioCtx();
                 const osc = ctx.createOscillator();
                 const gain = ctx.createGain();
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(isDark ? 220 : 520, ctx.currentTime);
-                osc.frequency.exponentialRampToValueAtTime(isDark ? 440 : 880, ctx.currentTime + 0.12);
-                gain.gain.setValueAtTime(0.08, ctx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.12);
+
+                if (isDark) {
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(523.25, ctx.currentTime);
+                    osc.frequency.exponentialRampToValueAtTime(392.00, ctx.currentTime + 0.12);
+                    gain.gain.setValueAtTime(0.06, ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.12);
+                } else {
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(440.00, ctx.currentTime);
+                    osc.frequency.exponentialRampToValueAtTime(880.00, ctx.currentTime + 0.10);
+                    gain.gain.setValueAtTime(0.05, ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.10);
+                }
+
                 osc.connect(gain);
                 gain.connect(ctx.destination);
                 osc.start();
@@ -1190,11 +1736,49 @@
             }
         });
 
-        // Initialize Theme on page load
+        // View Layout Switcher (List vs Grid)
+        function setCatalogLayout(mode) {
+            const grid = document.getElementById('controlsGrid');
+            const hdr = document.getElementById('listTableHeaderBar');
+            const btnList = document.getElementById('viewBtnList');
+            const btnGrid = document.getElementById('viewBtnGrid');
+            if (!grid) return;
+
+            if (mode === 'list') {
+                grid.classList.add('list-layout-view');
+                if (hdr) hdr.style.display = 'flex';
+                if (btnList) {
+                    btnList.style.background = '#16C4F4';
+                    btnList.style.color = '#0D1735';
+                }
+                if (btnGrid) {
+                    btnGrid.style.background = 'transparent';
+                    btnGrid.style.color = '#64748b';
+                }
+                localStorage.setItem('aspia_catalog_view', 'list');
+            } else {
+                grid.classList.remove('list-layout-view');
+                if (hdr) hdr.style.display = 'none';
+                if (btnGrid) {
+                    btnGrid.style.background = '#16C4F4';
+                    btnGrid.style.color = '#0D1735';
+                }
+                if (btnList) {
+                    btnList.style.background = 'transparent';
+                    btnList.style.color = '#64748b';
+                }
+                localStorage.setItem('aspia_catalog_view', 'grid');
+            }
+        }
+
+        // Initialize Theme & View Layout on page load
         (function () {
             const savedTheme = localStorage.getItem('aspia_theme') ||
                 (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
             setTheme(savedTheme, false);
+
+            const savedView = localStorage.getItem('aspia_catalog_view') || 'list';
+            setCatalogLayout(savedView);
         })();
 
         // PAGINATION & FILTER LOGIC
@@ -1203,7 +1787,7 @@
 
         function getMatchingCards() {
             const query = (document.getElementById('controlSearchInput')?.value || '').toLowerCase().trim();
-            const cards = Array.from(document.querySelectorAll('.framework-card'));
+            const cards = Array.from(document.querySelectorAll('#controlsGrid .framework-card'));
 
             return cards.filter(card => {
                 const text = card.textContent.toLowerCase();
@@ -1212,7 +1796,7 @@
         }
 
         function renderPagination() {
-            const allCards = Array.from(document.querySelectorAll('.framework-card'));
+            const allCards = Array.from(document.querySelectorAll('#controlsGrid .framework-card'));
             const matchingCards = getMatchingCards();
             const totalMatching = matchingCards.length;
 
@@ -1223,8 +1807,8 @@
                 if (!emptyMsg) {
                     emptyMsg = document.createElement('div');
                     emptyMsg.id = 'noControlsFoundMsg';
-                    emptyMsg.style.cssText = 'padding: 40px; text-align: center; color: #94a3b8; font-size: 1rem;';
-                    emptyMsg.innerHTML = '<i class="fas fa-search" style="font-size:2rem;margin-bottom:10px;display:block;"></i>No matching security controls found.';
+                    emptyMsg.style.cssText = 'grid-column: 1 / -1; padding: 40px; text-align: center; color: #94a3b8; font-size: 1rem;';
+                    emptyMsg.innerHTML = '<i class="fas fa-search" style="font-size:2rem;margin-bottom:10px;display:block;"></i>No matching controls found.';
                     const grid = document.getElementById('controlsGrid');
                     if (grid) grid.appendChild(emptyMsg);
                 }
@@ -1248,7 +1832,7 @@
 
             for (let i = startIndex; i < endIndex; i++) {
                 if (matchingCards[i]) {
-                    matchingCards[i].style.display = 'flex';
+                    matchingCards[i].style.display = '';
                 }
             }
 
@@ -1263,9 +1847,29 @@
 
                 btnsHtml += `<button type="button" class="page-btn" ${currentPage === 1 ? 'disabled' : ''} onclick="goToPage(${currentPage - 1})" aria-label="Previous Page"><i class="fas fa-chevron-left"></i></button>`;
 
-                for (let p = 1; p <= totalPages; p++) {
-                    const activeClass = p === currentPage ? ' active' : '';
-                    btnsHtml += `<button type="button" class="page-btn${activeClass}" onclick="goToPage(${p})">${p}</button>`;
+                if (totalPages <= 7) {
+                    for (let p = 1; p <= totalPages; p++) {
+                        const activeClass = p === currentPage ? ' active' : '';
+                        btnsHtml += `<button type="button" class="page-btn${activeClass}" onclick="goToPage(${p})">${p}</button>`;
+                    }
+                } else {
+                    let pagesToDisplay = [];
+                    if (currentPage <= 4) {
+                        pagesToDisplay = [1, 2, 3, 4, 5, '...', totalPages];
+                    } else if (currentPage >= totalPages - 3) {
+                        pagesToDisplay = [1, '...', totalPages - 4, totalPages - 3, totalPages - 2, totalPages - 1, totalPages];
+                    } else {
+                        pagesToDisplay = [1, '...', currentPage - 1, currentPage, currentPage + 1, '...', totalPages];
+                    }
+
+                    pagesToDisplay.forEach(item => {
+                        if (item === '...') {
+                            btnsHtml += `<span class="page-btn disabled" style="cursor:default;border:none;background:transparent;opacity:0.6;">...</span>`;
+                        } else {
+                            const activeClass = item === currentPage ? ' active' : '';
+                            btnsHtml += `<button type="button" class="page-btn${activeClass}" onclick="goToPage(${item})">${item}</button>`;
+                        }
+                    });
                 }
 
                 btnsHtml += `<button type="button" class="page-btn" ${currentPage === totalPages ? 'disabled' : ''} onclick="goToPage(${currentPage + 1})" aria-label="Next Page"><i class="fas fa-chevron-right"></i></button>`;
@@ -1289,13 +1893,26 @@
             renderPagination();
         }
 
-        document.addEventListener('DOMContentLoaded', function () {
+        // Initialize pagination on page load
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', renderPagination);
+        } else {
             renderPagination();
-        });
-        renderPagination();
+        }
     </script>
 
-    @include('aspiaUcl.partials.footer')
+    <!-- UNIFIED DARK NAVY CTA & FOOTER SECTION -->
+    <div class="footer-cta-wrapper" style="background: #0B132B; color: #ffffff; padding-top: 4rem; transition: background 0.35s ease;">
+        <div class="section-container" style="text-align: center; padding-bottom: 2rem;">
+            <h3 style="font-size: 2.15rem; font-weight: 800; color: #ffffff; margin: 0 0 0.8rem 0; letter-spacing: -0.02em;">Ready to Unify Your Security Controls &amp; Audit Evidence?</h3>
+            <p style="color: #94a3b8; font-size: 1.05rem; margin: 0 auto 2rem auto; line-height: 1.65;">Connect security controls with regulatory frameworks, auditable requirements, and evidence sampling in one centralized library.</p>
+            <div class="cta-buttons" style="display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center;">
+                <a href="https://aspiainfotech.com/" target="_blank" rel="noopener" class="btn-cta-primary">Explore ASPIA &rarr;</a>
+                <a href="https://aspiainfotech.com/request-a-demo/" target="_blank" rel="noopener" class="btn-cta-secondary">Book a Demo</a>
+            </div>
+        </div>
+        @include('aspiaUcl.partials.footer')
+    </div>
 
     <script>
         // Mobile Menu Toggle
@@ -1330,6 +1947,42 @@
                 applySiteTheme(newTheme);
             });
         }
+
+        // FAQ Accordion Interaction
+        const faqSectionItems = document.querySelectorAll('.faq-item');
+        faqSectionItems.forEach(item => {
+            const q = item.querySelector('.q');
+            if (q) {
+                const toggleItem = () => {
+                    const isActive = item.classList.contains('active');
+
+                    // Close other active items for clean single accordion mode
+                    faqSectionItems.forEach(otherItem => {
+                        if (otherItem !== item && otherItem.classList.contains('active')) {
+                            otherItem.classList.remove('active');
+                            const otherQ = otherItem.querySelector('.q');
+                            if (otherQ) otherQ.setAttribute('aria-expanded', 'false');
+                        }
+                    });
+
+                    if (isActive) {
+                        item.classList.remove('active');
+                        q.setAttribute('aria-expanded', 'false');
+                    } else {
+                        item.classList.add('active');
+                        q.setAttribute('aria-expanded', 'true');
+                    }
+                };
+
+                q.addEventListener('click', toggleItem);
+                q.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        toggleItem();
+                    }
+                });
+            }
+        });
     </script>
 </body>
 

@@ -102,7 +102,7 @@
                 <a href="<?php echo e(route('domains.public_index')); ?>" title="Governance Domains">Domains</a>
                 <a href="<?php echo e(route('controls.public_index')); ?>" title="Unified Controls Directory">Controls</a>
                 <a href="https://aspiainfotech.com/about-aspia-infotech/" target="_blank" rel="noopener noreferrer" title="About ASPIA Infotech">About Us</a>
-                <a href="<?php echo e(url('/#blog')); ?>" title="Compliance Blog & Articles">Blog</a>
+                <a href="https://aspiainfotech.com/blog/" target="_blank" rel="noopener noreferrer" title="Compliance Blog & Articles">Blog</a>
                 <a href="<?php echo e(route('login')); ?>" title="Sign In to ASPIA">Sign In</a>
             </div>
             <div class="social">

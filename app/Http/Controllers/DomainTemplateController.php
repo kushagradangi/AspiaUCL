@@ -171,9 +171,16 @@ HTML;
 
         $template = DomainTemplate::latest('updated_at')->first() ?? DomainTemplate::first();
 
-        $html = ($template && !empty(trim($template->html_content)))
-            ? $template->html_content
-            : $this->getDefaultTemplateHtml();
+        if (!$template || empty(trim($template->html_content ?? ''))) {
+            return redirect()
+                ->route('domains.index')
+                ->with(
+                    'error',
+                    "Template for domain is not present. Please add its template in 'Add Domain Template'."
+                );
+        }
+
+        $html = $template->html_content;
 
         // Framework Info & Links
         $framework       = $domain->framework;
@@ -483,11 +490,6 @@ HTML;
 
     private function getDefaultTemplateHtml(): string
     {
-        $filePath = resource_path('views/aspiaUcl/domains/domain_template.html');
-        if (file_exists($filePath)) {
-            return file_get_contents($filePath);
-        }
-
         return <<<'HTML'
 <!DOCTYPE html>
 <html lang="en">

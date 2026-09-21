@@ -113,13 +113,13 @@
         /* FULL WIDTH SECTION BANDS (HOMEPAGE MATCHING ALTERNATING SCHEME) */
         .section-light {
             background-color: #ffffff;
-            padding: 3.5rem 0;
+            padding: 5rem 0;
             border-bottom: 1px solid rgba(226, 232, 240, 0.7);
         }
 
         .section-alt {
             background-color: #f4f7fb;
-            padding: 3.5rem 0;
+            padding: 5rem 0;
             border-bottom: 1px solid rgba(226, 232, 240, 0.7);
         }
 
@@ -356,7 +356,7 @@
             border: none;
             border-radius: 0;
             padding: 0;
-            margin-bottom: 2rem;
+            margin: 3rem 0 5rem 0;
             box-shadow: none;
         }
 
@@ -377,7 +377,7 @@
         /* SECTION HEADINGS (CENTERED BADGE & TITLE UI) */
         .section-header-block {
             text-align: center;
-            margin: 3.5rem 0 1.5rem 0;
+            margin: 3.5rem 0 2.25rem 0;
         }
 
         .section-badge {
@@ -424,8 +424,8 @@
         .feature-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 1rem;
-            margin: 1.5rem 0;
+            gap: 1.25rem;
+            margin: 2.25rem 0;
         }
 
         .feature-card {
@@ -841,7 +841,7 @@
         .badge-fw-id {
             font-family: var(--aspia-infotech-font-primary), sans-serif;
             font-size: 0.75rem;
-            font-weight: 800;
+            font-weight: 400;
             padding: 0;
             background: transparent;
             color: #0D1735;
@@ -938,7 +938,7 @@
         .custom-table {
             width: 100%;
             border-collapse: collapse;
-            margin: 1.5rem 0;
+            margin: 2.5rem 0;
             border-radius: 12px;
             overflow: hidden;
             border: 1px solid var(--border-color);
@@ -966,8 +966,8 @@
         .workflow-box {
             background: #ffffff;
             border-radius: 16px;
-            padding: 2rem 1.5rem;
-            margin: 2rem 0;
+            padding: 2.25rem 1.75rem;
+            margin: 2.75rem 0;
             border: 1px solid rgba(22, 196, 244, 0.2);
             box-shadow: 0 4px 20px rgba(15, 23, 42, 0.03);
         }
@@ -1008,8 +1008,8 @@
         .checklist-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 0.8rem;
-            margin: 1.5rem 0;
+            gap: 1rem;
+            margin: 2.25rem 0;
         }
 
         .checklist-item {
@@ -1033,7 +1033,7 @@
             box-shadow: 0 10px 30px rgba(15, 23, 42, 0.04), 0 2px 6px rgba(15, 23, 42, 0.02);
             width: 100%;
             max-width: 100%;
-            margin: 1.5rem 0 3rem 0;
+            margin: 2.5rem 0 1rem 0;
             padding: 36px 48px;
             border: 1px solid rgba(226, 232, 240, 0.8);
         }
@@ -1377,13 +1377,6 @@
                     </div>
                 </div>
 
-                <!-- Meta Row -->
-                <div class="hero-meta-bar">
-                    <span class="hero-tag-pill"><i class="fas fa-shield-alt"></i> Unified Library</span>
-                    <span><i class="far fa-clock"></i> 14 min read</span>
-                    <span style="opacity:0.8;"><i class="far fa-calendar-alt"></i> September 2026</span>
-                    <span><i class="fas fa-user-edit"></i> ASPIA Editorial</span>
-                </div>
             </div>
 
             <!-- Right Column: 3D Isometric PNG Graphic -->
@@ -1397,7 +1390,7 @@
     <div class="section-light">
         <div class="section-container">
             <!-- SHORT ANSWER BOX -->
-            <div class="callout-box">
+            <div class="callout-box" style="margin-top: 1.25rem;">
                 <p class="callout-title">In Simple Terms:</p>
                 <p class="callout-text">A compliance framework is a set of security rules and guidelines that help
                     organizations protect data. ASPIA UCL connects global standards (like ISO 27001, NIST, SOC 2, and PCI
@@ -1406,15 +1399,15 @@
             </div>
 
             <!-- WHAT ARE FRAMEWORKS -->
-            <div class="section-header-block" id="what-are" style="margin-top: 0;">
+            <div class="section-header-block" id="what-are" style="margin-top: 6.5rem;">
                 <span class="section-badge">OVERVIEW</span>
                 <h2 class="section-heading">What Are Compliance Frameworks?</h2>
             </div>
-            <p style="text-align: center; max-width: 860px; margin: 0 auto 1rem auto; line-height: 1.7;">A cybersecurity or regulatory compliance framework is a system of standards, guidelines, and controls created by recognized international bodies or regulatory authorities (such as ISO, NIST, AICPA, PCI SSC, EU). Frameworks assist organizations in establishing information security governance, protecting sensitive data, mitigating operational risks, and achieving legal compliance.</p>
-            <p style="text-align: center; max-width: 860px; margin: 0 auto 2rem auto; line-height: 1.7;">Rather than designing custom security procedures from scratch, organizations adopt established frameworks to demonstrate compliance, satisfy client requirements, and pass third-party audits.</p>
+            <p style="line-height: 1.7; margin-bottom: 1.75rem;">A cybersecurity or regulatory compliance framework is a system of standards, guidelines, and controls created by recognized international bodies or regulatory authorities (such as ISO, NIST, AICPA, PCI SSC, EU). Frameworks assist organizations in establishing information security governance, protecting sensitive data, mitigating operational risks, and achieving legal compliance.</p>
+            <p style="line-height: 1.7; margin-bottom: 3.5rem;">Rather than designing custom security procedures from scratch, organizations adopt established frameworks to demonstrate compliance, satisfy client requirements, and pass third-party audits.</p>
 
             <!-- WHY USED -->
-            <div class="section-header-block" id="why-used">
+            <div class="section-header-block" id="why-used" style="margin-top: 6.5rem;">
                 <span class="section-badge">BUSINESS VALUE</span>
                 <h2 class="section-heading">Why Are Frameworks Used in GRC?</h2>
             </div>
@@ -1447,7 +1440,7 @@
             <div class="section-header-block" id="frameworks-catalog" style="margin-top: 0;">
                 <span class="section-badge">FRAMEWORK DIRECTORY</span>
                 <h2 class="section-heading">Explore Integrated Regulatory Frameworks</h2>
-                <p class="section-subtitle" style="color: #64748b; font-size: 0.95rem; margin-top: 0.4rem; max-width: 780px; margin-left: auto; margin-right: auto;">Browse all regulatory baselines, cybersecurity frameworks, and industry standards mapped within ASPIA UCL. Filter by category or search by framework code, title, publisher, or family.</p>
+                <p class="section-subtitle" style="color: #64748b; font-size: 0.95rem; margin-top: 0.4rem;">Browse all regulatory baselines, cybersecurity frameworks, and industry standards mapped within ASPIA UCL. Filter by category or search by framework code, title, publisher, or family.</p>
             </div>
 
             <div class="catalog-toolbar">
@@ -1526,7 +1519,7 @@
             </table>
 
             <!-- TYPES OF FRAMEWORKS -->
-            <div class="section-header-block" id="framework-types" style="margin-top: 3.5rem;">
+            <div class="section-header-block" id="framework-types" style="margin-top: 6.5rem; margin-bottom: 2.25rem;">
                 <span class="section-badge">FRAMEWORK CATEGORIES</span>
                 <h2 class="section-heading">Types of Security &amp; Regulatory Frameworks</h2>
             </div>
@@ -1559,7 +1552,7 @@
             <div class="section-header-block" id="crosswalk-mapping" style="margin-top: 0;">
                 <span class="section-badge">UNIFIED CONTROL MAPPING</span>
                 <h2 class="section-heading">Crosswalk &amp; Control Mapping Architecture</h2>
-                <p class="section-subtitle" style="color: #64748b; font-size: 0.95rem; margin-top: 0.4rem; max-width: 820px; margin-left: auto; margin-right: auto;">Framework crosswalk mapping correlates security controls, policy requirements, and audit tests across multiple regulatory standards (e.g., mapping NIST CSF 2.0 to ISO/IEC 27001:2022, SOC 2 TSC, and PCI DSS v4.0).</p>
+                <p class="section-subtitle" style="color: #64748b; font-size: 0.95rem; margin-top: 0.4rem;">Framework crosswalk mapping correlates security controls, policy requirements, and audit tests across multiple regulatory standards (e.g., mapping NIST CSF 2.0 to ISO/IEC 27001:2022, SOC 2 TSC, and PCI DSS v4.0).</p>
             </div>
 
             <div class="feature-grid" style="margin-top: 1.5rem;">
@@ -1581,13 +1574,13 @@
                 </div>
             </div>
 
-            <div class="callout-box" style="margin-top: 1.5rem;">
+            <div class="callout-box" style="margin-top: 2.75rem; margin-bottom: 2.75rem;">
                 <p class="callout-title">How ASPIA UCL Crosswalk Works:</p>
                 <p class="callout-text">For example, an Access Control policy requirement in ASPIA UCL maps simultaneously to <strong>ISO 27001:A.5.15</strong>, <strong>NIST CSF:PR.AA-01</strong>, <strong>SOC 2:CC6.1</strong>, and <strong>PCI DSS:7.1.1</strong>. Testing this control once validates compliance for all four standards automatically.</p>
             </div>
 
             <!-- WORKFLOW DIAGRAM -->
-            <div class="section-header-block" id="implementation-workflow" style="margin-top: 3.5rem;">
+            <div class="section-header-block" id="implementation-workflow" style="margin-top: 6.5rem; margin-bottom: 2.25rem;">
                 <span class="section-badge">IMPLEMENTATION WORKFLOW</span>
                 <h2 class="section-heading">Framework Implementation &amp; Mapping Workflow</h2>
             </div>
@@ -1727,7 +1720,7 @@
                 <span class="section-badge">SUMMARY</span>
                 <h2 class="section-heading">Final Takeaway</h2>
             </div>
-            <p style="text-align: center; max-width: 860px; margin: 0 auto 0 auto; line-height: 1.7;">Effective GRC management relies on unifying disparate compliance mandates under a central framework structure. By standardizing control domains and leveraging crosswalk mappings, organizations drastically reduce audit burden while strengthening their operational security posture.</p>
+            <p style="line-height: 1.7; margin: 0;">Effective GRC management relies on unifying disparate compliance mandates under a central framework structure. By standardizing control domains and leveraging crosswalk mappings, organizations drastically reduce audit burden while strengthening their operational security posture.</p>
         </div>
     </div>
 
@@ -1899,7 +1892,7 @@
 
         function getMatchingCards() {
             const query = (document.getElementById('frameworkSearchInput')?.value || '').toLowerCase().trim();
-            const cards = Array.from(document.querySelectorAll('.framework-card'));
+            const cards = Array.from(document.querySelectorAll('#frameworksGrid .framework-card'));
 
             return cards.filter(card => {
                 const text = card.textContent.toLowerCase();
@@ -1911,7 +1904,7 @@
         }
 
         function renderPagination() {
-            const allCards = Array.from(document.querySelectorAll('.framework-card'));
+            const allCards = Array.from(document.querySelectorAll('#frameworksGrid .framework-card'));
             const matchingCards = getMatchingCards();
             const totalMatching = matchingCards.length;
 
@@ -1962,9 +1955,29 @@
 
                 btnsHtml += `<button type="button" class="page-btn" ${currentPage === 1 ? 'disabled' : ''} onclick="goToPage(${currentPage - 1})" aria-label="Previous Page"><i class="fas fa-chevron-left"></i></button>`;
 
-                for (let p = 1; p <= totalPages; p++) {
-                    const activeClass = p === currentPage ? ' active' : '';
-                    btnsHtml += `<button type="button" class="page-btn${activeClass}" onclick="goToPage(${p})">${p}</button>`;
+                if (totalPages <= 7) {
+                    for (let p = 1; p <= totalPages; p++) {
+                        const activeClass = p === currentPage ? ' active' : '';
+                        btnsHtml += `<button type="button" class="page-btn${activeClass}" onclick="goToPage(${p})">${p}</button>`;
+                    }
+                } else {
+                    let pagesToDisplay = [];
+                    if (currentPage <= 4) {
+                        pagesToDisplay = [1, 2, 3, 4, 5, '...', totalPages];
+                    } else if (currentPage >= totalPages - 3) {
+                        pagesToDisplay = [1, '...', totalPages - 4, totalPages - 3, totalPages - 2, totalPages - 1, totalPages];
+                    } else {
+                        pagesToDisplay = [1, '...', currentPage - 1, currentPage, currentPage + 1, '...', totalPages];
+                    }
+
+                    pagesToDisplay.forEach(item => {
+                        if (item === '...') {
+                            btnsHtml += `<span class="page-btn disabled" style="cursor:default;border:none;background:transparent;opacity:0.6;">...</span>`;
+                        } else {
+                            const activeClass = item === currentPage ? ' active' : '';
+                            btnsHtml += `<button type="button" class="page-btn${activeClass}" onclick="goToPage(${item})">${item}</button>`;
+                        }
+                    });
                 }
 
                 btnsHtml += `<button type="button" class="page-btn" ${currentPage === totalPages ? 'disabled' : ''} onclick="goToPage(${currentPage + 1})" aria-label="Next Page"><i class="fas fa-chevron-right"></i></button>`;
@@ -1999,7 +2012,7 @@
     <div class="footer-cta-wrapper" style="background: #0B132B; color: #ffffff; padding-top: 4rem; transition: background 0.35s ease;">
         <div class="section-container" style="text-align: center; padding-bottom: 2rem;">
             <h3 style="font-size: 2.15rem; font-weight: 800; color: #ffffff; margin: 0 0 0.8rem 0; letter-spacing: -0.02em;">Ready to Streamline Your Framework Compliance &amp; Control Mapping?</h3>
-            <p style="color: #94a3b8; font-size: 1.05rem; max-width: 720px; margin: 0 auto 2rem auto; line-height: 1.65;">Connect regulatory frameworks with control domains, auditable requirements, and sampling evidence in one centralized unified control library.</p>
+            <p style="color: #94a3b8; font-size: 1.05rem; margin: 0 auto 2rem auto; line-height: 1.65;">Connect regulatory frameworks with control domains, auditable requirements, and sampling evidence in one centralized unified control library.</p>
             <div class="cta-buttons" style="display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center;">
                 <a href="https://aspiainfotech.com/" target="_blank" rel="noopener" class="btn-cta-primary">Explore ASPIA →</a>
                 <a href="https://aspiainfotech.com/request-a-demo/" target="_blank" rel="noopener" class="btn-cta-secondary">Book a Demo</a>
