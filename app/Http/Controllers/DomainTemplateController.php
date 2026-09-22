@@ -873,4 +873,8 @@ HTML;
         $html .= '</div>';
         return $html;
     }
+}       }
+        $html .= '</div>';
+        return $html;
+    }
 }
