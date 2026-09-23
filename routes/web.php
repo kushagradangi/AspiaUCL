@@ -78,7 +78,7 @@ Route::get(
     '/frameworks/{slug}',
     [FrameworkTemplateController::class, 'show']
 )
-    ->where('slug', '[a-z0-9]+(?:-[a-z0-9]+)*')
+    ->where('slug', '[A-Za-z0-9_-]+')
     ->name('frameworks.show');
 
 
@@ -88,7 +88,7 @@ Route::get(
     '/domains/{slug}',
     [DomainTemplateController::class, 'show']
 )
-    ->where('slug', '[a-z0-9]+(?:-[a-z0-9]+)*')
+    ->where('slug', '[A-Za-z0-9_-]+')
     ->name('domains.show');
 
 

@@ -169,16 +169,11 @@ HTML;
 
         $template = ControlTemplate::latest('updated_at')->first() ?? ControlTemplate::first();
 
-        if (!$template || empty(trim($template->html_content ?? ''))) {
-            return redirect()
-                ->route('controls.index')
-                ->with(
-                    'error',
-                    "Template for control is not present. Please add its template in 'Add Control Template'."
-                );
-        }
+        $html = $template?->html_content;
 
-        $html = $template->html_content;
+        if (empty(trim($html ?? ''))) {
+            $html = $this->getDefaultTemplateHtml();
+        }
 
         // Domain Info & Links
         $domainId      = $control->domain?->domain_id ?? '';
