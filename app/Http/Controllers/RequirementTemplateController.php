@@ -64,12 +64,17 @@ class RequirementTemplateController extends Controller
                 ->firstOrFail();
         }
 
-        $template = RequirementTemplate::latest('updated_at')->first() ?? RequirementTemplate::first();
+        $template = RequirementTemplate::whereNotNull('html_content')
+            ->where('html_content', '!=', '')
+            ->latest('updated_at')
+            ->first();
 
         $html = $template?->html_content;
 
         if (empty(trim($html ?? ''))) {
-            $html = $this->getDefaultTemplateHtml();
+            return redirect()
+                ->back()
+                ->with('error', "HTML template is missing in database for requirement '{$requirement->requirement_id}'. Please insert an HTML template first.");
         }
 
         // Control Info & Links
@@ -438,8 +443,177 @@ HTML;
                     {$rows}
                 </tbody>
             </table>
+    private function renderMissingTemplateError(string $moduleName, string $recordName, ?string $type = null, ?string $dashboardUrl = null)
+    {
+        $dashboardUrl = $dashboardUrl ?? route('dashboard');
+        $typeNotice = $type ? " for type <strong>\"" . e($type) . "\"</strong>" : "";
+        $titleName = e($recordName);
+        $module = e($moduleName);
+
+        $html = <<<HTML
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML Template Missing - {$titleName} | Aspia UCL</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0b0f17;
+            --card-bg: #151b26;
+            --border-color: rgba(255, 255, 255, 0.1);
+            --text-primary: #f0f6fc;
+            --text-secondary: #8b949e;
+            --accent-red: #f85149;
+            --accent-amber: #d29922;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+        .error-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            max-width: 620px;
+            width: 100%;
+            padding: 44px;
+            text-align: center;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            position: relative;
+            overflow: hidden;
+        }
+        .error-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #f85149, #d29922, #06b6d4);
+        }
+        .icon-wrapper {
+            width: 80px;
+            height: 80px;
+            background: rgba(248, 81, 73, 0.12);
+            border: 1.5px solid rgba(248, 81, 73, 0.35);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+            box-shadow: 0 0 30px rgba(248, 81, 73, 0.2);
+        }
+        .icon-wrapper svg {
+            width: 40px;
+            height: 40px;
+            color: var(--accent-red);
+        }
+        h1 {
+            font-size: 26px;
+            font-weight: 800;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+            letter-spacing: -0.5px;
+        }
+        .record-badge {
+            display: inline-block;
+            background: rgba(6, 182, 212, 0.12);
+            border: 1px solid rgba(6, 182, 212, 0.3);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 700;
+            color: #06b6d4;
+            margin-bottom: 24px;
+        }
+        p {
+            font-size: 15px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 24px;
+        }
+        .alert-box {
+            background: rgba(210, 153, 34, 0.1);
+            border: 1px solid rgba(210, 153, 34, 0.3);
+            border-radius: 12px;
+            padding: 18px;
+            text-align: left;
+            font-size: 14px;
+            color: #e3b341;
+            margin-bottom: 32px;
+            line-height: 1.5;
+        }
+        .alert-box strong { color: #f0f6fc; }
+        .actions {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        .btn-primary {
+            background: #238636;
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .btn-primary:hover {
+            background: #2ea043;
+            transform: translateY(-1px);
+        }
+        .btn-secondary {
+            background: #21262d;
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+        .btn-secondary:hover {
+            background: #30363d;
+            transform: translateY(-1px);
+        }
+    </style>
+</head>
+<body>
+    <div class="error-card">
+        <div class="icon-wrapper">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+            </svg>
         </div>
+        <h1>HTML Template Missing</h1>
+        <div class="record-badge">Record: {$titleName}</div>
+        <p>No custom HTML template has been inserted or saved in the database for the <strong>{$module}</strong> module{$typeNotice}.</p>
+        
+        <div class="alert-box">
+            <strong>Action Required:</strong> Log into the Super Admin Dashboard, navigate to <strong>{$module} Management</strong>, and click <strong>"HTML Template"</strong> to insert your HTML layout into the database.
+        </div>
+
+        <div class="actions">
+            <a href="{$dashboardUrl}" class="btn btn-primary">Go to {$module} Dashboard</a>
+            <a href="javascript:history.back()" class="btn btn-secondary">Go Back</a>
+        </div>
+    </div>
+</body>
+</html>
 HTML;
+
+        return response($html, 404);
     }
 
     private function getDefaultTemplateHtml(): string
