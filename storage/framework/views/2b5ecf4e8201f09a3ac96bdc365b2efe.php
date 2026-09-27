@@ -1379,9 +1379,9 @@
 
             </div>
 
-            <!-- Right Column: 3D Isometric PNG Graphic -->
+            <!-- Right Column: Framework Architecture Diagram Graphic -->
             <div class="hero-visual-wrapper">
-                <img src="<?php echo e(asset('images/frameworks_hero_graphic.png')); ?>" alt="Regulatory Frameworks Isometric Graphic" class="hero-isometric-img">
+                <img src="<?php echo e(asset('images/frameworks_hero_graphic.png')); ?>" alt="Framework Architecture, Domains, Controls and Requirements Mapping Graphic" class="hero-isometric-img">
             </div>
         </div>
     </div>
@@ -2673,4 +2673,4 @@
     </script>
 </body>
 
-</html><?php /**PATH C:\xampp\htdocs\AspiaUCL\storage\framework\views/565270e8aa5a702ee7841f8b18b5a11e.blade.php ENDPATH**/ ?>
+</html><?php /**PATH C:\xampp\htdocs\AspiaUCL\storage\framework\views/5de2f42d60b87ac1011a1bfffb0700b0.blade.php ENDPATH**/ ?>

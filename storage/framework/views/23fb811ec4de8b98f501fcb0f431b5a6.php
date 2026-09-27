@@ -1273,7 +1273,7 @@
 
             <!-- Right Column: 3D Isometric PNG Graphic -->
             <div class="hero-visual-wrapper">
-                <img src="<?php echo e(asset('images/frameworks_hero_graphic.png')); ?>" alt="Security Controls Isometric Graphic" class="hero-isometric-img">
+                <img src="<?php echo e(asset('images/controls_hero_graphic.png')); ?>" alt="Security Controls Overview Graphic" class="hero-isometric-img">
             </div>
         </div>
     </div>
@@ -7474,4 +7474,4 @@
     </script>
 </body>
 
-</html><?php /**PATH C:\xampp\htdocs\AspiaUCL\storage\framework\views/5cb1536c47fb99c3fb3d61c755462522.blade.php ENDPATH**/ ?>
+</html><?php /**PATH C:\xampp\htdocs\AspiaUCL\storage\framework\views/5dc4c233925f1079a60ac2f5aaa875de.blade.php ENDPATH**/ ?>

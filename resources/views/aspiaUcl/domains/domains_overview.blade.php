@@ -1273,7 +1273,7 @@
 
             <!-- Right Column: 3D Isometric PNG Graphic -->
             <div class="hero-visual-wrapper">
-                <img src="{{ asset('images/frameworks_hero_graphic.png') }}" alt="Control Domains Isometric Graphic" class="hero-isometric-img">
+                <img src="{{ asset('images/domains_hero_graphic.png') }}" alt="Control Domains Isometric Graphic" class="hero-isometric-img">
             </div>
         </div>
     </div>

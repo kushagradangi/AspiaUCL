@@ -1379,9 +1379,9 @@
 
             </div>
 
-            <!-- Right Column: 3D Isometric PNG Graphic -->
+            <!-- Right Column: Framework Architecture Diagram Graphic -->
             <div class="hero-visual-wrapper">
-                <img src="{{ asset('images/frameworks_hero_graphic.png') }}" alt="Regulatory Frameworks Isometric Graphic" class="hero-isometric-img">
+                <img src="{{ asset('images/frameworks_hero_graphic.png') }}" alt="Framework Architecture, Domains, Controls and Requirements Mapping Graphic" class="hero-isometric-img">
             </div>
         </div>
     </div>
