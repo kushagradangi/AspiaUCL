@@ -27,6 +27,69 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [UclHomepageController::class, 'index'])->name('home');
 Route::get('/ucl', [UclHomepageController::class, 'index'])->name('ucl.homepage');
 
+// Public Unified Search API Endpoint (Grouped by Module)
+Route::get('/api/ucl/search', function (\Illuminate\Http\Request $request) {
+    $q = trim($request->get('q', ''));
+    if (mb_strlen($q) < 1) {
+        return response()->json([
+            'domains' => [],
+            'controls' => [],
+            'frameworks' => [],
+            'requirements' => []
+        ]);
+    }
+
+    $frameworks = \App\Models\Framework::where('name', 'like', "%{$q}%")
+        ->take(6)->get()->map(function($fw) {
+            return [
+                'name' => $fw->name,
+                'code' => $fw->framework_code ?: ($fw->framework_family ?: 'FW'),
+                'sub'  => $fw->category ?: 'Regulatory Framework',
+                'url'  => route('frameworks.show', $fw->slug),
+            ];
+        });
+
+    $domains = \App\Models\Domain::where('name', 'like', "%{$q}%")
+        ->take(6)->get()->map(function($d) {
+            return [
+                'name' => $d->name,
+                'code' => $d->domain_code ?: ($d->domain_id ?: 'DOM'),
+                'sub'  => $d->short_overview ?: ($d->purpose ?: 'Control Domain'),
+                'url'  => route('domains.show', $d->slug),
+            ];
+        });
+
+    $controls = \App\Models\Control::where('name', 'like', "%{$q}%")
+        ->take(6)->get()->map(function($c) {
+            return [
+                'name' => $c->name,
+                'code' => $c->control_id,
+                'sub'  => $c->control_category ?: 'Security Control',
+                'url'  => route('controls.show', $c->control_id),
+            ];
+        });
+
+    $requirements = \App\Models\Requirement::where(function($query) use ($q) {
+            $query->where('requirement_title', 'like', "%{$q}%")
+                  ->orWhere('requirement', 'like', "%{$q}%");
+        })
+        ->take(6)->get()->map(function($r) {
+            return [
+                'name' => $r->requirement_title ?: ($r->requirement ?: $r->requirement_id),
+                'code' => $r->requirement_id,
+                'sub'  => $r->typical_owner ?: 'Audit Requirement',
+                'url'  => route('requirements.show', $r->requirement_id),
+            ];
+        });
+
+    return response()->json([
+        'frameworks'   => $frameworks,
+        'domains'      => $domains,
+        'controls'     => $controls,
+        'requirements' => $requirements,
+    ]);
+})->name('api.ucl.search');
+
 
 
 /*

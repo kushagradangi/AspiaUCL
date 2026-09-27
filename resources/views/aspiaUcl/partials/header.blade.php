@@ -1389,5 +1389,37 @@ document.addEventListener('DOMContentLoaded', function () {
         html += '</div>';
         searchResults.innerHTML = html;
     }
+
+    // 6. DROPDOWN POP-OVER FREEZE & FOCUS PREVENTION
+    const dropdownParents = document.querySelectorAll('.dropdown-parent');
+
+    function clearDropdownFocus() {
+        if (document.activeElement && document.activeElement.closest('.dropdown-parent')) {
+            document.activeElement.blur();
+        }
+    }
+
+    dropdownParents.forEach(function (parent) {
+        // Blur active elements when mouse leaves dropdown parent container
+        parent.addEventListener('mouseleave', clearDropdownFocus);
+
+        // Blur links immediately upon click so focus state doesn't freeze popover on navigation/back button
+        const links = parent.querySelectorAll('a');
+        links.forEach(function (link) {
+            link.addEventListener('click', function () {
+                this.blur();
+                clearDropdownFocus();
+            });
+        });
+    });
+
+    // Clear focus state on page restore (browser back/forward button bfcache restoration)
+    window.addEventListener('pageshow', function () {
+        clearDropdownFocus();
+        dropdownParents.forEach(function (parent) {
+            const links = parent.querySelectorAll('a');
+            links.forEach(function (l) { l.blur(); });
+        });
+    });
 });
 </script>

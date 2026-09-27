@@ -3161,7 +3161,6 @@
                 <div class="stat"><span class="num">{{ $domainsCount }}</span><div class="lbl">Governance Domains</div></div>
                 <div class="stat"><span class="num">{{ $controlsCount }}</span><div class="lbl">Unified Controls</div></div>
                 <div class="stat"><span class="num">{{ number_format($requirementsCount) }}</span><div class="lbl">Framework Requirements</div></div>
-                <div class="stat"><span class="num">{{ number_format($mappedRequirementsCount) }}</span><div class="lbl">Mapped Requirements</div></div>
             </div>
         </div>
     </div>
@@ -3194,7 +3193,6 @@
                         <div class="cat">{{ $fw->category ?? $fw->publisher ?? 'Governance' }} · {{ $fw->region ?? 'Global' }}</div>
                         <div class="meta">
                             <span>{{ $fw->display_order ?? 50 }} controls</span>
-                            <span class="controls">{{ $fw->mappings_count ?? 0 }} mapped</span>
                         </div>
                         <a href="{{ route('frameworks.show', $fw->slug ?? $fw->framework_id ?? 'view') }}" class="detail-link">View Details →</a>
                     </div>
@@ -3203,7 +3201,7 @@
                     <div class="framework-item" data-cat="global security">
                         <div><span class="name">ISO/IEC 27001</span><span class="ver">2022</span></div>
                         <div class="cat">Information Security · Global</div>
-                        <div class="meta"><span>93 controls</span><span>81 mapped</span></div>
+                        <div class="meta"><span>93 controls</span></div>
                         <a href="{{ route('frameworks.show', 'iso-27001') }}" class="detail-link">View Details →</a>
                     </div>
                 @endforelse
@@ -3501,7 +3499,7 @@
     <!-- ============================================================
     FOOTER
     ============================================================ -->
-    @include('aspiaUcl.partials.homepage_footer')
+    @include('aspiaUcl.partials.footer')
 
     <!-- ============================================================
     JAVASCRIPT

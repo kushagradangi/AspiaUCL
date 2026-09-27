@@ -1,5 +1,5 @@
 <style>
-    /* SHARED FOOTER STYLES (DARK SECONDARY NAVY) */
+    /* HOMEPAGE FOOTER STYLES (DARK SECONDARY NAVY) */
     .site-footer {
         background: #0B132B;
         border-top: none;
@@ -90,7 +90,7 @@
     }
 </style>
 
-<footer class="site-footer">
+<footer class="site-footer homepage-footer">
     <div class="container">
         <div class="footer">
             <div class="brand-col">
@@ -114,7 +114,7 @@
 </footer>
 
 <script>
-    // Universal Mobile Menu Toggle & Theme Switcher
+    // Universal Mobile Menu Toggle & Theme Switcher for Homepage
     (function() {
         function initNavigationScripts() {
             const mobileMenuToggle = document.getElementById('mobileMenuToggle');
@@ -125,28 +125,10 @@
                 };
             }
 
-            const themeSwitch = document.getElementById('themeToggleSwitch');
-            function applySiteTheme(theme) {
-                if (theme === 'dark') {
-                    document.body.classList.add('dark-mode');
-                    document.documentElement.setAttribute('data-theme', 'dark');
-                    if (themeSwitch) themeSwitch.checked = true;
-                } else {
-                    document.body.classList.remove('dark-mode');
-                    document.documentElement.setAttribute('data-theme', 'light');
-                    if (themeSwitch) themeSwitch.checked = false;
-                }
-            }
-            const savedTheme = localStorage.getItem('ucl-theme') || 'light';
-            applySiteTheme(savedTheme);
-
-            if (themeSwitch) {
-                themeSwitch.onchange = function() {
-                    const newTheme = this.checked ? 'dark' : 'light';
-                    localStorage.setItem('ucl-theme', newTheme);
-                    applySiteTheme(newTheme);
-                };
-            }
+            // Homepage defaults to light theme
+            document.body.classList.remove('dark-mode');
+            document.documentElement.setAttribute('data-theme', 'light');
+            document.body.setAttribute('data-theme', 'light');
         }
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', initNavigationScripts);
@@ -155,4 +137,4 @@
         }
     })();
 </script>
-<?php /**PATH C:\xampp\htdocs\AspiaUCL\resources\views\aspiaUcl\partials\footer.blade.php ENDPATH**/ ?>
+<?php /**PATH C:\xampp\htdocs\AspiaUCL\resources\views/aspiaUcl/partials/footer.blade.php ENDPATH**/ ?>

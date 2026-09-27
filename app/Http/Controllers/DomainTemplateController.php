@@ -69,7 +69,9 @@ class DomainTemplateController extends Controller
         if (file_exists($filePath)) {
             $html = file_get_contents($filePath);
         } else {
-            $html = $this->getDefaultTemplateHtml();
+            return redirect()
+                ->back()
+                ->with('error', "HTML template file is missing for Domain Overview. Please insert or create the template first.");
         }
 
         $gridHtml = $this->renderDomainCards($domains);
@@ -663,147 +665,7 @@ HTML;
 
     private function getDefaultTemplateHtml(): string
     {
-        return <<<'HTML'
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{domain_name}} ({{domain_code}}) - ASPIA Unified Control Library</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg-dark: #0b0f19;
-            --card-bg: rgba(22, 27, 46, 0.7);
-            --border-color: rgba(255, 255, 255, 0.08);
-            --accent-cyan: #10bce8;
-            --accent-purple: #8b5cf6;
-            --accent-green: #10b981;
-            --text-primary: #f8fafc;
-            --text-secondary: #94a3b8;
-            --text-muted: #64748b;
-        }
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body {
-            font-family: 'Inter', 'Segoe UI', 'Roboto', sans-serif;
-            background-color: var(--bg-dark);
-            color: var(--text-primary);
-            line-height: 1.7;
-            padding: 40px 20px;
-            min-height: 100vh;
-        }
-        .container { max-width: 1200px; margin: 0 auto; }
-        .header-card {
-            background: linear-gradient(135deg, rgba(30, 41, 59, 0.7) 0%, rgba(15, 23, 42, 0.8) 100%);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 32px;
-            margin-bottom: 24px;
-            backdrop-filter: blur(12px);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-        }
-        .badge-row { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; align-items: center; }
-        .badge {
-            display: inline-flex; align-items: center; padding: 4px 12px;
-            border-radius: 20px; font-size: 12px; font-weight: 700; letter-spacing: 0.5px;
-        }
-        .badge-navy { background: rgba(13, 23, 53, 0.08); border: 1px solid rgba(13, 23, 53, 0.25); color: #0D1735; }
-        .badge-cyan { background: rgba(13, 23, 53, 0.08); border: 1px solid rgba(13, 23, 53, 0.25); color: #0D1735; }
-        .badge-purple { background: rgba(13, 23, 53, 0.08); border: 1px solid rgba(13, 23, 53, 0.25); color: #0D1735; }
-        .badge-green { background: rgba(13, 23, 53, 0.08); border: 1px solid rgba(13, 23, 53, 0.25); color: #0D1735; }
-        .title { font-size: 28px; font-weight: 800; color: #fff; margin-bottom: 12px; }
-        .description { font-size: 15px; color: var(--text-secondary); max-width: 900px; }
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 16px;
-            margin-bottom: 24px;
-        }
-        .stat-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 14px;
-            padding: 20px;
-            backdrop-filter: blur(12px);
-        }
-        .stat-label { font-size: 12px; text-transform: uppercase; color: var(--text-muted); font-weight: 700; letter-spacing: 0.5px; }
-        .stat-value { font-size: 32px; font-weight: 800; color: #fff; margin-top: 4px; }
-        .section-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 28px;
-            margin-bottom: 24px;
-            backdrop-filter: blur(12px);
-        }
-        .section-title { font-size: 18px; font-weight: 700; color: #fff; margin-bottom: 16px; display: flex; align-items: center; justify-content: space-between; }
-        .meta-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 16px;
-            padding-top: 16px;
-            margin-top: 16px;
-            border-top: 1px solid var(--border-color);
-        }
-        .meta-item { display: flex; flex-direction: column; gap: 2px; }
-        .meta-label { font-size: 11px; text-transform: uppercase; color: var(--text-muted); font-weight: 600; }
-        .meta-val { font-size: 14px; color: var(--text-primary); font-weight: 500; }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <div class="header-card">
-            <div class="badge-row">
-                <span class="badge badge-purple">{{domain_code}}</span>
-                <span class="badge badge-cyan">{{domain_id}}</span>
-                <span class="badge badge-green">v{{version}}</span>
-            </div>
-            <h1 class="title">{{domain_name}}</h1>
-            <p class="description">{{purpose}}</p>
-            <div class="meta-grid">
-                <div class="meta-item"><span class="meta-label">Business Owner</span><span class="meta-val">{{business_owner}}</span></div>
-                <div class="meta-item"><span class="meta-label">Status</span><span class="meta-val">{{status}}</span></div>
-                <div class="meta-item"><span class="meta-label">Scope</span><span class="meta-val">{{scope}}</span></div>
-            </div>
-        </div>
-
-        <div class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-label">Associated Controls</div>
-                <div class="stat-value" style="color: #10bce8;">{{controls_count}}</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-label">Total Requirements</div>
-                <div class="stat-value" style="color: #34d399;">{{requirements_count}}</div>
-            </div>
-        </div>
-
-        <div class="section-card">
-            <div class="section-title">
-                <span>Domain Controls</span>
-                <span style="font-size: 13px; color: var(--text-muted); font-weight: 500;">{{controls_count}} controls</span>
-            </div>
-            {{controls_table}}
-        </div>
-
-        <div class="section-card">
-            <div class="section-title">
-                <span>Associated Requirements</span>
-                <span style="font-size: 13px; color: var(--text-muted); font-weight: 500;">{{requirements_count}} requirements</span>
-            </div>
-            {{requirements_chips}}
-        </div>
-
-        <div class="section-card">
-            <div class="section-title">
-                <span>Mapped Compliance Frameworks</span>
-            </div>
-            {{related_frameworks_badges}}
-        </div>
-    </div>
-</body>
-</html>
-HTML;
+        return '';
     }
 
     protected function renderPlainText(?string $val): string
