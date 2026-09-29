@@ -2801,16 +2801,11 @@
                         <div class="count"><?php echo e($domain->controls_count ?? 0); ?> controls</div>
                     </a>
                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
-                    <a href="<?php echo e(route('domains.public_index')); ?>" class="domain-card">
-                        <div class="icon"><i class="fas fa-shield-alt"></i></div>
-                        <div class="name">Information Security</div>
-                        <div class="count">142 controls</div>
-                    </a>
-                    <a href="<?php echo e(route('domains.public_index')); ?>" class="domain-card">
-                        <div class="icon"><i class="fas fa-lock"></i></div>
-                        <div class="name">Data Privacy</div>
-                        <div class="count">89 controls</div>
-                    </a>
+                    <div style="grid-column: 1 / -1; text-align: center; padding: 40px 20px; color: #6a7a92; background: #f0f6ff; border-radius: 12px; border: 1px dashed #d4e3f7;">
+                        <i class="fas fa-folder-open" style="font-size: 2rem; margin-bottom: 12px; color: #16C4F4;"></i>
+                        <p style="font-size: 0.95rem; font-weight: 600; color: #0D1735; margin: 0;">No Governance Domains Available</p>
+                        <p style="font-size: 0.8rem; color: #6a7a92; margin-top: 4px;">Domains will appear here once populated in the database.</p>
+                    </div>
                 <?php endif; ?>
             </div>
 
@@ -3082,52 +3077,11 @@
                         </div>
                     </a>
                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
-                    <?php
-                        $fallbackControls = [
-                            ['id' => 'GOV-001', 'name' => 'Information Security Governance', 'req' => '12 Requirements', 'desc' => 'Establish, govern, operate, monitor, and continually improve an enterprise information security program.', 'tags' => ['ISO 27001', 'NIST CSF', 'RBI CSF', '+2']],
-                            ['id' => 'POL-001', 'name' => 'Policy Management', 'req' => '8 Requirements', 'desc' => 'Define, maintain, and manage the lifecycle of security, privacy, and compliance policies.', 'tags' => ['ISO 27001', 'NIST CSF', 'PCI DSS', '+1']],
-                            ['id' => 'RSK-001', 'name' => 'Risk Management Framework', 'req' => '10 Requirements', 'desc' => 'Establish and maintain a framework for identifying, assessing, treating, and monitoring risks.', 'tags' => ['ISO 31000', 'NIST CSF', 'RBI CSF', '+2']],
-                            ['id' => 'CMP-001', 'name' => 'Compliance Program Management', 'req' => '10 Requirements', 'desc' => 'Establish and maintain a program to identify, manage, and monitor adherence to all applicable regulatory requirements.', 'tags' => ['RBI CSF', 'PCI DSS', 'DORA', '+3']],
-                            ['id' => 'IAM-001', 'name' => 'Identity & Account Lifecycle Management', 'req' => '12 Requirements', 'desc' => 'Manage the entire lifecycle of digital identities, including creation, modification, and deprovisioning.', 'tags' => ['ISO 27001', 'NIST CSF', 'CIS Controls', '+1']],
-                            ['id' => 'AST-001', 'name' => 'Asset Inventory Management', 'req' => '10 Requirements', 'desc' => 'Establish, maintain, and govern a comprehensive inventory of all technology assets, including hardware, software, and cloud assets.', 'tags' => ['ISO 27001', 'CIS Controls', 'NIST CSF']],
-                            ['id' => 'DAT-001', 'name' => 'Data Protection & Privacy Strategy', 'req' => '10 Requirements', 'desc' => 'Establish, implement, and maintain an enterprise data protection and privacy strategy.', 'tags' => ['ISO 27701', 'GDPR', 'DPDP', '+2']],
-                            ['id' => 'CRY-001', 'name' => 'Cryptographic Governance', 'req' => '10 Requirements', 'desc' => 'Establish and maintain an enterprise cryptographic governance framework defining the use, management, and lifecycle of cryptographic controls.', 'tags' => ['NIST CSF', 'FIPS 140-2', 'CIS Controls']],
-                            ['id' => 'NET-001', 'name' => 'Secure Network Architecture', 'req' => '10 Requirements', 'desc' => 'Establish and maintain a secure network architecture incorporating defense-in-depth, Zero Trust principles, and network monitoring.', 'tags' => ['NIST CSF', 'CIS Controls', 'ISO 27001']],
-                            ['id' => 'END-001', 'name' => 'Endpoint Protection', 'req' => '10 Requirements', 'desc' => 'Establish and maintain endpoint protection capabilities to prevent, detect, and mitigate malware and other threats.', 'tags' => ['CIS Controls', 'NIST CSF', 'ISO 27001']],
-                            ['id' => 'CLD-001', 'name' => 'Cloud Security Governance', 'req' => '10 Requirements', 'desc' => 'Establish and maintain an enterprise cloud security governance framework, strategy, and policies.', 'tags' => ['NIST CSF', 'CIS Controls', 'ISO 27017', '+1']],
-                            ['id' => 'CFG-001', 'name' => 'Secure Configuration Baseline', 'req' => '10 Requirements', 'desc' => 'Establish, maintain, and govern secure configuration baselines for systems, applications, and infrastructure.', 'tags' => ['CIS Controls', 'NIST CSF', 'ISO 27001']],
-                        ];
-                    ?>
-                    <?php $__currentLoopData = $fallbackControls; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $fb): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                        <?php
-                            $theme = $getControlThemeData($fb['id'], $fb['name']);
-                        ?>
-                        <a href="<?php echo e(route('controls.public_index')); ?>" class="control-card">
-                            <div class="control-card-header">
-                                <div class="control-icon-box" style="background: <?php echo e($theme['bg']); ?>; color: <?php echo e($theme['color']); ?>;">
-                                    <i class="<?php echo e($theme['icon']); ?>"></i>
-                                </div>
-                                <div class="control-header-info">
-                                    <div class="control-top-row">
-                                        <span class="control-id"><?php echo e($fb['id']); ?></span>
-                                        <span class="control-req-badge"><?php echo e($fb['req']); ?></span>
-                                    </div>
-                                    <h3 class="control-name"><?php echo e($fb['name']); ?></h3>
-                                </div>
-                            </div>
-                            <p class="control-desc"><?php echo e($fb['desc']); ?></p>
-                            <div class="control-card-footer">
-                                <div class="control-tags">
-                                    <?php $__currentLoopData = $fb['tags']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $tag): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                        <span class="control-tag <?php echo e($getControlTagClass($tag)); ?>"><?php echo e($tag); ?></span>
-                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                                </div>
-                                <span class="control-arrow">
-                                    <i class="fas fa-arrow-right"></i>
-                                </span>
-                            </div>
-                        </a>
-                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                    <div style="grid-column: 1 / -1; text-align: center; padding: 40px 20px; color: #6a7a92; background: #ffffff; border-radius: 12px; border: 1px dashed #d0d8e4;">
+                        <i class="fas fa-shield-alt" style="font-size: 2rem; margin-bottom: 12px; color: #16C4F4;"></i>
+                        <p style="font-size: 0.95rem; font-weight: 600; color: #0D1735; margin: 0;">No Unified Controls Available</p>
+                        <p style="font-size: 0.8rem; color: #6a7a92; margin-top: 4px;">Controls will appear here once populated in the database.</p>
+                    </div>
                 <?php endif; ?>
             </div>
 
@@ -3197,12 +3151,10 @@
                         <a href="<?php echo e(route('frameworks.show', $fw->slug ?? $fw->framework_id ?? 'view')); ?>" class="detail-link">View Details →</a>
                     </div>
                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
-                    <!-- Global & International Fallbacks -->
-                    <div class="framework-item" data-cat="global security">
-                        <div><span class="name">ISO/IEC 27001</span><span class="ver">2022</span></div>
-                        <div class="cat">Information Security · Global</div>
-                        <div class="meta"><span>93 controls</span></div>
-                        <a href="<?php echo e(route('frameworks.show', 'iso-27001')); ?>" class="detail-link">View Details →</a>
+                    <div style="grid-column: 1 / -1; text-align: center; padding: 40px 20px; color: #6a7a92; background: #ffffff; border-radius: 12px; border: 1px dashed #d0d8e4;">
+                        <i class="fas fa-cubes" style="font-size: 2rem; margin-bottom: 12px; color: #16C4F4;"></i>
+                        <p style="font-size: 0.95rem; font-weight: 600; color: #0D1735; margin: 0;">No Frameworks Available</p>
+                        <p style="font-size: 0.8rem; color: #6a7a92; margin-top: 4px;">Frameworks will appear here once populated in the database.</p>
                     </div>
                 <?php endif; ?>
             </div>
