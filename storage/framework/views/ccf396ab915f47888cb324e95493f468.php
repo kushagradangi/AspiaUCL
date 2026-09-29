@@ -23,12 +23,12 @@
     <!-- Article Schema -->
     <script type="application/ld+json">
     {
-        "@@context": "https://schema.org",
-        "@@type": "TechArticle",
+        "@context": "https://schema.org",
+        "@type": "TechArticle",
         "headline": "Regulatory & Security Frameworks: Meaning, Types, Mappings & Standards Guide",
         "description": "Complete guide to cybersecurity frameworks, regulatory standards, compliance mappings, control domains, audit requirements, and best practices in ASPIA Unified Control Library.",
-        "author": {"@@type": "Organization", "name": "ASPIA Infotech"},
-        "publisher": {"@@type": "Organization", "name": "ASPIA Infotech Pvt. Ltd."},
+        "author": {"@type": "Organization", "name": "ASPIA Infotech"},
+        "publisher": {"@type": "Organization", "name": "ASPIA Infotech Pvt. Ltd."},
         "datePublished": "2026-09-08",
         "dateModified": "2026-09-08"
     }
@@ -37,14 +37,14 @@
     <!-- FAQ Schema -->
     <script type="application/ld+json">
     {
-        "@@context": "https://schema.org",
-        "@@type": "FAQPage",
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
         "mainEntity": [
-            {"@@type":"Question","name":"What is a cybersecurity compliance framework?","acceptedAnswer":{"@@type":"Answer","text":"A cybersecurity compliance framework is a structured set of guidelines, security controls, and best practices designed to help organizations manage risk and meet regulatory requirements."}},
-            {"@@type":"Question","name":"What are the main types of compliance frameworks?","acceptedAnswer":{"@@type":"Answer","text":"Frameworks generally fall into three categories: Regulatory Mandates (GDPR, HIPAA, PCI DSS), Industry Standards (ISO/IEC 27001, SOC 2), and Security Benchmarks (NIST CSF, CIS Controls)."}},
-            {"@@type":"Question","name":"What is framework crosswalk mapping?","acceptedAnswer":{"@@type":"Answer","text":"Crosswalk mapping links controls and requirements from multiple frameworks to a unified baseline, enabling 'test once, comply with many' efficiency."}},
-            {"@@type":"Question","name":"How does ASPIA UCL organize frameworks?","acceptedAnswer":{"@@type":"Answer","text":"ASPIA UCL maps frameworks into standardized Control Domains, Security Controls, and Auditable Requirements for streamlined governance."}},
-            {"@@type":"Question","name":"What is the difference between ISO 27001 and NIST CSF?","acceptedAnswer":{"@@type":"Answer","text":"ISO 27001 is an certifiable Information Security Management System (ISMS) standard, while NIST CSF is a voluntary risk-management framework structured around Identify, Protect, Detect, Respond, and Recover functions."}}
+            {"@type":"Question","name":"What is a cybersecurity compliance framework?","acceptedAnswer":{"@type":"Answer","text":"A cybersecurity compliance framework is a structured set of guidelines, security controls, and best practices designed to help organizations manage risk and meet regulatory requirements."}},
+            {"@type":"Question","name":"What are the main types of compliance frameworks?","acceptedAnswer":{"@type":"Answer","text":"Frameworks generally fall into three categories: Regulatory Mandates (GDPR, HIPAA, PCI DSS), Industry Standards (ISO/IEC 27001, SOC 2), and Security Benchmarks (NIST CSF, CIS Controls)."}},
+            {"@type":"Question","name":"What is framework crosswalk mapping?","acceptedAnswer":{"@type":"Answer","text":"Crosswalk mapping links controls and requirements from multiple frameworks to a unified baseline, enabling 'test once, comply with many' efficiency."}},
+            {"@type":"Question","name":"How does ASPIA UCL organize frameworks?","acceptedAnswer":{"@type":"Answer","text":"ASPIA UCL maps frameworks into standardized Control Domains, Security Controls, and Auditable Requirements for streamlined governance."}},
+            {"@type":"Question","name":"What is the difference between ISO 27001 and NIST CSF?","acceptedAnswer":{"@type":"Answer","text":"ISO 27001 is an certifiable Information Security Management System (ISMS) standard, while NIST CSF is a voluntary risk-management framework structured around Identify, Protect, Detect, Respond, and Recover functions."}}
         ]
     }
     </script>
@@ -1321,7 +1321,7 @@
 </head>
 
 <body>
-    @include('aspiaUcl.partials.header', ['activeTab' => 'frameworks'])
+    <?php echo $__env->make('aspiaUcl.partials.header', ['activeTab' => 'frameworks'], array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
 
     <!-- HERO BANNER (ISOMETRIC LOGO DESIGN - FULL VH SCREEN) -->
     <div class="hero-section">
@@ -1381,7 +1381,7 @@
 
             <!-- Right Column: Framework Architecture Diagram Graphic -->
             <div class="hero-visual-wrapper">
-                <img src="{{ asset('images/frameworks_hero_graphic.png') }}" alt="Framework Architecture, Domains, Controls and Requirements Mapping Graphic" class="hero-isometric-img">
+                <img src="<?php echo e(asset('images/frameworks_hero_graphic.png')); ?>" alt="Framework Architecture, Domains, Controls and Requirements Mapping Graphic" class="hero-isometric-img">
             </div>
         </div>
     </div>
@@ -1462,7 +1462,7 @@
             <!-- CATALOG CARDS LIST -->
             <div class="catalog-list-wrapper">
                 <div class="frameworks-cards-grid list-layout-view" id="frameworksGrid">
-                    {{all_frameworks_grid}}
+                    <div class="empty-state"><div class="empty-icon">📁</div><h3>No frameworks available</h3><p>There are currently no frameworks added to the library.</p></div>
                 </div>
             </div>
 
@@ -2018,7 +2018,7 @@
                 <a href="https://aspiainfotech.com/request-a-demo/" target="_blank" rel="noopener" class="btn-cta-secondary">Book a Demo</a>
             </div>
         </div>
-        @include('aspiaUcl.partials.footer')
+        <?php echo $__env->make('aspiaUcl.partials.footer', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
     </div>
 
     <script>
@@ -2093,4 +2093,4 @@
     </script>
 </body>
 
-</html>
+</html><?php /**PATH C:\xampp\htdocs\AspiaUCL\storage\framework\views/66dc92b9794d80607765b58005625cfd.blade.php ENDPATH**/ ?>

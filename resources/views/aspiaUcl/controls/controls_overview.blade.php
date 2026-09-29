@@ -162,7 +162,7 @@
             padding: 0 24px;
             box-sizing: border-box;
             display: grid;
-            grid-template-columns: 1.12fr 0.88fr;
+            grid-template-columns: 1fr 1fr;
             gap: 2.5rem;
             align-items: center;
             position: relative;
@@ -288,21 +288,28 @@
             width: 100%;
             display: flex;
             align-items: center;
-            justify-content: center;
+            justify-content: flex-end;
         }
 
         .hero-isometric-img {
             width: 100%;
-            max-width: 560px;
+            max-width: 820px;
             height: auto;
             object-fit: contain;
             filter: drop-shadow(0 16px 36px rgba(0, 0, 0, 0.3));
+            transform: scale(1.18);
+            transform-origin: right center;
+            transition: transform 0.3s ease;
         }
 
         @media (max-width: 1100px) {
             .hero-container {
                 grid-template-columns: 1fr;
                 gap: 2rem;
+            }
+
+            .hero-isometric-img {
+                transform: none;
             }
 
             .hero-features-grid {

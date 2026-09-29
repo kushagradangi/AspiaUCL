@@ -1462,7 +1462,7 @@
             <!-- CATALOG CARDS LIST -->
             <div class="catalog-list-wrapper">
                 <div class="frameworks-cards-grid list-layout-view" id="frameworksGrid">
-                    {{all_frameworks_grid}}
+                    <div class="empty-state"><div class="empty-icon">📁</div><h3>No frameworks available</h3><p>There are currently no frameworks added to the library.</p></div>
                 </div>
             </div>
 
