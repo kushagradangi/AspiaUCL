@@ -1,10 +1,8 @@
-@extends('layouts.aspiaUcl')
+<?php $__env->startSection('title', ' | Frameworks'); ?>
 
-@section('title', ' | Frameworks')
+<?php $__env->startSection('page-title', 'Frameworks'); ?>
 
-@section('page-title', 'Frameworks')
-
-@section('content')
+<?php $__env->startSection('content'); ?>
 
 <style>
 
@@ -894,40 +892,36 @@
 <div class="framework-page">
 
 
-    {{-- =====================================================
-         SUCCESS MESSAGE
-    ====================================================== --}}
+    
 
-    @if(session('success'))
+    <?php if(session('success')): ?>
 
         <div class="alert-success">
 
-            {{ session('success') }}
+            <?php echo e(session('success')); ?>
+
 
         </div>
 
-    @endif
+    <?php endif; ?>
 
-    {{-- =====================================================
-     ERROR MESSAGE
-    ====================================================== --}}
+    
 
-    @if(session('error'))
+    <?php if(session('error')): ?>
 
         <div class="alert-error">
 
-            {{ session('error') }}
+            <?php echo e(session('error')); ?>
+
 
         </div>
 
-    @endif
+    <?php endif; ?>
 
 
-    {{-- =====================================================
-         VALIDATION ERRORS
-    ====================================================== --}}
+    
 
-    @if($errors->any())
+    <?php if($errors->any()): ?>
 
         <div class="alert-error">
 
@@ -935,24 +929,23 @@
 
             <ul style="margin:8px 0 0 18px;">
 
-                @foreach($errors->all() as $error)
+                <?php $__currentLoopData = $errors->all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $error): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
 
                     <li>
-                        {{ $error }}
+                        <?php echo e($error); ?>
+
                     </li>
 
-                @endforeach
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
             </ul>
 
         </div>
 
-    @endif
+    <?php endif; ?>
 
 
-    {{-- =====================================================
-         PAGE HEADER
-    ====================================================== --}}
+    
 
     <div class="page-header">
 
@@ -972,9 +965,7 @@
         <div class="header-actions">
 
 
-            {{-- =================================================
-                 ADD FRAMEWORK TEMPLATE
-            ================================================== --}}
+            
 
             <button
                 type="button"
@@ -987,9 +978,7 @@
             </button>
 
 
-            {{-- =================================================
-                 IMPORT XLSX
-            ================================================== --}}
+            
 
             <button
                 type="button"
@@ -1002,9 +991,7 @@
             </button>
 
 
-            {{-- =================================================
-                 ADD FRAMEWORK
-            ================================================== --}}
+            
 
             <button
                 type="button"
@@ -1020,9 +1007,7 @@
     </div>
 
 
-    {{-- =====================================================
-         FRAMEWORK MANAGEMENT
-    ====================================================== --}}
+    
 
     <div class="framework-panel">
 
@@ -1034,10 +1019,10 @@
             </h2>
 
 
-            {{-- SEARCH --}}
+            
 
             <form
-                action="{{ route('frameworks.index') }}"
+                action="<?php echo e(route('frameworks.index')); ?>"
                 method="GET"
                 class="search-form"
             >
@@ -1047,7 +1032,7 @@
                     name="search"
                     class="search-input"
                     placeholder="Search frameworks..."
-                    value="{{ request('search') }}"
+                    value="<?php echo e(request('search')); ?>"
                 >
 
 
@@ -1065,9 +1050,7 @@
         </div>
 
 
-        {{-- =================================================
-             TABLE
-        ================================================== --}}
+        
 
         <div class="table-wrapper">
 
@@ -1134,137 +1117,148 @@
                 <tbody>
 
 
-                    @forelse($frameworks as $framework)
+                    <?php $__empty_1 = true; $__currentLoopData = $frameworks; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $framework): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
 
 
                         <tr>
 
 
-                            {{-- Framework ID --}}
+                            
 
                             <td>
 
                                 <span class="framework-id">
 
-                                    {{ $framework->framework_id }}
+                                    <?php echo e($framework->framework_id); ?>
+
 
                                 </span>
 
                             </td>
 
 
-                            {{-- Framework Code --}}
+                            
 
                             <td>
 
                                 <span class="framework-code">
 
-                                    {{ $framework->framework_code }}
+                                    <?php echo e($framework->framework_code); ?>
+
 
                                 </span>
 
                             </td>
 
 
-                            {{-- Framework Name --}}
+                            
 
                             <td>
 
                                 <a
-                                    href="{{ route(
+                                    href="<?php echo e(route(
                                         'frameworks.show',
                                         ['slug' => $framework->slug]
-                                    ) }}"
+                                    )); ?>"
                                     class="framework-name-link"
                                 >
 
-                                    {{ $framework->name }}
+                                    <?php echo e($framework->name); ?>
+
 
                                 </a>
 
                             </td>
 
 
-                            {{-- Version --}}
+                            
 
                             <td>
 
-                                {{ $framework->version ?: '—' }}
+                                <?php echo e($framework->version ?: '—'); ?>
+
 
                             </td>
 
 
-                            {{-- Family --}}
+                            
 
                             <td>
 
-                                {{ $framework->framework_family ?: '—' }}
+                                <?php echo e($framework->framework_family ?: '—'); ?>
+
 
                             </td>
 
 
-                            {{-- Category --}}
+                            
 
                             <td>
 
-                                {{ $framework->category ?: '—' }}
+                                <?php echo e($framework->category ?: '—'); ?>
+
 
                             </td>
 
 
-                            {{-- Publisher --}}
+                            
 
                             <td>
 
-                                {{ $framework->publisher ?: '—' }}
+                                <?php echo e($framework->publisher ?: '—'); ?>
+
 
                             </td>
 
 
-                            {{-- Region --}}
+                            
 
                             <td>
 
-                                {{ $framework->region ?: '—' }}
+                                <?php echo e($framework->region ?: '—'); ?>
+
 
                             </td>
 
 
-                            {{-- Industry --}}
+                            
 
                             <td>
 
-                                {{ $framework->industry ?: '—' }}
+                                <?php echo e($framework->industry ?: '—'); ?>
+
 
                             </td>
 
 
-                            {{-- Type --}}
+                            
 
                             <td>
 
-                                {{ $framework->framework_type ?: '—' }}
+                                <?php echo e($framework->framework_type ?: '—'); ?>
+
 
                             </td>
 
 
-                            {{-- Created --}}
+                            
 
                             <td>
 
-                                {{ $framework->created_at?->format('d M Y') }}
+                                <?php echo e($framework->created_at?->format('d M Y')); ?>
+
 
                             </td>
 
 
-                            {{-- Actions --}}
+                            
 
                             <td>
 
                                 <div class="actions">
 
 
-                                    {{-- EDIT --}}
+                                    
 
                                     <button
                                         type="button"
@@ -1272,29 +1266,29 @@
 
                                         onclick="openEditModal(
 
-                                            {{ $framework->id }},
+                                            <?php echo e($framework->id); ?>,
 
-                                            @js($framework->framework_id),
+                                            <?php echo \Illuminate\Support\Js::from($framework->framework_id)->toHtml() ?>,
 
-                                            @js($framework->framework_code),
+                                            <?php echo \Illuminate\Support\Js::from($framework->framework_code)->toHtml() ?>,
 
-                                            @js($framework->name),
+                                            <?php echo \Illuminate\Support\Js::from($framework->name)->toHtml() ?>,
 
-                                            @js($framework->version),
+                                            <?php echo \Illuminate\Support\Js::from($framework->version)->toHtml() ?>,
 
-                                            @js($framework->framework_family),
+                                            <?php echo \Illuminate\Support\Js::from($framework->framework_family)->toHtml() ?>,
 
-                                            @js($framework->category),
+                                            <?php echo \Illuminate\Support\Js::from($framework->category)->toHtml() ?>,
 
-                                            @js($framework->publisher),
+                                            <?php echo \Illuminate\Support\Js::from($framework->publisher)->toHtml() ?>,
 
-                                            @js($framework->region),
+                                            <?php echo \Illuminate\Support\Js::from($framework->region)->toHtml() ?>,
 
-                                            @js($framework->industry),
+                                            <?php echo \Illuminate\Support\Js::from($framework->industry)->toHtml() ?>,
 
-                                            @js($framework->framework_type),
+                                            <?php echo \Illuminate\Support\Js::from($framework->framework_type)->toHtml() ?>,
 
-                                            @js($framework->related_domains)
+                                            <?php echo \Illuminate\Support\Js::from($framework->related_domains)->toHtml() ?>
 
                                         )"
                                     >
@@ -1304,10 +1298,10 @@
                                     </button>
 
 
-                                    {{-- DELETE --}}
+                                    
 
                                     <form
-                                        action="{{ route('frameworks.destroy', $framework) }}"
+                                        action="<?php echo e(route('frameworks.destroy', $framework)); ?>"
                                         method="POST"
 
                                         onsubmit="return confirm(
@@ -1315,9 +1309,9 @@
                                         )"
                                     >
 
-                                        @csrf
+                                        <?php echo csrf_field(); ?>
 
-                                        @method('DELETE')
+                                        <?php echo method_field('DELETE'); ?>
 
 
                                         <button
@@ -1340,7 +1334,7 @@
                         </tr>
 
 
-                    @empty
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
 
 
                         <tr>
@@ -1361,7 +1355,7 @@
                         </tr>
 
 
-                    @endforelse
+                    <?php endif; ?>
 
 
                 </tbody>
@@ -1371,73 +1365,73 @@
         </div>
 
 
-        {{-- =================================================
-             PAGINATION
-        ================================================== --}}
+        
 
-        @if($frameworks->hasPages())
+        <?php if($frameworks->hasPages()): ?>
 
             <div class="pagination-area">
 
                 <div class="custom-pagination">
 
-                    {{-- Previous --}}
-                    @if($frameworks->onFirstPage())
+                    
+                    <?php if($frameworks->onFirstPage()): ?>
                         <span class="disabled-page">Previous</span>
-                    @else
-                        <a href="{{ $frameworks->previousPageUrl() }}">
+                    <?php else: ?>
+                        <a href="<?php echo e($frameworks->previousPageUrl()); ?>">
                             Previous
                         </a>
-                    @endif
+                    <?php endif; ?>
 
-                    {{-- Page numbers --}}
-                    @foreach(range(1, $frameworks->lastPage()) as $page)
+                    
+                    <?php $__currentLoopData = range(1, $frameworks->lastPage()); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $page): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
 
-                        @if(
+                        <?php if(
                             $page == 1 ||
                             $page == $frameworks->lastPage() ||
                             abs($page - $frameworks->currentPage()) <= 2
-                        )
+                        ): ?>
 
-                            @if($page == $frameworks->currentPage())
+                            <?php if($page == $frameworks->currentPage()): ?>
 
                                 <span class="active-page">
-                                    {{ $page }}
+                                    <?php echo e($page); ?>
+
                                 </span>
 
-                            @else
+                            <?php else: ?>
 
-                                <a href="{{ $frameworks->url($page) }}">
-                                    {{ $page }}
+                                <a href="<?php echo e($frameworks->url($page)); ?>">
+                                    <?php echo e($page); ?>
+
                                 </a>
 
-                            @endif
+                            <?php endif; ?>
 
-                        @elseif(
+                        <?php elseif(
                             $page == 2 ||
                             $page == $frameworks->lastPage() - 1
-                        )
+                        ): ?>
 
                             <span class="pagination-info">...</span>
 
-                        @endif
+                        <?php endif; ?>
 
-                    @endforeach
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
-                    {{-- Next --}}
-                    @if($frameworks->hasMorePages())
-                        <a href="{{ $frameworks->nextPageUrl() }}">
+                    
+                    <?php if($frameworks->hasMorePages()): ?>
+                        <a href="<?php echo e($frameworks->nextPageUrl()); ?>">
                             Next
                         </a>
-                    @else
+                    <?php else: ?>
                         <span class="disabled-page">Next</span>
-                    @endif
+                    <?php endif; ?>
 
                 </div>
 
             </div>
 
-        @endif
+        <?php endif; ?>
 
 
     </div>
@@ -1447,9 +1441,7 @@
 
 
 
-{{-- =========================================================
-     ADD FRAMEWORK TEMPLATE MODAL
-========================================================= --}}
+
 
 <div
     id="templateModal"
@@ -1482,11 +1474,11 @@
 
 
         <form
-            action="{{ route('frameworks.template.store') }}"
+            action="<?php echo e(route('frameworks.template.store')); ?>"
             method="POST"
         >
 
-            @csrf
+            <?php echo csrf_field(); ?>
 
 
             <div class="modal-body">
@@ -1514,11 +1506,11 @@
                         required
                     >
                         <option value="" disabled selected>-- Select Framework Type --</option>
-                        @if(isset($frameworkTypes) && count($frameworkTypes) > 0)
-                            @foreach($frameworkTypes as $type)
-                                <option value="{{ $type }}">{{ $type }}</option>
-                            @endforeach
-                        @endif
+                        <?php if(isset($frameworkTypes) && count($frameworkTypes) > 0): ?>
+                            <?php $__currentLoopData = $frameworkTypes; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $type): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <option value="<?php echo e($type); ?>"><?php echo e($type); ?></option>
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                        <?php endif; ?>
                     </select>
 
                 </div>
@@ -1849,9 +1841,7 @@
 
 
 
-{{-- =========================================================
-     ADD FRAMEWORK MODAL
-========================================================= --}}
+
 
 <div
     id="addModal"
@@ -1886,11 +1876,11 @@
 
 
         <form
-            action="{{ route('frameworks.store') }}"
+            action="<?php echo e(route('frameworks.store')); ?>"
             method="POST"
         >
 
-            @csrf
+            <?php echo csrf_field(); ?>
 
 
             <div class="modal-body">
@@ -1899,7 +1889,7 @@
                 <div class="form-grid">
 
 
-                    {{-- FRAMEWORK ID --}}
+                    
 
                     <div class="form-group">
 
@@ -1923,7 +1913,7 @@
                     </div>
 
 
-                    {{-- FRAMEWORK CODE --}}
+                    
 
                     <div class="form-group">
 
@@ -1947,7 +1937,7 @@
                     </div>
 
 
-                    {{-- FRAMEWORK NAME --}}
+                    
 
                     <div class="form-group">
 
@@ -1971,7 +1961,7 @@
                     </div>
 
 
-                    {{-- VERSION --}}
+                    
 
                     <div class="form-group">
 
@@ -1990,7 +1980,7 @@
                     </div>
 
 
-                    {{-- FRAMEWORK FAMILY --}}
+                    
 
                     <div class="form-group">
 
@@ -2009,7 +1999,7 @@
                     </div>
 
 
-                    {{-- CATEGORY --}}
+                    
 
                     <div class="form-group">
 
@@ -2028,7 +2018,7 @@
                     </div>
 
 
-                    {{-- PUBLISHER --}}
+                    
 
                     <div class="form-group">
 
@@ -2047,7 +2037,7 @@
                     </div>
 
 
-                    {{-- REGION --}}
+                    
 
                     <div class="form-group">
 
@@ -2066,7 +2056,7 @@
                     </div>
 
 
-                    {{-- INDUSTRY --}}
+                    
 
                     <div class="form-group">
 
@@ -2085,7 +2075,7 @@
                     </div>
 
 
-                    {{-- FRAMEWORK TYPE --}}
+                    
 
                     <div class="form-group">
 
@@ -2104,7 +2094,7 @@
                     </div>
 
 
-                    {{-- RELATED DOMAINS --}}
+                    
 
                     <div class="form-group">
 
@@ -2166,9 +2156,7 @@
 
 
 
-{{-- =========================================================
-     EDIT FRAMEWORK MODAL
-========================================================= --}}
+
 
 <div
     id="editModal"
@@ -2207,9 +2195,9 @@
             method="POST"
         >
 
-            @csrf
+            <?php echo csrf_field(); ?>
 
-            @method('PUT')
+            <?php echo method_field('PUT'); ?>
 
 
             <div class="modal-body">
@@ -2218,7 +2206,7 @@
                 <div class="form-grid">
 
 
-                    {{-- FRAMEWORK ID --}}
+                    
 
                     <div class="form-group">
 
@@ -2242,7 +2230,7 @@
                     </div>
 
 
-                    {{-- FRAMEWORK CODE --}}
+                    
 
                     <div class="form-group">
 
@@ -2266,7 +2254,7 @@
                     </div>
 
 
-                    {{-- FRAMEWORK NAME --}}
+                    
 
                     <div class="form-group">
 
@@ -2290,7 +2278,7 @@
                     </div>
 
 
-                    {{-- VERSION --}}
+                    
 
                     <div class="form-group">
 
@@ -2309,7 +2297,7 @@
                     </div>
 
 
-                    {{-- FRAMEWORK FAMILY --}}
+                    
 
                     <div class="form-group">
 
@@ -2328,7 +2316,7 @@
                     </div>
 
 
-                    {{-- CATEGORY --}}
+                    
 
                     <div class="form-group">
 
@@ -2347,7 +2335,7 @@
                     </div>
 
 
-                    {{-- PUBLISHER --}}
+                    
 
                     <div class="form-group">
 
@@ -2366,7 +2354,7 @@
                     </div>
 
 
-                    {{-- REGION --}}
+                    
 
                     <div class="form-group">
 
@@ -2385,7 +2373,7 @@
                     </div>
 
 
-                    {{-- INDUSTRY --}}
+                    
 
                     <div class="form-group">
 
@@ -2404,7 +2392,7 @@
                     </div>
 
 
-                    {{-- FRAMEWORK TYPE --}}
+                    
 
                     <div class="form-group">
 
@@ -2423,7 +2411,7 @@
                     </div>
 
 
-                    {{-- RELATED DOMAINS --}}
+                    
 
                     <div class="form-group">
 
@@ -2485,9 +2473,7 @@
 
 
 
-{{-- =========================================================
-     IMPORT XLSX MODAL
-========================================================= --}}
+
 
 <div
     id="importModal"
@@ -2522,12 +2508,12 @@
 
 
         <form
-            action="{{ route('frameworks.import') }}"
+            action="<?php echo e(route('frameworks.import')); ?>"
             method="POST"
             enctype="multipart/form-data"
         >
 
-            @csrf
+            <?php echo csrf_field(); ?>
 
 
             <div class="modal-body">
@@ -2622,14 +2608,12 @@
 
 
 
-{{-- =========================================================
-     JAVASCRIPT
-========================================================= --}}
+
 
 <script>
 
 
-    const frameworkTemplatesMap = @json($frameworkTemplates ?? []);
+    const frameworkTemplatesMap = <?php echo json_encode($frameworkTemplates ?? [], 15, 512) ?>;
 
     function onFrameworkTypeChange(val)
     {
@@ -2951,4 +2935,5 @@
 </script>
 
 
-@endsection
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layouts.aspiaUcl', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\xampp\htdocs\AspiaUCL\resources\views/aspiaUcl/frameworks/index.blade.php ENDPATH**/ ?>

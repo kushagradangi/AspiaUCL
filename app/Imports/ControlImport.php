@@ -97,7 +97,8 @@ class ControlImport implements ToModel, WithStartRow
                 'business_benefits' => $this->value($row, 13) ?? $existing->business_benefits,
                 'business_risks_if_missing' => $this->value($row, 14) ?? $existing->business_risks_if_missing,
                 'primary_stakeholders' => $this->value($row, 15) ?? $existing->primary_stakeholders,
-                'control_type' => $this->value($row, 16) ?? $existing->control_type,
+                'control_nature' => $this->value($row, 16) ?? $existing->control_nature,
+                'compensating_control' => $this->value($row, 17) ?? $existing->compensating_control,
             ]);
 
             $this->updatedCount++;
@@ -196,9 +197,13 @@ class ControlImport implements ToModel, WithStartRow
             'primary_stakeholders' =>
                 $this->value($row, 15),
 
-            // 17. Control Type
-            'control_type' =>
+            // 17. Control Nature
+            'control_nature' =>
                 $this->value($row, 16),
+
+            // 18. Compensating Control
+            'compensating_control' =>
+                $this->value($row, 17),
         ]);
     }
 

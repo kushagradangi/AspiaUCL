@@ -160,6 +160,7 @@ class FrameworkTemplateController extends Controller
         $requirements       = $framework->getMappedRequirements();
         $requirementsCount  = $requirements->count();
         $requirementIdChips = $this->renderRequirementIdChips($requirements);
+        $requirementsTable  = $this->renderRequirementsTable($requirements);
 
         $nameVersion = "{$framework->name}:{$framework->version}";
         $canonicalUrl = route('frameworks.show', $framework->slug);
@@ -213,7 +214,7 @@ class FrameworkTemplateController extends Controller
             '{{controls_cards}}'           => $controlsHierarchy,
             '{{controls_table}}'           => $controlsTable,
 
-            // Requirements
+            // Requirements & Audit
             '{{requirements_count}}'       => $requirementsCount,
             '{{requirement_count}}'        => $requirementsCount,
             '{{total_requirements}}'       => $requirementsCount,
@@ -223,6 +224,9 @@ class FrameworkTemplateController extends Controller
             '{{count_requirements}}'       => $requirementsCount,
             '{{requirement_id_chips}}'     => $requirementIdChips,
             '{{requirements_chips}}'       => $requirementIdChips,
+            '{{requirements_table}}'       => $requirementsTable,
+            '{{requirements_list}}'        => $requirementsTable,
+            '{{audit_crosswalk_table}}'    => $requirementsTable,
         ];
 
         foreach ($placeholders as $placeholder => $value) {
@@ -352,46 +356,79 @@ HTML;
     protected function renderControlsTable($controls): string
     {
         if ($controls->isEmpty()) {
-            return '<p style="color: var(--text-muted); font-size: 14px; padding: 16px 0;">No controls associated with this framework yet.</p>';
+            return '<p style="color: var(--text-muted, #64748b); font-size: 13px; padding: 12px 0;">No controls associated with this framework yet.</p>';
         }
 
         $rows = '';
         foreach ($controls as $control) {
             $controlUrl = route('controls.show', $control->control_id);
-            $cid        = htmlspecialchars($control->control_id);
-            $name       = htmlspecialchars($control->name);
-            $reqCount   = $control->requirements()->count();
-            $status     = htmlspecialchars($control->status ?? 'Active');
+            $criticalityColor = match (strtolower($control->criticality ?? '')) {
+                'critical' => '#ef4444',
+                'high'     => '#f97316',
+                'medium'   => '#eab308',
+                'low'      => '#3b82f6',
+                default    => '#0284c7',
+            };
+            $criticalityBadge = $control->criticality
+                ? "<span style=\"display: inline-block; padding: 1px 7px; border-radius: 10px; font-size: 9.5px; font-weight: 700; background: {$criticalityColor}18; color: {$criticalityColor}; border: 1px solid {$criticalityColor}40;\">" . htmlspecialchars($control->criticality) . "</span>"
+                : '<span style="color: var(--text-muted, #94a3b8);">—</span>';
+
+            $category = htmlspecialchars($control->control_category ?? 'Governance');
+            $nature   = htmlspecialchars($control->control_nature ?? 'Preventative');
+            $status   = htmlspecialchars($control->status ?? 'Active');
+            $name        = htmlspecialchars($control->name);
+            $cid         = htmlspecialchars($control->control_id);
+            $summaryText = htmlspecialchars(\Illuminate\Support\Str::limit($control->control_summary ?: $control->business_description ?: '', 60));
+            $summaryHtml = $summaryText ? "<span style=\"font-size: 10px; color: var(--text-secondary, #64748b); display: block; margin-top: 2px;\">{$summaryText}</span>" : '';
+            $reqCount    = $control->requirements()->count();
 
             $rows .= <<<HTML
-            <tr class="table-row">
-                <td class="td-id">
-                    <a href="{$controlUrl}" class="table-link font-mono">{$cid}</a>
+            <tr class="control-card-box" style="border-bottom: 1px solid var(--border-light, #e2e8f0); transition: background 0.15s ease;" onmouseover="this.style.background='var(--bg-subtle, #f8fafc)'" onmouseout="this.style.background='transparent'">
+                <td style="padding: 8px 12px; white-space: nowrap;">
+                    <a href="{$controlUrl}" style="font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: var(--brand-primary, #0284c7); background: var(--brand-primary-light, #e0f2fe); border: 1px solid rgba(2, 132, 199, 0.25); padding: 2px 7px; border-radius: 4px; text-decoration: none;">{$cid}</a>
                 </td>
-                <td class="td-name">
-                    <a href="{$controlUrl}" class="table-link">{$name}</a>
+                <td style="padding: 8px 12px;">
+                    <a href="{$controlUrl}" style="font-weight: 700; color: var(--text-title, #0f172a); text-decoration: none; line-height: 1.25; font-size: 12px;" onmouseover="this.style.color='var(--brand-primary, #0284c7)'" onmouseout="this.style.color='var(--text-title, #0f172a)'">{$name}</a>
+                    {$summaryHtml}
                 </td>
-                <td class="td-stat font-mono">{$reqCount}</td>
-                <td class="td-status">
-                    <span class="status-pill status-active">{$status}</span>
+                <td style="padding: 8px 12px; white-space: nowrap;">
+                    <div style="font-weight: 600; color: var(--text-title, #0f172a); font-size: 11.5px;">{$category}</div>
+                    <div style="font-size: 9.5px; color: var(--text-muted, #94a3b8); margin-top: 1px;">{$nature}</div>
                 </td>
-                <td class="td-action">
-                    <a href="{$controlUrl}" class="btn-action">View Control →</a>
+                <td style="padding: 8px 12px; white-space: nowrap;">
+                    {$criticalityBadge}
+                </td>
+                <td style="padding: 8px 12px; white-space: nowrap;">
+                    <span style="display: inline-flex; align-items: center; gap: 3px; font-size: 10px; font-weight: 700; color: #059669; background: rgba(5, 150, 105, 0.1); border: 1px solid rgba(5, 150, 105, 0.25); padding: 1px 7px; border-radius: 10px;">
+                        <span style="width: 4px; height: 4px; border-radius: 50%; background: #059669; display: inline-block;"></span>
+                        {$status}
+                    </span>
+                </td>
+                <td style="padding: 8px 12px; white-space: nowrap; font-weight: 600; color: var(--text-secondary, #64748b); font-size: 11px;">
+                    📋 {$reqCount} Reqs
+                </td>
+                <td style="padding: 8px 12px; text-align: right; white-space: nowrap;">
+                    <a href="{$controlUrl}" style="display: inline-flex; align-items: center; gap: 3px; padding: 3px 8px; background: var(--brand-primary-light, #e0f2fe); border: 1px solid rgba(2, 132, 199, 0.3); border-radius: 5px; color: var(--brand-primary, #0284c7); font-size: 10.5px; font-weight: 700; text-decoration: none; transition: all 0.2s ease;">
+                        <span>View</span>
+                        <span>→</span>
+                    </a>
                 </td>
             </tr>
 HTML;
         }
 
         return <<<HTML
-        <div class="table-wrapper">
-            <table class="classic-table">
+        <div class="ucl-table-container" style="width: 100%; overflow-x: auto; background: var(--bg-surface, #ffffff); border: 1px solid var(--border-light, #e2e8f0); border-radius: 10px; box-shadow: var(--shadow-sm, 0 1px 2px rgba(0,0,0,0.04)); margin-top: 8px;">
+            <table class="ucl-data-table" style="width: 100%; border-collapse: collapse; text-align: left; font-size: 12px;">
                 <thead>
-                    <tr>
-                        <th style="width: 140px;">Control ID</th>
-                        <th>Control Name</th>
-                        <th style="width: 150px;">Requirements</th>
-                        <th style="width: 120px;">Status</th>
-                        <th style="width: 140px; text-align: right;">Action</th>
+                    <tr style="background: var(--bg-subtle, #f8fafc); border-bottom: 1px solid var(--border-light, #e2e8f0);">
+                        <th style="padding: 8px 12px; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted, #64748b);">Control ID</th>
+                        <th style="padding: 8px 12px; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted, #64748b);">Control Name</th>
+                        <th style="padding: 8px 12px; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted, #64748b);">Category & Type</th>
+                        <th style="padding: 8px 12px; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted, #64748b);">Criticality</th>
+                        <th style="padding: 8px 12px; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted, #64748b);">Status</th>
+                        <th style="padding: 8px 12px; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted, #64748b);">Requirements</th>
+                        <th style="padding: 8px 12px; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted, #64748b); text-align: right;">Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -421,6 +458,79 @@ HTML;
         }
 
         return "<div class=\"chips-grid\">{$chips}</div>";
+    }
+
+    protected function renderRequirementsTable($requirements): string
+    {
+        if ($requirements->isEmpty()) {
+            return '<p style="color: var(--text-muted, #64748b); font-size: 13px; padding: 12px 0;">No requirements associated with this framework yet.</p>';
+        }
+
+        $rows = '';
+        foreach ($requirements as $req) {
+            $reqUrl    = route('requirements.show', $req->requirement_id);
+            $rid       = htmlspecialchars($req->requirement_id);
+            $title         = htmlspecialchars($req->requirement_title ?: $req->requirement_id);
+            $reqStatement  = htmlspecialchars(\Illuminate\Support\Str::limit($req->requirement ?: '', 80));
+            $reqTextHtml   = $reqStatement ? "<span style=\"font-size: 11px; color: var(--text-secondary, #64748b); display: block; margin-top: 2px; line-height: 1.35;\">{$reqStatement}</span>" : '';
+            $owner         = htmlspecialchars($req->typical_owner ?: 'Audit & Compliance');
+
+            $control    = $req->control;
+            $controlId  = $req->control_id ?: ($control?->control_id ?? '');
+            $controlUrl = $controlId ? route('controls.show', $controlId) : '#';
+            $controlName = $control ? htmlspecialchars(\Illuminate\Support\Str::limit($control->name, 30)) : ($controlId ? 'Control ' . htmlspecialchars($controlId) : '—');
+            $cid        = htmlspecialchars($controlId);
+
+            $mappedControlCol = $controlId ? <<<HTML
+                <a href="{$controlUrl}" style="display: inline-flex; align-items: center; gap: 6px; text-decoration: none; font-weight: 600; color: var(--text-title, #0f172a); font-size: 12px;" onmouseover="this.style.color='var(--brand-primary, #0284c7)'" onmouseout="this.style.color='var(--text-title, #0f172a)'">
+                    <span style="font-family: 'JetBrains Mono', monospace; font-size: 9.5px; font-weight: 700; color: var(--brand-primary, #0284c7); background: var(--brand-primary-light, #e0f2fe); border: 1px solid rgba(2,132,199,0.25); padding: 1px 5px; border-radius: 4px; flex-shrink: 0;">{$cid}</span>
+                    <span style="max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: inline-block;">{$controlName}</span>
+                </a>
+HTML : '<span style="color: var(--text-muted, #64748b);">—</span>';
+
+            $rows .= <<<HTML
+            <tr class="req-card-box" style="border-bottom: 1px solid var(--border-light, #e2e8f0); transition: background 0.15s ease;" onmouseover="this.style.background='var(--bg-subtle, #f8fafc)'" onmouseout="this.style.background='transparent'">
+                <td style="padding: 10px 14px; white-space: nowrap; vertical-align: middle;">
+                    <span class="req-id-badge" style="font-family: 'JetBrains Mono', monospace; font-size: 10.5px; font-weight: 700; color: var(--brand-purple, #7c3aed); background: var(--brand-purple-light, #f5f3ff); border: 1px solid rgba(124, 58, 237, 0.25); padding: 3px 8px; border-radius: 6px; display: inline-block;">{$rid}</span>
+                </td>
+                <td style="padding: 10px 14px; vertical-align: middle;">
+                    <a href="{$reqUrl}" style="font-weight: 700; color: var(--text-title, #0f172a); text-decoration: none; display: block; line-height: 1.3; font-size: 13px;" onmouseover="this.style.color='var(--brand-purple, #7c3aed)'" onmouseout="this.style.color='var(--text-title, #0f172a)'">{$title}</a>
+                    {$reqTextHtml}
+                </td>
+                <td style="padding: 10px 14px; white-space: nowrap; vertical-align: middle;">
+                    {$mappedControlCol}
+                </td>
+                <td style="padding: 10px 14px; color: var(--text-body, #475569); font-size: 12px; font-weight: 500; vertical-align: middle;">
+                    {$owner}
+                </td>
+                <td style="padding: 10px 14px; text-align: right; white-space: nowrap; vertical-align: middle;">
+                    <a href="{$reqUrl}" style="display: inline-flex; align-items: center; gap: 4px; padding: 5px 12px; background: var(--brand-purple-light, #f5f3ff); border: 1px solid rgba(124, 58, 237, 0.3); border-radius: 6px; color: var(--brand-purple, #7c3aed); font-size: 11.5px; font-weight: 700; text-decoration: none; transition: all 0.2s ease;">
+                        <span>View</span>
+                        <span style="font-size: 11px;">↗</span>
+                    </a>
+                </td>
+            </tr>
+HTML;
+        }
+
+        return <<<HTML
+        <div class="ucl-table-container virtual-scroll-container" style="width: 100%; max-height: 520px; overflow-y: auto; overflow-x: auto; background: var(--bg-surface, #ffffff); border: 1px solid var(--border-light, #e2e8f0); border-radius: 10px; box-shadow: var(--shadow-sm, 0 1px 2px rgba(0,0,0,0.04)); margin-top: 8px; scroll-behavior: smooth;">
+            <table class="ucl-data-table" style="width: 100%; border-collapse: collapse; text-align: left; font-size: 12px;">
+                <thead style="position: sticky; top: 0; z-index: 10; background: var(--bg-subtle, #f8fafc);">
+                    <tr style="border-bottom: 1px solid var(--border-light, #e2e8f0);">
+                        <th style="padding: 10px 14px; font-size: 10.5px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted, #64748b);">REQUIREMENT ID</th>
+                        <th style="padding: 10px 14px; font-size: 10.5px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted, #64748b);">REQUIREMENT TITLE & DETAILS</th>
+                        <th style="padding: 10px 14px; font-size: 10.5px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted, #64748b);">MAPPED CONTROL</th>
+                        <th style="padding: 10px 14px; font-size: 10.5px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted, #64748b);">TYPICAL OWNER</th>
+                        <th style="padding: 10px 14px; font-size: 10.5px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted, #64748b); text-align: right;">ACTION</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {$rows}
+                </tbody>
+            </table>
+        </div>
+HTML;
     }
 
     protected function renderDomainsTable($domains): string

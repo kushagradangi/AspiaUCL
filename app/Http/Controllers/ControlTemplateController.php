@@ -277,7 +277,8 @@ HTML;
             '{{business_benefits}}'         => $control->business_benefits,
             '{{business_risks_if_missing}}' => $control->business_risks_if_missing,
             '{{primary_stakeholders}}'      => $control->primary_stakeholders,
-            '{{control_type}}'              => $control->control_type,
+            '{{control_nature}}'            => $control->control_nature,
+            '{{compensating_control}}'      => $control->compensating_control,
             '{{requirements_count}}'        => $requirementsCount,
             '{{requirement_count}}'         => $requirementsCount,
             '{{total_requirements}}'        => $requirementsCount,
@@ -896,7 +897,7 @@ HTML;
     <meta name="title" content="{{control_name}} ({{control_id}}) - Universal Control Library | ASPIA GRC">
     <meta name="description"
         content="Explore {{control_name}} ({{control_id}}), compliance requirements, business objectives, and framework mappings in ASPIA UCL.">
-    <meta name="keywords" content="{{control_id}}, {{control_name}}, {{control_category}}, {{control_type}}, {{criticality}}, GRC control, ASPIA UCL">
+    <meta name="keywords" content="{{control_id}}, {{control_name}}, {{control_category}}, {{control_nature}}, {{criticality}}, GRC control, ASPIA UCL">
     <meta name="author" content="ASPIA Unified Control Library">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://grc.aspia.io/controls/{{control_id}}">
@@ -1939,9 +1940,14 @@ HTML;
                             <div class="excel-label">Control Category</div>
                             <div class="excel-val">{{control_category}}</div>
                         </div>
+
                         <div class="excel-field-card">
-                            <div class="excel-label">Control Type</div>
-                            <div class="excel-val">{{control_type}}</div>
+                            <div class="excel-label">Control Nature</div>
+                            <div class="excel-val">{{control_nature}}</div>
+                        </div>
+                        <div class="excel-field-card">
+                            <div class="excel-label">Compensating Control</div>
+                            <div class="excel-val">{{compensating_control}}</div>
                         </div>
                         <div class="excel-field-card">
                             <div class="excel-label">Criticality</div>

@@ -404,7 +404,7 @@ HTML;
                 : '<span style="color: var(--text-muted, #94a3b8);">—</span>';
 
             $category = htmlspecialchars($control->control_category ?? 'Governance');
-            $type     = htmlspecialchars($control->control_type ?? 'Preventative');
+            $nature   = htmlspecialchars($control->control_nature ?? 'Preventative');
             $status   = htmlspecialchars($control->status ?? 'Active');
             $name     = htmlspecialchars($control->name);
             $cid      = htmlspecialchars($control->control_id);
@@ -422,7 +422,7 @@ HTML;
                 </td>
                 <td style="padding: 7px 12px; white-space: nowrap;">
                     <div style="font-weight: 600; color: var(--text-title, #0f172a); font-size: 11.5px;">{$category}</div>
-                    <div style="font-size: 9.5px; color: var(--text-muted, #94a3b8); margin-top: 1px;">{$type}</div>
+                    <div style="font-size: 9.5px; color: var(--text-muted, #94a3b8); margin-top: 1px;">{$nature}</div>
                 </td>
                 <td style="padding: 7px 12px; white-space: nowrap;">
                     {$criticalityBadge}

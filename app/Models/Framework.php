@@ -27,6 +27,18 @@ class Framework extends Model
     ];
 
     /**
+     * Boot the model to auto-sync related domains when framework is saved.
+     */
+    protected static function booted(): void
+    {
+        static::saved(function (Framework $framework) {
+            if (!empty($framework->related_domains)) {
+                app(\App\Services\RelationshipResolver::class)->syncFrameworkDomains($framework);
+            }
+        });
+    }
+
+    /**
      * Direct relationship: Framework has many Domains.
      */
     public function domains(): BelongsToMany
@@ -192,6 +204,14 @@ class Framework extends Model
     public function getMappedDomains()
     {
         $mapped = $this->domains()->with('controls')->get();
+
+        if ($mapped->isEmpty() && !empty($this->related_domains)) {
+            $synced = app(\App\Services\RelationshipResolver::class)->syncFrameworkDomains($this);
+            if ($synced->isNotEmpty()) {
+                $mapped = $this->domains()->with('controls')->get();
+            }
+        }
+
         if ($mapped->isNotEmpty()) {
             return $mapped->sortBy(fn ($domain) => [$domain->display_order, $domain->id])->values();
         }

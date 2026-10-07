@@ -83,7 +83,7 @@ class RequirementTemplateController extends Controller
         $controlName              = $control?->name ?? '';
         $controlCategory          = $control?->control_category ?? '';
         $controlSummary           = $control?->control_summary ?? '';
-        $controlType              = $control?->control_type ?? '';
+        $controlNature            = $control?->control_nature ?? '';
         $controlBusinessDesc      = $control?->business_description ?? '';
         $controlBusinessObj       = $control?->business_objective ?? '';
         $controlBusinessOwner     = $control?->business_owner ?? '';
@@ -159,7 +159,8 @@ HTML : ($domainName ? "<span class=\"badge-chip chip-cyan\">Domain: {$domainName
             '{{control_name}}'               => $controlName,
             '{{control_category}}'           => $controlCategory,
             '{{control_summary}}'            => $controlSummary,
-            '{{control_type}}'               => $controlType,
+            '{{control_type}}'               => $controlNature,
+            '{{control_nature}}'             => $controlNature,
             '{{business_description}}'      => $controlBusinessDesc,
             '{{business_objective}}'        => $controlBusinessObj,
             '{{business_owner}}'            => $controlBusinessOwner,
@@ -1356,7 +1357,7 @@ HTML;
                             <tr><th>2. Domain Code</th><td><strong class="font-mono" style="color: var(--accent-purple);">{{domain_code}}</strong></td></tr>
                             <tr><th>3. Control Name</th><td><strong>{{control_name}}</strong></td></tr>
                             <tr><th>4. Control Category</th><td><span class="badge-chip chip-purple">{{control_category}}</span></td></tr>
-                            <tr><th>5. Control Type</th><td><span class="badge-chip chip-emerald">{{control_type}}</span></td></tr>
+                            <tr><th>5. Control Nature</th><td><span class="badge-chip chip-emerald">{{control_nature}}</span></td></tr>
                             <tr><th>6. Criticality</th><td><span class="badge-chip chip-amber">{{criticality}}</span></td></tr>
                             <tr><th>7. Status</th><td><span class="badge-chip chip-emerald">{{status}}</span></td></tr>
                             <tr><th>8. Version</th><td class="font-mono">{{version}}</td></tr>

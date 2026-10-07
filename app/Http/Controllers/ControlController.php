@@ -75,7 +75,13 @@ class ControlController extends Controller
                     )
 
                     ->orWhere(
-                        'control_type',
+                        'control_nature',
+                        'like',
+                        "%{$search}%"
+                    )
+
+                    ->orWhere(
+                        'compensating_control',
                         'like',
                         "%{$search}%"
                     );
@@ -174,7 +180,10 @@ class ControlController extends Controller
             'primary_stakeholders' =>
                 'nullable|string',
 
-            'control_type' =>
+            'control_nature' =>
+                'nullable|string|max:255',
+
+            'compensating_control' =>
                 'nullable|string|max:255',
         ];
     }

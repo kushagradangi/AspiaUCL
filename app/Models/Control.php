@@ -61,10 +61,13 @@ class Control extends Model
         // 16. Primary Stakeholders
         'primary_stakeholders',
 
-        // 17. Control Type
-        'control_type',
+        // 17. Control Nature
+        'control_nature',
 
-        // 18. Display Order
+        // 19. Compensating Control
+        'compensating_control',
+
+        // 20. Display Order
         'display_order',
     ];
 

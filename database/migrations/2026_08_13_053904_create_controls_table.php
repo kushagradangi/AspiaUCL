@@ -65,8 +65,11 @@ return new class extends Migration
             // 16. Primary Stakeholders
             $table->longText('primary_stakeholders')->nullable();
 
-            // 17. Control Type
-            $table->string('control_type')->nullable();
+            // 17. Control Nature
+            $table->string('control_nature')->nullable();
+
+            // 19. Compensating Control
+            $table->string('compensating_control')->nullable();
 
             $table->timestamps();
         });

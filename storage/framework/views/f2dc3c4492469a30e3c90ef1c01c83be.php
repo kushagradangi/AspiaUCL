@@ -1,10 +1,8 @@
-@extends('layouts.aspiaUcl')
+<?php $__env->startSection('title', ' | Requirements'); ?>
 
-@section('title', ' | Frameworks')
+<?php $__env->startSection('page-title', 'Requirements'); ?>
 
-@section('page-title', 'Frameworks')
-
-@section('content')
+<?php $__env->startSection('content'); ?>
 
 <style>
 
@@ -12,7 +10,7 @@
        PAGE
     ========================================================= */
 
-    .framework-page {
+    .requirement-page {
         width: 100%;
     }
 
@@ -136,7 +134,7 @@
        PANEL
     ========================================================= */
 
-    .framework-panel {
+    .requirement-panel {
         background: #162544;
 
         border: 1px solid #1c4266;
@@ -223,16 +221,16 @@
     }
 
 
-    .framework-table {
+    .requirement-table {
         width: 100%;
 
-        min-width: 1500px;
+        min-width: 1200px;
 
         border-collapse: collapse;
     }
 
 
-    .framework-table th {
+    .requirement-table th {
         text-align: left;
 
         padding: 14px 16px;
@@ -253,7 +251,7 @@
     }
 
 
-    .framework-table td {
+    .requirement-table td {
         padding: 16px;
 
         border-top: 1px solid rgba(255,255,255,.06);
@@ -268,32 +266,26 @@
     }
 
 
-    .framework-table tr:hover td {
+    .requirement-table tr:hover td {
         background: rgba(22,196,244,.025);
     }
 
 
-    .framework-id {
+    .requirement-id {
         color: #ffffff;
 
         font-weight: 500;
     }
 
 
-    .framework-code {
+    .control-id {
         color: #ffffff;
 
         font-weight: 500;
     }
 
 
-    .framework-name {
-        color: #ffffff;
-
-        font-weight: 500;
-    }
-
-    .framework-name-link {
+    .requirement-title-link {
         color: #16C4F4;
         text-decoration: underline;
         text-underline-offset: 3px;
@@ -301,9 +293,19 @@
         transition: color 0.2s ease, text-decoration-color 0.2s ease;
     }
 
-    .framework-name-link:hover {
+    .requirement-title-link:hover {
         color: #38bdf8;
         text-decoration: underline;
+    }
+
+
+    .requirement-text {
+        max-width: 250px;
+        display: inline-block;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        vertical-align: middle;
     }
 
 
@@ -435,70 +437,6 @@
         padding: 0 8px;
         color: #71829f;
         font-weight: 400;
-    }
-
-
-    /* =========================================================
-       ACTIVITY
-    ========================================================= */
-
-    .activity-list {
-        padding: 5px 20px;
-    }
-
-
-    .activity-item {
-        display: flex;
-
-        align-items: center;
-
-        gap: 13px;
-
-        padding: 15px 0;
-
-        border-bottom: 1px solid rgba(255,255,255,.06);
-    }
-
-
-    .activity-item:last-child {
-        border-bottom: none;
-    }
-
-
-    .activity-icon {
-        width: 34px;
-
-        height: 34px;
-
-        border-radius: 50%;
-
-        background: rgba(22,196,244,.12);
-
-        color: #16C4F4;
-
-        display: flex;
-
-        align-items: center;
-
-        justify-content: center;
-
-        flex-shrink: 0;
-    }
-
-
-    .activity-text {
-        color: #b9c5d8;
-
-        font-size: 13px;
-    }
-
-
-    .activity-time {
-        color: #63728c;
-
-        font-size: 11px;
-
-        margin-top: 3px;
     }
 
 
@@ -686,7 +624,7 @@
 
 
     /* =========================================================
-       FRAMEWORK TEMPLATE
+       REQUIREMENT TEMPLATE
     ========================================================= */
 
     .template-editor {
@@ -891,43 +829,39 @@
 </style>
 
 
-<div class="framework-page">
+<div class="requirement-page">
 
 
-    {{-- =====================================================
-         SUCCESS MESSAGE
-    ====================================================== --}}
+    
 
-    @if(session('success'))
+    <?php if(session('success')): ?>
 
         <div class="alert-success">
 
-            {{ session('success') }}
+            <?php echo e(session('success')); ?>
+
 
         </div>
 
-    @endif
+    <?php endif; ?>
 
-    {{-- =====================================================
-     ERROR MESSAGE
-    ====================================================== --}}
+    
 
-    @if(session('error'))
+    <?php if(session('error')): ?>
 
         <div class="alert-error">
 
-            {{ session('error') }}
+            <?php echo e(session('error')); ?>
+
 
         </div>
 
-    @endif
+    <?php endif; ?>
 
 
-    {{-- =====================================================
-         VALIDATION ERRORS
-    ====================================================== --}}
+    
 
-    @if($errors->any())
+    <?php if($errors->any()): ?>
 
         <div class="alert-error">
 
@@ -935,35 +869,34 @@
 
             <ul style="margin:8px 0 0 18px;">
 
-                @foreach($errors->all() as $error)
+                <?php $__currentLoopData = $errors->all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $error): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
 
                     <li>
-                        {{ $error }}
+                        <?php echo e($error); ?>
+
                     </li>
 
-                @endforeach
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
             </ul>
 
         </div>
 
-    @endif
+    <?php endif; ?>
 
 
-    {{-- =====================================================
-         PAGE HEADER
-    ====================================================== --}}
+    
 
     <div class="page-header">
 
         <div>
 
             <h1>
-                Frameworks
+                Requirements
             </h1>
 
             <p>
-                Manage governance and compliance frameworks.
+                Manage compliance requirements under your controls.
             </p>
 
         </div>
@@ -972,24 +905,20 @@
         <div class="header-actions">
 
 
-            {{-- =================================================
-                 ADD FRAMEWORK TEMPLATE
-            ================================================== --}}
+            
 
             <button
                 type="button"
                 class="btn-aspia btn-secondary-aspia"
-                onclick="openModal('templateModal')"
+                onclick="openModal('requirementTemplateModal')"
             >
 
-                + Add Framework Template
+                + Add Requirement Template
 
             </button>
 
 
-            {{-- =================================================
-                 IMPORT XLSX
-            ================================================== --}}
+            
 
             <button
                 type="button"
@@ -1002,9 +931,7 @@
             </button>
 
 
-            {{-- =================================================
-                 ADD FRAMEWORK
-            ================================================== --}}
+            
 
             <button
                 type="button"
@@ -1012,7 +939,8 @@
                 onclick="openModal('addModal')"
             >
 
-                + Add Framework
+                + Add Requirement
+
             </button>
 
         </div>
@@ -1020,24 +948,22 @@
     </div>
 
 
-    {{-- =====================================================
-         FRAMEWORK MANAGEMENT
-    ====================================================== --}}
+    
 
-    <div class="framework-panel">
+    <div class="requirement-panel">
 
 
         <div class="panel-header">
 
             <h2>
-                Framework Management
+                Requirement Management
             </h2>
 
 
-            {{-- SEARCH --}}
+            
 
             <form
-                action="{{ route('frameworks.index') }}"
+                action="<?php echo e(route('requirements.index')); ?>"
                 method="GET"
                 class="search-form"
             >
@@ -1046,8 +972,8 @@
                     type="text"
                     name="search"
                     class="search-input"
-                    placeholder="Search frameworks..."
-                    value="{{ request('search') }}"
+                    placeholder="Search requirements..."
+                    value="<?php echo e(request('search')); ?>"
                 >
 
 
@@ -1065,13 +991,11 @@
         </div>
 
 
-        {{-- =================================================
-             TABLE
-        ================================================== --}}
+        
 
         <div class="table-wrapper">
 
-            <table class="framework-table">
+            <table class="requirement-table">
 
 
                 <thead>
@@ -1079,43 +1003,23 @@
                     <tr>
 
                         <th>
-                            Framework ID
+                            Requirement ID
                         </th>
 
                         <th>
-                            Framework Code
+                            Control ID
                         </th>
 
                         <th>
-                            Framework Name
+                            Requirement Title
                         </th>
 
                         <th>
-                            Version
+                            Requirement
                         </th>
 
                         <th>
-                            Framework Family
-                        </th>
-
-                        <th>
-                            Category
-                        </th>
-
-                        <th>
-                            Publisher
-                        </th>
-
-                        <th>
-                            Region
-                        </th>
-
-                        <th>
-                            Industry
-                        </th>
-
-                        <th>
-                            Framework Type
+                            Typical Owner
                         </th>
 
                         <th>
@@ -1134,167 +1038,132 @@
                 <tbody>
 
 
-                    @forelse($frameworks as $framework)
+                    <?php $__empty_1 = true; $__currentLoopData = $requirements; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $requirement): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
 
 
                         <tr>
 
 
-                            {{-- Framework ID --}}
+                            
 
                             <td>
 
-                                <span class="framework-id">
+                                <span class="requirement-id">
 
-                                    {{ $framework->framework_id }}
+                                    <?php echo e($requirement->requirement_id); ?>
+
 
                                 </span>
 
                             </td>
 
 
-                            {{-- Framework Code --}}
+                            
 
                             <td>
 
-                                <span class="framework-code">
+                                <span class="control-id">
 
-                                    {{ $framework->framework_code }}
+                                    <?php echo e($requirement->control_id ?: '—'); ?>
+
 
                                 </span>
 
                             </td>
 
 
-                            {{-- Framework Name --}}
+                            
 
                             <td>
 
                                 <a
-                                    href="{{ route(
-                                        'frameworks.show',
-                                        ['slug' => $framework->slug]
-                                    ) }}"
-                                    class="framework-name-link"
+                                    href="<?php echo e(route(
+                                        'requirements.show',
+                                        ['requirement_id' => $requirement->requirement_id]
+                                    )); ?>"
+                                    class="requirement-title-link"
                                 >
 
-                                    {{ $framework->name }}
+                                    <?php echo e($requirement->requirement_title); ?>
+
 
                                 </a>
 
                             </td>
 
 
-                            {{-- Version --}}
+                            
 
                             <td>
 
-                                {{ $framework->version ?: '—' }}
+                                <span class="requirement-text" title="<?php echo e($requirement->requirement); ?>">
+                                    <?php echo e(\Illuminate\Support\Str::limit(
+                                        $requirement->requirement,
+                                        55
+                                    )); ?>
+
+                                </span>
 
                             </td>
 
 
-                            {{-- Family --}}
+                            
 
                             <td>
 
-                                {{ $framework->framework_family ?: '—' }}
+                                <?php echo e($requirement->typical_owner ?: '—'); ?>
+
 
                             </td>
 
 
-                            {{-- Category --}}
+                            
 
                             <td>
 
-                                {{ $framework->category ?: '—' }}
+                                <?php echo e($requirement->created_at?->format('d M Y')); ?>
+
 
                             </td>
 
 
-                            {{-- Publisher --}}
-
-                            <td>
-
-                                {{ $framework->publisher ?: '—' }}
-
-                            </td>
-
-
-                            {{-- Region --}}
-
-                            <td>
-
-                                {{ $framework->region ?: '—' }}
-
-                            </td>
-
-
-                            {{-- Industry --}}
-
-                            <td>
-
-                                {{ $framework->industry ?: '—' }}
-
-                            </td>
-
-
-                            {{-- Type --}}
-
-                            <td>
-
-                                {{ $framework->framework_type ?: '—' }}
-
-                            </td>
-
-
-                            {{-- Created --}}
-
-                            <td>
-
-                                {{ $framework->created_at?->format('d M Y') }}
-
-                            </td>
-
-
-                            {{-- Actions --}}
+                            
 
                             <td>
 
                                 <div class="actions">
 
 
-                                    {{-- EDIT --}}
+                                    
 
                                     <button
                                         type="button"
                                         class="action-btn"
 
                                         onclick="openEditModal(
+                                            <?php echo e($requirement->id); ?>,
 
-                                            {{ $framework->id }},
+                                            <?php echo \Illuminate\Support\Js::from($requirement->requirement_id)->toHtml() ?>,
 
-                                            @js($framework->framework_id),
+                                            <?php echo \Illuminate\Support\Js::from($requirement->control_id)->toHtml() ?>,
 
-                                            @js($framework->framework_code),
+                                            <?php echo \Illuminate\Support\Js::from($requirement->requirement_title)->toHtml() ?>,
 
-                                            @js($framework->name),
+                                            <?php echo \Illuminate\Support\Js::from($requirement->requirement)->toHtml() ?>,
 
-                                            @js($framework->version),
+                                            <?php echo \Illuminate\Support\Js::from($requirement->why_requirement_exists)->toHtml() ?>,
 
-                                            @js($framework->framework_family),
+                                            <?php echo \Illuminate\Support\Js::from($requirement->implementation_guidance)->toHtml() ?>,
 
-                                            @js($framework->category),
+                                            <?php echo \Illuminate\Support\Js::from($requirement->common_audit_findings)->toHtml() ?>,
 
-                                            @js($framework->publisher),
+                                            <?php echo \Illuminate\Support\Js::from($requirement->common_mistakes)->toHtml() ?>,
 
-                                            @js($framework->region),
+                                            <?php echo \Illuminate\Support\Js::from($requirement->best_practices)->toHtml() ?>,
 
-                                            @js($framework->industry),
+                                            <?php echo \Illuminate\Support\Js::from($requirement->business_examples)->toHtml() ?>,
 
-                                            @js($framework->framework_type),
-
-                                            @js($framework->related_domains)
+                                            <?php echo \Illuminate\Support\Js::from($requirement->typical_owner)->toHtml() ?>
 
                                         )"
                                     >
@@ -1304,20 +1173,20 @@
                                     </button>
 
 
-                                    {{-- DELETE --}}
+                                    
 
                                     <form
-                                        action="{{ route('frameworks.destroy', $framework) }}"
+                                        action="<?php echo e(route('requirements.destroy', $requirement)); ?>"
                                         method="POST"
 
                                         onsubmit="return confirm(
-                                            'Are you sure you want to delete this framework?'
+                                            'Are you sure you want to delete this requirement?'
                                         )"
                                     >
 
-                                        @csrf
+                                        <?php echo csrf_field(); ?>
 
-                                        @method('DELETE')
+                                        <?php echo method_field('DELETE'); ?>
 
 
                                         <button
@@ -1340,13 +1209,13 @@
                         </tr>
 
 
-                    @empty
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
 
 
                         <tr>
 
                             <td
-                                colspan="12"
+                                colspan="7"
                                 class="empty-state"
                             >
 
@@ -1354,14 +1223,14 @@
                                     ◇
                                 </div>
 
-                                No frameworks found.
+                                No requirements found.
 
                             </td>
 
                         </tr>
 
 
-                    @endforelse
+                    <?php endif; ?>
 
 
                 </tbody>
@@ -1371,73 +1240,73 @@
         </div>
 
 
-        {{-- =================================================
-             PAGINATION
-        ================================================== --}}
+        
 
-        @if($frameworks->hasPages())
+        <?php if($requirements->hasPages()): ?>
 
             <div class="pagination-area">
 
                 <div class="custom-pagination">
 
-                    {{-- Previous --}}
-                    @if($frameworks->onFirstPage())
+                    
+                    <?php if($requirements->onFirstPage()): ?>
                         <span class="disabled-page">Previous</span>
-                    @else
-                        <a href="{{ $frameworks->previousPageUrl() }}">
+                    <?php else: ?>
+                        <a href="<?php echo e($requirements->previousPageUrl()); ?>">
                             Previous
                         </a>
-                    @endif
+                    <?php endif; ?>
 
-                    {{-- Page numbers --}}
-                    @foreach(range(1, $frameworks->lastPage()) as $page)
+                    
+                    <?php $__currentLoopData = range(1, $requirements->lastPage()); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $page): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
 
-                        @if(
+                        <?php if(
                             $page == 1 ||
-                            $page == $frameworks->lastPage() ||
-                            abs($page - $frameworks->currentPage()) <= 2
-                        )
+                            $page == $requirements->lastPage() ||
+                            abs($page - $requirements->currentPage()) <= 2
+                        ): ?>
 
-                            @if($page == $frameworks->currentPage())
+                            <?php if($page == $requirements->currentPage()): ?>
 
                                 <span class="active-page">
-                                    {{ $page }}
+                                    <?php echo e($page); ?>
+
                                 </span>
 
-                            @else
+                            <?php else: ?>
 
-                                <a href="{{ $frameworks->url($page) }}">
-                                    {{ $page }}
+                                <a href="<?php echo e($requirements->url($page)); ?>">
+                                    <?php echo e($page); ?>
+
                                 </a>
 
-                            @endif
+                            <?php endif; ?>
 
-                        @elseif(
+                        <?php elseif(
                             $page == 2 ||
-                            $page == $frameworks->lastPage() - 1
-                        )
+                            $page == $requirements->lastPage() - 1
+                        ): ?>
 
                             <span class="pagination-info">...</span>
 
-                        @endif
+                        <?php endif; ?>
 
-                    @endforeach
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
-                    {{-- Next --}}
-                    @if($frameworks->hasMorePages())
-                        <a href="{{ $frameworks->nextPageUrl() }}">
+                    
+                    <?php if($requirements->hasMorePages()): ?>
+                        <a href="<?php echo e($requirements->nextPageUrl()); ?>">
                             Next
                         </a>
-                    @else
+                    <?php else: ?>
                         <span class="disabled-page">Next</span>
-                    @endif
+                    <?php endif; ?>
 
                 </div>
 
             </div>
 
-        @endif
+        <?php endif; ?>
 
 
     </div>
@@ -1447,14 +1316,12 @@
 
 
 
-{{-- =========================================================
-     ADD FRAMEWORK TEMPLATE MODAL
-========================================================= --}}
+
 
 <div
-    id="templateModal"
+    id="requirementTemplateModal"
     class="modal-overlay"
-    onclick="closeModalOutside(event, 'templateModal')"
+    onclick="closeModalOutside(event, 'requirementTemplateModal')"
 >
 
 
@@ -1464,14 +1331,14 @@
         <div class="modal-header">
 
             <h2>
-                Add Framework Template
+                Add Requirement Template
             </h2>
 
 
             <button
                 type="button"
                 class="close-modal"
-                onclick="closeModal('templateModal')"
+                onclick="closeModal('requirementTemplateModal')"
             >
 
                 ×
@@ -1482,46 +1349,14 @@
 
 
         <form
-            action="{{ route('frameworks.template.store') }}"
+            action="<?php echo e(route('requirements.template.store')); ?>"
             method="POST"
         >
 
-            @csrf
+            <?php echo csrf_field(); ?>
 
 
             <div class="modal-body">
-
-
-                <div class="form-group">
-
-
-                    <label class="form-label">
-
-                        Framework Type
-
-                        <span class="required-star">
-                            *
-                        </span>
-
-                    </label>
-
-
-                    <select
-                        name="framework_type"
-                        id="templateFrameworkType"
-                        class="form-control-aspia"
-                        onchange="onFrameworkTypeChange(this.value)"
-                        required
-                    >
-                        <option value="" disabled selected>-- Select Framework Type --</option>
-                        @if(isset($frameworkTypes) && count($frameworkTypes) > 0)
-                            @foreach($frameworkTypes as $type)
-                                <option value="{{ $type }}">{{ $type }}</option>
-                            @endforeach
-                        @endif
-                    </select>
-
-                </div>
 
 
                 <div class="form-group">
@@ -1535,7 +1370,7 @@
 
                     <textarea
                         name="html_content"
-                        id="frameworkTemplate"
+                        id="requirementTemplate"
                         class="template-editor"
                         placeholder="Write your HTML template here..."
                         required
@@ -1547,7 +1382,7 @@
 
                         <div class="template-help-title">
 
-                            Available Framework Placeholders
+                            Available Requirement Placeholders
 
                         </div>
 
@@ -1555,9 +1390,9 @@
                         <div class="template-help-text">
 
                             Use these placeholders inside your HTML.
-                            When a Framework record is opened,
+                            When a Requirement record is opened,
                             the placeholders will be replaced with
-                            the actual Framework values.
+                            the actual Requirement values.
 
                         </div>
 
@@ -1568,236 +1403,209 @@
                             <button
                                 type="button"
                                 class="placeholder-btn"
-                                data-placeholder="&#123;&#123;framework_id&#125;&#125;"
-                                onclick="insertFrameworkPlaceholder(this.dataset.placeholder)"
+                                data-placeholder="&#123;&#123;requirement_id&#125;&#125;"
+                                onclick="insertRequirementPlaceholder(this.dataset.placeholder)"
                             >
-
-                                &#123;&#123;framework_id&#125;&#125;
-
+                                &#123;&#123;requirement_id&#125;&#125;
                             </button>
 
 
                             <button
                                 type="button"
                                 class="placeholder-btn"
-                                data-placeholder="&#123;&#123;framework_code&#125;&#125;"
-                                onclick="insertFrameworkPlaceholder(this.dataset.placeholder)"
+                                data-placeholder="&#123;&#123;control_id&#125;&#125;"
+                                onclick="insertRequirementPlaceholder(this.dataset.placeholder)"
                             >
-
-                                &#123;&#123;framework_code&#125;&#125;
-
+                                &#123;&#123;control_id&#125;&#125;
                             </button>
 
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="&#123;&#123;requirement_title&#125;&#125;"
+                                onclick="insertRequirementPlaceholder(this.dataset.placeholder)"
+                            >
+                                &#123;&#123;requirement_title&#125;&#125;
+                            </button>
+
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="&#123;&#123;requirement&#125;&#125;"
+                                onclick="insertRequirementPlaceholder(this.dataset.placeholder)"
+                            >
+                                &#123;&#123;requirement&#125;&#125;
+                            </button>
+
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="&#123;&#123;why_requirement_exists&#125;&#125;"
+                                onclick="insertRequirementPlaceholder(this.dataset.placeholder)"
+                            >
+                                &#123;&#123;why_requirement_exists&#125;&#125;
+                            </button>
+
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="&#123;&#123;implementation_guidance&#125;&#125;"
+                                onclick="insertRequirementPlaceholder(this.dataset.placeholder)"
+                            >
+                                &#123;&#123;implementation_guidance&#125;&#125;
+                            </button>
+
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="&#123;&#123;common_audit_findings&#125;&#125;"
+                                onclick="insertRequirementPlaceholder(this.dataset.placeholder)"
+                            >
+                                &#123;&#123;common_audit_findings&#125;&#125;
+                            </button>
+
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="&#123;&#123;common_mistakes&#125;&#125;"
+                                onclick="insertRequirementPlaceholder(this.dataset.placeholder)"
+                            >
+                                &#123;&#123;common_mistakes&#125;&#125;
+                            </button>
+
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="&#123;&#123;best_practices&#125;&#125;"
+                                onclick="insertRequirementPlaceholder(this.dataset.placeholder)"
+                            >
+                                &#123;&#123;best_practices&#125;&#125;
+                            </button>
+
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="&#123;&#123;business_examples&#125;&#125;"
+                                onclick="insertRequirementPlaceholder(this.dataset.placeholder)"
+                            >
+                                &#123;&#123;business_examples&#125;&#125;
+                            </button>
+
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="&#123;&#123;typical_owner&#125;&#125;"
+                                onclick="insertRequirementPlaceholder(this.dataset.placeholder)"
+                            >
+                                &#123;&#123;typical_owner&#125;&#125;
+                            </button>
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="&#123;&#123;control_name&#125;&#125;"
+                                onclick="insertRequirementPlaceholder(this.dataset.placeholder)"
+                            >
+                                &#123;&#123;control_name&#125;&#125;
+                            </button>
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="&#123;&#123;control_category&#125;&#125;"
+                                onclick="insertRequirementPlaceholder(this.dataset.placeholder)"
+                            >
+                                &#123;&#123;control_category&#125;&#125;
+                            </button>
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="&#123;&#123;control_summary&#125;&#125;"
+                                onclick="insertRequirementPlaceholder(this.dataset.placeholder)"
+                            >
+                                &#123;&#123;control_summary&#125;&#125;
+                            </button>
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="&#123;&#123;domain_name&#125;&#125;"
+                                onclick="insertRequirementPlaceholder(this.dataset.placeholder)"
+                            >
+                                &#123;&#123;domain_name&#125;&#125;
+                            </button>
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="&#123;&#123;domain_code&#125;&#125;"
+                                onclick="insertRequirementPlaceholder(this.dataset.placeholder)"
+                            >
+                                &#123;&#123;domain_code&#125;&#125;
+                            </button>
 
                             <button
                                 type="button"
                                 class="placeholder-btn"
                                 data-placeholder="&#123;&#123;framework_name&#125;&#125;"
-                                onclick="insertFrameworkPlaceholder(this.dataset.placeholder)"
+                                onclick="insertRequirementPlaceholder(this.dataset.placeholder)"
                             >
-
                                 &#123;&#123;framework_name&#125;&#125;
-
-                            </button>
-
-
-                            <button
-                                type="button"
-                                class="placeholder-btn"
-                                data-placeholder="&#123;&#123;version&#125;&#125;"
-                                onclick="insertFrameworkPlaceholder(this.dataset.placeholder)"
-                            >
-
-                                &#123;&#123;version&#125;&#125;
-
-                            </button>
-
-
-                            <button
-                                type="button"
-                                class="placeholder-btn"
-                                data-placeholder="&#123;&#123;framework_family&#125;&#125;"
-                                onclick="insertFrameworkPlaceholder(this.dataset.placeholder)"
-                            >
-
-                                &#123;&#123;framework_family&#125;&#125;
-
-                            </button>
-
-
-                            <button
-                                type="button"
-                                class="placeholder-btn"
-                                data-placeholder="&#123;&#123;category&#125;&#125;"
-                                onclick="insertFrameworkPlaceholder(this.dataset.placeholder)"
-                            >
-
-                                &#123;&#123;category&#125;&#125;
-
-                            </button>
-
-
-                            <button
-                                type="button"
-                                class="placeholder-btn"
-                                data-placeholder="&#123;&#123;publisher&#125;&#125;"
-                                onclick="insertFrameworkPlaceholder(this.dataset.placeholder)"
-                            >
-
-                                &#123;&#123;publisher&#125;&#125;
-
-                            </button>
-
-
-                            <button
-                                type="button"
-                                class="placeholder-btn"
-                                data-placeholder="&#123;&#123;region&#125;&#125;"
-                                onclick="insertFrameworkPlaceholder(this.dataset.placeholder)"
-                            >
-
-                                &#123;&#123;region&#125;&#125;
-
-                            </button>
-
-
-                            <button
-                                type="button"
-                                class="placeholder-btn"
-                                data-placeholder="&#123;&#123;industry&#125;&#125;"
-                                onclick="insertFrameworkPlaceholder(this.dataset.placeholder)"
-                            >
-
-                                &#123;&#123;industry&#125;&#125;
-
-                            </button>
-
-
-                            <button
-                                type="button"
-                                class="placeholder-btn"
-                                data-placeholder="&#123;&#123;framework_type&#125;&#125;"
-                                onclick="insertFrameworkPlaceholder(this.dataset.placeholder)"
-                            >
-
-                                &#123;&#123;framework_type&#125;&#125;
-
                             </button>
 
                             <button
                                 type="button"
                                 class="placeholder-btn"
-                                data-placeholder="&#123;&#123;description&#125;&#125;"
-                                onclick="insertFrameworkPlaceholder(this.dataset.placeholder)"
+                                data-placeholder="&#123;&#123;control_badge&#125;&#125;"
+                                onclick="insertRequirementPlaceholder(this.dataset.placeholder)"
                             >
-
-                                &#123;&#123;description&#125;&#125;
-
+                                &#123;&#123;control_badge&#125;&#125;
                             </button>
 
                             <button
                                 type="button"
                                 class="placeholder-btn"
-                                data-placeholder="&#123;&#123;domains_count&#125;&#125;"
-                                onclick="insertFrameworkPlaceholder(this.dataset.placeholder)"
+                                data-placeholder="&#123;&#123;domain_badge&#125;&#125;"
+                                onclick="insertRequirementPlaceholder(this.dataset.placeholder)"
                             >
-
-                                &#123;&#123;domains_count&#125;&#125;
-
+                                &#123;&#123;domain_badge&#125;&#125;
                             </button>
 
                             <button
                                 type="button"
                                 class="placeholder-btn"
-                                data-placeholder="&#123;&#123;domains_table&#125;&#125;"
-                                onclick="insertFrameworkPlaceholder(this.dataset.placeholder)"
+                                data-placeholder="&#123;&#123;framework_badge&#125;&#125;"
+                                onclick="insertRequirementPlaceholder(this.dataset.placeholder)"
                             >
-
-                                &#123;&#123;domains_table&#125;&#125;
-
+                                &#123;&#123;framework_badge&#125;&#125;
                             </button>
 
                             <button
                                 type="button"
                                 class="placeholder-btn"
-                                data-placeholder="&#123;&#123;domains_list&#125;&#125;"
-                                onclick="insertFrameworkPlaceholder(this.dataset.placeholder)"
+                                data-placeholder="&#123;&#123;domain_id&#125;&#125;"
+                                onclick="insertRequirementPlaceholder(this.dataset.placeholder)"
                             >
-
-                                &#123;&#123;domains_list&#125;&#125;
-
+                                &#123;&#123;domain_id&#125;&#125;
                             </button>
 
                             <button
                                 type="button"
                                 class="placeholder-btn"
-                                data-placeholder="&#123;&#123;controls_count&#125;&#125;"
-                                onclick="insertFrameworkPlaceholder(this.dataset.placeholder)"
+                                data-placeholder="&#123;&#123;framework_id&#125;&#125;"
+                                onclick="insertRequirementPlaceholder(this.dataset.placeholder)"
                             >
-                                &#123;&#123;controls_count&#125;&#125;
-                            </button>
-
-                            <button
-                                type="button"
-                                class="placeholder-btn"
-                                data-placeholder="&#123;&#123;domain_id_chips&#125;&#125;"
-                                onclick="insertFrameworkPlaceholder(this.dataset.placeholder)"
-                            >
-                                &#123;&#123;domain_id_chips&#125;&#125;
-                            </button>
-
-                            <button
-                                type="button"
-                                class="placeholder-btn"
-                                data-placeholder="&#123;&#123;control_id_chips&#125;&#125;"
-                                onclick="insertFrameworkPlaceholder(this.dataset.placeholder)"
-                            >
-                                &#123;&#123;control_id_chips&#125;&#125;
-                            </button>
-
-                            <button
-                                type="button"
-                                class="placeholder-btn"
-                                data-placeholder="&#123;&#123;controls_table&#125;&#125;"
-                                onclick="insertFrameworkPlaceholder(this.dataset.placeholder)"
-                            >
-                                &#123;&#123;controls_table&#125;&#125;
-                            </button>
-
-                            <button
-                                type="button"
-                                class="placeholder-btn"
-                                data-placeholder="&#123;&#123;controls_hierarchy&#125;&#125;"
-                                onclick="insertFrameworkPlaceholder(this.dataset.placeholder)"
-                            >
-                                &#123;&#123;controls_hierarchy&#125;&#125;
-                            </button>
-
-                            <button
-                                type="button"
-                                class="placeholder-btn"
-                                data-placeholder="&#123;&#123;requirements_count&#125;&#125;"
-                                onclick="insertFrameworkPlaceholder(this.dataset.placeholder)"
-                            >
-                                &#123;&#123;requirements_count&#125;&#125;
-                            </button>
-
-                            <button
-                                type="button"
-                                class="placeholder-btn"
-                                data-placeholder="&#123;&#123;requirement_id_chips&#125;&#125;"
-                                onclick="insertFrameworkPlaceholder(this.dataset.placeholder)"
-                            >
-                                &#123;&#123;requirement_id_chips&#125;&#125;
-                            </button>
-
-                            <button
-                                type="button"
-                                class="placeholder-btn"
-                                data-placeholder="&#123;&#123;requirements_table&#125;&#125;"
-                                onclick="insertFrameworkPlaceholder(this.dataset.placeholder)"
-                            >
-                                &#123;&#123;requirements_table&#125;&#125;
+                                &#123;&#123;framework_id&#125;&#125;
                             </button>
 
                         </div>
@@ -1814,27 +1622,20 @@
 
             <div class="modal-footer">
 
-
                 <button
                     type="button"
                     class="btn-aspia btn-secondary-aspia"
-                    onclick="closeModal('templateModal')"
+                    onclick="closeModal('requirementTemplateModal')"
                 >
-
                     Cancel
-
                 </button>
-
 
                 <button
                     type="submit"
                     class="btn-aspia btn-primary-aspia"
                 >
-
                     Save Template
-
                 </button>
-
 
             </div>
 
@@ -1849,650 +1650,11 @@
 
 
 
-{{-- =========================================================
-     ADD FRAMEWORK MODAL
-========================================================= --}}
 
-<div
-    id="addModal"
-    class="modal-overlay"
-
-    onclick="closeModalOutside(event, 'addModal')"
->
-
-
-    <div class="modal-box">
-
-
-        <div class="modal-header">
-
-            <h2>
-                Add Framework
-            </h2>
-
-
-            <button
-                type="button"
-                class="close-modal"
-
-                onclick="closeModal('addModal')"
-            >
-
-                ×
-
-            </button>
-
-        </div>
-
-
-        <form
-            action="{{ route('frameworks.store') }}"
-            method="POST"
-        >
-
-            @csrf
-
-
-            <div class="modal-body">
-
-
-                <div class="form-grid">
-
-
-                    {{-- FRAMEWORK ID --}}
-
-                    <div class="form-group">
-
-                        <label class="form-label">
-
-                            Framework ID
-
-                            <span class="required-star">*</span>
-
-                        </label>
-
-
-                        <input
-                            type="text"
-                            name="framework_id"
-                            class="form-control-aspia"
-                            placeholder="Example: FW-001"
-                            required
-                        >
-
-                    </div>
-
-
-                    {{-- FRAMEWORK CODE --}}
-
-                    <div class="form-group">
-
-                        <label class="form-label">
-
-                            Framework Code
-
-                            <span class="required-star">*</span>
-
-                        </label>
-
-
-                        <input
-                            type="text"
-                            name="framework_code"
-                            class="form-control-aspia"
-                            placeholder="Example: ISO27001"
-                            required
-                        >
-
-                    </div>
-
-
-                    {{-- FRAMEWORK NAME --}}
-
-                    <div class="form-group">
-
-                        <label class="form-label">
-
-                            Framework Name
-
-                            <span class="required-star">*</span>
-
-                        </label>
-
-
-                        <input
-                            type="text"
-                            name="name"
-                            class="form-control-aspia"
-                            placeholder="Example: ISO/IEC 27001"
-                            required
-                        >
-
-                    </div>
-
-
-                    {{-- VERSION --}}
-
-                    <div class="form-group">
-
-                        <label class="form-label">
-                            Version
-                        </label>
-
-
-                        <input
-                            type="text"
-                            name="version"
-                            class="form-control-aspia"
-                            placeholder="Example: 2022"
-                        >
-
-                    </div>
-
-
-                    {{-- FRAMEWORK FAMILY --}}
-
-                    <div class="form-group">
-
-                        <label class="form-label">
-                            Framework Family
-                        </label>
-
-
-                        <input
-                            type="text"
-                            name="framework_family"
-                            class="form-control-aspia"
-                            placeholder="Example: ISO"
-                        >
-
-                    </div>
-
-
-                    {{-- CATEGORY --}}
-
-                    <div class="form-group">
-
-                        <label class="form-label">
-                            Category
-                        </label>
-
-
-                        <input
-                            type="text"
-                            name="category"
-                            class="form-control-aspia"
-                            placeholder="Example: Information Security"
-                        >
-
-                    </div>
-
-
-                    {{-- PUBLISHER --}}
-
-                    <div class="form-group">
-
-                        <label class="form-label">
-                            Publisher
-                        </label>
-
-
-                        <input
-                            type="text"
-                            name="publisher"
-                            class="form-control-aspia"
-                            placeholder="Example: ISO"
-                        >
-
-                    </div>
-
-
-                    {{-- REGION --}}
-
-                    <div class="form-group">
-
-                        <label class="form-label">
-                            Region
-                        </label>
-
-
-                        <input
-                            type="text"
-                            name="region"
-                            class="form-control-aspia"
-                            placeholder="Example: Global"
-                        >
-
-                    </div>
-
-
-                    {{-- INDUSTRY --}}
-
-                    <div class="form-group">
-
-                        <label class="form-label">
-                            Industry
-                        </label>
-
-
-                        <input
-                            type="text"
-                            name="industry"
-                            class="form-control-aspia"
-                            placeholder="Example: All"
-                        >
-
-                    </div>
-
-
-                    {{-- FRAMEWORK TYPE --}}
-
-                    <div class="form-group">
-
-                        <label class="form-label">
-                            Framework Type
-                        </label>
-
-
-                        <input
-                            type="text"
-                            name="framework_type"
-                            class="form-control-aspia"
-                            placeholder="Example: Standard"
-                        >
-
-                    </div>
-
-
-                    {{-- RELATED DOMAINS --}}
-
-                    <div class="form-group">
-
-                        <label class="form-label">
-                            Related Domains
-                        </label>
-
-
-                        <textarea
-                            name="related_domains"
-                            class="form-control-aspia"
-                            rows="3"
-                            placeholder="Example: Access Control, Asset Management"
-                        ></textarea>
-
-                    </div>
-
-
-                </div>
-
-
-            </div>
-
-
-            <div class="modal-footer">
-
-
-                <button
-                    type="button"
-                    class="btn-aspia btn-secondary-aspia"
-
-                    onclick="closeModal('addModal')"
-                >
-
-                    Cancel
-
-                </button>
-
-
-                <button
-                    type="submit"
-                    class="btn-aspia btn-primary-aspia"
-                >
-
-                    Add Framework
-
-                </button>
-
-
-            </div>
-
-
-        </form>
-
-
-    </div>
-
-</div>
-
-
-
-{{-- =========================================================
-     EDIT FRAMEWORK MODAL
-========================================================= --}}
-
-<div
-    id="editModal"
-    class="modal-overlay"
-
-    onclick="closeModalOutside(event, 'editModal')"
->
-
-
-    <div class="modal-box">
-
-
-        <div class="modal-header">
-
-            <h2>
-                Edit Framework
-            </h2>
-
-
-            <button
-                type="button"
-                class="close-modal"
-
-                onclick="closeModal('editModal')"
-            >
-
-                ×
-
-            </button>
-
-        </div>
-
-
-        <form
-            id="editFrameworkForm"
-            method="POST"
-        >
-
-            @csrf
-
-            @method('PUT')
-
-
-            <div class="modal-body">
-
-
-                <div class="form-grid">
-
-
-                    {{-- FRAMEWORK ID --}}
-
-                    <div class="form-group">
-
-                        <label class="form-label">
-
-                            Framework ID
-
-                            <span class="required-star">*</span>
-
-                        </label>
-
-
-                        <input
-                            type="text"
-                            id="editFrameworkId"
-                            name="framework_id"
-                            class="form-control-aspia"
-                            required
-                        >
-
-                    </div>
-
-
-                    {{-- FRAMEWORK CODE --}}
-
-                    <div class="form-group">
-
-                        <label class="form-label">
-
-                            Framework Code
-
-                            <span class="required-star">*</span>
-
-                        </label>
-
-
-                        <input
-                            type="text"
-                            id="editFrameworkCode"
-                            name="framework_code"
-                            class="form-control-aspia"
-                            required
-                        >
-
-                    </div>
-
-
-                    {{-- FRAMEWORK NAME --}}
-
-                    <div class="form-group">
-
-                        <label class="form-label">
-
-                            Framework Name
-
-                            <span class="required-star">*</span>
-
-                        </label>
-
-
-                        <input
-                            type="text"
-                            id="editName"
-                            name="name"
-                            class="form-control-aspia"
-                            required
-                        >
-
-                    </div>
-
-
-                    {{-- VERSION --}}
-
-                    <div class="form-group">
-
-                        <label class="form-label">
-                            Version
-                        </label>
-
-
-                        <input
-                            type="text"
-                            id="editVersion"
-                            name="version"
-                            class="form-control-aspia"
-                        >
-
-                    </div>
-
-
-                    {{-- FRAMEWORK FAMILY --}}
-
-                    <div class="form-group">
-
-                        <label class="form-label">
-                            Framework Family
-                        </label>
-
-
-                        <input
-                            type="text"
-                            id="editFrameworkFamily"
-                            name="framework_family"
-                            class="form-control-aspia"
-                        >
-
-                    </div>
-
-
-                    {{-- CATEGORY --}}
-
-                    <div class="form-group">
-
-                        <label class="form-label">
-                            Category
-                        </label>
-
-
-                        <input
-                            type="text"
-                            id="editCategory"
-                            name="category"
-                            class="form-control-aspia"
-                        >
-
-                    </div>
-
-
-                    {{-- PUBLISHER --}}
-
-                    <div class="form-group">
-
-                        <label class="form-label">
-                            Publisher
-                        </label>
-
-
-                        <input
-                            type="text"
-                            id="editPublisher"
-                            name="publisher"
-                            class="form-control-aspia"
-                        >
-
-                    </div>
-
-
-                    {{-- REGION --}}
-
-                    <div class="form-group">
-
-                        <label class="form-label">
-                            Region
-                        </label>
-
-
-                        <input
-                            type="text"
-                            id="editRegion"
-                            name="region"
-                            class="form-control-aspia"
-                        >
-
-                    </div>
-
-
-                    {{-- INDUSTRY --}}
-
-                    <div class="form-group">
-
-                        <label class="form-label">
-                            Industry
-                        </label>
-
-
-                        <input
-                            type="text"
-                            id="editIndustry"
-                            name="industry"
-                            class="form-control-aspia"
-                        >
-
-                    </div>
-
-
-                    {{-- FRAMEWORK TYPE --}}
-
-                    <div class="form-group">
-
-                        <label class="form-label">
-                            Framework Type
-                        </label>
-
-
-                        <input
-                            type="text"
-                            id="editFrameworkType"
-                            name="framework_type"
-                            class="form-control-aspia"
-                        >
-
-                    </div>
-
-
-                    {{-- RELATED DOMAINS --}}
-
-                    <div class="form-group">
-
-                        <label class="form-label">
-                            Related Domains
-                        </label>
-
-
-                        <textarea
-                            id="editRelatedDomains"
-                            name="related_domains"
-                            class="form-control-aspia"
-                            rows="3"
-                        ></textarea>
-
-                    </div>
-
-
-                </div>
-
-
-            </div>
-
-
-            <div class="modal-footer">
-
-
-                <button
-                    type="button"
-                    class="btn-aspia btn-secondary-aspia"
-
-                    onclick="closeModal('editModal')"
-                >
-
-                    Cancel
-
-                </button>
-
-
-                <button
-                    type="submit"
-                    class="btn-aspia btn-primary-aspia"
-                >
-
-                    Save Changes
-
-                </button>
-
-
-            </div>
-
-
-        </form>
-
-
-    </div>
-
-</div>
-
-
-
-{{-- =========================================================
-     IMPORT XLSX MODAL
-========================================================= --}}
 
 <div
     id="importModal"
     class="modal-overlay"
-
     onclick="closeModalOutside(event, 'importModal')"
 >
 
@@ -2503,14 +1665,13 @@
         <div class="modal-header">
 
             <h2>
-                Import Frameworks
+                Import Requirements
             </h2>
 
 
             <button
                 type="button"
                 class="close-modal"
-
                 onclick="closeModal('importModal')"
             >
 
@@ -2522,26 +1683,25 @@
 
 
         <form
-            action="{{ route('frameworks.import') }}"
+            action="<?php echo e(route('requirements.import')); ?>"
             method="POST"
             enctype="multipart/form-data"
         >
 
-            @csrf
+            <?php echo csrf_field(); ?>
 
 
             <div class="modal-body">
 
 
-                <div class="form-group">
-
+                <div class="form-group full-width">
 
                     <label class="form-label">
-
                         Select XLSX File
-
+                        <span class="required-star">
+                            *
+                        </span>
                     </label>
-
 
                     <input
                         type="file"
@@ -2551,30 +1711,291 @@
                         required
                     >
 
-
                     <div class="import-info">
+                        Only .xlsx files are supported.
+                    </div>
 
-                        Only <strong>.xlsx</strong> files are supported.
+                </div>
 
-                        <br><br>
 
-                        Your Excel file should contain:
+            </div>
 
-                        <br>
 
-                        <strong>
-                            Framework ID,
-                            Framework Code,
-                            Framework Name,
-                            Version,
-                            Framework Family,
-                            Category,
-                            Publisher,
-                            Region,
-                            Industry,
-                            Framework Type,
-                            Related Domains
-                        </strong>
+            <div class="modal-footer">
+
+                <button
+                    type="button"
+                    class="btn-aspia btn-secondary-aspia"
+                    onclick="closeModal('importModal')"
+                >
+                    Cancel
+                </button>
+
+                <button
+                    type="submit"
+                    class="btn-aspia btn-primary-aspia"
+                >
+                    Import XLSX
+                </button>
+
+            </div>
+
+
+        </form>
+
+
+    </div>
+
+
+</div>
+
+
+
+
+
+<div
+    id="addModal"
+    class="modal-overlay"
+    onclick="closeModalOutside(event, 'addModal')"
+>
+
+
+    <div class="modal-box">
+
+
+        <div class="modal-header">
+
+            <h2>
+                Add Requirement
+            </h2>
+
+
+            <button
+                type="button"
+                class="close-modal"
+                onclick="closeModal('addModal')"
+            >
+
+                ×
+
+            </button>
+
+        </div>
+
+
+        <form
+            action="<?php echo e(route('requirements.store')); ?>"
+            method="POST"
+        >
+
+            <?php echo csrf_field(); ?>
+
+
+            <div class="modal-body">
+
+
+                <div class="form-grid">
+
+
+                    
+
+                    <div class="form-group">
+
+                        <label class="form-label">
+                            Requirement ID
+                            <span class="required-star">*</span>
+                        </label>
+
+                        <input
+                            type="text"
+                            name="requirement_id"
+                            class="form-control-aspia"
+                            placeholder="e.g. REQ-001"
+                            value="<?php echo e(old('requirement_id')); ?>"
+                            required
+                        >
+
+                    </div>
+
+
+                    
+
+                    <div class="form-group">
+
+                        <label class="form-label">
+                            Control ID
+                            <span class="required-star">*</span>
+                        </label>
+
+                        <input
+                            type="text"
+                            name="control_id"
+                            class="form-control-aspia"
+                            placeholder="e.g. CTRL-001"
+                            value="<?php echo e(old('control_id')); ?>"
+                            required
+                        >
+
+                    </div>
+
+
+                    
+
+                    <div class="form-group full-width">
+
+                        <label class="form-label">
+                            Requirement Title
+                            <span class="required-star">*</span>
+                        </label>
+
+                        <input
+                            type="text"
+                            name="requirement_title"
+                            class="form-control-aspia"
+                            placeholder="Enter Requirement Title"
+                            value="<?php echo e(old('requirement_title')); ?>"
+                            required
+                        >
+
+                    </div>
+
+
+                    
+
+                    <div class="form-group full-width">
+
+                        <label class="form-label">
+                            Requirement
+                            <span class="required-star">*</span>
+                        </label>
+
+                        <textarea
+                            name="requirement"
+                            class="form-control-aspia"
+                            placeholder="Enter Requirement text"
+                            required
+                        ><?php echo e(old('requirement')); ?></textarea>
+
+                    </div>
+
+
+                    
+
+                    <div class="form-group full-width">
+
+                        <label class="form-label">
+                            Why this Requirement Exists
+                        </label>
+
+                        <textarea
+                            name="why_requirement_exists"
+                            class="form-control-aspia"
+                            placeholder="Enter why this requirement exists"
+                        ><?php echo e(old('why_requirement_exists')); ?></textarea>
+
+                    </div>
+
+
+                    
+
+                    <div class="form-group full-width">
+
+                        <label class="form-label">
+                            Implementation Guidance
+                        </label>
+
+                        <textarea
+                            name="implementation_guidance"
+                            class="form-control-aspia"
+                            placeholder="Enter Implementation Guidance"
+                        ><?php echo e(old('implementation_guidance')); ?></textarea>
+
+                    </div>
+
+
+                    
+
+                    <div class="form-group full-width">
+
+                        <label class="form-label">
+                            Common Audit Findings
+                        </label>
+
+                        <textarea
+                            name="common_audit_findings"
+                            class="form-control-aspia"
+                            placeholder="Enter Common Audit Findings"
+                        ><?php echo e(old('common_audit_findings')); ?></textarea>
+
+                    </div>
+
+
+                    
+
+                    <div class="form-group full-width">
+
+                        <label class="form-label">
+                            Common Mistakes
+                        </label>
+
+                        <textarea
+                            name="common_mistakes"
+                            class="form-control-aspia"
+                            placeholder="Enter Common Mistakes"
+                        ><?php echo e(old('common_mistakes')); ?></textarea>
+
+                    </div>
+
+
+                    
+
+                    <div class="form-group full-width">
+
+                        <label class="form-label">
+                            Best Practices
+                        </label>
+
+                        <textarea
+                            name="best_practices"
+                            class="form-control-aspia"
+                            placeholder="Enter Best Practices"
+                        ><?php echo e(old('best_practices')); ?></textarea>
+
+                    </div>
+
+
+                    
+
+                    <div class="form-group full-width">
+
+                        <label class="form-label">
+                            Business Examples
+                        </label>
+
+                        <textarea
+                            name="business_examples"
+                            class="form-control-aspia"
+                            placeholder="Enter Business Examples"
+                        ><?php echo e(old('business_examples')); ?></textarea>
+
+                    </div>
+
+
+                    
+
+                    <div class="form-group">
+
+                        <label class="form-label">
+                            Typical Owner
+                        </label>
+
+                        <input
+                            type="text"
+                            name="typical_owner"
+                            class="form-control-aspia"
+                            placeholder="Enter Typical Owner"
+                            value="<?php echo e(old('typical_owner')); ?>"
+                        >
 
                     </div>
 
@@ -2587,28 +2008,20 @@
 
             <div class="modal-footer">
 
-
                 <button
                     type="button"
                     class="btn-aspia btn-secondary-aspia"
-
-                    onclick="closeModal('importModal')"
+                    onclick="closeModal('addModal')"
                 >
-
                     Cancel
-
                 </button>
-
 
                 <button
                     type="submit"
                     class="btn-aspia btn-primary-aspia"
                 >
-
-                    Import XLSX
-
+                    Add Requirement
                 </button>
-
 
             </div>
 
@@ -2618,25 +2031,299 @@
 
     </div>
 
+
 </div>
 
 
 
-{{-- =========================================================
-     JAVASCRIPT
-========================================================= --}}
+
+
+<div
+    id="editModal"
+    class="modal-overlay"
+    onclick="closeModalOutside(event, 'editModal')"
+>
+
+
+    <div class="modal-box">
+
+
+        <div class="modal-header">
+
+            <h2>
+                Edit Requirement
+            </h2>
+
+
+            <button
+                type="button"
+                class="close-modal"
+                onclick="closeModal('editModal')"
+            >
+
+                ×
+
+            </button>
+
+        </div>
+
+
+        <form
+            id="editRequirementForm"
+            method="POST"
+        >
+
+            <?php echo csrf_field(); ?>
+
+            <?php echo method_field('PUT'); ?>
+
+
+            <div class="modal-body">
+
+
+                <div class="form-grid">
+
+
+                    
+
+                    <div class="form-group">
+
+                        <label class="form-label">
+                            Requirement ID
+                            <span class="required-star">*</span>
+                        </label>
+
+                        <input
+                            type="text"
+                            id="editRequirementId"
+                            name="requirement_id"
+                            class="form-control-aspia"
+                            required
+                        >
+
+                    </div>
+
+
+                    
+
+                    <div class="form-group">
+
+                        <label class="form-label">
+                            Control ID
+                            <span class="required-star">*</span>
+                        </label>
+
+                        <input
+                            type="text"
+                            id="editControlId"
+                            name="control_id"
+                            class="form-control-aspia"
+                            required
+                        >
+
+                    </div>
+
+
+                    
+
+                    <div class="form-group full-width">
+
+                        <label class="form-label">
+                            Requirement Title
+                            <span class="required-star">*</span>
+                        </label>
+
+                        <input
+                            type="text"
+                            id="editRequirementTitle"
+                            name="requirement_title"
+                            class="form-control-aspia"
+                            required
+                        >
+
+                    </div>
+
+
+                    
+
+                    <div class="form-group full-width">
+
+                        <label class="form-label">
+                            Requirement
+                            <span class="required-star">*</span>
+                        </label>
+
+                        <textarea
+                            id="editRequirement"
+                            name="requirement"
+                            class="form-control-aspia"
+                            required
+                        ></textarea>
+
+                    </div>
+
+
+                    
+
+                    <div class="form-group full-width">
+
+                        <label class="form-label">
+                            Why this Requirement Exists
+                        </label>
+
+                        <textarea
+                            id="editWhyRequirementExists"
+                            name="why_requirement_exists"
+                            class="form-control-aspia"
+                        ></textarea>
+
+                    </div>
+
+
+                    
+
+                    <div class="form-group full-width">
+
+                        <label class="form-label">
+                            Implementation Guidance
+                        </label>
+
+                        <textarea
+                            id="editImplementationGuidance"
+                            name="implementation_guidance"
+                            class="form-control-aspia"
+                        ></textarea>
+
+                    </div>
+
+
+                    
+
+                    <div class="form-group full-width">
+
+                        <label class="form-label">
+                            Common Audit Findings
+                        </label>
+
+                        <textarea
+                            id="editCommonAuditFindings"
+                            name="common_audit_findings"
+                            class="form-control-aspia"
+                        ></textarea>
+
+                    </div>
+
+
+                    
+
+                    <div class="form-group full-width">
+
+                        <label class="form-label">
+                            Common Mistakes
+                        </label>
+
+                        <textarea
+                            id="editCommonMistakes"
+                            name="common_mistakes"
+                            class="form-control-aspia"
+                        ></textarea>
+
+                    </div>
+
+
+                    
+
+                    <div class="form-group full-width">
+
+                        <label class="form-label">
+                            Best Practices
+                        </label>
+
+                        <textarea
+                            id="editBestPractices"
+                            name="best_practices"
+                            class="form-control-aspia"
+                        ></textarea>
+
+                    </div>
+
+
+                    
+
+                    <div class="form-group full-width">
+
+                        <label class="form-label">
+                            Business Examples
+                        </label>
+
+                        <textarea
+                            id="editBusinessExamples"
+                            name="business_examples"
+                            class="form-control-aspia"
+                        ></textarea>
+
+                    </div>
+
+
+                    
+
+                    <div class="form-group">
+
+                        <label class="form-label">
+                            Typical Owner
+                        </label>
+
+                        <input
+                            type="text"
+                            id="editTypicalOwner"
+                            name="typical_owner"
+                            class="form-control-aspia"
+                        >
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+
+            <div class="modal-footer">
+
+                <button
+                    type="button"
+                    class="btn-aspia btn-secondary-aspia"
+                    onclick="closeModal('editModal')"
+                >
+                    Cancel
+                </button>
+
+                <button
+                    type="submit"
+                    class="btn-aspia btn-primary-aspia"
+                >
+                    Save Changes
+                </button>
+
+            </div>
+
+
+        </form>
+
+
+    </div>
+
+
+</div>
+
+
 
 <script>
 
-
-    const frameworkTemplatesMap = @json($frameworkTemplates ?? []);
-
-    function onFrameworkTypeChange(val)
-    {
-        const textarea = document.getElementById('frameworkTemplate');
-        if (!textarea) return;
-        textarea.value = '';
-    }
+    /* =====================================================
+       OPEN MODAL
+    ====================================================== */
 
     function openModal(id)
     {
@@ -2645,12 +2332,8 @@
 
         if (modal) {
 
-            if (id === 'templateModal') {
-                const typeInput = document.getElementById('templateFrameworkType');
-                const textarea = document.getElementById('frameworkTemplate');
-                if (typeInput) {
-                    typeInput.value = '';
-                }
+            if (id === 'requirementTemplateModal') {
+                const textarea = document.getElementById('requirementTemplate');
                 if (textarea) {
                     textarea.value = '';
                 }
@@ -2700,14 +2383,14 @@
 
 
     /* =====================================================
-       INSERT FRAMEWORK PLACEHOLDER
+       INSERT REQUIREMENT PLACEHOLDER
     ====================================================== */
 
-    function insertFrameworkPlaceholder(placeholder)
+    function insertRequirementPlaceholder(placeholder)
     {
         const textarea =
             document.getElementById(
-                'frameworkTemplate'
+                'requirementTemplate'
             );
 
         if (!textarea) {
@@ -2761,27 +2444,27 @@
 
         id,
 
-        frameworkId,
+        requirementId,
 
-        frameworkCode,
+        controlId,
 
-        name,
+        requirementTitle,
 
-        version,
+        requirement,
 
-        frameworkFamily,
+        whyRequirementExists,
 
-        category,
+        implementationGuidance,
 
-        publisher,
+        commonAuditFindings,
 
-        region,
+        commonMistakes,
 
-        industry,
+        bestPractices,
 
-        frameworkType,
+        businessExamples,
 
-        relatedDomains
+        typicalOwner
 
     ) {
 
@@ -2790,120 +2473,120 @@
 
         document
             .getElementById(
-                'editFrameworkForm'
+                'editRequirementForm'
             )
             .action =
-                `/frameworks/${id}`;
+                `/requirements/${id}`;
 
 
-        /* FRAMEWORK ID */
-
-        document
-            .getElementById(
-                'editFrameworkId'
-            )
-            .value =
-                frameworkId || '';
-
-
-        /* FRAMEWORK CODE */
+        /* REQUIREMENT ID */
 
         document
             .getElementById(
-                'editFrameworkCode'
+                'editRequirementId'
             )
             .value =
-                frameworkCode || '';
+                requirementId || '';
 
 
-        /* FRAMEWORK NAME */
+        /* CONTROL ID */
 
         document
             .getElementById(
-                'editName'
+                'editControlId'
             )
             .value =
-                name || '';
+                controlId || '';
 
 
-        /* VERSION */
+        /* REQUIREMENT TITLE */
 
         document
             .getElementById(
-                'editVersion'
+                'editRequirementTitle'
             )
             .value =
-                version || '';
+                requirementTitle || '';
 
 
-        /* FRAMEWORK FAMILY */
+        /* REQUIREMENT */
 
         document
             .getElementById(
-                'editFrameworkFamily'
+                'editRequirement'
             )
             .value =
-                frameworkFamily || '';
+                requirement || '';
 
 
-        /* CATEGORY */
+        /* WHY REQUIREMENT EXISTS */
 
         document
             .getElementById(
-                'editCategory'
+                'editWhyRequirementExists'
             )
             .value =
-                category || '';
+                whyRequirementExists || '';
 
 
-        /* PUBLISHER */
+        /* IMPLEMENTATION GUIDANCE */
 
         document
             .getElementById(
-                'editPublisher'
+                'editImplementationGuidance'
             )
             .value =
-                publisher || '';
+                implementationGuidance || '';
 
 
-        /* REGION */
+        /* COMMON AUDIT FINDINGS */
 
         document
             .getElementById(
-                'editRegion'
+                'editCommonAuditFindings'
             )
             .value =
-                region || '';
+                commonAuditFindings || '';
 
 
-        /* INDUSTRY */
+        /* COMMON MISTAKES */
 
         document
             .getElementById(
-                'editIndustry'
+                'editCommonMistakes'
             )
             .value =
-                industry || '';
+                commonMistakes || '';
 
 
-        /* FRAMEWORK TYPE */
+        /* BEST PRACTICES */
 
         document
             .getElementById(
-                'editFrameworkType'
+                'editBestPractices'
             )
             .value =
-                frameworkType || '';
+                bestPractices || '';
 
 
-        /* RELATED DOMAINS */
+        /* BUSINESS EXAMPLES */
 
         document
             .getElementById(
-                'editRelatedDomains'
+                'editBusinessExamples'
             )
             .value =
-                relatedDomains || '';
+                businessExamples || '';
+
+
+        /* TYPICAL OWNER */
+
+        document
+            .getElementById(
+                'editTypicalOwner'
+            )
+            .value =
+                typicalOwner || '';
 
 
         /* SHOW MODAL */
@@ -2947,8 +2630,8 @@
         }
     );
 
-
 </script>
 
 
-@endsection
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layouts.aspiaUcl', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\xampp\htdocs\AspiaUCL\resources\views/aspiaUcl/requirements/index.blade.php ENDPATH**/ ?>

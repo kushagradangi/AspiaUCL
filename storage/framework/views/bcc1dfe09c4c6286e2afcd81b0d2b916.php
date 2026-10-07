@@ -1,10 +1,8 @@
-@extends('layouts.aspiaUcl')
+<?php $__env->startSection('title', ' | Controls'); ?>
 
-@section('title', ' | Controls')
+<?php $__env->startSection('page-title', 'Controls'); ?>
 
-@section('page-title', 'Controls')
-
-@section('content')
+<?php $__env->startSection('content'); ?>
 
 <style>
 
@@ -876,40 +874,36 @@
 <div class="control-page">
 
 
-    {{-- =====================================================
-         SUCCESS MESSAGE
-    ====================================================== --}}
+    
 
-    @if(session('success'))
+    <?php if(session('success')): ?>
 
         <div class="alert-success">
 
-            {{ session('success') }}
+            <?php echo e(session('success')); ?>
+
 
         </div>
 
-    @endif
+    <?php endif; ?>
 
-    {{-- =====================================================
-         ERROR MESSAGE
-    ====================================================== --}}
+    
 
-    @if(session('error'))
+    <?php if(session('error')): ?>
 
         <div class="alert-error">
 
-            {{ session('error') }}
+            <?php echo e(session('error')); ?>
+
 
         </div>
 
-    @endif
+    <?php endif; ?>
 
 
-    {{-- =====================================================
-         VALIDATION ERRORS
-    ====================================================== --}}
+    
 
-    @if($errors->any())
+    <?php if($errors->any()): ?>
 
         <div class="alert-error">
 
@@ -917,24 +911,23 @@
 
             <ul style="margin:8px 0 0 18px;">
 
-                @foreach($errors->all() as $error)
+                <?php $__currentLoopData = $errors->all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $error): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
 
                     <li>
-                        {{ $error }}
+                        <?php echo e($error); ?>
+
                     </li>
 
-                @endforeach
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
             </ul>
 
         </div>
 
-    @endif
+    <?php endif; ?>
 
 
-    {{-- =====================================================
-         PAGE HEADER
-    ====================================================== --}}
+    
 
     <div class="page-header">
 
@@ -954,9 +947,7 @@
         <div class="header-actions">
 
 
-            {{-- =================================================
-                 ADD CONTROL TEMPLATE
-            ================================================== --}}
+            
 
             <button
                 type="button"
@@ -969,9 +960,7 @@
             </button>
 
 
-            {{-- =================================================
-                 IMPORT XLSX
-            ================================================== --}}
+            
 
             <button
                 type="button"
@@ -984,9 +973,7 @@
             </button>
 
 
-            {{-- =================================================
-                 ADD CONTROL
-            ================================================== --}}
+            
 
             <button
                 type="button"
@@ -1003,9 +990,7 @@
     </div>
 
 
-    {{-- =====================================================
-         CONTROL MANAGEMENT PANEL
-    ====================================================== --}}
+    
 
     <div class="control-panel">
 
@@ -1017,10 +1002,10 @@
             </h2>
 
 
-            {{-- SEARCH --}}
+            
 
             <form
-                action="{{ route('controls.index') }}"
+                action="<?php echo e(route('controls.index')); ?>"
                 method="GET"
                 class="search-form"
             >
@@ -1030,7 +1015,7 @@
                     name="search"
                     class="search-input"
                     placeholder="Search controls..."
-                    value="{{ request('search') }}"
+                    value="<?php echo e(request('search')); ?>"
                 >
 
 
@@ -1048,9 +1033,7 @@
         </div>
 
 
-        {{-- =================================================
-             TABLE
-        ================================================== --}}
+        
 
         <div class="table-wrapper">
 
@@ -1117,202 +1100,213 @@
                 <tbody>
 
 
-                    @forelse($controls as $control)
+                    <?php $__empty_1 = true; $__currentLoopData = $controls; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $control): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
 
 
                         <tr>
 
 
-                            {{-- Control ID --}}
+                            
 
                             <td>
 
                                 <span class="control-id">
 
-                                    {{ $control->control_id }}
+                                    <?php echo e($control->control_id); ?>
+
 
                                 </span>
 
                             </td>
 
 
-                            {{-- Domain Code --}}
+                            
 
                             <td>
 
                                 <span class="domain-code">
 
-                                    {{ $control->domain_code ?: '—' }}
+                                    <?php echo e($control->domain_code ?: '—'); ?>
+
 
                                 </span>
 
                             </td>
 
 
-                            {{-- Control Name --}}
+                            
 
                             <td>
 
                                 <a
-                                    href="{{ route(
+                                    href="<?php echo e(route(
                                         'controls.show',
                                         ['control_id' => $control->control_id]
-                                    ) }}"
+                                    )); ?>"
                                     class="control-name-link"
                                 >
 
-                                    {{ $control->name }}
+                                    <?php echo e($control->name); ?>
+
 
                                 </a>
 
                             </td>
 
 
-                            {{-- Version --}}
+                            
 
                             <td>
 
-                                {{ $control->version ?: '—' }}
+                                <?php echo e($control->version ?: '—'); ?>
+
 
                             </td>
 
 
-                            {{-- Business Owner --}}
+                            
 
                             <td>
 
-                                {{ $control->business_owner ?: '—' }}
+                                <?php echo e($control->business_owner ?: '—'); ?>
+
 
                             </td>
 
 
-                            {{-- Category --}}
+                            
 
                             <td>
 
-                                {{ $control->control_category ?: '—' }}
+                                <?php echo e($control->control_category ?: '—'); ?>
+
 
                             </td>
 
 
-                            {{-- Criticality --}}
+                            
 
                             <td>
 
-                                {{ $control->criticality ?: '—' }}
+                                <?php echo e($control->criticality ?: '—'); ?>
+
 
                             </td>
 
 
-                            {{-- Status --}}
+                            
 
                             <td>
 
-                                @php
+                                <?php
                                     $statusLower = strtolower(trim($control->status ?? ''));
-                                @endphp
+                                ?>
 
-                                @if($statusLower === 'active')
+                                <?php if($statusLower === 'active'): ?>
                                     <span class="status-badge status-active">
                                         Active
                                     </span>
-                                @elseif($statusLower === 'inactive')
+                                <?php elseif($statusLower === 'inactive'): ?>
                                     <span class="status-badge status-inactive">
                                         Inactive
                                     </span>
-                                @elseif($statusLower === 'draft')
+                                <?php elseif($statusLower === 'draft'): ?>
                                     <span class="status-badge status-draft">
                                         Draft
                                     </span>
-                                @elseif($control->status)
+                                <?php elseif($control->status): ?>
                                     <span class="status-badge status-default">
-                                        {{ $control->status }}
+                                        <?php echo e($control->status); ?>
+
                                     </span>
-                                @else
+                                <?php else: ?>
                                     —
-                                @endif
+                                <?php endif; ?>
 
                             </td>
 
 
-                            {{-- Control Nature --}}
+                            
 
                             <td>
 
-                                {{ $control->control_nature ?: '—' }}
+                                <?php echo e($control->control_nature ?: '—'); ?>
+
 
                             </td>
 
 
-                            {{-- Compensating Control --}}
+                            
 
                             <td>
 
-                                {{ $control->compensating_control ?: '—' }}
+                                <?php echo e($control->compensating_control ?: '—'); ?>
+
 
                             </td>
 
 
-                            {{-- Created --}}
+                            
 
                             <td>
 
-                                {{ $control->created_at?->format('d M Y') }}
+                                <?php echo e($control->created_at?->format('d M Y')); ?>
+
 
                             </td>
 
 
-                            {{-- Actions --}}
+                            
 
                             <td>
 
                                 <div class="actions">
 
 
-                                    {{-- EDIT --}}
+                                    
 
                                     <button
                                         type="button"
                                         class="action-btn"
 
                                         onclick="openEditModal(
-                                            {{ $control->id }},
+                                            <?php echo e($control->id); ?>,
 
-                                            @js($control->control_id),
+                                            <?php echo \Illuminate\Support\Js::from($control->control_id)->toHtml() ?>,
 
-                                            @js($control->domain_code),
+                                            <?php echo \Illuminate\Support\Js::from($control->domain_code)->toHtml() ?>,
 
-                                            @js($control->name),
+                                            <?php echo \Illuminate\Support\Js::from($control->name)->toHtml() ?>,
 
-                                            @js($control->business_description),
+                                            <?php echo \Illuminate\Support\Js::from($control->business_description)->toHtml() ?>,
 
-                                            @js($control->business_objective),
+                                            <?php echo \Illuminate\Support\Js::from($control->business_objective)->toHtml() ?>,
 
-                                            @js($control->business_owner),
+                                            <?php echo \Illuminate\Support\Js::from($control->business_owner)->toHtml() ?>,
 
-                                            @js($control->control_category),
+                                            <?php echo \Illuminate\Support\Js::from($control->control_category)->toHtml() ?>,
 
-                                            @js($control->criticality),
+                                            <?php echo \Illuminate\Support\Js::from($control->criticality)->toHtml() ?>,
 
-                                            @js($control->applicable_industries),
+                                            <?php echo \Illuminate\Support\Js::from($control->applicable_industries)->toHtml() ?>,
 
-                                            @js($control->applicable_technologies),
+                                            <?php echo \Illuminate\Support\Js::from($control->applicable_technologies)->toHtml() ?>,
 
-                                            @js($control->status),
+                                            <?php echo \Illuminate\Support\Js::from($control->status)->toHtml() ?>,
 
-                                            @js($control->version),
+                                            <?php echo \Illuminate\Support\Js::from($control->version)->toHtml() ?>,
 
-                                            @js($control->control_summary),
+                                            <?php echo \Illuminate\Support\Js::from($control->control_summary)->toHtml() ?>,
 
-                                            @js($control->business_benefits),
+                                            <?php echo \Illuminate\Support\Js::from($control->business_benefits)->toHtml() ?>,
 
-                                            @js($control->business_risks_if_missing),
+                                            <?php echo \Illuminate\Support\Js::from($control->business_risks_if_missing)->toHtml() ?>,
 
-                                            @js($control->primary_stakeholders),
+                                            <?php echo \Illuminate\Support\Js::from($control->primary_stakeholders)->toHtml() ?>,
 
-                                            @js($control->control_nature),
+                                            <?php echo \Illuminate\Support\Js::from($control->control_nature)->toHtml() ?>,
 
-                                            @js($control->compensating_control)
+                                            <?php echo \Illuminate\Support\Js::from($control->compensating_control)->toHtml() ?>
 
                                         )"
                                     >
@@ -1322,10 +1316,10 @@
                                     </button>
 
 
-                                    {{-- DELETE --}}
+                                    
 
                                     <form
-                                        action="{{ route('controls.destroy', $control) }}"
+                                        action="<?php echo e(route('controls.destroy', $control)); ?>"
                                         method="POST"
 
                                         onsubmit="return confirm(
@@ -1333,9 +1327,9 @@
                                         )"
                                     >
 
-                                        @csrf
+                                        <?php echo csrf_field(); ?>
 
-                                        @method('DELETE')
+                                        <?php echo method_field('DELETE'); ?>
 
 
                                         <button
@@ -1358,7 +1352,7 @@
                         </tr>
 
 
-                    @empty
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
 
 
                         <tr>
@@ -1379,7 +1373,7 @@
                         </tr>
 
 
-                    @endforelse
+                    <?php endif; ?>
 
 
                 </tbody>
@@ -1389,73 +1383,73 @@
         </div>
 
 
-        {{-- =================================================
-             PAGINATION
-        ================================================== --}}
+        
 
-        @if($controls->hasPages())
+        <?php if($controls->hasPages()): ?>
 
             <div class="pagination-area">
 
                 <div class="custom-pagination">
 
-                    {{-- Previous --}}
-                    @if($controls->onFirstPage())
+                    
+                    <?php if($controls->onFirstPage()): ?>
                         <span class="disabled-page">Previous</span>
-                    @else
-                        <a href="{{ $controls->previousPageUrl() }}">
+                    <?php else: ?>
+                        <a href="<?php echo e($controls->previousPageUrl()); ?>">
                             Previous
                         </a>
-                    @endif
+                    <?php endif; ?>
 
-                    {{-- Page numbers --}}
-                    @foreach(range(1, $controls->lastPage()) as $page)
+                    
+                    <?php $__currentLoopData = range(1, $controls->lastPage()); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $page): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
 
-                        @if(
+                        <?php if(
                             $page == 1 ||
                             $page == $controls->lastPage() ||
                             abs($page - $controls->currentPage()) <= 2
-                        )
+                        ): ?>
 
-                            @if($page == $controls->currentPage())
+                            <?php if($page == $controls->currentPage()): ?>
 
                                 <span class="active-page">
-                                    {{ $page }}
+                                    <?php echo e($page); ?>
+
                                 </span>
 
-                            @else
+                            <?php else: ?>
 
-                                <a href="{{ $controls->url($page) }}">
-                                    {{ $page }}
+                                <a href="<?php echo e($controls->url($page)); ?>">
+                                    <?php echo e($page); ?>
+
                                 </a>
 
-                            @endif
+                            <?php endif; ?>
 
-                        @elseif(
+                        <?php elseif(
                             $page == 2 ||
                             $page == $controls->lastPage() - 1
-                        )
+                        ): ?>
 
                             <span class="pagination-info">...</span>
 
-                        @endif
+                        <?php endif; ?>
 
-                    @endforeach
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
-                    {{-- Next --}}
-                    @if($controls->hasMorePages())
-                        <a href="{{ $controls->nextPageUrl() }}">
+                    
+                    <?php if($controls->hasMorePages()): ?>
+                        <a href="<?php echo e($controls->nextPageUrl()); ?>">
                             Next
                         </a>
-                    @else
+                    <?php else: ?>
                         <span class="disabled-page">Next</span>
-                    @endif
+                    <?php endif; ?>
 
                 </div>
 
             </div>
 
-        @endif
+        <?php endif; ?>
 
 
     </div>
@@ -1465,9 +1459,7 @@
 
 
 
-{{-- =========================================================
-     ADD CONTROL TEMPLATE MODAL
-========================================================= --}}
+
 
 <div
     id="controlTemplateModal"
@@ -1500,11 +1492,11 @@
 
 
         <form
-            action="{{ route('controls.template.store') }}"
+            action="<?php echo e(route('controls.template.store')); ?>"
             method="POST"
         >
 
-            @csrf
+            <?php echo csrf_field(); ?>
 
 
             <div class="modal-body">
@@ -1889,9 +1881,7 @@
 
 
 
-{{-- =========================================================
-     IMPORT CONTROLS MODAL
-========================================================= --}}
+
 
 <div
     id="importModal"
@@ -1924,12 +1914,12 @@
 
 
         <form
-            action="{{ route('controls.import') }}"
+            action="<?php echo e(route('controls.import')); ?>"
             method="POST"
             enctype="multipart/form-data"
         >
 
-            @csrf
+            <?php echo csrf_field(); ?>
 
 
             <div class="modal-body">
@@ -1992,9 +1982,7 @@
 
 
 
-{{-- =========================================================
-     ADD CONTROL MODAL
-========================================================= --}}
+
 
 <div
     id="addModal"
@@ -2027,11 +2015,11 @@
 
 
         <form
-            action="{{ route('controls.store') }}"
+            action="<?php echo e(route('controls.store')); ?>"
             method="POST"
         >
 
-            @csrf
+            <?php echo csrf_field(); ?>
 
 
             <div class="modal-body">
@@ -2040,7 +2028,7 @@
                 <div class="form-grid">
 
 
-                    {{-- CONTROL ID --}}
+                    
 
                     <div class="form-group">
 
@@ -2054,14 +2042,14 @@
                             name="control_id"
                             class="form-control-aspia"
                             placeholder="e.g. CTRL-001"
-                            value="{{ old('control_id') }}"
+                            value="<?php echo e(old('control_id')); ?>"
                             required
                         >
 
                     </div>
 
 
-                    {{-- DOMAIN CODE --}}
+                    
 
                     <div class="form-group">
 
@@ -2075,14 +2063,14 @@
                             name="domain_code"
                             class="form-control-aspia"
                             placeholder="e.g. DOM-001"
-                            value="{{ old('domain_code') }}"
+                            value="<?php echo e(old('domain_code')); ?>"
                             required
                         >
 
                     </div>
 
 
-                    {{-- CONTROL NAME --}}
+                    
 
                     <div class="form-group full-width">
 
@@ -2096,14 +2084,14 @@
                             name="name"
                             class="form-control-aspia"
                             placeholder="Enter Control Name"
-                            value="{{ old('name') }}"
+                            value="<?php echo e(old('name')); ?>"
                             required
                         >
 
                     </div>
 
 
-                    {{-- BUSINESS DESCRIPTION --}}
+                    
 
                     <div class="form-group full-width">
 
@@ -2115,12 +2103,12 @@
                             name="business_description"
                             class="form-control-aspia"
                             placeholder="Enter Business Description"
-                        >{{ old('business_description') }}</textarea>
+                        ><?php echo e(old('business_description')); ?></textarea>
 
                     </div>
 
 
-                    {{-- BUSINESS OBJECTIVE --}}
+                    
 
                     <div class="form-group full-width">
 
@@ -2132,12 +2120,12 @@
                             name="business_objective"
                             class="form-control-aspia"
                             placeholder="Enter Business Objective"
-                        >{{ old('business_objective') }}</textarea>
+                        ><?php echo e(old('business_objective')); ?></textarea>
 
                     </div>
 
 
-                    {{-- BUSINESS OWNER --}}
+                    
 
                     <div class="form-group">
 
@@ -2150,13 +2138,13 @@
                             name="business_owner"
                             class="form-control-aspia"
                             placeholder="Enter Business Owner"
-                            value="{{ old('business_owner') }}"
+                            value="<?php echo e(old('business_owner')); ?>"
                         >
 
                     </div>
 
 
-                    {{-- CONTROL CATEGORY --}}
+                    
 
                     <div class="form-group">
 
@@ -2169,13 +2157,13 @@
                             name="control_category"
                             class="form-control-aspia"
                             placeholder="Enter Control Category"
-                            value="{{ old('control_category') }}"
+                            value="<?php echo e(old('control_category')); ?>"
                         >
 
                     </div>
 
 
-                    {{-- CRITICALITY --}}
+                    
 
                     <div class="form-group">
 
@@ -2188,13 +2176,13 @@
                             name="criticality"
                             class="form-control-aspia"
                             placeholder="Enter Criticality"
-                            value="{{ old('criticality') }}"
+                            value="<?php echo e(old('criticality')); ?>"
                         >
 
                     </div>
 
 
-                    {{-- STATUS --}}
+                    
 
                     <div class="form-group">
 
@@ -2209,15 +2197,15 @@
                             required
                         >
 
-                            <option value="Active" {{ old('status') == 'Active' ? 'selected' : '' }}>
+                            <option value="Active" <?php echo e(old('status') == 'Active' ? 'selected' : ''); ?>>
                                 Active
                             </option>
 
-                            <option value="Inactive" {{ old('status') == 'Inactive' ? 'selected' : '' }}>
+                            <option value="Inactive" <?php echo e(old('status') == 'Inactive' ? 'selected' : ''); ?>>
                                 Inactive
                             </option>
 
-                            <option value="Draft" {{ old('status') == 'Draft' ? 'selected' : '' }}>
+                            <option value="Draft" <?php echo e(old('status') == 'Draft' ? 'selected' : ''); ?>>
                                 Draft
                             </option>
 
@@ -2226,7 +2214,7 @@
                     </div>
 
 
-                    {{-- VERSION --}}
+                    
 
                     <div class="form-group">
 
@@ -2239,7 +2227,7 @@
                             name="version"
                             class="form-control-aspia"
                             placeholder="e.g. 1.0"
-                            value="{{ old('version') }}"
+                            value="<?php echo e(old('version')); ?>"
                         >
 
                     </div>
@@ -2248,7 +2236,7 @@
 
 
 
-                    {{-- CONTROL NATURE --}}
+                    
 
                     <div class="form-group">
 
@@ -2261,13 +2249,13 @@
                             name="control_nature"
                             class="form-control-aspia"
                             placeholder="e.g. Detective, Preventative"
-                            value="{{ old('control_nature') }}"
+                            value="<?php echo e(old('control_nature')); ?>"
                         >
 
                     </div>
 
 
-                    {{-- COMPENSATING CONTROL --}}
+                    
 
                     <div class="form-group">
 
@@ -2280,13 +2268,13 @@
                             name="compensating_control"
                             class="form-control-aspia"
                             placeholder="e.g. Yes, No"
-                            value="{{ old('compensating_control') }}"
+                            value="<?php echo e(old('compensating_control')); ?>"
                         >
 
                     </div>
 
 
-                    {{-- APPLICABLE INDUSTRIES --}}
+                    
 
                     <div class="form-group full-width">
 
@@ -2298,12 +2286,12 @@
                             name="applicable_industries"
                             class="form-control-aspia"
                             placeholder="Enter Applicable Industries"
-                        >{{ old('applicable_industries') }}</textarea>
+                        ><?php echo e(old('applicable_industries')); ?></textarea>
 
                     </div>
 
 
-                    {{-- APPLICABLE TECHNOLOGIES --}}
+                    
 
                     <div class="form-group full-width">
 
@@ -2315,12 +2303,12 @@
                             name="applicable_technologies"
                             class="form-control-aspia"
                             placeholder="Enter Applicable Technologies"
-                        >{{ old('applicable_technologies') }}</textarea>
+                        ><?php echo e(old('applicable_technologies')); ?></textarea>
 
                     </div>
 
 
-                    {{-- CONTROL SUMMARY --}}
+                    
 
                     <div class="form-group full-width">
 
@@ -2332,12 +2320,12 @@
                             name="control_summary"
                             class="form-control-aspia"
                             placeholder="Enter Control Summary"
-                        >{{ old('control_summary') }}</textarea>
+                        ><?php echo e(old('control_summary')); ?></textarea>
 
                     </div>
 
 
-                    {{-- BUSINESS BENEFITS --}}
+                    
 
                     <div class="form-group full-width">
 
@@ -2349,12 +2337,12 @@
                             name="business_benefits"
                             class="form-control-aspia"
                             placeholder="Enter Business Benefits"
-                        >{{ old('business_benefits') }}</textarea>
+                        ><?php echo e(old('business_benefits')); ?></textarea>
 
                     </div>
 
 
-                    {{-- BUSINESS RISKS IF MISSING --}}
+                    
 
                     <div class="form-group full-width">
 
@@ -2366,12 +2354,12 @@
                             name="business_risks_if_missing"
                             class="form-control-aspia"
                             placeholder="Enter Business Risks if Missing"
-                        >{{ old('business_risks_if_missing') }}</textarea>
+                        ><?php echo e(old('business_risks_if_missing')); ?></textarea>
 
                     </div>
 
 
-                    {{-- PRIMARY STAKEHOLDERS --}}
+                    
 
                     <div class="form-group full-width">
 
@@ -2383,7 +2371,7 @@
                             name="primary_stakeholders"
                             class="form-control-aspia"
                             placeholder="Enter Primary Stakeholders"
-                        >{{ old('primary_stakeholders') }}</textarea>
+                        ><?php echo e(old('primary_stakeholders')); ?></textarea>
 
                     </div>
 
@@ -2424,9 +2412,7 @@
 
 
 
-{{-- =========================================================
-     EDIT CONTROL MODAL
-========================================================= --}}
+
 
 <div
     id="editModal"
@@ -2463,9 +2449,9 @@
             method="POST"
         >
 
-            @csrf
+            <?php echo csrf_field(); ?>
 
-            @method('PUT')
+            <?php echo method_field('PUT'); ?>
 
 
             <div class="modal-body">
@@ -2474,7 +2460,7 @@
                 <div class="form-grid">
 
 
-                    {{-- CONTROL ID --}}
+                    
 
                     <div class="form-group">
 
@@ -2494,7 +2480,7 @@
                     </div>
 
 
-                    {{-- DOMAIN CODE --}}
+                    
 
                     <div class="form-group">
 
@@ -2514,7 +2500,7 @@
                     </div>
 
 
-                    {{-- CONTROL NAME --}}
+                    
 
                     <div class="form-group full-width">
 
@@ -2534,7 +2520,7 @@
                     </div>
 
 
-                    {{-- BUSINESS DESCRIPTION --}}
+                    
 
                     <div class="form-group full-width">
 
@@ -2551,7 +2537,7 @@
                     </div>
 
 
-                    {{-- BUSINESS OBJECTIVE --}}
+                    
 
                     <div class="form-group full-width">
 
@@ -2568,7 +2554,7 @@
                     </div>
 
 
-                    {{-- BUSINESS OWNER --}}
+                    
 
                     <div class="form-group">
 
@@ -2586,7 +2572,7 @@
                     </div>
 
 
-                    {{-- CONTROL CATEGORY --}}
+                    
 
                     <div class="form-group">
 
@@ -2604,7 +2590,7 @@
                     </div>
 
 
-                    {{-- CRITICALITY --}}
+                    
 
                     <div class="form-group">
 
@@ -2622,7 +2608,7 @@
                     </div>
 
 
-                    {{-- STATUS --}}
+                    
 
                     <div class="form-group">
 
@@ -2655,7 +2641,7 @@
                     </div>
 
 
-                    {{-- VERSION --}}
+                    
 
                     <div class="form-group">
 
@@ -2676,7 +2662,7 @@
 
 
 
-                    {{-- CONTROL NATURE --}}
+                    
 
                     <div class="form-group">
 
@@ -2694,7 +2680,7 @@
                     </div>
 
 
-                    {{-- COMPENSATING CONTROL --}}
+                    
 
                     <div class="form-group">
 
@@ -2712,7 +2698,7 @@
                     </div>
 
 
-                    {{-- APPLICABLE INDUSTRIES --}}
+                    
 
                     <div class="form-group full-width">
 
@@ -2729,7 +2715,7 @@
                     </div>
 
 
-                    {{-- APPLICABLE TECHNOLOGIES --}}
+                    
 
                     <div class="form-group full-width">
 
@@ -2746,7 +2732,7 @@
                     </div>
 
 
-                    {{-- CONTROL SUMMARY --}}
+                    
 
                     <div class="form-group full-width">
 
@@ -2763,7 +2749,7 @@
                     </div>
 
 
-                    {{-- BUSINESS BENEFITS --}}
+                    
 
                     <div class="form-group full-width">
 
@@ -2780,7 +2766,7 @@
                     </div>
 
 
-                    {{-- BUSINESS RISKS IF MISSING --}}
+                    
 
                     <div class="form-group full-width">
 
@@ -2797,7 +2783,7 @@
                     </div>
 
 
-                    {{-- PRIMARY STAKEHOLDERS --}}
+                    
 
                     <div class="form-group full-width">
 
@@ -3245,4 +3231,5 @@
 </script>
 
 
-@endsection
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layouts.aspiaUcl', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\xampp\htdocs\AspiaUCL\resources\views/aspiaUcl/controls/index.blade.php ENDPATH**/ ?>
