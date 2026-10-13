@@ -197,6 +197,16 @@ HTML : ($domainName ? "<span class=\"badge-chip chip-cyan\">Domain: {$domainName
             '{{sibling_requirements_chips}}' => $siblingRequirementsChips,
             '{{sibling_requirements_table}}' => $siblingRequirementsTable,
             '{{sibling_requirements_count}}' => $siblingRequirementsCount,
+            '{{all_frameworks_dropdown_list}}' => $this->renderAllFrameworksDropdownList(),
+            '{{all_domains_dropdown_list}}'    => $this->renderAllDomainsDropdownList(),
+            '{{all_controls_dropdown_list}}'   => $this->renderAllControlsDropdownList(),
+            '{{all_framework_dropdown_list}}'  => $this->renderAllFrameworksDropdownList(),
+            '{{all_domain_dropdown_list}}'     => $this->renderAllDomainsDropdownList(),
+            '{{all_control_dropdown_list}}'    => $this->renderAllControlsDropdownList(),
+            '{{frameworks_dropdown_list}}'     => $this->renderAllFrameworksDropdownList(),
+            '{{domains_dropdown_list}}'        => $this->renderAllDomainsDropdownList(),
+            '{{controls_dropdown_list}}'       => $this->renderAllControlsDropdownList(),
+            '{{search_index_json}}'            => '[]',
         ];
 
         foreach ($placeholders as $placeholder => $value) {
@@ -444,6 +454,10 @@ HTML;
                     {$rows}
                 </tbody>
             </table>
+        </div>
+HTML;
+    }
+
     private function renderMissingTemplateError(string $moduleName, string $recordName, ?string $type = null, ?string $dashboardUrl = null)
     {
         $dashboardUrl = $dashboardUrl ?? route('dashboard');
@@ -1543,5 +1557,104 @@ HTML;
 </body>
 </html>
 HTML;
+    }
+
+    protected function renderAllFrameworksDropdownList(): string
+    {
+        $frameworks = \App\Models\Framework::orderBy('name', 'asc')->get();
+        if ($frameworks->isEmpty()) {
+            return '';
+        }
+
+        $html = '';
+        $badges = ['badge-navy'];
+        $i = 0;
+        foreach ($frameworks as $fw) {
+            $badgeClass = $badges[$i % count($badges)];
+            $i++;
+            $url = route('frameworks.show', $fw->slug);
+            $code = e($fw->framework_code ?: $fw->framework_family ?: 'FW');
+            $name = e($fw->name);
+            $cat  = e($fw->category ?: 'Regulatory Framework');
+
+            $html .= <<<HTML
+            <a href="{$url}" class="dropdown-card">
+                <div class="dropdown-card-body">
+                    <div class="dropdown-card-title-row">
+                        <span class="dropdown-card-title">{$name}</span>
+                        <span class="card-badge {$badgeClass}">{$code}</span>
+                    </div>
+                    <span class="dropdown-card-sub">{$cat}</span>
+                </div>
+            </a>
+HTML;
+        }
+        return $html;
+    }
+
+    protected function renderAllDomainsDropdownList(): string
+    {
+        $domains = \App\Models\Domain::orderBy('display_order', 'asc')->get();
+        if ($domains->isEmpty()) {
+            return '';
+        }
+
+        $html = '';
+        $badges = ['badge-navy'];
+        $i = 0;
+        foreach ($domains as $d) {
+            $badgeClass = $badges[$i % count($badges)];
+            $i++;
+            $url = route('domains.show', $d->slug);
+            $code = e($d->domain_code ?: $d->domain_id ?: 'DOM');
+            $name = e($d->name);
+            $sub  = e($d->short_overview ?: $d->purpose ?: 'Control Domain');
+
+            $html .= <<<HTML
+            <a href="{$url}" class="dropdown-card">
+                <div class="dropdown-card-body">
+                    <div class="dropdown-card-title-row">
+                        <span class="dropdown-card-title">{$name}</span>
+                        <span class="card-badge {$badgeClass}">{$code}</span>
+                    </div>
+                    <span class="dropdown-card-sub">{$sub}</span>
+                </div>
+            </a>
+HTML;
+        }
+        return $html;
+    }
+
+    protected function renderAllControlsDropdownList(): string
+    {
+        $controls = \App\Models\Control::orderBy('control_id', 'asc')->take(50)->get();
+        if ($controls->isEmpty()) {
+            return '';
+        }
+
+        $html = '';
+        $badges = ['badge-navy'];
+        $i = 0;
+        foreach ($controls as $c) {
+            $badgeClass = $badges[$i % count($badges)];
+            $i++;
+            $url = route('controls.show', $c->control_id);
+            $code = e($c->control_id);
+            $name = e($c->name);
+            $sub  = e($c->control_category ?: $c->description ?: 'Security Control');
+
+            $html .= <<<HTML
+            <a href="{$url}" class="dropdown-card">
+                <div class="dropdown-card-body">
+                    <div class="dropdown-card-title-row">
+                        <span class="dropdown-card-title">{$name}</span>
+                        <span class="card-badge {$badgeClass}">{$code}</span>
+                    </div>
+                    <span class="dropdown-card-sub">{$sub}</span>
+                </div>
+            </a>
+HTML;
+        }
+        return $html;
     }
 }

@@ -194,6 +194,38 @@ class FrameworkController extends Controller
                 'nullable',
                 'string',
             ],
+            'purpose_objective' => [
+                'nullable',
+                'string',
+            ],
+            'description' => [
+                'nullable',
+                'string',
+            ],
+            'scope' => [
+                'nullable',
+                'string',
+            ],
+            'key_focus_areas' => [
+                'nullable',
+                'string',
+            ],
+            'structure_domains' => [
+                'nullable',
+                'string',
+            ],
+            'certification_assessment' => [
+                'nullable',
+                'string',
+            ],
+            'related_frameworks' => [
+                'nullable',
+                'string',
+            ],
+            'official_source_url' => [
+                'nullable',
+                'string',
+            ],
         ]);
 
         // Check if matching framework already exists
@@ -328,6 +360,38 @@ class FrameworkController extends Controller
                 'max:255',
             ],
             'related_domains' => [
+                'nullable',
+                'string',
+            ],
+            'purpose_objective' => [
+                'nullable',
+                'string',
+            ],
+            'description' => [
+                'nullable',
+                'string',
+            ],
+            'scope' => [
+                'nullable',
+                'string',
+            ],
+            'key_focus_areas' => [
+                'nullable',
+                'string',
+            ],
+            'structure_domains' => [
+                'nullable',
+                'string',
+            ],
+            'certification_assessment' => [
+                'nullable',
+                'string',
+            ],
+            'related_frameworks' => [
+                'nullable',
+                'string',
+            ],
+            'official_source_url' => [
                 'nullable',
                 'string',
             ],

@@ -146,12 +146,12 @@
         font-weight: 800;
         text-transform: uppercase;
         letter-spacing: 0.06em;
-        color: #16C4F4;
+        color: #0284C7;
     }
     .popover-all-link {
         font-size: 0.75rem;
         font-weight: 700;
-        color: #16C4F4 !important;
+        color: #0284C7 !important;
         text-decoration: none;
         transition: opacity 0.2s;
     }

@@ -759,4 +759,58 @@
 
 </body>
 
+</html> <!-- ADMIN -->
+
+        <div class="admin">
+
+            <div class="admin-avatar">
+
+                {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
+
+            </div>
+
+
+            <div class="admin-info">
+
+                <strong>
+
+                    {{ auth()->user()->name }}
+
+                </strong>
+
+                <span>
+
+                    Super Admin
+
+                </span>
+
+            </div>
+
+        </div>
+
+    </header>
+
+
+    <main class="content">
+
+        @yield('content')
+
+    </main>
+
+
+</div>
+
+<script>
+    function toggleSidebar() {
+        const sidebar = document.getElementById('appSidebar');
+        const backdrop = document.getElementById('sidebarBackdrop');
+        if (sidebar && backdrop) {
+            sidebar.classList.toggle('show');
+            backdrop.classList.toggle('show');
+        }
+    }
+</script>
+
+</body>
+
 </html>

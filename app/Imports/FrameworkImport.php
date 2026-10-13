@@ -84,6 +84,15 @@ class FrameworkImport implements ToModel, WithHeadingRow, WithEvents
                 $counter++;
             }
 
+            $purposeObjective = $row['purpose_objective'] ?? ($row['purpose'] ?? ($row['objective'] ?? null));
+            $description = $row['overview_description'] ?? ($row['description'] ?? ($row['overview'] ?? null));
+            $scope = $row['scope'] ?? null;
+            $keyFocusAreas = $row['key_focus_areas'] ?? ($row['key_focus'] ?? null);
+            $structureDomains = $row['structure_domains'] ?? ($row['structure'] ?? null);
+            $certificationAssessment = $row['certification_assessment'] ?? ($row['certification'] ?? null);
+            $relatedFrameworks = $row['related_frameworks'] ?? null;
+            $officialSourceUrl = $row['official_source_url'] ?? ($row['official_source'] ?? ($row['url'] ?? null));
+
             $existing->update([
                 'framework_id' => $frameworkId,
                 'framework_code' => $frameworkCode ?? $existing->framework_code,
@@ -98,6 +107,14 @@ class FrameworkImport implements ToModel, WithHeadingRow, WithEvents
                 'industry' => $row['industry'] ?? $existing->industry,
                 'framework_type' => $row['framework_type'] ?? $existing->framework_type,
                 'related_domains' => $row['related_domains'] ?? $existing->related_domains,
+                'purpose_objective' => $purposeObjective ?? $existing->purpose_objective,
+                'description' => $description ?? $existing->description,
+                'scope' => $scope ?? $existing->scope,
+                'key_focus_areas' => $keyFocusAreas ?? $existing->key_focus_areas,
+                'structure_domains' => $structureDomains ?? $existing->structure_domains,
+                'certification_assessment' => $certificationAssessment ?? $existing->certification_assessment,
+                'related_frameworks' => $relatedFrameworks ?? $existing->related_frameworks,
+                'official_source_url' => $officialSourceUrl ?? $existing->official_source_url,
             ]);
 
             $this->updatedCount++;
@@ -127,6 +144,15 @@ class FrameworkImport implements ToModel, WithHeadingRow, WithEvents
         |--------------------------------------------------------------------------
         */
 
+        $purposeObjective = $row['purpose_objective'] ?? ($row['purpose'] ?? ($row['objective'] ?? null));
+        $description = $row['overview_description'] ?? ($row['description'] ?? ($row['overview'] ?? null));
+        $scope = $row['scope'] ?? null;
+        $keyFocusAreas = $row['key_focus_areas'] ?? ($row['key_focus'] ?? null);
+        $structureDomains = $row['structure_domains'] ?? ($row['structure'] ?? null);
+        $certificationAssessment = $row['certification_assessment'] ?? ($row['certification'] ?? null);
+        $relatedFrameworks = $row['related_frameworks'] ?? null;
+        $officialSourceUrl = $row['official_source_url'] ?? ($row['official_source'] ?? ($row['url'] ?? null));
+
         return new Framework([
             'framework_id' => $frameworkId,
             'framework_code' => $frameworkCode,
@@ -141,6 +167,14 @@ class FrameworkImport implements ToModel, WithHeadingRow, WithEvents
             'industry' => $row['industry'] ?? null,
             'framework_type' => $row['framework_type'] ?? null,
             'related_domains' => $row['related_domains'] ?? null,
+            'purpose_objective' => $purposeObjective,
+            'description' => $description,
+            'scope' => $scope,
+            'key_focus_areas' => $keyFocusAreas,
+            'structure_domains' => $structureDomains,
+            'certification_assessment' => $certificationAssessment,
+            'related_frameworks' => $relatedFrameworks,
+            'official_source_url' => $officialSourceUrl,
         ]);
     }
 }

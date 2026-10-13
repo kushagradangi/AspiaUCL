@@ -143,11 +143,21 @@ class FrameworkTemplateController extends Controller
         }
 
         // Domains
-        $domains       = $framework->getMappedDomains();
-        $domainsCount  = $domains->count();
-        $domainIdChips = $this->renderDomainIdChips($domains);
-        $domainsTable  = $this->renderDomainsTable($domains);
-        $domainsList   = $this->renderDomainsList($domains);
+        $domains          = $framework->getMappedDomains();
+        $domainsCount     = $domains->count();
+        $domainIdChips    = $this->renderDomainIdChips($domains);
+        $domainCodeChips  = $this->renderDomainCodeChips($domains);
+        $domainCodeBadges = $this->renderDomainCodeBadges($domains);
+        $domainsTable     = $this->renderDomainsTable($domains);
+        $domainsList      = $this->renderDomainsList($domains);
+
+        $domainCodesStr = $domains->map(function ($d) {
+            return $d->domain_code ?: $d->domain_id;
+        })->filter()->unique()->implode(', ');
+
+        if (empty($domainCodesStr)) {
+            $domainCodesStr = $framework->related_domains ?? '';
+        }
 
         // Controls
         $controls          = $framework->getMappedControls();
@@ -161,6 +171,22 @@ class FrameworkTemplateController extends Controller
         $requirementsCount  = $requirements->count();
         $requirementIdChips = $this->renderRequirementIdChips($requirements);
         $requirementsTable  = $this->renderRequirementsTable($requirements);
+
+        $requirementStatements = $requirements->map(function ($r) {
+            $statement = trim($r->requirement ?? '');
+            $title     = trim($r->requirement_title ?? '');
+            if ($statement && $title && $statement !== $title) {
+                return "• {$title}: {$statement}";
+            }
+            return "• " . ($statement ?: $title ?: $r->requirement_id);
+        })->filter()->implode("\n\n");
+
+        $typicalOwnersStr = $requirements->pluck('typical_owner')->filter()->unique()->implode(', ');
+        if (empty($typicalOwnersStr)) {
+            $typicalOwnersStr = 'Audit & Compliance';
+        }
+
+        $typicalOwnerBadges = $this->renderTypicalOwnerBadges($requirements);
 
         $nameVersion = "{$framework->name}:{$framework->version}";
         $canonicalUrl = route('frameworks.show', $framework->slug);
@@ -181,7 +207,23 @@ class FrameworkTemplateController extends Controller
             '{{region}}'                   => $framework->region,
             '{{industry}}'                 => $framework->industry,
             '{{framework_type}}'           => $framework->framework_type,
+            '{{related_domains}}'          => $framework->related_domains,
+            '{{purpose_objective}}'        => $framework->purpose_objective,
+            '{{purpose}}'                  => $framework->purpose_objective,
+            '{{objective}}'                => $framework->purpose_objective,
             '{{description}}'              => $framework->description,
+            '{{overview_description}}'     => $framework->description,
+            '{{overview}}'                 => $framework->description,
+            '{{scope}}'                    => $framework->scope,
+            '{{key_focus_areas}}'          => $framework->key_focus_areas,
+            '{{structure_domains}}'        => $framework->structure_domains,
+            '{{structure}}'                => $framework->structure_domains,
+            '{{certification_assessment}}' => $framework->certification_assessment,
+            '{{certification}}'            => $framework->certification_assessment,
+            '{{related_frameworks}}'       => $framework->related_frameworks,
+            '{{official_source_url}}'      => $framework->official_source_url,
+            '{{official_source}}'          => $framework->official_source_url,
+            '{{url}}'                      => $framework->official_source_url,
             '{{aspia_logo_url}}'          => asset('images/aspia.png'),
             '{{dashboard_url}}'           => route('dashboard'),
 
@@ -196,8 +238,25 @@ class FrameworkTemplateController extends Controller
             '{{count_domains}}'            => $domainsCount,
             '{{domain_id_chips}}'          => $domainIdChips,
             '{{domains_chips}}'            => $domainIdChips,
+            '{{domain_code_chips}}'        => $domainCodeChips,
+            '{{domains_code_chips}}'       => $domainCodeChips,
+            '{{domain_codes_chips}}'       => $domainCodeChips,
+            '{{domain_code_list}}'         => $domainCodeChips,
+            '{{domains_code_list}}'        => $domainCodeChips,
+            '{{domain_codes_list}}'        => $domainCodeChips,
+            '{{domain_code_badges}}'      => $domainCodeBadges,
+            '{{domains_code_badges}}'     => $domainCodeBadges,
+            '{{domain_codes_badges}}'     => $domainCodeBadges,
+            '{{domain_code}}'              => $domainCodesStr,
+            '{{domain_codes}}'             => $domainCodesStr,
+            '{{domains_code}}'             => $domainCodesStr,
+            '{{domains_codes}}'            => $domainCodesStr,
             '{{domains_table}}'            => $domainsTable,
+            '{{domain_table}}'             => $domainsTable,
+            '{{domain_code_table}}'        => $domainsTable,
+            '{{domains_code_table}}'       => $domainsTable,
             '{{domains_list}}'             => $domainsList,
+            '{{domain_list}}'              => $domainsList,
 
             // Controls
             '{{controls_count}}'           => $controlsCount,
@@ -227,6 +286,30 @@ class FrameworkTemplateController extends Controller
             '{{requirements_table}}'       => $requirementsTable,
             '{{requirements_list}}'        => $requirementsTable,
             '{{audit_crosswalk_table}}'    => $requirementsTable,
+
+            // Requirement Statements & Typical Owner
+            '{{requirement}}'              => $requirementStatements,
+            '{{requirements}}'             => $requirementStatements,
+            '{{requirement_statement}}'    => $requirementStatements,
+            '{{requirement_text}}'         => $requirementStatements,
+            '{{typical_owner}}'            => $typicalOwnersStr,
+            '{{typical_owners}}'           => $typicalOwnersStr,
+            '{{requirement_typical_owner}}'=> $typicalOwnersStr,
+            '{{requirement_owner}}'        => $typicalOwnersStr,
+            '{{typical_owner_chips}}'      => $typicalOwnerBadges,
+            '{{typical_owner_badges}}'     => $typicalOwnerBadges,
+            '{{typical_owners_badges}}'    => $typicalOwnerBadges,
+
+            // Navbar Dropdowns
+            '{{all_frameworks_dropdown_list}}' => $this->renderAllFrameworksDropdownList(),
+            '{{all_domains_dropdown_list}}'    => $this->renderAllDomainsDropdownList(),
+            '{{all_controls_dropdown_list}}'   => $this->renderAllControlsDropdownList(),
+            '{{all_framework_dropdown_list}}'  => $this->renderAllFrameworksDropdownList(),
+            '{{all_domain_dropdown_list}}'     => $this->renderAllDomainsDropdownList(),
+            '{{all_control_dropdown_list}}'    => $this->renderAllControlsDropdownList(),
+            '{{frameworks_dropdown_list}}'     => $this->renderAllFrameworksDropdownList(),
+            '{{domains_dropdown_list}}'        => $this->renderAllDomainsDropdownList(),
+            '{{controls_dropdown_list}}'       => $this->renderAllControlsDropdownList(),
         ];
 
         foreach ($placeholders as $placeholder => $value) {
@@ -244,10 +327,13 @@ class FrameworkTemplateController extends Controller
 
         $chips = '';
         foreach ($domains as $domain) {
-            $domainUrl = route('domains.show', $domain->slug);
-            $name      = htmlspecialchars($domain->name);
+            $domainUrl  = route('domains.show', $domain->slug);
+            $name       = htmlspecialchars($domain->name);
+            $domainCode = htmlspecialchars($domain->domain_code ?: $domain->domain_id ?: '');
+            $codeHtml   = $domainCode ? "<span class=\"chip-code font-mono\" style=\"font-weight: 700; color: var(--accent-purple, #6366f1); background: var(--accent-purple-glow, rgba(99, 102, 241, 0.1)); border: 1px solid var(--accent-purple-border, rgba(99, 102, 241, 0.25)); padding: 2px 7px; border-radius: 4px; font-size: 11px; margin-right: 6px; flex-shrink: 0;\">{$domainCode}</span>" : '';
             $chips .= <<<HTML
             <a href="{$domainUrl}" title="Domain: {$name}" class="module-chip chip-purple">
+                {$codeHtml}
                 <span class="chip-name">{$name}</span>
                 <span class="chip-arrow">↗</span>
             </a>
@@ -255,6 +341,71 @@ HTML;
         }
 
         return "<div class=\"chips-grid\">{$chips}</div>";
+    }
+
+    protected function renderDomainCodeChips($domains): string
+    {
+        if ($domains->isEmpty()) {
+            return '<p style="color: var(--text-muted); font-size: 13px;">No associated domains found.</p>';
+        }
+
+        $chips = '';
+        foreach ($domains as $domain) {
+            $domainUrl  = route('domains.show', $domain->slug);
+            $domainCode = htmlspecialchars($domain->domain_code ?: $domain->domain_id ?: 'DOM');
+            $name       = htmlspecialchars($domain->name);
+            $chips .= <<<HTML
+            <a href="{$domainUrl}" title="Domain: {$name} ({$domainCode})" class="module-chip chip-purple">
+                <span class="chip-code font-mono" style="font-weight: 700; color: var(--accent-purple, #6366f1); background: var(--accent-purple-glow, rgba(99, 102, 241, 0.1)); border: 1px solid var(--accent-purple-border, rgba(99, 102, 241, 0.25)); padding: 2px 7px; border-radius: 4px; font-size: 11px; margin-right: 6px; flex-shrink: 0;">{$domainCode}</span>
+                <span class="chip-name">{$name}</span>
+                <span class="chip-arrow">↗</span>
+            </a>
+HTML;
+        }
+
+        return "<div class=\"chips-grid\">{$chips}</div>";
+    }
+
+    protected function renderDomainCodeBadges($domains): string
+    {
+        if ($domains->isEmpty()) {
+            return '<p style="color: var(--text-muted); font-size: 13px;">No associated domain codes found.</p>';
+        }
+
+        $badges = '';
+        foreach ($domains as $domain) {
+            $domainUrl  = route('domains.show', $domain->slug);
+            $domainCode = htmlspecialchars($domain->domain_code ?: $domain->domain_id ?: 'DOM');
+            $name       = htmlspecialchars($domain->name);
+            $badges .= <<<HTML
+            <a href="{$domainUrl}" title="Domain: {$name}" style="display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; background: var(--accent-purple-glow, rgba(99, 102, 241, 0.1)); border: 1px solid var(--accent-purple-border, rgba(99, 102, 241, 0.25)); border-radius: 6px; color: var(--accent-purple, #6366f1); font-family: 'JetBrains Mono', monospace; font-size: 11.5px; font-weight: 700; text-decoration: none; transition: all 0.2s ease;">
+                <span>{$domainCode}</span>
+                <span style="font-size: 10px; opacity: 0.75;">↗</span>
+            </a>
+HTML;
+        }
+
+        return "<div style=\"display: flex; flex-wrap: wrap; gap: 8px; align-items: center;\">{$badges}</div>";
+    }
+
+    protected function renderTypicalOwnerBadges($requirements): string
+    {
+        $owners = $requirements->pluck('typical_owner')->filter()->unique();
+        if ($owners->isEmpty()) {
+            return '<span style="display: inline-flex; align-items: center; gap: 5px; padding: 4px 12px; background: rgba(5, 150, 105, 0.1); border: 1px solid rgba(5, 150, 105, 0.25); border-radius: 20px; color: #059669; font-size: 11.5px; font-weight: 700;">👤 Audit & Compliance</span>';
+        }
+
+        $badges = '';
+        foreach ($owners as $owner) {
+            $ownerEsc = htmlspecialchars($owner);
+            $badges .= <<<HTML
+            <span style="display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; background: rgba(5, 150, 105, 0.1); border: 1px solid rgba(5, 150, 105, 0.25); border-radius: 20px; color: #059669; font-size: 11.5px; font-weight: 700;">
+                <span>👤 {$ownerEsc}</span>
+            </span>
+HTML;
+        }
+
+        return "<div style=\"display: flex; flex-wrap: wrap; gap: 8px; align-items: center;\">{$badges}</div>";
     }
 
     protected function renderControlIdChips($controls): string
@@ -2220,7 +2371,7 @@ HTML;
             return '';
         }
 
-        $html = '<div class="dropdown-popover-list virtual-scroll-container" style="display: flex; flex-direction: column; gap: 0;">';
+        $html = '';
         $badges = ['badge-navy'];
         $i = 0;
         foreach ($frameworks as $fw) {
@@ -2232,16 +2383,17 @@ HTML;
             $cat  = e($fw->category ?: 'Regulatory Framework');
 
             $html .= <<<HTML
-            <a href="{$url}" class="dropdown-card" style="display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 8px 10px; border-bottom: 1px solid var(--border-light, #e2e8f0); background: transparent; border-radius: 4px; text-decoration: none; transition: background 0.15s ease;" onmouseover="this.style.background='var(--bg-subtle, #f8fafc)';" onmouseout="this.style.background='transparent';">
-                <div style="flex: 1; min-width: 0;">
-                    <div style="font-size: 12.5px; font-weight: 600; color: var(--text-title, #0f172a); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.3;">{$name}</div>
-                    <div style="font-size: 10.5px; color: var(--text-muted, #64748b); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 1px;">{$cat}</div>
+            <a href="{$url}" class="dropdown-card">
+                <div class="dropdown-card-body">
+                    <div class="dropdown-card-title-row">
+                        <span class="dropdown-card-title">{$name}</span>
+                        <span class="card-badge {$badgeClass}">{$code}</span>
+                    </div>
+                    <span class="dropdown-card-sub">{$cat}</span>
                 </div>
-                <span class="card-badge {$badgeClass}" style="font-family: 'JetBrains Mono', monospace; font-size: 9.5px; font-weight: 700; padding: 2px 6px; border-radius: 4px; flex-shrink: 0;">{$code}</span>
             </a>
 HTML;
         }
-        $html .= '</div>';
         return $html;
     }
 
@@ -2252,7 +2404,7 @@ HTML;
             return '';
         }
 
-        $html = '<div class="dropdown-popover-list virtual-scroll-container" style="display: flex; flex-direction: column; gap: 0;">';
+        $html = '';
         $badges = ['badge-navy'];
         $i = 0;
         foreach ($domains as $d) {
@@ -2264,27 +2416,28 @@ HTML;
             $sub  = e($d->short_overview ?: $d->purpose ?: 'Control Domain');
 
             $html .= <<<HTML
-            <a href="{$url}" class="dropdown-card" style="display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 8px 10px; border-bottom: 1px solid var(--border-light, #e2e8f0); background: transparent; border-radius: 4px; text-decoration: none; transition: background 0.15s ease;" onmouseover="this.style.background='var(--bg-subtle, #f8fafc)';" onmouseout="this.style.background='transparent';">
-                <div style="flex: 1; min-width: 0;">
-                    <div style="font-size: 12.5px; font-weight: 600; color: var(--text-title, #0f172a); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.3;">{$name}</div>
-                    <div style="font-size: 10.5px; color: var(--text-muted, #64748b); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 1px;">{$sub}</div>
+            <a href="{$url}" class="dropdown-card">
+                <div class="dropdown-card-body">
+                    <div class="dropdown-card-title-row">
+                        <span class="dropdown-card-title">{$name}</span>
+                        <span class="card-badge {$badgeClass}">{$code}</span>
+                    </div>
+                    <span class="dropdown-card-sub">{$sub}</span>
                 </div>
-                <span class="card-badge {$badgeClass}" style="font-family: 'JetBrains Mono', monospace; font-size: 9.5px; font-weight: 700; padding: 2px 6px; border-radius: 4px; flex-shrink: 0;">{$code}</span>
             </a>
 HTML;
         }
-        $html .= '</div>';
         return $html;
     }
 
     protected function renderAllControlsDropdownList(): string
     {
-        $controls = \App\Models\Control::orderBy('control_id', 'asc')->get();
+        $controls = \App\Models\Control::orderBy('control_id', 'asc')->take(50)->get();
         if ($controls->isEmpty()) {
             return '';
         }
 
-        $html = '<div class="dropdown-popover-list virtual-scroll-container" style="display: flex; flex-direction: column; gap: 0;">';
+        $html = '';
         $badges = ['badge-navy'];
         $i = 0;
         foreach ($controls as $c) {
@@ -2296,16 +2449,17 @@ HTML;
             $sub  = e($c->control_category ?: $c->description ?: 'Security Control');
 
             $html .= <<<HTML
-            <a href="{$url}" class="dropdown-card" style="display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 8px 10px; border-bottom: 1px solid var(--border-light, #e2e8f0); background: transparent; border-radius: 4px; text-decoration: none; transition: background 0.15s ease;" onmouseover="this.style.background='var(--bg-subtle, #f8fafc)';" onmouseout="this.style.background='transparent';">
-                <div style="flex: 1; min-width: 0;">
-                    <div style="font-size: 12.5px; font-weight: 600; color: var(--text-title, #0f172a); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.3;">{$name}</div>
-                    <div style="font-size: 10.5px; color: var(--text-muted, #64748b); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 1px;">{$sub}</div>
+            <a href="{$url}" class="dropdown-card">
+                <div class="dropdown-card-body">
+                    <div class="dropdown-card-title-row">
+                        <span class="dropdown-card-title">{$name}</span>
+                        <span class="card-badge {$badgeClass}">{$code}</span>
+                    </div>
+                    <span class="dropdown-card-sub">{$sub}</span>
                 </div>
-                <span class="card-badge {$badgeClass}" style="font-family: 'JetBrains Mono', monospace; font-size: 9.5px; font-weight: 700; padding: 2px 6px; border-radius: 4px; flex-shrink: 0;">{$code}</span>
             </a>
 HTML;
         }
-        $html .= '</div>';
         return $html;
     }
 }

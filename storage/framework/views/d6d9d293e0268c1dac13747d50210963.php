@@ -761,4 +761,60 @@
 
 </body>
 
+</html> <!-- ADMIN -->
+
+        <div class="admin">
+
+            <div class="admin-avatar">
+
+                <?php echo e(strtoupper(substr(auth()->user()->name, 0, 1))); ?>
+
+
+            </div>
+
+
+            <div class="admin-info">
+
+                <strong>
+
+                    <?php echo e(auth()->user()->name); ?>
+
+
+                </strong>
+
+                <span>
+
+                    Super Admin
+
+                </span>
+
+            </div>
+
+        </div>
+
+    </header>
+
+
+    <main class="content">
+
+        <?php echo $__env->yieldContent('content'); ?>
+
+    </main>
+
+
+</div>
+
+<script>
+    function toggleSidebar() {
+        const sidebar = document.getElementById('appSidebar');
+        const backdrop = document.getElementById('sidebarBackdrop');
+        if (sidebar && backdrop) {
+            sidebar.classList.toggle('show');
+            backdrop.classList.toggle('show');
+        }
+    }
+</script>
+
+</body>
+
 </html><?php /**PATH C:\xampp\htdocs\AspiaUCL\resources\views/layouts/aspiaUcl.blade.php ENDPATH**/ ?>

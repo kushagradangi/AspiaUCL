@@ -1294,7 +1294,23 @@
 
                                             @js($framework->framework_type),
 
-                                            @js($framework->related_domains)
+                                            @js($framework->related_domains),
+
+                                            @js($framework->purpose_objective),
+
+                                            @js($framework->description),
+
+                                            @js($framework->scope),
+
+                                            @js($framework->key_focus_areas),
+
+                                            @js($framework->structure_domains),
+
+                                            @js($framework->certification_assessment),
+
+                                            @js($framework->related_frameworks),
+
+                                            @js($framework->official_source_url)
 
                                         )"
                                     >
@@ -1698,6 +1714,83 @@
                             <button
                                 type="button"
                                 class="placeholder-btn"
+                                data-placeholder="&#123;&#123;purpose_objective&#125;&#125;"
+                                onclick="insertFrameworkPlaceholder(this.dataset.placeholder)"
+                            >
+
+                                &#123;&#123;purpose_objective&#125;&#125;
+
+                            </button>
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="&#123;&#123;scope&#125;&#125;"
+                                onclick="insertFrameworkPlaceholder(this.dataset.placeholder)"
+                            >
+
+                                &#123;&#123;scope&#125;&#125;
+
+                            </button>
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="&#123;&#123;key_focus_areas&#125;&#125;"
+                                onclick="insertFrameworkPlaceholder(this.dataset.placeholder)"
+                            >
+
+                                &#123;&#123;key_focus_areas&#125;&#125;
+
+                            </button>
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="&#123;&#123;structure_domains&#125;&#125;"
+                                onclick="insertFrameworkPlaceholder(this.dataset.placeholder)"
+                            >
+
+                                &#123;&#123;structure_domains&#125;&#125;
+
+                            </button>
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="&#123;&#123;certification_assessment&#125;&#125;"
+                                onclick="insertFrameworkPlaceholder(this.dataset.placeholder)"
+                            >
+
+                                &#123;&#123;certification_assessment&#125;&#125;
+
+                            </button>
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="&#123;&#123;related_frameworks&#125;&#125;"
+                                onclick="insertFrameworkPlaceholder(this.dataset.placeholder)"
+                            >
+
+                                &#123;&#123;related_frameworks&#125;&#125;
+
+                            </button>
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="&#123;&#123;official_source_url&#125;&#125;"
+                                onclick="insertFrameworkPlaceholder(this.dataset.placeholder)"
+                            >
+
+                                &#123;&#123;official_source_url&#125;&#125;
+
+                            </button>
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
                                 data-placeholder="&#123;&#123;domains_count&#125;&#125;"
                                 onclick="insertFrameworkPlaceholder(this.dataset.placeholder)"
                             >
@@ -1744,6 +1837,33 @@
                                 onclick="insertFrameworkPlaceholder(this.dataset.placeholder)"
                             >
                                 &#123;&#123;domain_id_chips&#125;&#125;
+                            </button>
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="&#123;&#123;domain_code_chips&#125;&#125;"
+                                onclick="insertFrameworkPlaceholder(this.dataset.placeholder)"
+                            >
+                                &#123;&#123;domain_code_chips&#125;&#125;
+                            </button>
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="&#123;&#123;domain_code_badges&#125;&#125;"
+                                onclick="insertFrameworkPlaceholder(this.dataset.placeholder)"
+                            >
+                                &#123;&#123;domain_code_badges&#125;&#125;
+                            </button>
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="&#123;&#123;domain_codes&#125;&#125;"
+                                onclick="insertFrameworkPlaceholder(this.dataset.placeholder)"
+                            >
+                                &#123;&#123;domain_codes&#125;&#125;
                             </button>
 
                             <button
@@ -1798,6 +1918,33 @@
                                 onclick="insertFrameworkPlaceholder(this.dataset.placeholder)"
                             >
                                 &#123;&#123;requirements_table&#125;&#125;
+                            </button>
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="&#123;&#123;requirement&#125;&#125;"
+                                onclick="insertFrameworkPlaceholder(this.dataset.placeholder)"
+                            >
+                                &#123;&#123;requirement&#125;&#125;
+                            </button>
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="&#123;&#123;typical_owner&#125;&#125;"
+                                onclick="insertFrameworkPlaceholder(this.dataset.placeholder)"
+                            >
+                                &#123;&#123;typical_owner&#125;&#125;
+                            </button>
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="&#123;&#123;typical_owner_badges&#125;&#125;"
+                                onclick="insertFrameworkPlaceholder(this.dataset.placeholder)"
+                            >
+                                &#123;&#123;typical_owner_badges&#125;&#125;
                             </button>
 
                         </div>
@@ -2123,6 +2270,158 @@
                     </div>
 
 
+                    {{-- PURPOSE / OBJECTIVE --}}
+
+                    <div class="form-group">
+
+                        <label class="form-label">
+                            Purpose / Objective
+                        </label>
+
+
+                        <textarea
+                            name="purpose_objective"
+                            class="form-control-aspia"
+                            rows="3"
+                            placeholder="Establish, implement, maintain and continually improve..."
+                        ></textarea>
+
+                    </div>
+
+
+                    {{-- OVERVIEW / DESCRIPTION --}}
+
+                    <div class="form-group">
+
+                        <label class="form-label">
+                            Overview / Description
+                        </label>
+
+
+                        <textarea
+                            name="description"
+                            class="form-control-aspia"
+                            rows="3"
+                            placeholder="An international standard specifying requirements..."
+                        ></textarea>
+
+                    </div>
+
+
+                    {{-- SCOPE --}}
+
+                    <div class="form-group">
+
+                        <label class="form-label">
+                            Scope
+                        </label>
+
+
+                        <textarea
+                            name="scope"
+                            class="form-control-aspia"
+                            rows="3"
+                            placeholder="Organization-wide ISMS, information assets..."
+                        ></textarea>
+
+                    </div>
+
+
+                    {{-- KEY FOCUS AREAS --}}
+
+                    <div class="form-group">
+
+                        <label class="form-label">
+                            Key Focus Areas
+                        </label>
+
+
+                        <textarea
+                            name="key_focus_areas"
+                            class="form-control-aspia"
+                            rows="3"
+                            placeholder="ISMS governance, risk management, security objectives..."
+                        ></textarea>
+
+                    </div>
+
+
+                    {{-- STRUCTURE / DOMAINS --}}
+
+                    <div class="form-group">
+
+                        <label class="form-label">
+                            Structure / Domains
+                        </label>
+
+
+                        <textarea
+                            name="structure_domains"
+                            class="form-control-aspia"
+                            rows="3"
+                            placeholder="Clauses 4-10 plus Annex A control set..."
+                        ></textarea>
+
+                    </div>
+
+
+                    {{-- CERTIFICATION / ASSESSMENT --}}
+
+                    <div class="form-group">
+
+                        <label class="form-label">
+                            Certification / Assessment
+                        </label>
+
+
+                        <textarea
+                            name="certification_assessment"
+                            class="form-control-aspia"
+                            rows="3"
+                            placeholder="Certifiable through independent conformity assessment..."
+                        ></textarea>
+
+                    </div>
+
+
+                    {{-- RELATED FRAMEWORKS --}}
+
+                    <div class="form-group">
+
+                        <label class="form-label">
+                            Related Frameworks
+                        </label>
+
+
+                        <textarea
+                            name="related_frameworks"
+                            class="form-control-aspia"
+                            rows="3"
+                            placeholder="ISO/IEC 27002, ISO/IEC 27005, NIST CSF"
+                        ></textarea>
+
+                    </div>
+
+
+                    {{-- OFFICIAL SOURCE / URL --}}
+
+                    <div class="form-group">
+
+                        <label class="form-label">
+                            Official Source / URL
+                        </label>
+
+
+                        <input
+                            type="text"
+                            name="official_source_url"
+                            class="form-control-aspia"
+                            placeholder="https://www.iso.org/standard/27001.html"
+                        >
+
+                    </div>
+
+
                 </div>
 
 
@@ -2438,6 +2737,158 @@
                             class="form-control-aspia"
                             rows="3"
                         ></textarea>
+
+                    </div>
+
+
+                    {{-- PURPOSE / OBJECTIVE --}}
+
+                    <div class="form-group">
+
+                        <label class="form-label">
+                            Purpose / Objective
+                        </label>
+
+
+                        <textarea
+                            id="editPurposeObjective"
+                            name="purpose_objective"
+                            class="form-control-aspia"
+                            rows="3"
+                        ></textarea>
+
+                    </div>
+
+
+                    {{-- OVERVIEW / DESCRIPTION --}}
+
+                    <div class="form-group">
+
+                        <label class="form-label">
+                            Overview / Description
+                        </label>
+
+
+                        <textarea
+                            id="editDescription"
+                            name="description"
+                            class="form-control-aspia"
+                            rows="3"
+                        ></textarea>
+
+                    </div>
+
+
+                    {{-- SCOPE --}}
+
+                    <div class="form-group">
+
+                        <label class="form-label">
+                            Scope
+                        </label>
+
+
+                        <textarea
+                            id="editScope"
+                            name="scope"
+                            class="form-control-aspia"
+                            rows="3"
+                        ></textarea>
+
+                    </div>
+
+
+                    {{-- KEY FOCUS AREAS --}}
+
+                    <div class="form-group">
+
+                        <label class="form-label">
+                            Key Focus Areas
+                        </label>
+
+
+                        <textarea
+                            id="editKeyFocusAreas"
+                            name="key_focus_areas"
+                            class="form-control-aspia"
+                            rows="3"
+                        ></textarea>
+
+                    </div>
+
+
+                    {{-- STRUCTURE / DOMAINS --}}
+
+                    <div class="form-group">
+
+                        <label class="form-label">
+                            Structure / Domains
+                        </label>
+
+
+                        <textarea
+                            id="editStructureDomains"
+                            name="structure_domains"
+                            class="form-control-aspia"
+                            rows="3"
+                        ></textarea>
+
+                    </div>
+
+
+                    {{-- CERTIFICATION / ASSESSMENT --}}
+
+                    <div class="form-group">
+
+                        <label class="form-label">
+                            Certification / Assessment
+                        </label>
+
+
+                        <textarea
+                            id="editCertificationAssessment"
+                            name="certification_assessment"
+                            class="form-control-aspia"
+                            rows="3"
+                        ></textarea>
+
+                    </div>
+
+
+                    {{-- RELATED FRAMEWORKS --}}
+
+                    <div class="form-group">
+
+                        <label class="form-label">
+                            Related Frameworks
+                        </label>
+
+
+                        <textarea
+                            id="editRelatedFrameworks"
+                            name="related_frameworks"
+                            class="form-control-aspia"
+                            rows="3"
+                        ></textarea>
+
+                    </div>
+
+
+                    {{-- OFFICIAL SOURCE / URL --}}
+
+                    <div class="form-group">
+
+                        <label class="form-label">
+                            Official Source / URL
+                        </label>
+
+
+                        <input
+                            type="text"
+                            id="editOfficialSourceUrl"
+                            name="official_source_url"
+                            class="form-control-aspia"
+                        >
 
                     </div>
 
@@ -2781,7 +3232,23 @@
 
         frameworkType,
 
-        relatedDomains
+        relatedDomains,
+
+        purposeObjective,
+
+        description,
+
+        scope,
+
+        keyFocusAreas,
+
+        structureDomains,
+
+        certificationAssessment,
+
+        relatedFrameworks,
+
+        officialSourceUrl
 
     ) {
 
@@ -2904,6 +3371,86 @@
             )
             .value =
                 relatedDomains || '';
+
+
+        /* PURPOSE OBJECTIVE */
+
+        document
+            .getElementById(
+                'editPurposeObjective'
+            )
+            .value =
+                purposeObjective || '';
+
+
+        /* OVERVIEW DESCRIPTION */
+
+        document
+            .getElementById(
+                'editDescription'
+            )
+            .value =
+                description || '';
+
+
+        /* SCOPE */
+
+        document
+            .getElementById(
+                'editScope'
+            )
+            .value =
+                scope || '';
+
+
+        /* KEY FOCUS AREAS */
+
+        document
+            .getElementById(
+                'editKeyFocusAreas'
+            )
+            .value =
+                keyFocusAreas || '';
+
+
+        /* STRUCTURE DOMAINS */
+
+        document
+            .getElementById(
+                'editStructureDomains'
+            )
+            .value =
+                structureDomains || '';
+
+
+        /* CERTIFICATION ASSESSMENT */
+
+        document
+            .getElementById(
+                'editCertificationAssessment'
+            )
+            .value =
+                certificationAssessment || '';
+
+
+        /* RELATED FRAMEWORKS */
+
+        document
+            .getElementById(
+                'editRelatedFrameworks'
+            )
+            .value =
+                relatedFrameworks || '';
+
+
+        /* OFFICIAL SOURCE URL */
+
+        document
+            .getElementById(
+                'editOfficialSourceUrl'
+            )
+            .value =
+                officialSourceUrl || '';
 
 
         /* SHOW MODAL */

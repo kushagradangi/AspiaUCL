@@ -39,46 +39,64 @@ Route::get('/api/ucl/search', function (\Illuminate\Http\Request $request) {
         ]);
     }
 
-    $frameworks = \App\Models\Framework::where('name', 'like', "%{$q}%")
+    $frameworks = \App\Models\Framework::where(function($query) use ($q) {
+            $query->where('name', 'like', "%{$q}%")
+                  ->orWhere('slug', 'like', "%{$q}%")
+                  ->orWhere('framework_code', 'like', "%{$q}%")
+                  ->orWhere('framework_id', 'like', "%{$q}%");
+        })
         ->take(6)->get()->map(function($fw) {
             return [
                 'name' => $fw->name,
+                'slug' => $fw->slug,
                 'code' => $fw->framework_code ?: ($fw->framework_family ?: 'FW'),
                 'sub'  => $fw->category ?: 'Regulatory Framework',
-                'url'  => route('frameworks.show', $fw->slug),
+                'url'  => '/frameworks/' . $fw->slug,
             ];
         });
 
-    $domains = \App\Models\Domain::where('name', 'like', "%{$q}%")
+    $domains = \App\Models\Domain::where(function($query) use ($q) {
+            $query->where('name', 'like', "%{$q}%")
+                  ->orWhere('slug', 'like', "%{$q}%")
+                  ->orWhere('domain_code', 'like', "%{$q}%")
+                  ->orWhere('domain_id', 'like', "%{$q}%");
+        })
         ->take(6)->get()->map(function($d) {
             return [
                 'name' => $d->name,
+                'slug' => $d->slug,
                 'code' => $d->domain_code ?: ($d->domain_id ?: 'DOM'),
                 'sub'  => $d->short_overview ?: ($d->purpose ?: 'Control Domain'),
-                'url'  => route('domains.show', $d->slug),
+                'url'  => '/domains/' . $d->slug,
             ];
         });
 
-    $controls = \App\Models\Control::where('name', 'like', "%{$q}%")
+    $controls = \App\Models\Control::where(function($query) use ($q) {
+            $query->where('name', 'like', "%{$q}%")
+                  ->orWhere('control_id', 'like', "%{$q}%");
+        })
         ->take(6)->get()->map(function($c) {
             return [
                 'name' => $c->name,
+                'slug' => $c->control_id,
                 'code' => $c->control_id,
                 'sub'  => $c->control_category ?: 'Security Control',
-                'url'  => route('controls.show', $c->control_id),
+                'url'  => '/controls/view/' . $c->control_id,
             ];
         });
 
     $requirements = \App\Models\Requirement::where(function($query) use ($q) {
             $query->where('requirement_title', 'like', "%{$q}%")
-                  ->orWhere('requirement', 'like', "%{$q}%");
+                  ->orWhere('requirement', 'like', "%{$q}%")
+                  ->orWhere('requirement_id', 'like', "%{$q}%");
         })
         ->take(6)->get()->map(function($r) {
             return [
                 'name' => $r->requirement_title ?: ($r->requirement ?: $r->requirement_id),
+                'slug' => $r->requirement_id,
                 'code' => $r->requirement_id,
                 'sub'  => $r->typical_owner ?: 'Audit Requirement',
-                'url'  => route('requirements.show', $r->requirement_id),
+                'url'  => '/requirements/view/' . $r->requirement_id,
             ];
         });
 
