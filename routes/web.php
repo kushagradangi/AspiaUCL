@@ -396,6 +396,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     )->name('requirements.import');
 
     Route::post(
+        '/requirements/import-framework-mappings',
+        [RequirementController::class, 'importFrameworkMappings']
+    )->name('requirements.import-framework-mappings');
+
+    Route::post(
         '/requirements/template',
         [RequirementTemplateController::class, 'store']
     )->name('requirements.template.store');

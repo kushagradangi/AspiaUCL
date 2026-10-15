@@ -128,12 +128,39 @@ HTML : ($domainName ? "<span class=\"badge-chip chip-cyan\">Domain: {$domainName
         $frameworkFamily = $framework?->framework_family ?? 'UCL';
         $frameworkUrl    = $framework ? route('frameworks.show', $framework->slug) : '#';
 
-        // Framework Mappings
+        $parentFrameworkBadge = $framework ? <<<HTML
+        <a href="{$frameworkUrl}" style="display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; background: rgba(16,188,232,0.15); border: 1px solid rgba(16,188,232,0.35); border-radius: 20px; color: #10bce8; text-decoration: none; font-size: 12px; font-weight: 700; transition: all 0.2s; letter-spacing: 0.5px;">
+            <span>Framework: {$frameworkId} ({$frameworkCode})</span>
+            <span style="opacity: 0.7; font-size: 10px;">↗</span>
+        </a>
+HTML : "<span class=\"badge badge-cyan\">Framework: {$frameworkName}</span>";
+
+        // Framework Mappings & Related Frameworks
         $mappings                = $requirement->frameworkMappings()->get();
         $mappingsCount           = $mappings->count();
         $frameworkMappingsBadges = $this->renderFrameworkMappingsBadges($requirement, $mappings);
         $frameworkMappingsTable  = $this->renderFrameworkMappingsTable($requirement, $mappings);
-        $frameworkBadge          = $frameworkMappingsBadges;
+
+        $mappedFwNames = $mappings->pluck('framework_name')->filter()->unique();
+        if ($mappedFwNames->isNotEmpty()) {
+            $relatedFrameworksStr = implode(', ', $mappedFwNames->toArray());
+            $frameworksCount = $mappingsCount;
+        } else {
+            // Fallback to control or domain mappings if available
+            $controlMappedFws = $control ? $control->getMappedFrameworks()->unique('framework_name') : collect();
+            if ($controlMappedFws->isNotEmpty()) {
+                $relatedFrameworksStr = implode(', ', array_filter($controlMappedFws->pluck('framework_name')->toArray()));
+                $frameworksCount = $controlMappedFws->count();
+            } else {
+                $relatedFrameworksStr = $domain?->related_frameworks ?? '';
+                $frameworksCount = !empty($relatedFrameworksStr)
+                    ? count(array_filter(array_map('trim', explode(',', $relatedFrameworksStr))))
+                    : 0;
+            }
+        }
+
+        $frameworksTable = $this->renderRelatedFrameworkBadges($relatedFrameworksStr, $mappings);
+        $frameworkBadge  = $mappings->isNotEmpty() ? $frameworkMappingsBadges : $parentFrameworkBadge;
 
         // Sibling Requirements under same Control
         $siblingRequirements      = $control ? $control->requirements()->orderBy('display_order', 'asc')->orderBy('id', 'asc')->get() : collect([$requirement]);
@@ -189,10 +216,20 @@ HTML : ($domainName ? "<span class=\"badge-chip chip-cyan\">Domain: {$domainName
             '{{framework_family}}'           => $frameworkFamily,
             '{{framework_url}}'              => $frameworkUrl,
             '{{framework_badge}}'            => $frameworkBadge,
-            '{{framework_id_badge}}'         => $frameworkBadge,
+            '{{framework_id_badge}}'         => $parentFrameworkBadge,
+            '{{parent_framework_badge}}'     => $parentFrameworkBadge,
             '{{framework_mappings}}'         => $frameworkMappingsBadges,
             '{{framework_mappings_badges}}'  => $frameworkMappingsBadges,
             '{{framework_mappings_table}}'   => $frameworkMappingsTable,
+            '{{related_frameworks_cards}}'  => $frameworksTable,
+            '{{frameworks_table}}'          => $frameworksTable,
+            '{{related_frameworks}}'        => $this->renderPlainText($relatedFrameworksStr),
+            '{{related_frameworks_badges}}' => $frameworkMappingsBadges ?: $this->renderPlainText($relatedFrameworksStr),
+            '{{framework_badges}}'          => $frameworkMappingsBadges ?: $this->renderPlainText($relatedFrameworksStr),
+            '{{frameworks_chips}}'          => $frameworkMappingsBadges ?: $this->renderPlainText($relatedFrameworksStr),
+            '{{frameworks_count}}'          => $frameworksCount,
+            '{{framework_count}}'           => $frameworksCount,
+            '{{mapped_frameworks_count}}'   => $frameworksCount,
             '{{mappings_count}}'             => $mappingsCount,
             '{{sibling_requirements_chips}}' => $siblingRequirementsChips,
             '{{sibling_requirements_table}}' => $siblingRequirementsTable,
@@ -279,6 +316,211 @@ HTML;
                         <th style="width: 20%;">Code</th>
                         <th style="width: 28%;">Clause / Section Reference</th>
                         <th style="width: 20%; text-align: right;">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {$rows}
+                </tbody>
+            </table>
+        </div>
+HTML;
+    }
+
+    protected function renderPlainText(?string $val): string
+    {
+        $trimmed = trim((string)$val);
+        return $trimmed !== '' ? htmlspecialchars($trimmed) : 'None';
+    }
+
+    protected function renderRelatedFrameworkBadges(?string $relatedFrameworks, $mappings = null): string
+    {
+        $mappings = $mappings ?? collect();
+
+        // If direct requirement framework mappings are present, render each mapping
+        if ($mappings->isNotEmpty()) {
+            $rows = '';
+            foreach ($mappings as $m) {
+                $name        = $m->framework_name;
+                $fwCode      = htmlspecialchars($m->framework_code ?: 'FW');
+                $clause      = htmlspecialchars($m->clause_reference ?? '-');
+                $fw          = $this->resolveFrameworkModel($m->framework_name, $m->framework_code, $m->framework_id);
+                $escapedName = htmlspecialchars($name);
+
+                if ($fw) {
+                    $url        = route('frameworks.show', $fw->slug);
+                    $code       = htmlspecialchars($fw->framework_code ?: $fw->framework_id ?: $fwCode);
+                    $family     = htmlspecialchars($fw->framework_family ?: 'Standard');
+                    $version    = htmlspecialchars($fw->version ? "v{$fw->version}" : 'Latest');
+                    $type       = htmlspecialchars($fw->framework_type ?: $fw->category ?: 'Framework');
+                    $fwDesc     = htmlspecialchars(\Illuminate\Support\Str::limit($fw->description ?: "Harmonized framework mapped under ASPIA UCL.", 50));
+                    $clauseHtml = ($clause !== '-' && $clause !== '') ? "<span style=\"display: inline-block; font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; color: var(--brand-emerald, #059669); background: var(--brand-emerald-light, #ecfdf5); border: 1px solid rgba(5, 150, 105, 0.25); padding: 1px 6px; border-radius: 4px; margin-top: 3px;\">Clause: {$clause}</span>" : '';
+
+                    $rows .= <<<HTML
+                    <tr class="framework-card-box" style="border-bottom: 1px solid var(--border-light, #e2e8f0); transition: background 0.15s ease;" onmouseover="this.style.background='var(--bg-subtle, #f8fafc)'" onmouseout="this.style.background='transparent'">
+                        <td style="padding: 10px 14px; white-space: nowrap; vertical-align: middle;">
+                            <span class="fw-code-badge" style="font-family: 'JetBrains Mono', monospace; font-size: 10.5px; font-weight: 700; color: var(--brand-emerald, #059669); background: var(--brand-emerald-light, #ecfdf5); border: 1px solid rgba(5, 150, 105, 0.25); padding: 3px 8px; border-radius: 6px; display: inline-block;">{$code}</span>
+                        </td>
+                        <td style="padding: 10px 14px; vertical-align: middle;">
+                            <a href="{$url}" style="font-weight: 700; color: var(--text-title, #0f172a); text-decoration: none; display: block; line-height: 1.3; font-size: 13px;" onmouseover="this.style.color='var(--brand-emerald, #059669)'" onmouseout="this.style.color='var(--text-title, #0f172a)'">{$escapedName}</a>
+                            <span style="font-size: 11px; color: var(--text-secondary, #64748b); display: block; margin-top: 2px; line-height: 1.35;">{$fwDesc}</span>
+                            {$clauseHtml}
+                        </td>
+                        <td style="padding: 10px 14px; white-space: nowrap; vertical-align: middle;">
+                            <div style="font-weight: 700; color: var(--text-title, #0f172a); font-size: 12px;">{$family}</div>
+                            <div style="font-size: 10.5px; color: var(--text-secondary, #64748b); margin-top: 2px;">{$type}</div>
+                        </td>
+                        <td style="padding: 10px 14px; white-space: nowrap; vertical-align: middle;">
+                            <span style="display: inline-block; padding: 2px 9px; border-radius: 12px; font-size: 10.5px; font-weight: 600; background: var(--bg-subtle, #f8fafc); border: 1px solid var(--border-light, #e2e8f0); color: var(--text-muted, #64748b);">{$version}</span>
+                        </td>
+                        <td style="padding: 10px 14px; text-align: right; white-space: nowrap; vertical-align: middle;">
+                            <a href="{$url}" style="display: inline-flex; align-items: center; gap: 4px; padding: 5px 12px; background: var(--brand-emerald-light, #ecfdf5); border: 1px solid rgba(5, 150, 105, 0.3); border-radius: 6px; color: var(--brand-emerald, #059669); font-size: 11.5px; font-weight: 700; text-decoration: none; transition: all 0.2s ease;">
+                                <span>View</span>
+                                <span style="font-size: 11px;">→</span>
+                            </a>
+                        </td>
+                    </tr>
+HTML;
+                } else {
+                    $clauseHtml = ($clause !== '-' && $clause !== '') ? "<span style=\"display: inline-block; font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; color: var(--text-muted, #94a3b8); background: var(--bg-subtle, #f8fafc); border: 1px solid var(--border-light, #e2e8f0); padding: 1px 6px; border-radius: 4px; margin-top: 3px;\">Clause: {$clause}</span>" : '';
+
+                    $rows .= <<<HTML
+                    <tr class="framework-card-box" style="border-bottom: 1px solid var(--border-light, #e2e8f0); transition: background 0.15s ease;" onmouseover="this.style.background='var(--bg-subtle, #f8fafc)'" onmouseout="this.style.background='transparent'">
+                        <td style="padding: 10px 14px; white-space: nowrap; vertical-align: middle;">
+                            <span class="fw-code-badge" style="font-family: 'JetBrains Mono', monospace; font-size: 10.5px; font-weight: 700; color: var(--text-muted, #94a3b8); background: var(--bg-subtle, #f8fafc); border: 1px solid var(--border-light, #e2e8f0); padding: 3px 8px; border-radius: 6px; display: inline-block;">{$fwCode}</span>
+                        </td>
+                        <td style="padding: 10px 14px; vertical-align: middle;">
+                            <span style="font-weight: 700; color: var(--text-title, #0f172a); display: block; line-height: 1.3; font-size: 13px;">{$escapedName}</span>
+                            <span style="font-size: 11px; color: var(--text-secondary, #64748b); display: block; margin-top: 2px; line-height: 1.35;">Crosswalk regulatory baseline mapped under ASPIA UCL.</span>
+                            {$clauseHtml}
+                        </td>
+                        <td style="padding: 10px 14px; white-space: nowrap; vertical-align: middle;">
+                            <div style="font-weight: 700; color: var(--text-title, #0f172a); font-size: 12px;">Standard</div>
+                            <div style="font-size: 10.5px; color: var(--text-secondary, #64748b); margin-top: 2px;">Compliance Framework</div>
+                        </td>
+                        <td style="padding: 10px 14px; white-space: nowrap; vertical-align: middle;">
+                            <span style="display: inline-block; padding: 2px 9px; border-radius: 12px; font-size: 10.5px; font-weight: 600; background: var(--bg-subtle, #f8fafc); border: 1px solid var(--border-light, #e2e8f0); color: var(--text-muted, #64748b);">Baseline</span>
+                        </td>
+                        <td style="padding: 10px 14px; text-align: right; white-space: nowrap; vertical-align: middle; color: var(--text-muted, #64748b); font-size: 13px;">
+                            —
+                        </td>
+                    </tr>
+HTML;
+                }
+            }
+
+            return <<<HTML
+            <div class="ucl-table-container virtual-scroll-container" style="width: 100%; max-height: 520px; overflow-y: auto; overflow-x: auto; background: var(--bg-surface, #ffffff); border: 1px solid var(--border-light, #e2e8f0); border-radius: 10px; box-shadow: var(--shadow-sm, 0 1px 2px rgba(0,0,0,0.04)); margin-top: 8px; scroll-behavior: smooth;">
+                <table class="ucl-data-table" style="width: 100%; border-collapse: collapse; text-align: left; font-size: 12px;">
+                    <thead style="position: sticky; top: 0; z-index: 10; background: var(--bg-subtle, #f8fafc); box-shadow: 0 1px 2px rgba(0,0,0,0.05);">
+                        <tr style="border-bottom: 1px solid var(--border-light, #e2e8f0);">
+                            <th style="padding: 10px 14px; font-size: 10.5px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted, #64748b); background: var(--bg-subtle, #f8fafc); white-space: nowrap;">FRAMEWORK CODE</th>
+                            <th style="padding: 10px 14px; font-size: 10.5px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted, #64748b); background: var(--bg-subtle, #f8fafc);">FRAMEWORK NAME & DETAILS</th>
+                            <th style="padding: 10px 14px; font-size: 10.5px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted, #64748b); background: var(--bg-subtle, #f8fafc); white-space: nowrap;">FAMILY / CATEGORY</th>
+                            <th style="padding: 10px 14px; font-size: 10.5px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted, #64748b); background: var(--bg-subtle, #f8fafc); white-space: nowrap;">VERSION</th>
+                            <th style="padding: 10px 14px; font-size: 10.5px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted, #64748b); text-align: right; background: var(--bg-subtle, #f8fafc); white-space: nowrap;">ACTION</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {$rows}
+                    </tbody>
+                </table>
+            </div>
+HTML;
+        }
+
+        // Otherwise fallback to comma-separated relatedFrameworks string
+        if (empty($relatedFrameworks)) {
+            return '<p style="color: var(--text-muted, #64748b); font-size: 13px; padding: 12px 0;">No mapped frameworks specified for this requirement.</p>';
+        }
+
+        $items = array_filter(array_map('trim', explode(',', $relatedFrameworks)));
+        if (empty($items)) {
+            return '<p style="color: var(--text-muted, #64748b); font-size: 13px; padding: 12px 0;">No mapped frameworks specified for this requirement.</p>';
+        }
+
+        $rows = '';
+        foreach ($items as $name) {
+            $cleanName = trim(preg_replace('/\s*\(.*?\)\s*/', ' ', $name));
+            $slug      = \Illuminate\Support\Str::slug($name);
+            $cleanSlug = \Illuminate\Support\Str::slug($cleanName);
+
+            $fw = $this->resolveFrameworkModel($name) ?? \App\Models\Framework::where('name', 'like', "%{$name}%")
+                ->orWhere('name', 'like', "%{$cleanName}%")
+                ->orWhere('framework_code', 'like', "%{$name}%")
+                ->orWhere('framework_code', 'like', "%{$cleanSlug}%")
+                ->orWhere('slug', 'like', "%{$slug}%")
+                ->orWhere('slug', 'like', "%{$cleanSlug}%")
+                ->first();
+
+            $escapedName = htmlspecialchars($name);
+
+            if ($fw) {
+                $url       = route('frameworks.show', $fw->slug);
+                $fwCode    = htmlspecialchars($fw->framework_code ?: $fw->framework_id ?: 'FW');
+                $fwFamily  = htmlspecialchars($fw->framework_family ?: 'Standard');
+                $fwVersion = htmlspecialchars($fw->version ? "v{$fw->version}" : 'Latest');
+                $fwType    = htmlspecialchars($fw->framework_type ?: $fw->category ?: 'Framework');
+                $fwDesc    = htmlspecialchars(\Illuminate\Support\Str::limit($fw->description ?: "Harmonized framework mapped under ASPIA UCL.", 50));
+
+                $rows .= <<<HTML
+                <tr class="framework-card-box" style="border-bottom: 1px solid var(--border-light, #e2e8f0); transition: background 0.15s ease;" onmouseover="this.style.background='var(--bg-subtle, #f8fafc)'" onmouseout="this.style.background='transparent'">
+                    <td style="padding: 10px 14px; white-space: nowrap; vertical-align: middle;">
+                        <span class="fw-code-badge" style="font-family: 'JetBrains Mono', monospace; font-size: 10.5px; font-weight: 700; color: var(--brand-emerald, #059669); background: var(--brand-emerald-light, #ecfdf5); border: 1px solid rgba(5, 150, 105, 0.25); padding: 3px 8px; border-radius: 6px; display: inline-block;">{$fwCode}</span>
+                    </td>
+                    <td style="padding: 10px 14px; vertical-align: middle;">
+                        <a href="{$url}" style="font-weight: 700; color: var(--text-title, #0f172a); text-decoration: none; display: block; line-height: 1.3; font-size: 13px;" onmouseover="this.style.color='var(--brand-emerald, #059669)'" onmouseout="this.style.color='var(--text-title, #0f172a)'">{$escapedName}</a>
+                        <span style="font-size: 11px; color: var(--text-secondary, #64748b); display: block; margin-top: 2px; line-height: 1.35;">{$fwDesc}</span>
+                    </td>
+                    <td style="padding: 10px 14px; white-space: nowrap; vertical-align: middle;">
+                        <div style="font-weight: 700; color: var(--text-title, #0f172a); font-size: 12px;">{$fwFamily}</div>
+                        <div style="font-size: 10.5px; color: var(--text-secondary, #64748b); margin-top: 2px;">{$fwType}</div>
+                    </td>
+                    <td style="padding: 10px 14px; white-space: nowrap; vertical-align: middle;">
+                        <span style="display: inline-block; padding: 2px 9px; border-radius: 12px; font-size: 10.5px; font-weight: 600; background: var(--bg-subtle, #f8fafc); border: 1px solid var(--border-light, #e2e8f0); color: var(--text-muted, #64748b);">{$fwVersion}</span>
+                    </td>
+                    <td style="padding: 10px 14px; text-align: right; white-space: nowrap; vertical-align: middle;">
+                        <a href="{$url}" style="display: inline-flex; align-items: center; gap: 4px; padding: 5px 12px; background: var(--brand-emerald-light, #ecfdf5); border: 1px solid rgba(5, 150, 105, 0.3); border-radius: 6px; color: var(--brand-emerald, #059669); font-size: 11.5px; font-weight: 700; text-decoration: none; transition: all 0.2s ease;">
+                            <span>View</span>
+                            <span style="font-size: 11px;">→</span>
+                        </a>
+                    </td>
+                </tr>
+HTML;
+            } else {
+                $rows .= <<<HTML
+                <tr class="framework-card-box" style="border-bottom: 1px solid var(--border-light, #e2e8f0); transition: background 0.15s ease;" onmouseover="this.style.background='var(--bg-subtle, #f8fafc)'" onmouseout="this.style.background='transparent'">
+                    <td style="padding: 10px 14px; white-space: nowrap; vertical-align: middle;">
+                        <span class="fw-code-badge" style="font-family: 'JetBrains Mono', monospace; font-size: 10.5px; font-weight: 700; color: var(--text-muted, #94a3b8); background: var(--bg-subtle, #f8fafc); border: 1px solid var(--border-light, #e2e8f0); padding: 3px 8px; border-radius: 6px; display: inline-block;">MAPPED</span>
+                    </td>
+                    <td style="padding: 10px 14px; vertical-align: middle;">
+                        <span style="font-weight: 700; color: var(--text-title, #0f172a); display: block; line-height: 1.3; font-size: 13px;">{$escapedName}</span>
+                        <span style="font-size: 11px; color: var(--text-secondary, #64748b); display: block; margin-top: 2px; line-height: 1.35;">Crosswalk regulatory baseline mapped under ASPIA UCL.</span>
+                    </td>
+                    <td style="padding: 10px 14px; white-space: nowrap; vertical-align: middle;">
+                        <div style="font-weight: 700; color: var(--text-title, #0f172a); font-size: 12px;">Standard</div>
+                        <div style="font-size: 10.5px; color: var(--text-secondary, #64748b); margin-top: 2px;">Compliance Framework</div>
+                    </td>
+                    <td style="padding: 10px 14px; white-space: nowrap; vertical-align: middle;">
+                        <span style="display: inline-block; padding: 2px 9px; border-radius: 12px; font-size: 10.5px; font-weight: 600; background: var(--bg-subtle, #f8fafc); border: 1px solid var(--border-light, #e2e8f0); color: var(--text-muted, #64748b);">Baseline</span>
+                    </td>
+                    <td style="padding: 10px 14px; text-align: right; white-space: nowrap; vertical-align: middle; color: var(--text-muted, #64748b); font-size: 13px;">
+                        —
+                    </td>
+                </tr>
+HTML;
+            }
+        }
+
+        return <<<HTML
+        <div class="ucl-table-container virtual-scroll-container" style="width: 100%; max-height: 520px; overflow-y: auto; overflow-x: auto; background: var(--bg-surface, #ffffff); border: 1px solid var(--border-light, #e2e8f0); border-radius: 10px; box-shadow: var(--shadow-sm, 0 1px 2px rgba(0,0,0,0.04)); margin-top: 8px; scroll-behavior: smooth;">
+            <table class="ucl-data-table" style="width: 100%; border-collapse: collapse; text-align: left; font-size: 12px;">
+                <thead style="position: sticky; top: 0; z-index: 10; background: var(--bg-subtle, #f8fafc); box-shadow: 0 1px 2px rgba(0,0,0,0.05);">
+                    <tr style="border-bottom: 1px solid var(--border-light, #e2e8f0);">
+                        <th style="padding: 10px 14px; font-size: 10.5px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted, #64748b); background: var(--bg-subtle, #f8fafc); white-space: nowrap;">FRAMEWORK CODE</th>
+                        <th style="padding: 10px 14px; font-size: 10.5px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted, #64748b); background: var(--bg-subtle, #f8fafc);">FRAMEWORK NAME & DESCRIPTION</th>
+                        <th style="padding: 10px 14px; font-size: 10.5px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted, #64748b); background: var(--bg-subtle, #f8fafc); white-space: nowrap;">FAMILY / CATEGORY</th>
+                        <th style="padding: 10px 14px; font-size: 10.5px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted, #64748b); background: var(--bg-subtle, #f8fafc); white-space: nowrap;">VERSION</th>
+                        <th style="padding: 10px 14px; font-size: 10.5px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted, #64748b); text-align: right; background: var(--bg-subtle, #f8fafc); white-space: nowrap;">ACTION</th>
                     </tr>
                 </thead>
                 <tbody>

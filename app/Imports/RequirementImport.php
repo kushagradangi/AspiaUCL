@@ -288,7 +288,15 @@ class RequirementImport implements ToModel, WithHeadingRow
 
         foreach ($row as $key => $val) {
             $val = trim((string) $val);
-            if (empty($val) || $val === '—' || $val === '-' || in_array(strtolower($key), $standardKeys)) {
+            $key = (string) $key;
+            if (
+                is_numeric($key)
+                || str_starts_with(strtolower($key), '__empty')
+                || empty($val)
+                || $val === '—'
+                || $val === '-'
+                || in_array(strtolower($key), $standardKeys, true)
+            ) {
                 continue;
             }
 

@@ -941,6 +941,16 @@
 
             </button>
 
+            <button
+                type="button"
+                class="btn-aspia btn-secondary-aspia"
+                onclick="openModal('frameworkMappingsImportModal')"
+            >
+
+                ↑ Import Framework Mappings
+
+            </button>
+
 
             {{-- =================================================
                  ADD REQUIREMENT
@@ -1621,6 +1631,105 @@
                                 &#123;&#123;framework_id&#125;&#125;
                             </button>
 
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="&#123;&#123;framework_code&#125;&#125;"
+                                onclick="insertRequirementPlaceholder(this.dataset.placeholder)"
+                            >
+                                &#123;&#123;framework_code&#125;&#125;
+                            </button>
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="&#123;&#123;framework_family&#125;&#125;"
+                                onclick="insertRequirementPlaceholder(this.dataset.placeholder)"
+                            >
+                                &#123;&#123;framework_family&#125;&#125;
+                            </button>
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="&#123;&#123;framework_url&#125;&#125;"
+                                onclick="insertRequirementPlaceholder(this.dataset.placeholder)"
+                            >
+                                &#123;&#123;framework_url&#125;&#125;
+                            </button>
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="&#123;&#123;related_frameworks_cards&#125;&#125;"
+                                onclick="insertRequirementPlaceholder(this.dataset.placeholder)"
+                            >
+                                &#123;&#123;related_frameworks_cards&#125;&#125;
+                            </button>
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="&#123;&#123;frameworks_table&#125;&#125;"
+                                onclick="insertRequirementPlaceholder(this.dataset.placeholder)"
+                            >
+                                &#123;&#123;frameworks_table&#125;&#125;
+                            </button>
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="&#123;&#123;framework_mappings_table&#125;&#125;"
+                                onclick="insertRequirementPlaceholder(this.dataset.placeholder)"
+                            >
+                                &#123;&#123;framework_mappings_table&#125;&#125;
+                            </button>
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="&#123;&#123;framework_mappings_badges&#125;&#125;"
+                                onclick="insertRequirementPlaceholder(this.dataset.placeholder)"
+                            >
+                                &#123;&#123;framework_mappings_badges&#125;&#125;
+                            </button>
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="&#123;&#123;mapped_frameworks_count&#125;&#125;"
+                                onclick="insertRequirementPlaceholder(this.dataset.placeholder)"
+                            >
+                                &#123;&#123;mapped_frameworks_count&#125;&#125;
+                            </button>
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="&#123;&#123;frameworks_count&#125;&#125;"
+                                onclick="insertRequirementPlaceholder(this.dataset.placeholder)"
+                            >
+                                &#123;&#123;frameworks_count&#125;&#125;
+                            </button>
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="&#123;&#123;related_frameworks&#125;&#125;"
+                                onclick="insertRequirementPlaceholder(this.dataset.placeholder)"
+                            >
+                                &#123;&#123;related_frameworks&#125;&#125;
+                            </button>
+
+                            <button
+                                type="button"
+                                class="placeholder-btn"
+                                data-placeholder="&#123;&#123;related_frameworks_badges&#125;&#125;"
+                                onclick="insertRequirementPlaceholder(this.dataset.placeholder)"
+                            >
+                                &#123;&#123;related_frameworks_badges&#125;&#125;
+                            </button>
+
                         </div>
 
 
@@ -1764,6 +1873,77 @@
 
 </div>
 
+
+{{-- =========================================================
+     IMPORT REQUIREMENT-FRAMEWORK MAPPINGS MODAL
+========================================================= --}}
+
+<div
+    id="frameworkMappingsImportModal"
+    class="modal-overlay"
+    onclick="closeModalOutside(event, 'frameworkMappingsImportModal')"
+>
+
+    <div class="modal-box">
+
+        <div class="modal-header">
+            <h2>Import Requirement-Framework Mappings</h2>
+
+            <button
+                type="button"
+                class="close-modal"
+                onclick="closeModal('frameworkMappingsImportModal')"
+            >
+                ×
+            </button>
+        </div>
+
+        <form
+            action="{{ route('requirements.import-framework-mappings') }}"
+            method="POST"
+            enctype="multipart/form-data"
+        >
+            @csrf
+
+            <div class="modal-body">
+                <div class="form-group full-width">
+                    <label class="form-label">
+                        Select Sheet19 mapping workbook
+                        <span class="required-star">*</span>
+                    </label>
+
+                    <input
+                        type="file"
+                        name="file"
+                        class="form-control-aspia"
+                        accept=".xlsx"
+                        required
+                    >
+
+                    <div class="import-info">
+                        Upload the mapping workbook with Requirement ID and framework clause columns. Rows link by Requirement ID; titles are not used to match.
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button
+                    type="button"
+                    class="btn-aspia btn-secondary-aspia"
+                    onclick="closeModal('frameworkMappingsImportModal')"
+                >
+                    Cancel
+                </button>
+
+                <button type="submit" class="btn-aspia btn-primary-aspia">
+                    Import Mappings
+                </button>
+            </div>
+        </form>
+
+    </div>
+
+</div>
 
 
 {{-- =========================================================

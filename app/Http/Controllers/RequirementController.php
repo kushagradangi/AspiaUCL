@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\RequirementFrameworkMappingImport;
 use App\Imports\RequirementImport;
 use App\Models\Activity;
 use App\Models\Requirement;
@@ -98,6 +99,7 @@ class RequirementController extends Controller
             )
         );
     }
+
 
 
     /*
@@ -296,6 +298,68 @@ class RequirementController extends Controller
             return redirect()
                 ->route('requirements.index')
                 ->with('error', 'Error occurred during requirement import: ' . $e->getMessage());
+        }
+    }
+
+    public function importFrameworkMappings(Request $request)
+    {
+        $request->validate([
+            'file' => [
+                'required',
+                'file',
+                'mimes:xlsx',
+                'max:20480',
+            ],
+        ]);
+
+        try {
+            $import = new RequirementFrameworkMappingImport();
+
+            Excel::import(
+                $import,
+                $request->file('file')
+            );
+
+            Activity::create([
+                'user_id' => auth()->id(),
+                'module' => 'requirement',
+                'action' => 'Imported framework mappings',
+                'description' => sprintf(
+                    'Imported framework mappings for %d requirements (%d framework mappings).',
+                    $import->getMappedRows(),
+                    $import->getMappedPairs()
+                ),
+            ]);
+
+            $message = sprintf(
+                'Framework mappings imported: %d requirements with mappings, %d framework mappings saved.',
+                $import->getMappedRows(),
+                $import->getMappedPairs()
+            );
+
+            if ($import->getMissingRequirementCount() > 0) {
+                $message .= sprintf(
+                    ' %d Requirement IDs were not found in the project (examples: %s).',
+                    $import->getMissingRequirementCount(),
+                    implode(', ', $import->getMissingRequirementIds())
+                );
+            }
+
+            if ($import->getTitleMismatchCount() > 0) {
+                $message .= sprintf(
+                    ' %d titles differ from the project; mappings were matched by Requirement ID (examples: %s).',
+                    $import->getTitleMismatchCount(),
+                    implode(', ', $import->getTitleMismatchIds())
+                );
+            }
+
+            return redirect()
+                ->route('requirements.index')
+                ->with('success', $message);
+        } catch (\Throwable $e) {
+            return redirect()
+                ->route('requirements.index')
+                ->with('error', 'Error occurred during framework mapping import: ' . $e->getMessage());
         }
     }
 }
