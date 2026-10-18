@@ -828,6 +828,11 @@
 
     }
 
+    @keyframes aspiaSpin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
 </style>
 
 
@@ -1104,7 +1109,7 @@
                                 <a
                                     href="{{ route(
                                         'requirements.show',
-                                        ['requirement_id' => $requirement->requirement_id]
+                                        $requirement->slug ?: $requirement->requirement_id
                                     ) }}"
                                     class="requirement-title-link"
                                 >
@@ -1472,6 +1477,8 @@
             action="{{ route('requirements.import') }}"
             method="POST"
             enctype="multipart/form-data"
+            id="importRequirementsForm"
+            onsubmit="handleImportSubmit(event)"
         >
 
             @csrf
@@ -1492,6 +1499,7 @@
                     <input
                         type="file"
                         name="file"
+                        id="requirementFileInput"
                         class="form-control-aspia"
                         accept=".xlsx"
                         required
@@ -1503,6 +1511,16 @@
 
                 </div>
 
+                {{-- Visual progress / loading banner --}}
+                <div id="importLoadingState" style="display: none; margin-top: 15px; padding: 12px 14px; background: rgba(22, 196, 244, 0.08); border: 1px solid rgba(22, 196, 244, 0.25); border-radius: 8px; color: #16C4F4; font-size: 13px;">
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <svg style="animation: aspiaSpin 1s linear infinite; width: 18px; height: 18px; flex-shrink: 0;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                            <circle cx="12" cy="12" r="10" stroke-opacity="0.25"></circle>
+                            <path d="M12 2a10 10 0 0 1 10 10"></path>
+                        </svg>
+                        <span>Importing requirements... Please wait a moment, processing file. Do not refresh.</span>
+                    </div>
+                </div>
 
             </div>
 
@@ -1513,6 +1531,7 @@
                     type="button"
                     class="btn-aspia btn-secondary-aspia"
                     onclick="closeModal('importModal')"
+                    id="importCancelBtn"
                 >
                     Cancel
                 </button>
@@ -1520,6 +1539,7 @@
                 <button
                     type="submit"
                     class="btn-aspia btn-primary-aspia"
+                    id="importSubmitBtn"
                 >
                     Import XLSX
                 </button>
@@ -2200,6 +2220,25 @@
                 }
             }
 
+            if (id === 'importModal') {
+                const submitBtn = document.getElementById('importSubmitBtn');
+                const cancelBtn = document.getElementById('importCancelBtn');
+                const loadingState = document.getElementById('importLoadingState');
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.style.opacity = '';
+                    submitBtn.style.cursor = '';
+                    submitBtn.innerHTML = 'Import XLSX';
+                }
+                if (cancelBtn) {
+                    cancelBtn.style.pointerEvents = '';
+                    cancelBtn.style.opacity = '';
+                }
+                if (loadingState) {
+                    loadingState.style.display = 'none';
+                }
+            }
+
             modal.classList.add('show');
 
             document.body.style.overflow = 'hidden';
@@ -2490,6 +2529,40 @@
 
         }
     );
+
+    /* =====================================================
+       HANDLE IMPORT SUBMIT
+    ====================================================== */
+    function handleImportSubmit(event)
+    {
+        const submitBtn = document.getElementById('importSubmitBtn');
+        const cancelBtn = document.getElementById('importCancelBtn');
+        const loadingState = document.getElementById('importLoadingState');
+
+        if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.style.opacity = '0.75';
+            submitBtn.style.cursor = 'not-allowed';
+            submitBtn.innerHTML = `
+                <svg style="animation: aspiaSpin 1s linear infinite; width: 14px; height: 14px; display: inline-block; vertical-align: middle; margin-right: 6px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <circle cx="12" cy="12" r="10" stroke-opacity="0.25"></circle>
+                    <path d="M12 2a10 10 0 0 1 10 10"></path>
+                </svg>
+                Importing...
+            `;
+        }
+
+        if (cancelBtn) {
+            cancelBtn.style.pointerEvents = 'none';
+            cancelBtn.style.opacity = '0.5';
+        }
+
+        if (loadingState) {
+            loadingState.style.display = 'block';
+        }
+
+        return true;
+    }
 
 </script>
 

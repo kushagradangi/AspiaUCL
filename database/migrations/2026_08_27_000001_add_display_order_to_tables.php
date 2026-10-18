@@ -16,7 +16,17 @@ return new class extends Migration
 
         if (Schema::hasTable('controls') && !Schema::hasColumn('controls', 'display_order')) {
             Schema::table('controls', function (Blueprint $table) {
-                $table->unsignedInteger('display_order')->default(0)->after('control_type');
+                if (Schema::hasColumn('controls', 'control_type')) {
+                    $table->unsignedInteger('display_order')->default(0)->after('control_type');
+                } elseif (Schema::hasColumn('controls', 'compensating_control')) {
+                    $table->unsignedInteger('display_order')->default(0)->after('compensating_control');
+                } elseif (Schema::hasColumn('controls', 'control_nature')) {
+                    $table->unsignedInteger('display_order')->default(0)->after('control_nature');
+                } elseif (Schema::hasColumn('controls', 'primary_stakeholders')) {
+                    $table->unsignedInteger('display_order')->default(0)->after('primary_stakeholders');
+                } else {
+                    $table->unsignedInteger('display_order')->default(0);
+                }
             });
         }
 

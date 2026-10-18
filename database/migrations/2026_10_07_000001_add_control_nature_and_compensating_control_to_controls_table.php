@@ -11,7 +11,13 @@ return new class extends Migration
         if (Schema::hasTable('controls')) {
             Schema::table('controls', function (Blueprint $table) {
                 if (!Schema::hasColumn('controls', 'control_nature')) {
-                    $table->string('control_nature')->nullable()->after('control_type');
+                    if (Schema::hasColumn('controls', 'control_type')) {
+                        $table->string('control_nature')->nullable()->after('control_type');
+                    } elseif (Schema::hasColumn('controls', 'primary_stakeholders')) {
+                        $table->string('control_nature')->nullable()->after('primary_stakeholders');
+                    } else {
+                        $table->string('control_nature')->nullable();
+                    }
                 }
                 if (!Schema::hasColumn('controls', 'compensating_control')) {
                     $table->string('compensating_control')->nullable()->after('control_nature');

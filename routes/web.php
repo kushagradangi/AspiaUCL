@@ -73,30 +73,34 @@ Route::get('/api/ucl/search', function (\Illuminate\Http\Request $request) {
 
     $controls = \App\Models\Control::where(function($query) use ($q) {
             $query->where('name', 'like', "%{$q}%")
+                  ->orWhere('slug', 'like', "%{$q}%")
                   ->orWhere('control_id', 'like', "%{$q}%");
         })
         ->take(6)->get()->map(function($c) {
+            $slug = $c->slug ?: $c->control_id;
             return [
                 'name' => $c->name,
-                'slug' => $c->control_id,
+                'slug' => $slug,
                 'code' => $c->control_id,
                 'sub'  => $c->control_category ?: 'Security Control',
-                'url'  => '/controls/view/' . $c->control_id,
+                'url'  => '/controls/' . $slug,
             ];
         });
 
     $requirements = \App\Models\Requirement::where(function($query) use ($q) {
             $query->where('requirement_title', 'like', "%{$q}%")
+                  ->orWhere('slug', 'like', "%{$q}%")
                   ->orWhere('requirement', 'like', "%{$q}%")
                   ->orWhere('requirement_id', 'like', "%{$q}%");
         })
         ->take(6)->get()->map(function($r) {
+            $slug = $r->slug ?: $r->requirement_id;
             return [
                 'name' => $r->requirement_title ?: ($r->requirement ?: $r->requirement_id),
-                'slug' => $r->requirement_id,
+                'slug' => $slug,
                 'code' => $r->requirement_id,
                 'sub'  => $r->typical_owner ?: 'Audit Requirement',
-                'url'  => '/requirements/view/' . $r->requirement_id,
+                'url'  => '/requirements/' . $slug,
             ];
         });
 
@@ -173,34 +177,36 @@ Route::get(
     ->name('domains.show');
 
 
-// Control Template View (e.g. /controls/view/GOV-001 or /controls/GOV-001)
+// Control Template View (e.g. /controls/information-security-governance)
 Route::get(
-    '/controls/view/{control_id}',
+    '/controls/{slug}',
     [ControlTemplateController::class, 'show']
 )
-    ->where('control_id', '[A-Za-z0-9_-]+')
+    ->where('slug', '[A-Za-z0-9_-]+')
     ->name('controls.show');
 
+// Legacy & compatibility route for controls
 Route::get(
-    '/controls/{control_id}',
+    '/controls/view/{slug}',
     [ControlTemplateController::class, 'show']
 )
-    ->where('control_id', '[A-Za-z0-9_-]+');
+    ->where('slug', '[A-Za-z0-9_-]+');
 
 
-// Requirement Template View (e.g. /requirements/view/REQ-001 or /requirements/REQ-001)
+// Requirement Template View (e.g. /requirements/governance-framework)
 Route::get(
-    '/requirements/view/{requirement_id}',
+    '/requirements/{slug}',
     [RequirementTemplateController::class, 'show']
 )
-    ->where('requirement_id', '[A-Za-z0-9_-]+')
+    ->where('slug', '[A-Za-z0-9_-]+')
     ->name('requirements.show');
 
+// Legacy & compatibility route for requirements
 Route::get(
-    '/requirements/{requirement_id}',
+    '/requirements/view/{slug}',
     [RequirementTemplateController::class, 'show']
 )
-    ->where('requirement_id', '[A-Za-z0-9_-]+');
+    ->where('slug', '[A-Za-z0-9_-]+');
 
 
 

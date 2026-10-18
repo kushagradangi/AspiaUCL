@@ -567,6 +567,11 @@ class DomainController extends Controller
 
     public function import(Request $request)
     {
+        if (function_exists('set_time_limit')) {
+            @set_time_limit(600);
+        }
+        @ini_set('memory_limit', '512M');
+
         $request->validate([
             'file' => [
                 'required',

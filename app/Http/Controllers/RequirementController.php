@@ -262,12 +262,29 @@ class RequirementController extends Controller
     public function import(
         Request $request
     ) {
+        // Increase time and memory limits for large spreadsheet imports
+        if (function_exists('set_time_limit')) {
+            @set_time_limit(600);
+        }
+        @ini_set('memory_limit', '512M');
+
         $request->validate([
             'file' => [
                 'required',
                 'file',
-                'mimes:xlsx',
+                'max:51200', // 50MB
+                function ($attribute, $value, $fail) {
+                    $ext = strtolower($value->getClientOriginalExtension());
+                    $validExts = ['xlsx', 'xls', 'csv', 'xlxs'];
+                    if (!in_array($ext, $validExts)) {
+                        $fail('The uploaded file must be a valid Excel spreadsheet (.xlsx, .xls) or CSV file.');
+                    }
+                },
             ],
+        ], [
+            'file.required' => 'Please select an Excel file (.xlsx) to import.',
+            'file.file' => 'The uploaded item must be a valid file.',
+            'file.max' => 'The uploaded file exceeds the 50MB size limit.',
         ]);
 
         try {
@@ -295,6 +312,10 @@ class RequirementController extends Controller
                 ->with('success', $message);
 
         } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::error('Requirement Import Error: ' . $e->getMessage(), [
+                'trace' => $e->getTraceAsString()
+            ]);
+
             return redirect()
                 ->route('requirements.index')
                 ->with('error', 'Error occurred during requirement import: ' . $e->getMessage());

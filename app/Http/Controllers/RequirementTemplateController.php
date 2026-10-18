@@ -51,17 +51,22 @@ class RequirementTemplateController extends Controller
     |--------------------------------------------------------------------------
     */
 
-    public function show($requirement_id)
+    public function show($slug)
     {
         $requirement = Requirement::with('control.domain.framework')
-            ->where('requirement_id', $requirement_id)
+            ->where('slug', $slug)
             ->first();
 
         if (!$requirement) {
             $requirement = Requirement::with('control.domain.framework')
-                ->whereRaw('LOWER(requirement_id) = ?', [strtolower(trim($requirement_id))])
-                ->orWhere('id', $requirement_id)
+                ->where('requirement_id', $slug)
+                ->orWhereRaw('LOWER(requirement_id) = ?', [strtolower(trim($slug))])
+                ->orWhere('id', $slug)
                 ->firstOrFail();
+        }
+
+        if (request()->is('requirements/view/*') || ($requirement->slug && $slug !== $requirement->slug)) {
+            return redirect()->route('requirements.show', $requirement->slug, 301);
         }
 
         $template = RequirementTemplate::whereNotNull('html_content')
@@ -95,7 +100,7 @@ class RequirementTemplateController extends Controller
         $controlBenefits          = $control?->business_benefits ?? '';
         $controlRisksIfMissing    = $control?->business_risks_if_missing ?? '';
         $controlStakeholders      = $control?->primary_stakeholders ?? '';
-        $controlUrl               = $control ? route('controls.show', $control->control_id) : '#';
+        $controlUrl               = $control ? route('controls.show', $control->slug ?: $control->control_id) : '#';
 
         $controlBadge = $control ? <<<HTML
         <a href="{$controlUrl}" class="badge-chip chip-purple" title="View Control {$controlId}">
@@ -168,10 +173,13 @@ HTML : "<span class=\"badge badge-cyan\">Framework: {$frameworkName}</span>";
         $siblingRequirementsChips = $this->renderSiblingRequirementsChips($siblingRequirements, $requirement->requirement_id);
         $siblingRequirementsTable = $this->renderSiblingRequirementsTable($siblingRequirements, $requirement->requirement_id);
 
-        $canonicalUrl = route('requirements.show', $requirement->requirement_id);
+        $canonicalUrl = route('requirements.show', $requirement->slug ?: $requirement->requirement_id);
 
         $placeholders = [
             '{{requirement_id}}'             => $requirement->requirement_id,
+            '{{requirement_slug}}'           => $requirement->slug,
+            '{{slug}}'                       => $requirement->slug,
+            '{{requirement_url}}'            => $canonicalUrl,
             '{{control_id}}'                 => $controlId,
             '{{requirement_title}}'          => $requirement->requirement_title,
             '{{requirement}}'                => $requirement->requirement,
@@ -630,7 +638,7 @@ HTML;
 
         $items = '';
         foreach ($requirements as $req) {
-            $reqUrl = route('requirements.show', $req->requirement_id);
+            $reqUrl = route('requirements.show', $req->slug ?: $req->requirement_id);
             $rid    = htmlspecialchars($req->requirement_id);
             $title  = htmlspecialchars($req->requirement_title);
             $isCurrent = (strcasecmp($req->requirement_id, $currentRequirementId) === 0);
@@ -657,7 +665,7 @@ HTML;
 
         $rows = '';
         foreach ($requirements as $req) {
-            $reqUrl = route('requirements.show', $req->requirement_id);
+            $reqUrl = route('requirements.show', $req->slug ?: $req->requirement_id);
             $rid    = htmlspecialchars($req->requirement_id);
             $title  = htmlspecialchars($req->requirement_title);
             $owner  = htmlspecialchars($req->typical_owner ?? 'InfoSec Team');
@@ -1880,7 +1888,7 @@ HTML;
         foreach ($controls as $c) {
             $badgeClass = $badges[$i % count($badges)];
             $i++;
-            $url = route('controls.show', $c->control_id);
+            $url = route('controls.show', $c->slug ?: $c->control_id);
             $code = e($c->control_id);
             $name = e($c->name);
             $sub  = e($c->control_category ?: $c->description ?: 'Security Control');

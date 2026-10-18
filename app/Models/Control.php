@@ -69,7 +69,51 @@ class Control extends Model
 
         // 20. Display Order
         'display_order',
+
+        // 21. Slug
+        'slug',
     ];
+
+    /**
+     * Boot model events to auto-generate unique slug.
+     */
+    protected static function booted(): void
+    {
+        static::saving(function (Control $control) {
+            if (empty($control->slug) || ($control->isDirty('name') && !$control->isDirty('slug'))) {
+                $control->slug = static::generateUniqueSlug(
+                    $control->name ?? '',
+                    $control->id,
+                    $control->control_id ?? null
+                );
+            }
+        });
+    }
+
+    /**
+     * Generate a unique URL slug for the Control.
+     */
+    public static function generateUniqueSlug(string $name, ?int $ignoreId = null, ?string $controlId = null): string
+    {
+        $baseSlug = \Illuminate\Support\Str::slug($name);
+        if (empty($baseSlug)) {
+            $baseSlug = \Illuminate\Support\Str::slug($controlId ?: 'control');
+        }
+
+        $slug = $baseSlug;
+        $counter = 1;
+
+        while (
+            static::where('slug', $slug)
+                ->when($ignoreId, fn($q) => $q->where('id', '!=', $ignoreId))
+                ->exists()
+        ) {
+            $slug = $baseSlug . '-' . $counter;
+            $counter++;
+        }
+
+        return $slug;
+    }
 
 
     /*

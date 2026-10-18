@@ -1231,18 +1231,18 @@
                 { type: "domain", code: "AUD", slug: "audit-assurance", title: "Audit & Assurance", description: "Independent testing, compliance audits, and assurance certifications.", url: "/domains/audit-assurance" },
 
                 // Controls (Prioritized 3rd)
-                { type: "control", code: "GOV-001", slug: "GOV-001", title: "Information Security Governance", description: "Administrative security governance structure and executive oversight.", url: "/controls/view/GOV-001" },
-                { type: "control", code: "GOV-002", slug: "GOV-002", title: "Security Charter", description: "Approved security program charter and mandate.", url: "/controls/view/GOV-002" },
-                { type: "control", code: "GOV-003", slug: "GOV-003", title: "Governance Committees", description: "Steering committee meetings, oversight, and decision logs.", url: "/controls/view/GOV-003" },
-                { type: "control", code: "RSK-001", slug: "RSK-001", title: "Risk Management Framework", description: "Enterprise risk framework and appetite governance.", url: "/controls/view/RSK-001" },
-                { type: "control", code: "RSK-002", slug: "RSK-002", title: "Risk Register", description: "Centralized tracking and ownership of organization risks.", url: "/controls/view/RSK-002" },
-                { type: "control", code: "RSK-003", slug: "RSK-003", title: "Risk Assessment", description: "Periodic risk assessments and business impact analyses.", url: "/controls/view/RSK-003" },
-                { type: "control", code: "IAM-003", slug: "IAM-003", title: "Privileged Access Management", description: "Restricted administrative access and privileged session management.", url: "/controls/view/IAM-003" },
+                { type: "control", code: "GOV-001", slug: "information-security-governance", title: "Information Security Governance", description: "Administrative security governance structure and executive oversight.", url: "/controls/information-security-governance" },
+                { type: "control", code: "GOV-002", slug: "security-charter", title: "Security Charter", description: "Approved security program charter and mandate.", url: "/controls/security-charter" },
+                { type: "control", code: "GOV-003", slug: "governance-committees", title: "Governance Committees", description: "Steering committee meetings, oversight, and decision logs.", url: "/controls/governance-committees" },
+                { type: "control", code: "RSK-001", slug: "risk-management-framework", title: "Risk Management Framework", description: "Enterprise risk framework and appetite governance.", url: "/controls/risk-management-framework" },
+                { type: "control", code: "RSK-002", slug: "risk-register", title: "Risk Register", description: "Centralized tracking and ownership of organization risks.", url: "/controls/risk-register" },
+                { type: "control", code: "RSK-003", slug: "risk-assessment", title: "Risk Assessment", description: "Periodic risk assessments and business impact analyses.", url: "/controls/risk-assessment" },
+                { type: "control", code: "IAM-003", slug: "privileged-access-management", title: "Privileged Access Management", description: "Restricted administrative access and privileged session management.", url: "/controls/privileged-access-management" },
 
                 // Requirements (Prioritized 4th)
-                { type: "requirement", code: "GOV-001-R001", slug: "GOV-001-R001", title: "Governance Framework", description: "CISO, Governance Committee, Board of Directors oversight.", url: "/requirements/view/GOV-001-R001" },
-                { type: "requirement", code: "GOV-001-R002", slug: "GOV-001-R002", title: "Governance Charter", description: "Board of Directors, CEO, and Executive Leadership approval.", url: "/requirements/view/GOV-001-R002" },
-                { type: "requirement", code: "GOV-001-R003", slug: "GOV-001-R003", title: "Governance Principles", description: "Defined security principles endorsed by leadership.", url: "/requirements/view/GOV-001-R003" }
+                { type: "requirement", code: "GOV-001-R001", slug: "governance-framework", title: "Governance Framework", description: "CISO, Governance Committee, Board of Directors oversight.", url: "/requirements/governance-framework" },
+                { type: "requirement", code: "GOV-001-R002", slug: "governance-charter", title: "Governance Charter", description: "Board of Directors, CEO, and Executive Leadership approval.", url: "/requirements/governance-charter" },
+                { type: "requirement", code: "GOV-001-R003", slug: "governance-principles", title: "Governance Principles", description: "Defined security principles endorsed by leadership.", url: "/requirements/governance-principles" }
             ];
 
             // DOM Elements
@@ -1368,27 +1368,27 @@
 
                             // 3rd Priority: Controls
                             (data.controls || []).forEach(item => {
-                                const ctrlId = item.code || item.control_id || "CTRL";
+                                const ctrlSlug = item.slug || item.code || item.control_id || "CTRL";
                                 results.push({
                                     type: "control",
-                                    code: ctrlId,
-                                    slug: ctrlId,
+                                    code: item.code || item.control_id || "CTRL",
+                                    slug: ctrlSlug,
                                     title: item.name || "Control",
                                     description: item.sub || "Baseline Control Requirement",
-                                    url: normalizeRecordUrl(item.url, `/controls/view/${encodeURIComponent(ctrlId)}`)
+                                    url: normalizeRecordUrl(item.url, `/controls/${encodeURIComponent(ctrlSlug)}`)
                                 });
                             });
 
                             // 4th Priority: Requirements
                             (data.requirements || []).forEach(item => {
-                                const reqId = item.code || item.requirement_id || "REQ";
+                                const reqSlug = item.slug || item.code || item.requirement_id || "REQ";
                                 results.push({
                                     type: "requirement",
-                                    code: reqId,
-                                    slug: reqId,
+                                    code: item.code || item.requirement_id || "REQ",
+                                    slug: reqSlug,
                                     title: item.name || "Requirement",
                                     description: item.sub || "Audit Implementation Requirement",
-                                    url: normalizeRecordUrl(item.url, `/requirements/view/${encodeURIComponent(reqId)}`)
+                                    url: normalizeRecordUrl(item.url, `/requirements/${encodeURIComponent(reqSlug)}`)
                                 });
                             });
 

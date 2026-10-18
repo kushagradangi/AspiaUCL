@@ -971,7 +971,7 @@
                             @foreach($headerControls as $c)
                                 @php
                                     $badgeClass = $badgeClasses[$loop->index % count($badgeClasses)];
-                                    $url  = route('controls.show', $c->control_id);
+                                    $url  = route('controls.show', $c->slug ?: $c->control_id);
                                     $code = $c->control_id;
                                     $name = $c->name;
                                     $sub  = $c->control_category ?: ($c->description ?: 'Security Control');
@@ -1099,7 +1099,7 @@
                             @foreach($headerControls as $c)
                                 @php
                                     $badgeClass = $badgeClasses[$loop->index % count($badgeClasses)];
-                                    $url  = route('controls.show', $c->control_id);
+                                    $url  = route('controls.show', $c->slug ?: $c->control_id);
                                     $code = $c->control_id;
                                     $name = $c->name;
                                     $sub  = $c->control_category ?: ($c->description ?: 'Security Control');
@@ -1323,7 +1323,7 @@ document.addEventListener('DOMContentLoaded', function () {
             { name: "{{ addslashes($d->name) }}", code: "{{ addslashes($d->domain_code ?: $d->domain_id) }}", type: "Domain", url: "{{ route('domains.show', $d->slug) }}" },
         @endforeach
         @foreach($headerControls as $c)
-            { name: "{{ addslashes($c->name) }}", code: "{{ addslashes($c->control_id) }}", type: "Control", url: "{{ route('controls.show', $c->control_id) }}" },
+            { name: "{{ addslashes($c->name) }}", code: "{{ addslashes($c->control_id) }}", type: "Control", url: "{{ route('controls.show', $c->slug ?: $c->control_id) }}" },
         @endforeach
     ];
 

@@ -3051,7 +3051,7 @@
                         $description = $control->business_description ?? $control->control_summary ?? $control->business_objective ?? 'Establish, govern, operate, monitor, and continually improve enterprise security.';
                         $cardTags = $getDynamicTagsForControl($control, $theme['tags']);
                     @endphp
-                    <a href="{{ route('controls.show', $control->control_id ?? $control->id) }}" class="control-card">
+                    <a href="{{ route('controls.show', $control->slug ?: ($control->control_id ?? $control->id)) }}" class="control-card">
                         <div class="control-card-header">
                             <div class="control-icon-box" style="background: {{ $theme['bg'] }}; color: {{ $theme['color'] }};">
                                 <i class="{{ $theme['icon'] }}"></i>

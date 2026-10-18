@@ -103,7 +103,7 @@ class ControlTemplateController extends Controller
         $html = '';
         foreach ($controls as $c) {
             $ctrlId   = e($c->control_id);
-            $url      = route('controls.show', $ctrlId);
+            $url      = route('controls.show', $c->slug ?: $ctrlId);
             $name     = e($c->name);
             $category = e($c->control_category ?: 'Security Safeguard');
             $domName  = e($c->domain?->name ?: 'Control Governance');
@@ -155,16 +155,21 @@ HTML;
     |--------------------------------------------------------------------------
     */
 
-    public function show(string $control_id)
+    public function show(string $slug)
     {
         $control = Control::with(['domain.framework', 'requirements'])
-            ->where('control_id', $control_id)
+            ->where('slug', $slug)
             ->first();
 
         if (!$control) {
             $control = Control::with(['domain.framework', 'requirements'])
-                ->where('id', $control_id)
+                ->where('control_id', $slug)
+                ->orWhere('id', $slug)
                 ->firstOrFail();
+        }
+
+        if (request()->is('controls/view/*') || ($control->slug && $slug !== $control->slug)) {
+            return redirect()->route('controls.show', $control->slug, 301);
         }
 
         $template = ControlTemplate::whereNotNull('html_content')
@@ -249,6 +254,10 @@ HTML;
         $placeholders = [
             '{{control_id}}'                => $control->control_id,
             '{{control_name}}'              => $control->name,
+            '{{control_slug}}'              => $control->slug,
+            '{{slug}}'                      => $control->slug,
+            '{{control_url}}'               => route('controls.show', $control->slug ?: $control->control_id),
+            '{{canonical_url}}'             => route('controls.show', $control->slug ?: $control->control_id),
             '{{domain_id}}'                 => $domainId,
             '{{domain_code}}'               => $domainCode,
             '{{domain_name}}'               => $domainName,
@@ -313,7 +322,7 @@ HTML;
 
         $chips = '';
         foreach ($requirements as $req) {
-            $reqUrl = route('requirements.show', $req->requirement_id);
+            $reqUrl = route('requirements.show', $req->slug ?: $req->requirement_id);
             $rid    = htmlspecialchars($req->requirement_id);
             $title  = htmlspecialchars($req->requirement_title);
             $chips .= <<<HTML
@@ -335,14 +344,14 @@ HTML;
 
         $rows = '';
         foreach ($requirements as $req) {
-            $reqUrl    = route('requirements.show', $req->requirement_id);
+            $reqUrl    = route('requirements.show', $req->slug ?: $req->requirement_id);
             $rid       = htmlspecialchars($req->requirement_id);
             $title     = htmlspecialchars($req->requirement_title ?: $req->requirement ?: $req->requirement_id);
             $shortText = htmlspecialchars(\Illuminate\Support\Str::limit($req->requirement ?: $title, 40));
             $owner     = htmlspecialchars($req->typical_owner ?: 'Audit & Compliance');
 
             $controlId   = $req->control_id ?: ($control?->control_id ?? '');
-            $controlUrl  = $controlId ? route('controls.show', $controlId) : '#';
+            $controlUrl  = $control ? route('controls.show', $control->slug ?: $control->control_id) : ($controlId ? route('controls.show', $controlId) : '#');
             $controlName = $control ? htmlspecialchars(\Illuminate\Support\Str::limit($control->name, 30)) : ($controlId ? 'Control ' . htmlspecialchars($controlId) : '—');
             $cid         = htmlspecialchars($controlId);
 
@@ -406,7 +415,7 @@ HTML;
 
         $items = '';
         foreach ($requirements as $req) {
-            $reqUrl = route('requirements.show', $req->requirement_id);
+            $reqUrl = route('requirements.show', $req->slug ?: $req->requirement_id);
             $rid    = htmlspecialchars($req->requirement_id);
             $title  = htmlspecialchars($req->requirement_title);
             $items .= <<<HTML
@@ -692,7 +701,7 @@ HTML;
         foreach ($controls as $c) {
             $badgeClass = $badges[$i % count($badges)];
             $i++;
-            $url = route('controls.show', $c->control_id);
+            $url = route('controls.show', $c->slug ?: $c->control_id);
             $code = e($c->control_id);
             $name = e($c->name);
             $sub  = e($c->control_category ?: $c->description ?: 'Security Control');

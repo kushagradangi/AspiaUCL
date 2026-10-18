@@ -45,7 +45,50 @@ class Requirement extends Model
         // Display Order
         'display_order',
 
+        // Slug
+        'slug',
     ];
+
+    /**
+     * Boot model events to auto-generate unique slug.
+     */
+    protected static function booted(): void
+    {
+        static::saving(function (Requirement $requirement) {
+            if (empty($requirement->slug) || ($requirement->isDirty('requirement_title') && !$requirement->isDirty('slug'))) {
+                $requirement->slug = static::generateUniqueSlug(
+                    $requirement->requirement_title ?? '',
+                    $requirement->id,
+                    $requirement->requirement_id ?? null
+                );
+            }
+        });
+    }
+
+    /**
+     * Generate a unique URL slug for the Requirement.
+     */
+    public static function generateUniqueSlug(?string $title, ?int $ignoreId = null, ?string $reqId = null): string
+    {
+        $baseSlug = \Illuminate\Support\Str::slug($title ?? '');
+        if (empty($baseSlug)) {
+            $baseSlug = \Illuminate\Support\Str::slug($reqId ?: 'requirement');
+        }
+
+        $slug = $baseSlug;
+        $counter = 1;
+
+        while (
+            static::where('slug', $slug)
+                ->when($ignoreId, fn($q) => $q->where('id', '!=', $ignoreId))
+                ->exists()
+        ) {
+            $slug = $baseSlug . '-' . $counter;
+            $counter++;
+        }
+
+        return $slug;
+    }
 
     /*
     |--------------------------------------------------------------------------

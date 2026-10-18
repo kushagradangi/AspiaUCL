@@ -299,7 +299,7 @@ HTML : "<span class=\"badge badge-cyan\">Framework: {$frameworkName}</span>";
 
         $chips = '';
         foreach ($controls as $control) {
-            $controlUrl = route('controls.show', $control->control_id);
+            $controlUrl = route('controls.show', $control->slug ?: $control->control_id);
             $cid        = htmlspecialchars($control->control_id);
             $name       = htmlspecialchars($control->name);
             $chips .= <<<HTML
@@ -323,7 +323,7 @@ HTML;
 
         $rows = '';
         foreach ($requirements as $req) {
-            $reqUrl    = route('requirements.show', $req->requirement_id);
+            $reqUrl    = route('requirements.show', $req->slug ?: $req->requirement_id);
             $rid       = htmlspecialchars($req->requirement_id);
             $title     = htmlspecialchars($req->requirement_title ?: $req->requirement ?: $req->requirement_id);
             $shortText = htmlspecialchars(\Illuminate\Support\Str::limit($req->requirement ?: $title, 40));
@@ -331,7 +331,7 @@ HTML;
 
             $controlId   = $req->control_id;
             $control     = $controlsMap->get($controlId);
-            $controlUrl  = route('controls.show', $controlId);
+            $controlUrl  = $control ? route('controls.show', $control->slug ?: $control->control_id) : route('controls.show', $controlId);
             $controlName = $control ? htmlspecialchars(\Illuminate\Support\Str::limit($control->name, 30)) : 'Control ' . $controlId;
             $cid         = htmlspecialchars($controlId);
 
@@ -391,7 +391,7 @@ HTML;
 
         $rows = '';
         foreach ($controls as $control) {
-            $controlUrl = route('controls.show', $control->control_id);
+            $controlUrl = route('controls.show', $control->slug ?: $control->control_id);
             $criticalityColor = match (strtolower($control->criticality ?? '')) {
                 'critical' => '#ef4444',
                 'high'     => '#f97316',
@@ -476,7 +476,7 @@ HTML;
 
         $items = '';
         foreach ($controls as $control) {
-            $controlUrl = route('controls.show', $control->control_id);
+            $controlUrl = route('controls.show', $control->slug ?: $control->control_id);
             $cid = htmlspecialchars($control->control_id);
             $name = htmlspecialchars($control->name);
             $items .= <<<HTML
@@ -890,7 +890,7 @@ HTML;
         foreach ($controls as $c) {
             $badgeClass = $badges[$i % count($badges)];
             $i++;
-            $url = route('controls.show', $c->control_id);
+            $url = route('controls.show', $c->slug ?: $c->control_id);
             $code = e($c->control_id);
             $name = e($c->name);
             $sub  = e($c->control_category ?: $c->description ?: 'Security Control');

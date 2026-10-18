@@ -416,7 +416,7 @@ HTML;
 
         $chips = '';
         foreach ($controls as $control) {
-            $controlUrl = route('controls.show', $control->control_id);
+            $controlUrl = route('controls.show', $control->slug ?: $control->control_id);
             $name       = htmlspecialchars($control->name);
             $chips .= <<<HTML
             <a href="{$controlUrl}" title="Control: {$name}" class="module-chip chip-cyan">
@@ -437,7 +437,7 @@ HTML;
 
         $html = '<div class="controls-hierarchy-stack">';
         foreach ($controls as $control) {
-            $controlUrl  = route('controls.show', $control->control_id);
+            $controlUrl  = route('controls.show', $control->slug ?: $control->control_id);
             $name        = htmlspecialchars($control->name);
             $reqs        = $control->requirements()->orderBy('display_order', 'asc')->orderBy('id', 'asc')->get();
             $reqCount    = $reqs->count();
@@ -445,7 +445,7 @@ HTML;
 
             $pills = '';
             foreach ($reqs as $req) {
-                $reqUrl   = route('requirements.show', $req->requirement_id);
+                $reqUrl   = route('requirements.show', $req->slug ?: $req->requirement_id);
                 $reqTitle = htmlspecialchars($req->requirement_title ?: $req->requirement ?: $req->requirement_id);
                 $pills .= <<<HTML
                 <a href="{$reqUrl}" class="req-grid-card" title="Requirement: {$reqTitle}">
@@ -512,7 +512,7 @@ HTML;
 
         $rows = '';
         foreach ($controls as $control) {
-            $controlUrl = route('controls.show', $control->control_id);
+            $controlUrl = route('controls.show', $control->slug ?: $control->control_id);
             $criticalityColor = match (strtolower($control->criticality ?? '')) {
                 'critical' => '#ef4444',
                 'high'     => '#f97316',
@@ -598,7 +598,7 @@ HTML;
 
         $chips = '';
         foreach ($requirements as $req) {
-            $reqUrl = route('requirements.show', $req->requirement_id);
+            $reqUrl = route('requirements.show', $req->slug ?: $req->requirement_id);
             $title  = htmlspecialchars($req->requirement_title ?: $req->requirement ?: $req->requirement_id);
             $chips .= <<<HTML
             <a href="{$reqUrl}" title="Requirement: {$title}" class="module-chip chip-green">
@@ -619,7 +619,7 @@ HTML;
 
         $rows = '';
         foreach ($requirements as $req) {
-            $reqUrl    = route('requirements.show', $req->requirement_id);
+            $reqUrl    = route('requirements.show', $req->slug ?: $req->requirement_id);
             $rid       = htmlspecialchars($req->requirement_id);
             $title         = htmlspecialchars($req->requirement_title ?: $req->requirement_id);
             $reqStatement  = htmlspecialchars(\Illuminate\Support\Str::limit($req->requirement ?: '', 80));
@@ -628,7 +628,7 @@ HTML;
 
             $control    = $req->control;
             $controlId  = $req->control_id ?: ($control?->control_id ?? '');
-            $controlUrl = $controlId ? route('controls.show', $controlId) : '#';
+            $controlUrl = $control ? route('controls.show', $control->slug ?: $control->control_id) : ($controlId ? route('controls.show', $controlId) : '#');
             $controlName = $control ? htmlspecialchars(\Illuminate\Support\Str::limit($control->name, 30)) : ($controlId ? 'Control ' . htmlspecialchars($controlId) : '—');
             $cid        = htmlspecialchars($controlId);
 
@@ -2443,7 +2443,7 @@ HTML;
         foreach ($controls as $c) {
             $badgeClass = $badges[$i % count($badges)];
             $i++;
-            $url = route('controls.show', $c->control_id);
+            $url = route('controls.show', $c->slug ?: $c->control_id);
             $code = e($c->control_id);
             $name = e($c->name);
             $sub  = e($c->control_category ?: $c->description ?: 'Security Control');
