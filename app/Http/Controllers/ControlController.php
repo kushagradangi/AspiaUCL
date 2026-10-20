@@ -371,20 +371,50 @@ class ControlController extends Controller
             'file' => [
                 'required',
                 'file',
-                'mimes:xlsx',
+                'max:51200', // 50MB
+                function ($attribute, $value, $fail) {
+                    $ext = strtolower($value->getClientOriginalExtension());
+                    $validExts = ['xlsx', 'xls', 'csv', 'xlxs'];
+                    if (!in_array($ext, $validExts)) {
+                        $fail('The uploaded file must be a valid Excel spreadsheet (.xlsx, .xls) or CSV file.');
+                    }
+                },
             ],
+        ], [
+            'file.required' => 'Please select an Excel file (.xlsx) to import.',
+            'file.file' => 'The uploaded item must be a valid file.',
+            'file.max' => 'The uploaded file exceeds the 50MB size limit.',
         ]);
 
         try {
+            $file = $request->file('file');
+            $ext = strtolower($file->getClientOriginalExtension());
+            $readerType = null;
+            if ($ext === 'xlxs' || $ext === 'xlsx') {
+                $readerType = \Maatwebsite\Excel\Excel::XLSX;
+            } elseif ($ext === 'xls') {
+                $readerType = \Maatwebsite\Excel\Excel::XLS;
+            } elseif ($ext === 'csv') {
+                $readerType = \Maatwebsite\Excel\Excel::CSV;
+            }
+
             $import = new ControlImport();
 
             Excel::import(
                 $import,
-                $request->file('file')
+                $file,
+                null,
+                $readerType
             );
 
             $created = $import->getCreatedCount();
             $updated = $import->getUpdatedCount();
+
+            if ($created === 0 && $updated === 0) {
+                return redirect()
+                    ->route('controls.index')
+                    ->with('error', 'No valid control rows were found in the uploaded file. Please make sure the Excel file contains Control ID and Control Name columns.');
+            }
 
             Activity::create([
                 'user_id' => auth()->id(),
@@ -400,6 +430,10 @@ class ControlController extends Controller
                 ->with('success', $message);
 
         } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::error('Control import error: ' . $e->getMessage(), [
+                'exception' => $e,
+            ]);
+
             return redirect()
                 ->route('controls.index')
                 ->with('error', 'Error occurred during control import: ' . $e->getMessage());
