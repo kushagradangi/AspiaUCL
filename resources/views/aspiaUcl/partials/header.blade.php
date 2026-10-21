@@ -335,6 +335,9 @@
         transform: translateY(-1px);
         box-shadow: 0 4px 14px rgba(2, 204, 255, 0.45);
     }
+    .mobile-nav-auth-item {
+        display: none !important;
+    }
 
     /* Dark Mode Header Overrides */
     [data-theme="dark"] .site-header,
@@ -858,7 +861,44 @@
         .sticky-light-navbar .sticky-mobile-toggle {
             display: inline-flex;
         }
-        .sticky-light-navbar .sticky-btn-signin,
+        .site-header .nav-actions .btn-outline,
+        .sticky-light-navbar .sticky-nav-actions .sticky-btn-signin {
+            display: none !important;
+        }
+        .mobile-nav-auth-item {
+            display: block !important;
+            width: 100%;
+            margin-top: 8px;
+            padding-top: 12px;
+            border-top: 1px solid #f0f2f6;
+            list-style: none;
+        }
+        .mobile-nav-auth-btn {
+            display: flex !important;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            box-sizing: border-box;
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-size: 0.88rem;
+            font-weight: 700;
+            background: #02CCFF !important;
+            color: #ffffff !important;
+            text-decoration: none !important;
+            box-shadow: 0 2px 10px rgba(2, 204, 255, 0.3);
+            transition: all 0.2s ease;
+        }
+        .mobile-nav-auth-btn:hover {
+            background: #00b8e6 !important;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 14px rgba(2, 204, 255, 0.45);
+        }
+        [data-theme="dark"] .mobile-nav-auth-item,
+        body.dark-mode .mobile-nav-auth-item {
+            border-top-color: #1e293b !important;
+        }
         .sticky-light-navbar .btn-accent-demo {
             padding: 6px 12px;
             font-size: 0.78rem;
@@ -992,6 +1032,17 @@
 
                 <li><a href="https://aspiainfotech.com/about-aspia-infotech/" target="_blank" rel="noopener" title="About Us">About Us</a></li>
                 <li><a href="https://aspiainfotech.com/blog/" target="_blank" rel="noopener" title="Resources & Articles">Blog</a></li>
+                <li class="mobile-nav-auth-item">
+                    @auth
+                        <a href="{{ route('dashboard') }}" class="mobile-nav-auth-btn" title="Go to Dashboard">
+                            <i class="fas fa-chart-line" aria-hidden="true"></i> Dashboard
+                        </a>
+                    @else
+                        <a href="{{ route('login') }}" class="mobile-nav-auth-btn" title="Sign In">
+                            <i class="fas fa-sign-in-alt" aria-hidden="true"></i> Sign In
+                        </a>
+                    @endauth
+                </li>
             </ul>
             <div class="nav-actions">
                 @auth
@@ -1120,6 +1171,17 @@
 
                 <li><a href="https://aspiainfotech.com/about-aspia-infotech/" target="_blank" rel="noopener" title="About Us">About Us</a></li>
                 <li><a href="https://aspiainfotech.com/blog/" target="_blank" rel="noopener" title="Resources & Articles">Blog</a></li>
+                <li class="mobile-nav-auth-item">
+                    @auth
+                        <a href="{{ route('dashboard') }}" class="mobile-nav-auth-btn" title="Go to Dashboard">
+                            <i class="fas fa-chart-line" aria-hidden="true"></i> Dashboard
+                        </a>
+                    @else
+                        <a href="{{ route('login') }}" class="mobile-nav-auth-btn" title="Sign In">
+                            <i class="fas fa-sign-in-alt" aria-hidden="true"></i> Sign In
+                        </a>
+                    @endauth
+                </li>
             </ul>
 
             <!-- Actions -->

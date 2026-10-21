@@ -1755,6 +1755,9 @@
                 margin-left: auto;
                 gap: 8px;
             }
+            .nav-actions .btn-outline {
+                display: none !important;
+            }
             .nav-links {
                 display: none;
                 width: 100%;
@@ -1773,6 +1776,15 @@
                 gap: 24px;
                 flex-direction: column;
             }
+            .hero-visual {
+                order: 1;
+                padding: 16px 12px;
+                width: 100%;
+            }
+            .hero-content {
+                order: 2;
+                width: 100%;
+            }
             .hero-content h1 {
                 font-size: clamp(1.6rem, 5vw, 2.2rem);
             }
@@ -1782,10 +1794,6 @@
             .hero-stats {
                 gap: 16px;
                 justify-content: space-around;
-            }
-            .hero-visual {
-                padding: 16px 12px;
-                width: 100%;
             }
             .flow-box {
                 font-size: 0.6rem;
@@ -1805,8 +1813,17 @@
                 grid-template-columns: repeat(2, 1fr);
                 gap: 10px;
             }
+            .domains-grid .domain-card:nth-child(n+5) {
+                display: none !important;
+            }
             .controls-grid {
                 grid-template-columns: repeat(2, 1fr);
+            }
+            .controls-grid .control-card:nth-child(n+4) {
+                display: none !important;
+            }
+            .controls-pagination {
+                display: none !important;
             }
             .framework-grid {
                 grid-template-columns: 1fr;
@@ -1840,6 +1857,12 @@
             }
             .faq-item .a {
                 padding-left: 0;
+            }
+        }
+
+        @@media (max-width: 600px) {
+            .controls-grid {
+                grid-template-columns: 1fr;
             }
         }
 
@@ -2656,7 +2679,6 @@
             <div class="container hero-container">
                 <section class="hero" aria-label="Hero Section">
                     <div class="hero-content">
-                        <span class="tag"><i class="fas fa-layer-group" aria-hidden="true"></i> Unified Control Layer</span>
                         <h1>
                             Compliance Frameworks<br />
                             <span class="highlight">Unified. Simplified.</span>
@@ -3481,6 +3503,19 @@
                     }
 
                     function render() {
+                        const w = window.innerWidth;
+                        if (w <= 768) {
+                            cards.forEach((card, idx) => {
+                                if (idx < 4) {
+                                    card.style.display = '';
+                                } else {
+                                    card.style.display = 'none';
+                                }
+                            });
+                            if (paginationWrap) paginationWrap.style.display = 'none';
+                            return;
+                        }
+
                         const cols = getCols();
                         const itemsPerPage = cols * 3; // Set only 3 rows
                         const totalPages = Math.ceil(cards.length / itemsPerPage);
@@ -3588,6 +3623,19 @@
                     }
 
                     function renderControls() {
+                        const w = window.innerWidth;
+                        if (w <= 768) {
+                            controlCards.forEach((card, idx) => {
+                                if (idx < 3) {
+                                    card.style.display = 'flex';
+                                } else {
+                                    card.style.display = 'none';
+                                }
+                            });
+                            if (paginationWrap) paginationWrap.style.display = 'none';
+                            return;
+                        }
+
                         const cols = getCtrlCols();
                         const itemsPerPage = cols * 3;
                         const totalPages = Math.ceil(controlCards.length / itemsPerPage);
