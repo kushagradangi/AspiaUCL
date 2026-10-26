@@ -14,6 +14,7 @@ use App\Http\Controllers\ControlTemplateController;
 use App\Http\Controllers\RequirementController;
 use App\Http\Controllers\RequirementTemplateController;
 use App\Http\Controllers\UclHomepageController;
+use App\Http\Controllers\ApiClientController;
 
 use Illuminate\Support\Facades\Route;
 
@@ -410,6 +411,31 @@ Route::middleware(['auth', 'verified'])->group(function () {
         '/requirements/template',
         [RequirementTemplateController::class, 'store']
     )->name('requirements.template.store');
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | API Access Management (Clients, Tokens, IP Whitelisting)
+    |--------------------------------------------------------------------------
+    */
+
+    Route::get('/api-clients', [ApiClientController::class, 'index'])->name('api-clients.index');
+    Route::get('/api-clients/create', [ApiClientController::class, 'create'])->name('api-clients.create');
+    Route::post('/api-clients', [ApiClientController::class, 'store'])->name('api-clients.store');
+    Route::get('/api-clients/{apiClient}', [ApiClientController::class, 'show'])->name('api-clients.show');
+    Route::get('/api-clients/{apiClient}/edit', [ApiClientController::class, 'edit'])->name('api-clients.edit');
+    Route::put('/api-clients/{apiClient}', [ApiClientController::class, 'update'])->name('api-clients.update');
+    Route::delete('/api-clients/{apiClient}', [ApiClientController::class, 'destroy'])->name('api-clients.destroy');
+    Route::patch('/api-clients/{apiClient}/toggle-status', [ApiClientController::class, 'toggleStatus'])->name('api-clients.toggle-status');
+
+    // Token Management
+    Route::post('/api-clients/{apiClient}/tokens', [ApiClientController::class, 'generateToken'])->name('api-clients.tokens.generate');
+    Route::delete('/api-clients/{apiClient}/tokens/{tokenId}', [ApiClientController::class, 'revokeToken'])->name('api-clients.tokens.revoke');
+
+    // IP Whitelist Management
+    Route::post('/api-clients/{apiClient}/ips', [ApiClientController::class, 'storeIp'])->name('api-clients.ips.store');
+    Route::delete('/api-clients/{apiClient}/ips/{ip}', [ApiClientController::class, 'destroyIp'])->name('api-clients.ips.destroy');
+    Route::patch('/api-clients/{apiClient}/ips/{ip}/toggle-status', [ApiClientController::class, 'toggleIpStatus'])->name('api-clients.ips.toggle-status');
 
 });
 

@@ -4,6 +4,7 @@ namespace App\Imports;
 
 use App\Models\Framework;
 use App\Services\RelationshipResolver;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Concerns\ToModel;
@@ -38,7 +39,7 @@ class FrameworkImport implements ToModel, WithHeadingRow, WithEvents
         ];
     }
 
-    public function model(array $row)
+    public function model(array $row): Model|array|null
     {
         /*
         |--------------------------------------------------------------------------

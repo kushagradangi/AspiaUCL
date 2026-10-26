@@ -4,6 +4,7 @@ namespace App\Imports;
 
 use App\Models\Domain;
 use App\Services\RelationshipResolver;
+use Illuminate\Database\Eloquent\Model;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Concerns\WithStartRow;
@@ -50,7 +51,7 @@ class DomainImport implements ToModel, WithStartRow, WithEvents
     /**
      * Import one Excel row.
      */
-    public function model(array $row)
+    public function model(array $row): Model|array|null
     {
         // Skip completely empty rows
         if (

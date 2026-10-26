@@ -12,7 +12,14 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        //
+        $trustedProxies = env('TRUSTED_PROXIES');
+        if ($trustedProxies !== null && $trustedProxies !== '') {
+            $middleware->trustProxies(at: array_map('trim', explode(',', $trustedProxies)));
+        }
+
+        $middleware->alias([
+            'api.client.whitelist' => \App\Http\Middleware\EnsureApiClientIpIsWhitelisted::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

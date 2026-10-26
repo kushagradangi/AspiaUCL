@@ -22,7 +22,7 @@ class ControlColumnFilter implements IReadFilter
         $this->maxColIndex = $maxColIndex;
     }
 
-    public function readCell($columnAddress, $row, $worksheetName = '')
+    public function readCell(string $columnAddress, int $row, string $worksheetName = ''): bool
     {
         return Coordinate::columnIndexFromString($columnAddress) <= $this->maxColIndex;
     }

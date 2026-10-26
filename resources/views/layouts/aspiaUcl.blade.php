@@ -53,7 +53,7 @@
 
             border-right: 1px solid #1c4266;
 
-            padding: 25px 18px;
+            padding: 0;
 
             display: flex;
             flex-direction: column;
@@ -66,13 +66,29 @@
 
         .brand {
 
+            height: 75px;
+
             display: flex;
             align-items: center;
             justify-content: center;
 
-            padding: 5px 10px 30px;
+            padding: 0 18px;
 
             border-bottom: 1px solid rgba(255,255,255,0.06);
+
+            flex-shrink: 0;
+
+            box-sizing: border-box;
+        }
+
+        .brand a {
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+            text-decoration: none;
         }
 
 
@@ -80,7 +96,8 @@
 
             display: block;
 
-            width: 150px;
+            width: 140px;
+            max-height: 42px;
             max-width: 100%;
             height: auto;
 
@@ -92,7 +109,22 @@
 
         .menu {
 
-            margin-top: 35px;
+            margin-top: 0;
+
+            padding: 24px 18px 12px;
+
+            flex: 1;
+
+            overflow-y: auto;
+        }
+
+        .menu::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .menu::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
         }
 
 
@@ -174,6 +206,10 @@
         .sidebar-bottom {
 
             margin-top: auto;
+
+            padding: 15px 18px 22px;
+
+            flex-shrink: 0;
         }
 
 
@@ -237,7 +273,7 @@
 
             justify-content: space-between;
 
-            padding: 0 40px;
+            padding: 0 32px;
         }
 
 
@@ -307,7 +343,7 @@
 
         .content {
 
-            padding: 40px;
+            padding: 24px 32px;
         }
 
 
@@ -568,7 +604,7 @@
 
         <a
             href="{{ route('dashboard') }}"
-            style="display:flex;align-items:center;justify-content:center;width:100%;"
+            style="display:flex;align-items:center;justify-content:center;width:100%;height:100%;"
         >
 
             <img
@@ -664,6 +700,20 @@
                 </svg>
             </span>
             Requirements
+        </a>
+
+        <!-- API ACCESS MANAGEMENT -->
+        <a
+            href="{{ route('api-clients.index') }}"
+            class="menu-link {{ request()->routeIs('api-clients.*') ? 'active' : '' }}"
+        >
+            <span class="menu-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                </svg>
+            </span>
+            API Access Management
         </a>
 
     </nav>
