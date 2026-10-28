@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Traits\CapitalizesFirstLetter;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -9,6 +10,8 @@ use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
 class Framework extends Model
 {
+    use CapitalizesFirstLetter;
+
     protected $fillable = [
         'framework_id',
         'framework_code',
