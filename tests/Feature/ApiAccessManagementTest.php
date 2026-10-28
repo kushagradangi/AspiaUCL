@@ -363,6 +363,8 @@ test('case 12b: duplicate IP is rejected when added via storeIp endpoint', funct
 
 // 13. Existing Frameworks, Domains, Controls, and Requirements API response structures remain compatible.
 test('case 13: all four existing API modules return compatible JSON structures', function () {
+    $this->withoutMiddleware(\Illuminate\Routing\Middleware\ThrottleRequests::class);
+
     $data = createClientWithToken(
         permissions: ['frameworks', 'domains', 'controls', 'requirements'],
         ips: ['203.0.113.10'],
@@ -432,3 +434,30 @@ test('admin can generate and revoke tokens with proper audit logging', function 
 
     expect($client->tokens()->where('name', 'production-sync')->exists())->toBeFalse();
 });
+
+test('api rate limit of 3 hits per minute is enforced with 429 response', function () {
+    $data = createClientWithToken(
+        permissions: ['controls'],
+        ips: ['203.0.113.10'],
+        abilities: ['*']
+    );
+
+    // Hits 1 to 3 should succeed (HTTP 200)
+    for ($i = 0; $i < 3; $i++) {
+        $resp = $this->withServerVariables(['REMOTE_ADDR' => '203.0.113.10'])
+            ->withHeader('Authorization', 'Bearer ' . $data['token'])
+            ->getJson('/api/v1/controls');
+        $resp->assertStatus(200);
+    }
+
+    // 4th hit within 1 minute must return HTTP 429
+    $fourthResp = $this->withServerVariables(['REMOTE_ADDR' => '203.0.113.10'])
+        ->withHeader('Authorization', 'Bearer ' . $data['token'])
+        ->getJson('/api/v1/controls');
+    $fourthResp->assertStatus(429);
+    $fourthResp->assertJson([
+        'status' => 'error',
+        'message' => 'Too many requests. You are allowed 3 requests per minute.',
+    ]);
+});
+
