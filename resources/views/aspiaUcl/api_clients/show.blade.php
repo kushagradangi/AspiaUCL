@@ -898,7 +898,7 @@
                     <div style="display:flex; flex-direction:column; gap:8px; margin-top:6px;">
                         @foreach($availableModules as $modKey => $modLabel)
                             @php $isPermitted = in_array($modKey, $client->permissions ?? []); @endphp
-                            <label style="display:flex; align-items:center; gap:8px; font-size:13px; color:{{ $isPermitted ? '#ffffff' : '#64748b' }};">
+                            <label style="display:flex; align-items:center; gap:8px; font-size:13px; color:{{ $isPermitted ? '#ffffff' : '#64748b' }}; cursor:{{ $isPermitted ? 'pointer' : 'not-allowed' }};">
                                 <input
                                     type="checkbox"
                                     name="abilities[]"
@@ -906,9 +906,11 @@
                                     {{ $isPermitted ? 'checked' : 'disabled' }}
                                     style="accent-color:#16C4F4;"
                                 >
-                                {{ $modLabel }} Ability (<code>{{ $modKey }}:read</code>)
+                                <span>
+                                    {{ $modLabel }} Ability <span style="white-space:nowrap;">(<code>{{ $modKey }}:read</code>)</span>
+                                </span>
                                 @if(! $isPermitted)
-                                    <span style="font-size:11px; color:#f87171;">(Client lacks module permission)</span>
+                                    <span style="font-size:11px; color:#f87171; white-space:nowrap;">(Client lacks module permission)</span>
                                 @endif
                             </label>
                         @endforeach
