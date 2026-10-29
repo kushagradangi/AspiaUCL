@@ -4,6 +4,7 @@ use App\Models\Control;
 use App\Models\Domain;
 use App\Models\Framework;
 use App\Models\Requirement;
+use App\Models\RequirementEvidenceMapping;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -158,5 +159,41 @@ Route::middleware(['auth:sanctum', 'throttle:api'])->group(function () {
             ->orderBy('id')
             ->paginate($perPage);
     })->middleware('api.client.whitelist:requirements');
+
+    Route::get('/v1/requirement-evidence-mappings', function (Request $request) {
+        $perPage = min(
+            max((int) $request->query('per_page', 100), 1),
+            500
+        );
+
+        return RequirementEvidenceMapping::query()
+            ->select([
+                'id',
+                'requirement_id',
+                'control_id',
+                'requirement_title',
+                'requirement',
+                'evidence_type',
+                'evidence_owner',
+                'evidence_reference_link',
+                'evidence_description',
+                'source_system',
+                'frequency',
+                'freshness',
+                'auditor_validation_method',
+                'test_procedure',
+                'evidence_checklist',
+                'expected_result',
+                'pass_criteria',
+                'fail_criteria',
+                'test_frequency',
+                'test_method',
+                'display_order',
+                'created_at',
+                'updated_at',
+            ])
+            ->orderBy('id')
+            ->paginate($perPage);
+    })->middleware('api.client.whitelist:requirement-evidence-mappings');
 
 });

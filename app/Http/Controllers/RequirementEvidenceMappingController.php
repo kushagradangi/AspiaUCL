@@ -37,7 +37,7 @@ class RequirementEvidenceMappingController extends Controller
             })
             ->orderBy('display_order', 'asc')
             ->orderBy('id', 'asc')
-            ->paginate(15)
+            ->paginate(10)
             ->withQueryString();
 
         // Statistics for header summary cards

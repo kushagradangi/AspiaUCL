@@ -6,6 +6,7 @@ use App\Models\Control;
 use App\Models\Domain;
 use App\Models\Framework;
 use App\Models\Requirement;
+use App\Models\RequirementEvidenceMapping;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -45,11 +46,34 @@ beforeEach(function () {
         'slug' => 'formal-user-registration-process',
         'requirement' => 'A formal user registration and deregistration process shall be implemented.',
     ]);
+
+    $this->mapping = RequirementEvidenceMapping::create([
+        'requirement_id' => 'REQ-AC-01-A',
+        'control_id' => 'CTRL-AC-01',
+        'requirement_title' => 'Formal User Registration Process',
+        'requirement' => 'A formal user registration and deregistration process shall be implemented.',
+        'evidence_type' => 'Process Documentation',
+        'evidence_owner' => 'IT Security Lead',
+        'evidence_reference_link' => 'https://docs.example.com/access-process',
+        'evidence_description' => 'User onboarding and offboarding approval tickets.',
+        'source_system' => 'Jira Service Desk',
+        'frequency' => 'Monthly',
+        'freshness' => '30 Days',
+        'auditor_validation_method' => 'Sample Testing',
+        'test_procedure' => 'Review 25 random user account creations.',
+        'evidence_checklist' => 'Manager approval ticket attached.',
+        'expected_result' => 'All sampled accounts have valid tickets.',
+        'pass_criteria' => '100% compliance',
+        'fail_criteria' => 'Any unapproved access account',
+        'test_frequency' => 'Quarterly',
+        'test_method' => 'Manual Audit',
+        'display_order' => 1,
+    ]);
 });
 
 // Helper function to create an active client with whitelisted IP and Sanctum token
 function createClientWithToken(
-    array $permissions = ['frameworks', 'domains', 'controls', 'requirements'],
+    array $permissions = ['frameworks', 'domains', 'controls', 'requirements', 'requirement-evidence-mappings'],
     array $ips = ['203.0.113.10'],
     bool $isActive = true,
     ?Carbon $expiresAt = null,
@@ -361,12 +385,12 @@ test('case 12b: duplicate IP is rejected when added via storeIp endpoint', funct
     $response->assertSessionHasErrors('ip_address');
 });
 
-// 13. Existing Frameworks, Domains, Controls, and Requirements API response structures remain compatible.
-test('case 13: all four existing API modules return compatible JSON structures', function () {
+// 13. Existing Frameworks, Domains, Controls, Requirements, and Requirement Evidence Mappings API response structures remain compatible.
+test('case 13: all five API modules return compatible JSON structures', function () {
     $this->withoutMiddleware(\Illuminate\Routing\Middleware\ThrottleRequests::class);
 
     $data = createClientWithToken(
-        permissions: ['frameworks', 'domains', 'controls', 'requirements'],
+        permissions: ['frameworks', 'domains', 'controls', 'requirements', 'requirement-evidence-mappings'],
         ips: ['203.0.113.10'],
         abilities: ['*']
     );
@@ -402,6 +426,50 @@ test('case 13: all four existing API modules return compatible JSON structures',
     $requirementsResp->assertStatus(200);
     $requirementsResp->assertJsonPath('data.0.requirement_id', 'REQ-AC-01-A');
     $requirementsResp->assertJsonPath('data.0.requirement_title', 'Formal User Registration Process');
+
+    // 5. Requirement Evidence Mappings
+    $mappingsResp = $this->withServerVariables(['REMOTE_ADDR' => '203.0.113.10'])
+        ->withHeader('Authorization', 'Bearer ' . $data['token'])
+        ->getJson('/api/v1/requirement-evidence-mappings');
+    $mappingsResp->assertStatus(200);
+    $mappingsResp->assertJsonPath('data.0.requirement_id', 'REQ-AC-01-A');
+    $mappingsResp->assertJsonPath('data.0.control_id', 'CTRL-AC-01');
+    $mappingsResp->assertJsonPath('data.0.evidence_type', 'Process Documentation');
+    $mappingsResp->assertJsonPath('data.0.evidence_owner', 'IT Security Lead');
+    $mappingsResp->assertJsonPath('data.0.source_system', 'Jira Service Desk');
+});
+
+test('requirement-evidence-mappings endpoint requires specific module permission and ability', function () {
+    $this->withoutMiddleware(\Illuminate\Routing\Middleware\ThrottleRequests::class);
+
+    // Client without requirement-evidence-mappings permission
+    $dataUnauthorized = createClientWithToken(
+        permissions: ['controls'],
+        ips: ['203.0.113.10'],
+        abilities: ['controls:read']
+    );
+
+    $this->withServerVariables(['REMOTE_ADDR' => '203.0.113.10'])
+        ->withHeader('Authorization', 'Bearer ' . $dataUnauthorized['token'])
+        ->getJson('/api/v1/requirement-evidence-mappings')
+        ->assertStatus(403);
+
+    // Reset auth guard between requests in the same test
+    $this->app['auth']->forgetGuards();
+
+    // Client with requirement-evidence-mappings permission and ability
+    $dataAuthorized = createClientWithToken(
+        permissions: ['requirement-evidence-mappings'],
+        ips: ['203.0.113.10'],
+        abilities: ['requirement-evidence-mappings:read']
+    );
+
+    $resp = $this->withServerVariables(['REMOTE_ADDR' => '203.0.113.10'])
+        ->withHeader('Authorization', 'Bearer ' . $dataAuthorized['token'])
+        ->getJson('/api/v1/requirement-evidence-mappings');
+
+    $resp->assertStatus(200);
+    $resp->assertJsonPath('data.0.requirement_id', 'REQ-AC-01-A');
 });
 
 // Additional test: token generation and revocation via controller

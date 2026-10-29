@@ -7,12 +7,20 @@
 @section('content')
 
 <style>
+
     /* =========================================================
-       PAGE LAYOUT & HEADERS
+       PAGE
     ========================================================= */
+
+    .control-page,
     .mapping-page {
         width: 100%;
     }
+
+
+    /* =========================================================
+       PAGE HEADER
+    ========================================================= */
 
     .page-header {
         display: flex;
@@ -41,9 +49,11 @@
         flex-wrap: wrap;
     }
 
+
     /* =========================================================
        BUTTONS
     ========================================================= */
+
     .btn-aspia {
         border: none;
         border-radius: 8px;
@@ -52,10 +62,12 @@
         font-weight: 600;
         cursor: pointer;
         text-decoration: none;
+
         display: inline-flex;
         align-items: center;
         justify-content: center;
         gap: 8px;
+
         transition: .2s;
     }
 
@@ -89,39 +101,91 @@
         background: rgba(239, 68, 68, .2);
     }
 
+
     /* =========================================================
-       STATS CARDS ROW
+       ALERTS
     ========================================================= */
+
+    .alert-success {
+        background: rgba(34,197,94,.10);
+        border: 1px solid rgba(34,197,94,.2);
+        color: #6ee7a0;
+
+        padding: 13px 16px;
+        border-radius: 9px;
+
+        margin-bottom: 20px;
+
+        font-size: 13px;
+    }
+
+    .alert-error {
+        background: rgba(239,68,68,.10);
+        border: 1px solid rgba(239,68,68,.2);
+        color: #ff8585;
+
+        padding: 13px 16px;
+        border-radius: 9px;
+
+        margin-bottom: 20px;
+
+        font-size: 13px;
+    }
+
+
+    /* =========================================================
+       STATS CARDS ROW (DYNAMIC BOXES)
+    ========================================================= */
+
     .stats-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+        grid-template-columns: repeat(4, 1fr);
         gap: 18px;
         margin-bottom: 25px;
+    }
+
+    @media (max-width: 1200px) {
+        .stats-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    @media (max-width: 640px) {
+        .stats-grid {
+            grid-template-columns: 1fr;
+        }
     }
 
     .stat-card-ucl {
         background: #162544;
         border: 1px solid #1c4266;
         border-radius: 12px;
-        padding: 20px;
+        padding: 20px 22px;
         display: flex;
         align-items: center;
         justify-content: space-between;
+        transition: transform 0.2s, border-color 0.2s;
+    }
+
+    .stat-card-ucl:hover {
+        border-color: rgba(22, 196, 244, 0.4);
     }
 
     .stat-card-ucl .stat-info h3 {
-        margin: 0 0 6px;
-        font-size: 12px;
-        font-weight: 600;
+        margin: 0 0 8px;
+        font-size: 11.5px;
+        font-weight: 700;
         text-transform: uppercase;
-        letter-spacing: 0.8px;
+        letter-spacing: 0.9px;
         color: #8f9db5;
     }
 
     .stat-card-ucl .stat-info .stat-val {
-        font-size: 26px;
-        font-weight: 600;
+        font-size: 28px;
+        font-weight: 700;
         color: #ffffff;
+        line-height: 1;
+        letter-spacing: -0.5px;
     }
 
     .stat-card-ucl .stat-icon-wrap {
@@ -133,188 +197,324 @@
         display: flex;
         align-items: center;
         justify-content: center;
+        flex-shrink: 0;
     }
+
 
     /* =========================================================
-       ALERTS
+       PANEL
     ========================================================= */
-    .alert-success {
-        background: rgba(34,197,94,.10);
-        border: 1px solid rgba(34,197,94,.2);
-        color: #6ee7a0;
-        padding: 13px 16px;
-        border-radius: 9px;
-        margin-bottom: 20px;
-        font-size: 13px;
-    }
 
-    .alert-error {
-        background: rgba(239,68,68,.10);
-        border: 1px solid rgba(239,68,68,.2);
-        color: #ff8585;
-        padding: 13px 16px;
-        border-radius: 9px;
-        margin-bottom: 20px;
-        font-size: 13px;
-    }
-
-    /* =========================================================
-       PANEL & TABLE
-    ========================================================= */
-    .mapping-panel {
+    .control-panel {
         background: #162544;
+
         border: 1px solid #1c4266;
+
         border-radius: 14px;
+
         overflow: hidden;
+
         margin-bottom: 25px;
     }
 
+
     .panel-header {
         padding: 20px 22px;
+
         border-bottom: 1px solid rgba(255,255,255,.07);
+
         display: flex;
+
         justify-content: space-between;
+
         align-items: center;
+
         gap: 15px;
+
         flex-wrap: wrap;
     }
 
+
     .panel-header h2 {
         margin: 0;
+
         color: #ffffff;
+
         font-size: 17px;
+
         font-weight: 500;
     }
+
+
+    /* =========================================================
+       SEARCH
+    ========================================================= */
 
     .search-form {
         display: flex;
         gap: 8px;
     }
 
+
     .search-input {
-        width: 320px;
+        width: 280px;
+
         background: #0D1735;
+
         border: 1px solid #27496b;
+
         color: #ffffff;
+
         border-radius: 8px;
+
         padding: 10px 13px;
+
         outline: none;
-        font-size: 13px;
     }
+
 
     .search-input:focus {
         border-color: #16C4F4;
     }
 
+
+    .search-input::placeholder {
+        color: #687993;
+    }
+
+
+    /* =========================================================
+       TABLE (FIT TO SCREEN - NO HORIZONTAL SCROLL)
+    ========================================================= */
+
     .table-wrapper {
-        overflow-x: auto;
-    }
-
-    .mapping-table {
         width: 100%;
-        min-width: 1100px;
-        border-collapse: collapse;
+        overflow-x: hidden;
     }
 
-    .mapping-table th {
+    .control-table {
+        width: 100%;
+        min-width: 0;
+        border-collapse: collapse;
+        table-layout: fixed;
+    }
+
+    .control-table th {
         text-align: left;
         padding: 14px 16px;
         color: #71829f;
         font-size: 11px;
         text-transform: uppercase;
-        letter-spacing: 1px;
+        letter-spacing: 0.8px;
         font-weight: 600;
         background: rgba(14,24,54,.35);
         white-space: nowrap;
     }
 
-    .mapping-table td {
-        padding: 15px 16px;
+    .control-table td {
+        padding: 14px 16px;
         border-top: 1px solid rgba(255,255,255,.06);
         color: #b9c5d8;
         font-size: 13px;
         vertical-align: middle;
+        overflow: hidden;
     }
 
-    .mapping-table tr:hover td {
+    .control-table tr:hover td {
         background: rgba(22,196,244,.025);
     }
 
-    .code-pill {
-        display: inline-block;
-        padding: 4px 8px;
-        border-radius: 6px;
-        font-size: 11.5px;
-        font-weight: 600;
-        font-family: var(--aspia-infotech-font-mono, monospace);
-    }
-
-    .code-pill-req {
-        background: rgba(22, 196, 244, 0.12);
-        color: #16C4F4;
-        border: 1px solid rgba(22, 196, 244, 0.25);
-    }
-
-    .code-pill-ctrl {
-        background: rgba(255, 255, 255, 0.06);
+    .control-id {
         color: #ffffff;
-        border: 1px solid rgba(255, 255, 255, 0.12);
+        font-weight: 500;
+        white-space: nowrap;
     }
 
-    .badge-tag {
-        display: inline-block;
-        background: rgba(22, 196, 244, 0.08);
-        color: #b3e7f8;
-        border: 1px solid rgba(22, 196, 244, 0.18);
-        border-radius: 4px;
-        padding: 3px 7px;
-        font-size: 11px;
-        margin: 2px;
-        line-height: 1.3;
+    .domain-code {
+        color: #ffffff;
+        font-weight: 500;
+        white-space: nowrap;
     }
+
+    .control-name-link {
+        color: #16C4F4;
+        text-decoration: underline;
+        text-underline-offset: 3px;
+        font-weight: 500;
+        transition: color 0.2s ease, text-decoration-color 0.2s ease;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        line-height: 1.45;
+        word-break: break-word;
+    }
+
+    .control-name-link:hover {
+        color: #38bdf8;
+        text-decoration: underline;
+    }
+
+    .table-cell-ellipsis {
+        display: block;
+        max-width: 100%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        line-height: 1.4;
+    }
+
+    .nowrap-cell {
+        white-space: nowrap;
+    }
+
+
+    /* =========================================================
+       ACTIONS (MANIPULATION BUTTONS)
+    ========================================================= */
 
     .actions {
         display: flex;
         gap: 6px;
+        align-items: center;
+        justify-content: flex-end;
         white-space: nowrap;
     }
 
     .action-btn {
-        border-radius: 6px;
-        padding: 6px 10px;
+        border-radius: 7px;
+        padding: 6px 12px;
         font-size: 12px;
+        font-weight: 500;
         cursor: pointer;
         border: 1px solid #27496b;
         background: #172540;
         color: #aebbd0;
+        transition: all 0.2s;
+        text-decoration: none;
         display: inline-flex;
         align-items: center;
-        gap: 5px;
-        transition: .2s;
+        justify-content: center;
+        white-space: nowrap;
     }
 
     .action-btn:hover {
         color: #ffffff;
         border-color: #16C4F4;
+        background: #1c3155;
     }
 
-    .action-btn-danger:hover {
-        border-color: #ef4444;
-        color: #ff8585;
+    .action-btn.btn-danger-aspia {
+        background: rgba(239, 68, 68, .12);
+        color: #ff7070;
+        border: 1px solid rgba(239, 68, 68, .25);
     }
+
+    .action-btn.btn-danger-aspia:hover {
+        background: rgba(239, 68, 68, .25);
+        color: #ffffff;
+        border-color: #ef4444;
+    }
+
 
     /* =========================================================
-       MODALS
+       EMPTY STATE
     ========================================================= */
+
+    .empty-state {
+        text-align: center;
+        padding: 50px 20px !important;
+        color: #71829f !important;
+    }
+
+    .empty-state-icon {
+        font-size: 35px;
+        color: #16C4F4;
+        margin-bottom: 10px;
+    }
+
+
+    /* =========================================================
+       PAGINATION
+    ========================================================= */
+
+    .pagination-area {
+        padding: 18px 20px;
+        border-top: 1px solid rgba(255,255,255,.06);
+        display: flex;
+        justify-content: flex-end;
+    }
+
+
+    /* =========================================================
+       CUSTOM PAGINATION
+    ========================================================= */
+
+    .custom-pagination {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        flex-wrap: wrap;
+    }
+
+    .custom-pagination a,
+    .custom-pagination span {
+        min-width: 36px;
+        height: 36px;
+        padding: 0 11px;
+        box-sizing: border-box;
+        border-radius: 7px;
+        border: 1px solid #27496b;
+        background: #172540;
+        color: #aebbd0;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    .custom-pagination a:hover {
+        color: #ffffff;
+        border-color: #16C4F4;
+        background: #162544;
+    }
+
+    .custom-pagination .active-page {
+        background: #16C4F4;
+        border-color: #16C4F4;
+        color: #07152e;
+    }
+
+    .custom-pagination .disabled-page {
+        opacity: .45;
+        cursor: not-allowed;
+    }
+
+    .custom-pagination .pagination-info {
+        min-width: auto;
+        border: none;
+        background: transparent;
+        padding: 0 8px;
+        color: #71829f;
+        font-weight: 400;
+    }
+
+
+    /* =========================================================
+       MODAL
+    ========================================================= */
+
     .modal-overlay {
         position: fixed;
         inset: 0;
-        background: rgba(0,0,0,.75);
+        background: rgba(0,0,0,.70);
         display: none;
         align-items: center;
         justify-content: center;
         z-index: 9999;
-        padding: 20px;
+        padding: 25px;
     }
 
     .modal-overlay.show {
@@ -323,31 +523,31 @@
 
     .modal-box {
         width: 100%;
-        max-width: 900px;
+        max-width: 850px;
         max-height: 90vh;
         overflow-y: auto;
         background: #162544;
         border: 1px solid #1c4266;
         border-radius: 14px;
-        box-shadow: 0 20px 60px rgba(0,0,0,.6);
+        box-shadow: 0 20px 60px rgba(0,0,0,.5);
     }
 
     .modal-header {
-        padding: 18px 24px;
-        border-bottom: 1px solid rgba(255,255,255,.08);
+        padding: 20px 22px;
+        border-bottom: 1px solid rgba(255,255,255,.07);
         display: flex;
         justify-content: space-between;
         align-items: center;
         position: sticky;
         top: 0;
         background: #162544;
-        z-index: 5;
+        z-index: 2;
     }
 
     .modal-header h2 {
         margin: 0;
         color: #ffffff;
-        font-size: 18px;
+        font-size: 19px;
         font-weight: 500;
     }
 
@@ -355,7 +555,7 @@
         background: none;
         border: none;
         color: #8291aa;
-        font-size: 26px;
+        font-size: 27px;
         cursor: pointer;
         line-height: 1;
     }
@@ -365,22 +565,26 @@
     }
 
     .modal-body {
-        padding: 24px;
+        padding: 22px;
     }
 
     .modal-footer {
-        padding: 16px 24px;
-        border-top: 1px solid rgba(255,255,255,.08);
+        padding: 18px 22px;
+        border-top: 1px solid rgba(255,255,255,.07);
         display: flex;
         justify-content: flex-end;
         gap: 10px;
         position: sticky;
         bottom: 0;
         background: #162544;
-        z-index: 5;
+        z-index: 2;
     }
 
-    /* Modal Form Sections */
+
+    /* =========================================================
+       FORM
+    ========================================================= */
+
     .form-section-title {
         color: #16C4F4;
         font-size: 13px;
@@ -390,9 +594,6 @@
         margin: 22px 0 14px;
         padding-bottom: 6px;
         border-bottom: 1px solid rgba(22, 196, 244, 0.2);
-        display: flex;
-        align-items: center;
-        gap: 8px;
     }
 
     .form-section-title:first-child {
@@ -402,19 +603,18 @@
     .form-grid {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        gap: 16px;
+        gap: 18px;
     }
 
     .form-group {
-        margin-bottom: 16px;
+        margin-bottom: 18px;
     }
 
     .form-label {
         display: block;
         color: #b9c5d8;
-        font-size: 12.5px;
-        font-weight: 500;
-        margin-bottom: 6px;
+        font-size: 13px;
+        margin-bottom: 8px;
     }
 
     .required-star {
@@ -427,26 +627,39 @@
         background: #0D1735;
         border: 1px solid #27496b;
         border-radius: 8px;
-        padding: 10px 13px;
+        padding: 11px 13px;
         color: #ffffff;
         outline: none;
-        font-size: 13.5px;
+        font-size: 14px;
     }
 
     .form-control-aspia:focus {
         border-color: #16C4F4;
-        box-shadow: 0 0 0 2px rgba(22,196,244,.1);
+        box-shadow: 0 0 0 2px rgba(22,196,244,.08);
+    }
+
+    .form-control-aspia::placeholder {
+        color: #687993;
     }
 
     textarea.form-control-aspia {
-        min-height: 90px;
+        min-height: 110px;
         resize: vertical;
-        font-family: inherit;
-        line-height: 1.5;
     }
 
     .full-width {
         grid-column: 1 / -1;
+    }
+
+    .import-info {
+        font-size: 12px;
+        color: #8f9db5;
+        margin-top: 6px;
+    }
+
+    @keyframes aspiaSpin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
     }
 
     /* Detail View Box */
@@ -493,114 +706,115 @@
 
     .detail-criteria-pass {
         border-left: 3px solid #22c55e;
-        padding-left: 10px;
-        background: rgba(34, 197, 94, 0.05);
         padding: 8px 10px;
+        background: rgba(34, 197, 94, 0.08);
         border-radius: 4px;
     }
 
     .detail-criteria-fail {
         border-left: 3px solid #ef4444;
-        padding-left: 10px;
-        background: rgba(239, 68, 68, 0.05);
         padding: 8px 10px;
+        background: rgba(239, 68, 68, 0.08);
         border-radius: 4px;
     }
 
-    /* Custom pagination */
-    .pagination-area {
-        padding: 18px 20px;
-        border-top: 1px solid rgba(255,255,255,.06);
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        flex-wrap: wrap;
-        gap: 12px;
-    }
-
-    .pagination-summary {
-        color: #71829f;
-        font-size: 13px;
-    }
-
-    @keyframes aspiaSpin {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
-    }
 </style>
 
-<div class="mapping-page">
+<div class="control-page">
 
-    {{-- SUCCESS / ERROR ALERTS --}}
+    {{-- =====================================================
+         SUCCESS MESSAGE
+    ====================================================== --}}
+
     @if(session('success'))
         <div class="alert-success">
-            ✓ {{ session('success') }}
+            {{ session('success') }}
         </div>
     @endif
+
+    {{-- =====================================================
+         ERROR MESSAGE
+    ====================================================== --}}
 
     @if(session('error'))
         <div class="alert-error">
-            ⚠ {{ session('error') }}
+            {{ session('error') }}
         </div>
     @endif
 
+
+    {{-- =====================================================
+         VALIDATION ERRORS
+    ====================================================== --}}
+
     @if($errors->any())
         <div class="alert-error">
-            <strong>Please resolve the following:</strong>
-            <ul style="margin: 8px 0 0 18px;">
-                @foreach($errors->all() as $err)
-                    <li>{{ $err }}</li>
+            <strong>Please fix the following:</strong>
+            <ul style="margin:8px 0 0 18px;">
+                @foreach($errors->all() as $error)
+                    <li>{{ $error }}</li>
                 @endforeach
             </ul>
         </div>
     @endif
 
-    {{-- PAGE HEADER --}}
+
+    {{-- =====================================================
+         PAGE HEADER
+    ====================================================== --}}
+
     <div class="page-header">
+
         <div>
-            <h1>Requirement Evidence Mapping</h1>
-            <p>Define and manage verification evidence, test procedures, and auditor validation methods for compliance requirements.</p>
+            <h1>
+                Requirement Evidence Mapping
+            </h1>
+            <p>
+                Manage compliance requirement evidence mappings and audit verification specifications.
+            </p>
         </div>
 
+
         <div class="header-actions">
-            {{-- IMPORT BUTTON --}}
+
+            {{-- IMPORT XLSX --}}
             <button
                 type="button"
                 class="btn-aspia btn-secondary-aspia"
                 onclick="openModal('importModal')"
             >
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                    <polyline points="17 8 12 3 7 8"/>
-                    <line x1="12" y1="3" x2="12" y2="15"/>
-                </svg>
-                Import Excel
+                ↑ Import XLSX
             </button>
 
-            {{-- ADD BUTTON --}}
+
+            {{-- ADD MAPPING --}}
             <button
                 type="button"
                 class="btn-aspia btn-primary-aspia"
                 onclick="openModal('addModal')"
             >
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="12" y1="5" x2="12" y2="19"/>
-                    <line x1="5" y1="12" x2="19" y2="12"/>
-                </svg>
-                Add Mapping
+                + Add Mapping
             </button>
+
         </div>
+
     </div>
 
-    {{-- STATISTICS SUMMARY ROW --}}
+
+    {{-- =====================================================
+         DYNAMIC STATS BOXES ROW
+    ====================================================== --}}
+
     <div class="stats-grid">
+
+        {{-- TOTAL MAPPINGS --}}
         <div class="stat-card-ucl">
             <div class="stat-info">
                 <h3>Total Mappings</h3>
                 <div class="stat-val">{{ number_format($totalMappings) }}</div>
             </div>
             <div class="stat-icon-wrap">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
                     <polyline points="14 2 14 8 20 8"/>
                     <path d="m9 15 2 2 4-4"/>
@@ -608,38 +822,41 @@
             </div>
         </div>
 
+        {{-- COVERED REQUIREMENTS --}}
         <div class="stat-card-ucl">
             <div class="stat-info">
                 <h3>Covered Requirements</h3>
                 <div class="stat-val">{{ number_format($coveredRequirementsCount) }}</div>
             </div>
             <div class="stat-icon-wrap">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <rect width="8" height="4" x="8" y="2" rx="1" ry="1"/>
                     <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
                 </svg>
             </div>
         </div>
 
+        {{-- COVERED CONTROLS --}}
         <div class="stat-card-ucl">
             <div class="stat-info">
                 <h3>Covered Controls</h3>
                 <div class="stat-val">{{ number_format($coveredControlsCount) }}</div>
             </div>
             <div class="stat-icon-wrap">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/>
                 </svg>
             </div>
         </div>
 
+        {{-- EVIDENCE OWNERS --}}
         <div class="stat-card-ucl">
             <div class="stat-info">
                 <h3>Evidence Owners</h3>
                 <div class="stat-val">{{ number_format($uniqueOwnersCount) }}</div>
             </div>
             <div class="stat-icon-wrap">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
                     <circle cx="9" cy="7" r="4"/>
                     <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
@@ -647,203 +864,329 @@
                 </svg>
             </div>
         </div>
+
     </div>
 
-    {{-- MAIN TABLE PANEL --}}
-    <div class="mapping-panel">
-        <div class="panel-header">
-            <h2>Evidence Mapping Records ({{ $mappings->total() }})</h2>
 
-            {{-- SEARCH FORM --}}
-            <form action="{{ route('requirement-evidence-mappings.index') }}" method="GET" class="search-form">
+    {{-- =====================================================
+         MANAGEMENT PANEL
+    ====================================================== --}}
+
+    <div class="control-panel">
+
+        <div class="panel-header">
+
+            <h2>
+                Requirement Evidence Mapping Management
+            </h2>
+
+
+            {{-- SEARCH --}}
+            <form
+                action="{{ route('requirement-evidence-mappings.index') }}"
+                method="GET"
+                class="search-form"
+            >
                 <input
                     type="text"
                     name="search"
                     class="search-input"
-                    placeholder="Search ID, title, owner, system..."
-                    value="{{ $search }}"
+                    placeholder="Search mappings..."
+                    value="{{ request('search') }}"
                 >
-                <button type="submit" class="btn-aspia btn-secondary-aspia">
+
+                <button
+                    type="submit"
+                    class="btn-aspia btn-secondary-aspia"
+                >
                     Search
                 </button>
-                @if($search !== '')
-                    <a href="{{ route('requirement-evidence-mappings.index') }}" class="btn-aspia btn-secondary-aspia" style="padding: 10px 14px;" title="Clear Search">
-                        ✕
+
+                @if(request('search'))
+                    <a
+                        href="{{ route('requirement-evidence-mappings.index') }}"
+                        class="btn-aspia btn-secondary-aspia"
+                        style="padding: 10px 14px;"
+                        title="Clear search"
+                    >
+                        Clear
                     </a>
                 @endif
             </form>
+
         </div>
 
+
+        {{-- =================================================
+             TABLE (FIT TO SCREEN - IMPORTANT RECORDS + ACTIONS)
+        ================================================== --}}
+
         <div class="table-wrapper">
-            <table class="mapping-table">
+
+            <table class="control-table">
+
                 <thead>
+
                     <tr>
-                        <th style="width: 130px;">Req ID</th>
-                        <th style="width: 100px;">Control ID</th>
-                        <th>Requirement Title</th>
-                        <th>Evidence Type</th>
-                        <th>Evidence Owner</th>
-                        <th>Source / System</th>
-                        <th>Frequency</th>
-                        <th style="text-align: right; width: 140px;">Actions</th>
+
+                        <th style="width: 150px;">
+                            Requirement ID
+                        </th>
+
+                        <th style="width: 120px;">
+                            Control ID
+                        </th>
+
+                        <th>
+                            Requirement Title
+                        </th>
+
+                        <th style="width: 200px;">
+                            Evidence Type
+                        </th>
+
+                        <th style="width: 200px;">
+                            Evidence Owner
+                        </th>
+
+                        <th style="width: 210px; text-align: right;">
+                            Actions
+                        </th>
+
                     </tr>
+
                 </thead>
+
+
                 <tbody>
+
                     @forelse($mappings as $item)
+
                         <tr>
-                            <td>
-                                <span class="code-pill code-pill-req">{{ $item->requirement_id }}</span>
+
+                            {{-- Requirement ID --}}
+                            <td class="nowrap-cell">
+                                <span class="control-id">
+                                    {{ $item->requirement_id }}
+                                </span>
                             </td>
-                            <td>
-                                <span class="code-pill code-pill-ctrl">{{ $item->control_id ?: '—' }}</span>
+
+
+                            {{-- Control ID --}}
+                            <td class="nowrap-cell">
+                                <span class="domain-code">
+                                    {{ $item->control_id ?: '—' }}
+                                </span>
                             </td>
+
+
+                            {{-- Requirement Title (clickable link to details) --}}
                             <td>
                                 <a
                                     href="javascript:void(0)"
-                                    onclick="viewMappingDetails({{ json_encode($item) }})"
-                                    style="color: #16C4F4; text-decoration: none; font-weight: 500;"
-                                    title="Click to view full details"
+                                    onclick="viewMappingDetails({{ $item->id }})"
+                                    class="control-name-link"
+                                    title="{{ $item->requirement_title }}"
                                 >
                                     {{ $item->requirement_title ?: 'Untitled' }}
                                 </a>
                             </td>
+
+
+                            {{-- Evidence Type --}}
                             <td>
-                                @if($item->evidence_type)
-                                    @php
-                                        $types = explode(',', $item->evidence_type);
-                                    @endphp
-                                    @foreach(array_slice($types, 0, 2) as $t)
-                                        <span class="badge-tag">{{ trim($t) }}</span>
-                                    @endforeach
-                                    @if(count($types) > 2)
-                                        <span class="badge-tag">+{{ count($types) - 2 }}</span>
-                                    @endif
-                                @else
-                                    <span style="color: #63728c;">—</span>
-                                @endif
+                                <div class="table-cell-ellipsis" title="{{ $item->evidence_type }}">
+                                    {{ $item->evidence_type ?: '—' }}
+                                </div>
                             </td>
+
+
+                            {{-- Evidence Owner --}}
                             <td>
-                                <span style="color: #ffffff;">{{ $item->evidence_owner ?: '—' }}</span>
+                                <div class="table-cell-ellipsis" title="{{ $item->evidence_owner }}">
+                                    {{ $item->evidence_owner ?: '—' }}
+                                </div>
                             </td>
-                            <td>
-                                <span style="color: #8f9db5;">{{ $item->source_system ?: '—' }}</span>
-                            </td>
-                            <td>
-                                <span style="font-size: 12px; color: #aebbd0;">{{ $item->frequency ?: '—' }}</span>
-                            </td>
-                            <td style="text-align: right;">
-                                <div class="actions" style="justify-content: flex-end;">
+
+
+                            {{-- Manipulation Buttons --}}
+                            <td class="nowrap-cell" style="text-align: right;">
+
+                                <div class="actions">
+
+                                    {{-- VIEW --}}
                                     <button
                                         type="button"
                                         class="action-btn"
-                                        onclick="viewMappingDetails({{ json_encode($item) }})"
-                                        title="View Details"
+                                        onclick="viewMappingDetails({{ $item->id }})"
+                                        title="View full details"
                                     >
-                                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/>
-                                            <circle cx="12" cy="12" r="3"/>
-                                        </svg>
                                         View
                                     </button>
+
+
+                                    {{-- EDIT --}}
                                     <button
                                         type="button"
                                         class="action-btn"
-                                        onclick="openEditModal({{ json_encode($item) }})"
-                                        title="Edit Record"
+                                        onclick="openEditModal({{ $item->id }})"
+                                        title="Edit this record"
                                     >
-                                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/>
-                                        </svg>
                                         Edit
                                     </button>
-                                    <button
-                                        type="button"
-                                        class="action-btn action-btn-danger"
-                                        onclick="openDeleteModal({{ $item->id }}, '{{ addslashes($item->requirement_id) }}')"
-                                        title="Delete Record"
+
+
+                                    {{-- DELETE --}}
+                                    <form
+                                        action="{{ route('requirement-evidence-mappings.destroy', $item) }}"
+                                        method="POST"
+                                        onsubmit="return confirm('Are you sure you want to delete requirement evidence mapping for {{ addslashes($item->requirement_id) }}?')"
+                                        style="margin: 0; display: inline;"
                                     >
-                                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <path d="M3 6h18"/>
-                                            <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/>
-                                            <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
-                                        </svg>
-                                    </button>
+                                        @csrf
+                                        @method('DELETE')
+
+                                        <button
+                                            type="submit"
+                                            class="action-btn btn-danger-aspia"
+                                            title="Delete this record"
+                                        >
+                                            Delete
+                                        </button>
+                                    </form>
+
                                 </div>
+
                             </td>
+
                         </tr>
+
                     @empty
+
                         <tr>
-                            <td colspan="8" style="text-align: center; padding: 45px 20px; color: #71829f;">
-                                <div style="font-size: 32px; color: #16C4F4; margin-bottom: 8px;">📋</div>
-                                <div style="font-size: 15px; color: #ffffff; margin-bottom: 4px;">No Evidence Mappings Found</div>
-                                <div style="font-size: 13px;">
-                                    @if($search !== '')
-                                        No records match "{{ $search }}". <a href="{{ route('requirement-evidence-mappings.index') }}" style="color: #16C4F4;">Clear search filter</a>.
-                                    @else
-                                        Import an Excel file using the <strong>Import Excel</strong> button or click <strong>Add Mapping</strong> to get started.
-                                    @endif
+                            <td
+                                colspan="6"
+                                class="empty-state"
+                            >
+                                <div class="empty-state-icon">
+                                    ◇
                                 </div>
+                                No requirement evidence mappings found.
                             </td>
                         </tr>
+
                     @endforelse
+
                 </tbody>
+
             </table>
+
         </div>
+
+
+        {{-- =================================================
+             PAGINATION
+        ================================================== --}}
 
         @if($mappings->hasPages())
+
             <div class="pagination-area">
-                <div class="pagination-summary">
-                    Showing {{ $mappings->firstItem() }} to {{ $mappings->lastItem() }} of {{ $mappings->total() }} records
+
+                <div class="custom-pagination">
+
+                    {{-- Previous --}}
+                    @if($mappings->onFirstPage())
+                        <span class="disabled-page">Previous</span>
+                    @else
+                        <a href="{{ $mappings->previousPageUrl() }}">
+                            Previous
+                        </a>
+                    @endif
+
+                    {{-- Page numbers --}}
+                    @foreach(range(1, $mappings->lastPage()) as $page)
+
+                        @if(
+                            $page == 1 ||
+                            $page == $mappings->lastPage() ||
+                            abs($page - $mappings->currentPage()) <= 2
+                        )
+
+                            @if($page == $mappings->currentPage())
+                                <span class="active-page">
+                                    {{ $page }}
+                                </span>
+                            @else
+                                <a href="{{ $mappings->url($page) }}">
+                                    {{ $page }}
+                                </a>
+                            @endif
+
+                        @elseif(
+                            $page == 2 ||
+                            $page == $mappings->lastPage() - 1
+                        )
+                            <span class="pagination-info">...</span>
+                        @endif
+
+                    @endforeach
+
+                    {{-- Next --}}
+                    @if($mappings->hasMorePages())
+                        <a href="{{ $mappings->nextPageUrl() }}">
+                            Next
+                        </a>
+                    @else
+                        <span class="disabled-page">Next</span>
+                    @endif
+
                 </div>
-                <div>
-                    {{ $mappings->links() }}
-                </div>
+
             </div>
+
         @endif
+
     </div>
 
-    {{-- RECENT ACTIVITY PANEL --}}
-    @if(isset($activities) && count($activities) > 0)
-        <div class="mapping-panel" style="padding: 20px 22px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                <h3 style="margin: 0; font-size: 15px; font-weight: 500; color: #ffffff;">Recent Activity</h3>
-                <span style="font-size: 11px; background: rgba(22,196,244,.1); color: #16C4F4; padding: 4px 8px; border-radius: 20px;">LIVE</span>
-            </div>
-            <div>
-                @foreach($activities as $act)
-                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 13px;">
-                        <div>
-                            <span style="color: #16C4F4; font-weight: 600; margin-right: 6px;">[{{ $act->action }}]</span>
-                            <span style="color: #b9c5d8;">{{ $act->description }}</span>
-                        </div>
-                        <span style="color: #63728c; font-size: 12px; white-space: nowrap; margin-left: 12px;">
-                            {{ $act->created_at->diffForHumans() }}
-                        </span>
-                    </div>
-                @endforeach
-            </div>
-        </div>
-    @endif
-
 </div>
+
 
 {{-- =========================================================
      VIEW DETAILS MODAL (ALL 19 COLUMNS)
 ========================================================= --}}
-<div class="modal-overlay" id="viewModal">
-    <div class="modal-box" style="max-width: 960px;">
+
+<div
+    id="viewModal"
+    class="modal-overlay"
+    onclick="closeModalOutside(event, 'viewModal')"
+>
+
+    <div class="modal-box" style="max-width: 900px;">
+
         <div class="modal-header">
+
             <div>
-                <h2 id="viewModalTitle">Evidence Mapping Details</h2>
-                <div style="font-size: 12px; color: #8f9db5; margin-top: 2px;" id="viewModalSubtitle"></div>
+                <h2 id="viewModalTitle">
+                    Evidence Mapping Details
+                </h2>
+                <div style="font-size: 12px; color: #8f9db5; margin-top: 3px;" id="viewModalSubtitle"></div>
             </div>
-            <button type="button" class="close-modal" onclick="closeModal('viewModal')">&times;</button>
+
+            <button
+                type="button"
+                class="close-modal"
+                onclick="closeModal('viewModal')"
+            >
+                ×
+            </button>
+
         </div>
 
         <div class="modal-body">
+
             {{-- Section 1: Requirement Context --}}
             <div class="detail-section">
-                <div class="detail-section-title">1. Requirement Information (Cols A – D)</div>
+                <div class="detail-section-title">1. Requirement Context (Columns A – D)</div>
                 <div class="detail-row">
                     <div class="detail-label">Requirement ID:</div>
                     <div class="detail-value" id="viewReqId"></div>
@@ -854,7 +1197,7 @@
                 </div>
                 <div class="detail-row">
                     <div class="detail-label">Requirement Title:</div>
-                    <div class="detail-value" id="viewReqTitle" style="font-weight: 600; color: #16C4F4;"></div>
+                    <div class="detail-value" id="viewReqTitle" style="font-weight: 500; color: #16C4F4;"></div>
                 </div>
                 <div class="detail-row">
                     <div class="detail-label">Requirement Statement:</div>
@@ -864,7 +1207,7 @@
 
             {{-- Section 2: Evidence Specifications --}}
             <div class="detail-section">
-                <div class="detail-section-title">2. Evidence Specifications (Cols E – K)</div>
+                <div class="detail-section-title">2. Evidence Specifications (Columns E – K)</div>
                 <div class="detail-row">
                     <div class="detail-label">Evidence Type:</div>
                     <div class="detail-value" id="viewEvidenceType"></div>
@@ -897,7 +1240,7 @@
 
             {{-- Section 3: Audit & Testing Procedures --}}
             <div class="detail-section">
-                <div class="detail-section-title">3. Audit & Testing Procedures (Cols L – S)</div>
+                <div class="detail-section-title">3. Audit & Testing Procedures (Columns L – S)</div>
                 <div class="detail-row">
                     <div class="detail-label">Auditor Validation Method:</div>
                     <div class="detail-value" id="viewValidationMethod" style="line-height: 1.6;"></div>
@@ -931,426 +1274,766 @@
                     <div class="detail-value" id="viewTestMethod"></div>
                 </div>
             </div>
+
         </div>
 
         <div class="modal-footer">
-            <button type="button" class="btn-aspia btn-secondary-aspia" onclick="closeModal('viewModal')">
+            <button
+                type="button"
+                class="btn-aspia btn-secondary-aspia"
+                onclick="closeModal('viewModal')"
+            >
                 Close
             </button>
         </div>
+
     </div>
+
 </div>
+
 
 {{-- =========================================================
      ADD MAPPING MODAL (ALL 19 FIELDS)
 ========================================================= --}}
-<div class="modal-overlay" id="addModal">
+
+<div
+    id="addModal"
+    class="modal-overlay"
+    onclick="closeModalOutside(event, 'addModal')"
+>
+
     <div class="modal-box">
+
         <div class="modal-header">
-            <h2>Add Requirement Evidence Mapping</h2>
-            <button type="button" class="close-modal" onclick="closeModal('addModal')">&times;</button>
+
+            <h2>
+                Add Requirement Evidence Mapping
+            </h2>
+
+            <button
+                type="button"
+                class="close-modal"
+                onclick="closeModal('addModal')"
+            >
+                ×
+            </button>
+
         </div>
 
-        <form action="{{ route('requirement-evidence-mappings.store') }}" method="POST">
+        <form
+            action="{{ route('requirement-evidence-mappings.store') }}"
+            method="POST"
+        >
             @csrf
 
             <div class="modal-body">
+
                 {{-- SECTION 1 --}}
                 <div class="form-section-title">1. Requirement Context (Columns A – D)</div>
+
                 <div class="form-grid">
+
                     <div class="form-group">
-                        <label class="form-label">Requirement ID <span class="required-star">*</span></label>
-                        <input type="text" name="requirement_id" class="form-control-aspia" placeholder="e.g. GOV-001-R001" required value="{{ old('requirement_id') }}">
+                        <label class="form-label">
+                            Requirement ID <span class="required-star">*</span>
+                        </label>
+                        <input
+                            type="text"
+                            name="requirement_id"
+                            class="form-control-aspia"
+                            placeholder="e.g. GOV-001-R001"
+                            value="{{ old('requirement_id') }}"
+                            required
+                        >
                     </div>
 
                     <div class="form-group">
                         <label class="form-label">Control ID</label>
-                        <input type="text" name="control_id" class="form-control-aspia" placeholder="e.g. GOV-001 (auto-resolves if blank)" value="{{ old('control_id') }}">
+                        <input
+                            type="text"
+                            name="control_id"
+                            class="form-control-aspia"
+                            placeholder="e.g. GOV-001 (auto-resolves if blank)"
+                            value="{{ old('control_id') }}"
+                        >
                     </div>
 
                     <div class="form-group full-width">
-                        <label class="form-label">Requirement Title <span class="required-star">*</span></label>
-                        <input type="text" name="requirement_title" class="form-control-aspia" placeholder="e.g. Governance Framework" required value="{{ old('requirement_title') }}">
+                        <label class="form-label">
+                            Requirement Title <span class="required-star">*</span>
+                        </label>
+                        <input
+                            type="text"
+                            name="requirement_title"
+                            class="form-control-aspia"
+                            placeholder="e.g. Governance Framework"
+                            value="{{ old('requirement_title') }}"
+                            required
+                        >
                     </div>
 
                     <div class="form-group full-width">
                         <label class="form-label">Requirement Statement</label>
-                        <textarea name="requirement" class="form-control-aspia" placeholder="Detailed requirement statement...">{{ old('requirement') }}</textarea>
+                        <textarea
+                            name="requirement"
+                            class="form-control-aspia"
+                            placeholder="Detailed requirement statement..."
+                        >{{ old('requirement') }}</textarea>
                     </div>
+
                 </div>
 
                 {{-- SECTION 2 --}}
                 <div class="form-section-title">2. Evidence Specifications (Columns E – K)</div>
+
                 <div class="form-grid">
+
                     <div class="form-group">
                         <label class="form-label">Evidence Type</label>
-                        <input type="text" name="evidence_type" class="form-control-aspia" placeholder="e.g. Design / Documentation, Operating Evidence" value="{{ old('evidence_type') }}">
+                        <input
+                            type="text"
+                            name="evidence_type"
+                            class="form-control-aspia"
+                            placeholder="e.g. Design / Documentation, Operating Evidence"
+                            value="{{ old('evidence_type') }}"
+                        >
                     </div>
 
                     <div class="form-group">
                         <label class="form-label">Evidence Owner</label>
-                        <input type="text" name="evidence_owner" class="form-control-aspia" placeholder="e.g. CISO / Information Security Governance" value="{{ old('evidence_owner') }}">
+                        <input
+                            type="text"
+                            name="evidence_owner"
+                            class="form-control-aspia"
+                            placeholder="e.g. CISO / Information Security Governance"
+                            value="{{ old('evidence_owner') }}"
+                        >
                     </div>
 
                     <div class="form-group full-width">
                         <label class="form-label">Evidence Reference / Link</label>
-                        <input type="text" name="evidence_reference_link" class="form-control-aspia" placeholder="Repository path + document/version or record ID" value="{{ old('evidence_reference_link') }}">
+                        <input
+                            type="text"
+                            name="evidence_reference_link"
+                            class="form-control-aspia"
+                            placeholder="Repository path, document link, or record ID"
+                            value="{{ old('evidence_reference_link') }}"
+                        >
                     </div>
 
                     <div class="form-group full-width">
                         <label class="form-label">Evidence Description</label>
-                        <textarea name="evidence_description" class="form-control-aspia" placeholder="Demonstrate implementation and operation...">{{ old('evidence_description') }}</textarea>
+                        <textarea
+                            name="evidence_description"
+                            class="form-control-aspia"
+                            placeholder="Demonstrate implementation and operation..."
+                        >{{ old('evidence_description') }}</textarea>
                     </div>
 
                     <div class="form-group">
                         <label class="form-label">Source / System</label>
-                        <input type="text" name="source_system" class="form-control-aspia" placeholder="e.g. GRC platform / policy repository" value="{{ old('source_system') }}">
+                        <input
+                            type="text"
+                            name="source_system"
+                            class="form-control-aspia"
+                            placeholder="e.g. GRC platform / policy repository"
+                            value="{{ old('source_system') }}"
+                        >
                     </div>
 
                     <div class="form-group">
                         <label class="form-label">Frequency</label>
-                        <input type="text" name="frequency" class="form-control-aspia" placeholder="e.g. At least annually and upon material change" value="{{ old('frequency') }}">
+                        <input
+                            type="text"
+                            name="frequency"
+                            class="form-control-aspia"
+                            placeholder="e.g. At least annually and upon material change"
+                            value="{{ old('frequency') }}"
+                        >
                     </div>
 
                     <div class="form-group full-width">
-                        <label class="form-label">Freshness</label>
-                        <input type="text" name="freshness" class="form-control-aspia" placeholder="e.g. Current approved version; review evidence normally <= 12 months old" value="{{ old('freshness') }}">
+                        <label class="form-label">Freshness Criteria</label>
+                        <input
+                            type="text"
+                            name="freshness"
+                            class="form-control-aspia"
+                            placeholder="e.g. Current approved version; review evidence <= 12 months old"
+                            value="{{ old('freshness') }}"
+                        >
                     </div>
+
                 </div>
 
                 {{-- SECTION 3 --}}
                 <div class="form-section-title">3. Audit & Testing Procedures (Columns L – S)</div>
+
                 <div class="form-grid">
+
                     <div class="form-group full-width">
                         <label class="form-label">Auditor Validation Method</label>
-                        <textarea name="auditor_validation_method" class="form-control-aspia" placeholder="Verify source authenticity and owner, confirm approved version...">{{ old('auditor_validation_method') }}</textarea>
+                        <textarea
+                            name="auditor_validation_method"
+                            class="form-control-aspia"
+                            placeholder="Verify source authenticity and owner, confirm approved version..."
+                        >{{ old('auditor_validation_method') }}</textarea>
                     </div>
 
                     <div class="form-group full-width">
                         <label class="form-label">Test Procedure</label>
-                        <textarea name="test_procedure" class="form-control-aspia" style="min-height: 120px;" placeholder="Step-by-step audit testing procedures...">{{ old('test_procedure') }}</textarea>
+                        <textarea
+                            name="test_procedure"
+                            class="form-control-aspia"
+                            style="min-height: 120px;"
+                            placeholder="Step-by-step audit testing procedures..."
+                        >{{ old('test_procedure') }}</textarea>
                     </div>
 
                     <div class="form-group full-width">
                         <label class="form-label">Evidence Checklist</label>
-                        <textarea name="evidence_checklist" class="form-control-aspia" style="min-height: 120px;" placeholder="• Approved governance framework...&#10;• Dated minutes or decision logs...">{{ old('evidence_checklist') }}</textarea>
+                        <textarea
+                            name="evidence_checklist"
+                            class="form-control-aspia"
+                            style="min-height: 120px;"
+                            placeholder="• Approved policy document...&#10;• Dated meeting minutes..."
+                        >{{ old('evidence_checklist') }}</textarea>
                     </div>
 
                     <div class="form-group full-width">
                         <label class="form-label">Expected Result</label>
-                        <textarea name="expected_result" class="form-control-aspia" placeholder="The control is implemented as documented, operates at required frequency...">{{ old('expected_result') }}</textarea>
+                        <textarea
+                            name="expected_result"
+                            class="form-control-aspia"
+                            placeholder="The control is implemented as documented, operates at required frequency..."
+                        >{{ old('expected_result') }}</textarea>
                     </div>
 
                     <div class="form-group full-width">
                         <label class="form-label">Pass Criteria</label>
-                        <textarea name="pass_criteria" class="form-control-aspia" placeholder="Pass when the required control is documented and approved...">{{ old('pass_criteria') }}</textarea>
+                        <textarea
+                            name="pass_criteria"
+                            class="form-control-aspia"
+                            placeholder="Pass when the required control is documented and approved..."
+                        >{{ old('pass_criteria') }}</textarea>
                     </div>
 
                     <div class="form-group full-width">
                         <label class="form-label">Fail Criteria</label>
-                        <textarea name="fail_criteria" class="form-control-aspia" placeholder="Fail when required evidence is missing, unapproved, outdated...">{{ old('fail_criteria') }}</textarea>
+                        <textarea
+                            name="fail_criteria"
+                            class="form-control-aspia"
+                            placeholder="Fail when required evidence is missing, unapproved, outdated..."
+                        >{{ old('fail_criteria') }}</textarea>
                     </div>
 
                     <div class="form-group">
                         <label class="form-label">Test Frequency</label>
-                        <input type="text" name="test_frequency" class="form-control-aspia" placeholder="e.g. At least annually and upon material change" value="{{ old('test_frequency') }}">
+                        <input
+                            type="text"
+                            name="test_frequency"
+                            class="form-control-aspia"
+                            placeholder="e.g. At least annually and upon material change"
+                            value="{{ old('test_frequency') }}"
+                        >
                     </div>
 
                     <div class="form-group">
                         <label class="form-label">Test Method</label>
-                        <input type="text" name="test_method" class="form-control-aspia" placeholder="e.g. Document inspection + sample operating evidence" value="{{ old('test_method') }}">
+                        <input
+                            type="text"
+                            name="test_method"
+                            class="form-control-aspia"
+                            placeholder="e.g. Document inspection + sample testing"
+                            value="{{ old('test_method') }}"
+                        >
                     </div>
+
                 </div>
+
             </div>
 
             <div class="modal-footer">
-                <button type="button" class="btn-aspia btn-secondary-aspia" onclick="closeModal('addModal')">Cancel</button>
-                <button type="submit" class="btn-aspia btn-primary-aspia">Create Mapping</button>
+
+                <button
+                    type="button"
+                    class="btn-aspia btn-secondary-aspia"
+                    onclick="closeModal('addModal')"
+                >
+                    Cancel
+                </button>
+
+                <button
+                    type="submit"
+                    class="btn-aspia btn-primary-aspia"
+                >
+                    Create Mapping
+                </button>
+
             </div>
+
         </form>
+
     </div>
+
 </div>
+
 
 {{-- =========================================================
      EDIT MAPPING MODAL
 ========================================================= --}}
-<div class="modal-overlay" id="editModal">
+
+<div
+    id="editModal"
+    class="modal-overlay"
+    onclick="closeModalOutside(event, 'editModal')"
+>
+
     <div class="modal-box">
+
         <div class="modal-header">
-            <h2>Edit Requirement Evidence Mapping</h2>
-            <button type="button" class="close-modal" onclick="closeModal('editModal')">&times;</button>
+
+            <h2>
+                Edit Requirement Evidence Mapping
+            </h2>
+
+            <button
+                type="button"
+                class="close-modal"
+                onclick="closeModal('editModal')"
+            >
+                ×
+            </button>
+
         </div>
 
-        <form id="editMappingForm" method="POST">
+        <form
+            id="editMappingForm"
+            method="POST"
+        >
             @csrf
             @method('PUT')
 
             <div class="modal-body">
+
                 {{-- SECTION 1 --}}
                 <div class="form-section-title">1. Requirement Context (Columns A – D)</div>
+
                 <div class="form-grid">
+
                     <div class="form-group">
-                        <label class="form-label">Requirement ID <span class="required-star">*</span></label>
-                        <input type="text" id="edit_requirement_id" name="requirement_id" class="form-control-aspia" required>
+                        <label class="form-label">
+                            Requirement ID <span class="required-star">*</span>
+                        </label>
+                        <input
+                            type="text"
+                            id="edit_requirement_id"
+                            name="requirement_id"
+                            class="form-control-aspia"
+                            required
+                        >
                     </div>
 
                     <div class="form-group">
                         <label class="form-label">Control ID</label>
-                        <input type="text" id="edit_control_id" name="control_id" class="form-control-aspia">
+                        <input
+                            type="text"
+                            id="edit_control_id"
+                            name="control_id"
+                            class="form-control-aspia"
+                        >
                     </div>
 
                     <div class="form-group full-width">
-                        <label class="form-label">Requirement Title <span class="required-star">*</span></label>
-                        <input type="text" id="edit_requirement_title" name="requirement_title" class="form-control-aspia" required>
+                        <label class="form-label">
+                            Requirement Title <span class="required-star">*</span>
+                        </label>
+                        <input
+                            type="text"
+                            id="edit_requirement_title"
+                            name="requirement_title"
+                            class="form-control-aspia"
+                            required
+                        >
                     </div>
 
                     <div class="form-group full-width">
                         <label class="form-label">Requirement Statement</label>
-                        <textarea id="edit_requirement" name="requirement" class="form-control-aspia"></textarea>
+                        <textarea
+                            id="edit_requirement"
+                            name="requirement"
+                            class="form-control-aspia"
+                        ></textarea>
                     </div>
+
                 </div>
 
                 {{-- SECTION 2 --}}
                 <div class="form-section-title">2. Evidence Specifications (Columns E – K)</div>
+
                 <div class="form-grid">
+
                     <div class="form-group">
                         <label class="form-label">Evidence Type</label>
-                        <input type="text" id="edit_evidence_type" name="evidence_type" class="form-control-aspia">
+                        <input
+                            type="text"
+                            id="edit_evidence_type"
+                            name="evidence_type"
+                            class="form-control-aspia"
+                        >
                     </div>
 
                     <div class="form-group">
                         <label class="form-label">Evidence Owner</label>
-                        <input type="text" id="edit_evidence_owner" name="evidence_owner" class="form-control-aspia">
+                        <input
+                            type="text"
+                            id="edit_evidence_owner"
+                            name="evidence_owner"
+                            class="form-control-aspia"
+                        >
                     </div>
 
                     <div class="form-group full-width">
                         <label class="form-label">Evidence Reference / Link</label>
-                        <input type="text" id="edit_evidence_reference_link" name="evidence_reference_link" class="form-control-aspia">
+                        <input
+                            type="text"
+                            id="edit_evidence_reference_link"
+                            name="evidence_reference_link"
+                            class="form-control-aspia"
+                        >
                     </div>
 
                     <div class="form-group full-width">
                         <label class="form-label">Evidence Description</label>
-                        <textarea id="edit_evidence_description" name="evidence_description" class="form-control-aspia"></textarea>
+                        <textarea
+                            id="edit_evidence_description"
+                            name="evidence_description"
+                            class="form-control-aspia"
+                        ></textarea>
                     </div>
 
                     <div class="form-group">
                         <label class="form-label">Source / System</label>
-                        <input type="text" id="edit_source_system" name="source_system" class="form-control-aspia">
+                        <input
+                            type="text"
+                            id="edit_source_system"
+                            name="source_system"
+                            class="form-control-aspia"
+                        >
                     </div>
 
                     <div class="form-group">
                         <label class="form-label">Frequency</label>
-                        <input type="text" id="edit_frequency" name="frequency" class="form-control-aspia">
+                        <input
+                            type="text"
+                            id="edit_frequency"
+                            name="frequency"
+                            class="form-control-aspia"
+                        >
                     </div>
 
                     <div class="form-group full-width">
-                        <label class="form-label">Freshness</label>
-                        <input type="text" id="edit_freshness" name="freshness" class="form-control-aspia">
+                        <label class="form-label">Freshness Criteria</label>
+                        <input
+                            type="text"
+                            id="edit_freshness"
+                            name="freshness"
+                            class="form-control-aspia"
+                        >
                     </div>
+
                 </div>
 
                 {{-- SECTION 3 --}}
                 <div class="form-section-title">3. Audit & Testing Procedures (Columns L – S)</div>
+
                 <div class="form-grid">
+
                     <div class="form-group full-width">
                         <label class="form-label">Auditor Validation Method</label>
-                        <textarea id="edit_auditor_validation_method" name="auditor_validation_method" class="form-control-aspia"></textarea>
+                        <textarea
+                            id="edit_auditor_validation_method"
+                            name="auditor_validation_method"
+                            class="form-control-aspia"
+                        ></textarea>
                     </div>
 
                     <div class="form-group full-width">
                         <label class="form-label">Test Procedure</label>
-                        <textarea id="edit_test_procedure" name="test_procedure" class="form-control-aspia" style="min-height: 120px;"></textarea>
+                        <textarea
+                            id="edit_test_procedure"
+                            name="test_procedure"
+                            class="form-control-aspia"
+                            style="min-height: 120px;"
+                        ></textarea>
                     </div>
 
                     <div class="form-group full-width">
                         <label class="form-label">Evidence Checklist</label>
-                        <textarea id="edit_evidence_checklist" name="evidence_checklist" class="form-control-aspia" style="min-height: 120px;"></textarea>
+                        <textarea
+                            id="edit_evidence_checklist"
+                            name="evidence_checklist"
+                            class="form-control-aspia"
+                            style="min-height: 120px;"
+                        ></textarea>
                     </div>
 
                     <div class="form-group full-width">
                         <label class="form-label">Expected Result</label>
-                        <textarea id="edit_expected_result" name="expected_result" class="form-control-aspia"></textarea>
+                        <textarea
+                            id="edit_expected_result"
+                            name="expected_result"
+                            class="form-control-aspia"
+                        ></textarea>
                     </div>
 
                     <div class="form-group full-width">
                         <label class="form-label">Pass Criteria</label>
-                        <textarea id="edit_pass_criteria" name="pass_criteria" class="form-control-aspia"></textarea>
+                        <textarea
+                            id="edit_pass_criteria"
+                            name="pass_criteria"
+                            class="form-control-aspia"
+                        ></textarea>
                     </div>
 
                     <div class="form-group full-width">
                         <label class="form-label">Fail Criteria</label>
-                        <textarea id="edit_fail_criteria" name="fail_criteria" class="form-control-aspia"></textarea>
+                        <textarea
+                            id="edit_fail_criteria"
+                            name="fail_criteria"
+                            class="form-control-aspia"
+                        ></textarea>
                     </div>
 
                     <div class="form-group">
                         <label class="form-label">Test Frequency</label>
-                        <input type="text" id="edit_test_frequency" name="test_frequency" class="form-control-aspia">
+                        <input
+                            type="text"
+                            id="edit_test_frequency"
+                            name="test_frequency"
+                            class="form-control-aspia"
+                        >
                     </div>
 
                     <div class="form-group">
                         <label class="form-label">Test Method</label>
-                        <input type="text" id="edit_test_method" name="test_method" class="form-control-aspia">
+                        <input
+                            type="text"
+                            id="edit_test_method"
+                            name="test_method"
+                            class="form-control-aspia"
+                        >
                     </div>
+
                 </div>
+
             </div>
 
             <div class="modal-footer">
-                <button type="button" class="btn-aspia btn-secondary-aspia" onclick="closeModal('editModal')">Cancel</button>
-                <button type="submit" class="btn-aspia btn-primary-aspia">Update Mapping</button>
+
+                <button
+                    type="button"
+                    class="btn-aspia btn-secondary-aspia"
+                    onclick="closeModal('editModal')"
+                >
+                    Cancel
+                </button>
+
+                <button
+                    type="submit"
+                    class="btn-aspia btn-primary-aspia"
+                >
+                    Update Mapping
+                </button>
+
             </div>
+
         </form>
+
     </div>
+
 </div>
 
+
 {{-- =========================================================
-     IMPORT MODAL
+     IMPORT XLSX MODAL
 ========================================================= --}}
-<div class="modal-overlay" id="importModal">
-    <div class="modal-box" style="max-width: 650px;">
+
+<div
+    id="importModal"
+    class="modal-overlay"
+    onclick="closeModalOutside(event, 'importModal')"
+>
+
+    <div class="modal-box">
+
         <div class="modal-header">
-            <h2>Import Requirement Evidence Mappings</h2>
-            <button type="button" class="close-modal" onclick="closeModal('importModal')">&times;</button>
+
+            <h2>
+                Import Requirement Evidence Mappings
+            </h2>
+
+            <button
+                type="button"
+                class="close-modal"
+                onclick="closeModal('importModal')"
+            >
+                ×
+            </button>
+
         </div>
 
-        <form action="{{ route('requirement-evidence-mappings.import') }}" method="POST" enctype="multipart/form-data" onsubmit="return handleImportSubmit()">
+        <form
+            action="{{ route('requirement-evidence-mappings.import') }}"
+            method="POST"
+            enctype="multipart/form-data"
+            id="importMappingsForm"
+            onsubmit="handleImportSubmit(event)"
+        >
             @csrf
 
             <div class="modal-body">
-                <p style="color: #8f9db5; font-size: 13.5px; margin-top: 0; line-height: 1.5;">
-                    Upload an Excel spreadsheet (<code style="color: #16C4F4;">.xlsx</code>, <code style="color: #16C4F4;">.xls</code>) or <code style="color: #16C4F4;">.csv</code> file containing requirement evidence mapping records.
-                </p>
 
-                <div style="background: #0D1735; border: 2px dashed #27496b; border-radius: 10px; padding: 25px 20px; text-align: center; margin: 18px 0;">
-                    <div style="font-size: 34px; color: #16C4F4; margin-bottom: 8px;">📊</div>
-                    <label style="display: block; font-size: 13px; color: #ffffff; margin-bottom: 10px; font-weight: 500;">
-                        Choose Spreadsheet File
+                <div class="form-group full-width">
+
+                    <label class="form-label">
+                        Select XLSX File
+                        <span class="required-star">*</span>
                     </label>
+
                     <input
                         type="file"
                         name="file"
+                        class="form-control-aspia"
                         accept=".xlsx,.xls,.csv"
                         required
-                        style="color: #8f9db5; font-size: 13px;"
                     >
+
+                    <div class="import-info">
+                        Only .xlsx, .xls, .csv files are supported.
+                    </div>
+
                 </div>
 
-                <div style="background: rgba(22, 196, 244, 0.05); border: 1px solid rgba(22, 196, 244, 0.2); border-radius: 8px; padding: 14px 16px; font-size: 12px; color: #aebbd0; line-height: 1.6;">
-                    <strong style="color: #16C4F4; display: block; margin-bottom: 6px;">Supported Columns (Columns A – S):</strong>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4px 12px; font-family: monospace; font-size: 11.5px;">
-                        <span>• Requirement ID (Col A)</span>
-                        <span>• Freshness (Col K)</span>
-                        <span>• Control ID (Col B)</span>
-                        <span>• Auditor Validation Method (Col L)</span>
-                        <span>• Requirement Title (Col C)</span>
-                        <span>• Test Procedure (Col M)</span>
-                        <span>• Requirement Statement (Col D)</span>
-                        <span>• Evidence Checklist (Col N)</span>
-                        <span>• Evidence Type (Col E)</span>
-                        <span>• Expected Result (Col O)</span>
-                        <span>• Evidence Owner (Col F)</span>
-                        <span>• Pass Criteria (Col P)</span>
-                        <span>• Evidence Reference / Link (Col G)</span>
-                        <span>• Fail Criteria (Col Q)</span>
-                        <span>• Evidence Description (Col H)</span>
-                        <span>• Test Frequency (Col R)</span>
-                        <span>• Source/System (Col I)</span>
-                        <span>• Test Method (Col S)</span>
-                        <span>• Frequency (Col J)</span>
+                {{-- Visual progress / loading banner --}}
+                <div id="importLoadingState" style="display: none; margin-top: 15px; padding: 12px 14px; background: rgba(22, 196, 244, 0.08); border: 1px solid rgba(22, 196, 244, 0.25); border-radius: 8px; color: #16C4F4; font-size: 13px;">
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <svg style="animation: aspiaSpin 1s linear infinite; width: 18px; height: 18px; flex-shrink: 0;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                            <circle cx="12" cy="12" r="10" stroke-opacity="0.25"></circle>
+                            <path d="M12 2a10 10 0 0 1 10 10"></path>
+                        </svg>
+                        <span>Importing mappings... Please wait a moment, processing file. Do not refresh.</span>
                     </div>
                 </div>
 
-                <div id="importLoadingState" style="display: none; margin-top: 18px; text-align: center; color: #16C4F4; font-size: 13px;">
-                    <svg style="animation: aspiaSpin 1s linear infinite; width: 18px; height: 18px; display: inline-block; vertical-align: middle; margin-right: 8px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                        <circle cx="12" cy="12" r="10" stroke-opacity="0.25"></circle>
-                        <path d="M12 2a10 10 0 0 1 10 10"></path>
-                    </svg>
-                    Processing spreadsheet import, please wait...
-                </div>
             </div>
 
             <div class="modal-footer">
-                <button type="button" id="importCancelBtn" class="btn-aspia btn-secondary-aspia" onclick="closeModal('importModal')">Cancel</button>
-                <button type="submit" id="importSubmitBtn" class="btn-aspia btn-primary-aspia">Import Spreadsheet</button>
+
+                <button
+                    type="button"
+                    class="btn-aspia btn-secondary-aspia"
+                    onclick="closeModal('importModal')"
+                    id="importCancelBtn"
+                >
+                    Cancel
+                </button>
+
+                <button
+                    type="submit"
+                    class="btn-aspia btn-primary-aspia"
+                    id="importSubmitBtn"
+                >
+                    Import XLSX
+                </button>
+
             </div>
+
         </form>
+
     </div>
+
 </div>
 
-{{-- =========================================================
-     DELETE CONFIRMATION MODAL
-========================================================= --}}
-<div class="modal-overlay" id="deleteModal">
-    <div class="modal-box" style="max-width: 480px;">
-        <div class="modal-header">
-            <h2>Confirm Deletion</h2>
-            <button type="button" class="close-modal" onclick="closeModal('deleteModal')">&times;</button>
-        </div>
-
-        <form id="deleteMappingForm" method="POST">
-            @csrf
-            @method('DELETE')
-
-            <div class="modal-body" style="text-align: center; padding: 28px 20px;">
-                <div style="width: 52px; height: 52px; border-radius: 50%; background: rgba(239, 68, 68, 0.12); color: #ef4444; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; font-size: 24px;">
-                    ⚠
-                </div>
-                <h3 style="margin: 0 0 8px; color: #ffffff; font-size: 17px; font-weight: 500;">Delete this evidence mapping?</h3>
-                <p style="margin: 0; color: #8f9db5; font-size: 13.5px; line-height: 1.5;">
-                    Are you sure you want to delete the mapping for <strong id="deleteReqId" style="color: #ffffff;"></strong>? This action cannot be undone.
-                </p>
-            </div>
-
-            <div class="modal-footer" style="justify-content: center;">
-                <button type="button" class="btn-aspia btn-secondary-aspia" onclick="closeModal('deleteModal')">Cancel</button>
-                <button type="submit" class="btn-aspia btn-danger-aspia">Delete Mapping</button>
-            </div>
-        </form>
-    </div>
-</div>
 
 <script>
+
+    /* Store mappings for safe client-side lookup */
+    const mappingsData = @json($mappings->keyBy('id'));
+
     /* =========================================================
        MODAL CONTROLLERS
     ========================================================= */
-    function openModal(id) {
+
+    function openModal(id)
+    {
         const modal = document.getElementById(id);
+
         if (modal) {
+
+            if (id === 'importModal') {
+                const submitBtn = document.getElementById('importSubmitBtn');
+                const cancelBtn = document.getElementById('importCancelBtn');
+                const loadingState = document.getElementById('importLoadingState');
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.style.opacity = '';
+                    submitBtn.style.cursor = '';
+                    submitBtn.innerHTML = 'Import XLSX';
+                }
+                if (cancelBtn) {
+                    cancelBtn.style.pointerEvents = '';
+                    cancelBtn.style.opacity = '';
+                }
+                if (loadingState) {
+                    loadingState.style.display = 'none';
+                }
+            }
+
             modal.classList.add('show');
             document.body.style.overflow = 'hidden';
+
         }
     }
 
-    function closeModal(id) {
+    function closeModal(id)
+    {
         const modal = document.getElementById(id);
+
         if (modal) {
+
             modal.classList.remove('show');
             document.body.style.overflow = '';
+
+        }
+    }
+
+    function closeModalOutside(event, id)
+    {
+        if (event.target.id === id) {
+            closeModal(id);
         }
     }
 
     /* Escape Key Handler */
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') {
-            document.querySelectorAll('.modal-overlay.show').forEach(m => m.classList.remove('show'));
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape') {
+            document.querySelectorAll('.modal-overlay').forEach(function(modal) {
+                modal.classList.remove('show');
+            });
             document.body.style.overflow = '';
         }
-    });
-
-    /* Click outside modal box to close */
-    document.querySelectorAll('.modal-overlay').forEach(overlay => {
-        overlay.addEventListener('click', function(e) {
-            if (e.target === overlay) {
-                overlay.classList.remove('show');
-                document.body.style.overflow = '';
-            }
-        });
     });
 
     /* =========================================================
        VIEW DETAILS MODAL POPULATION
     ========================================================= */
-    function viewMappingDetails(data) {
-        document.getElementById('viewModalTitle').textContent = data.requirement_id + ' — ' + (data.requirement_title || 'Evidence Mapping');
+
+    function viewMappingDetails(target)
+    {
+        const data = typeof target === 'object' ? target : (mappingsData[target] || null);
+        if (!data) return;
+
+        document.getElementById('viewModalTitle').textContent = (data.requirement_id || 'Mapping') + ' — ' + (data.requirement_title || 'Evidence Mapping');
         document.getElementById('viewModalSubtitle').textContent = 'Control: ' + (data.control_id || 'Not assigned') + ' • Owner: ' + (data.evidence_owner || 'Unassigned');
 
         document.getElementById('viewReqId').textContent = data.requirement_id || '—';
@@ -1381,8 +2064,13 @@
     /* =========================================================
        EDIT MODAL POPULATION
     ========================================================= */
-    function openEditModal(data) {
-        document.getElementById('editMappingForm').action = `/requirement-evidence-mappings/${data.id}`;
+
+    function openEditModal(target)
+    {
+        const data = typeof target === 'object' ? target : (mappingsData[target] || null);
+        if (!data) return;
+
+        document.getElementById('editMappingForm').action = '/requirement-evidence-mappings/' + data.id;
 
         document.getElementById('edit_requirement_id').value = data.requirement_id || '';
         document.getElementById('edit_control_id').value = data.control_id || '';
@@ -1410,25 +2098,18 @@
     }
 
     /* =========================================================
-       DELETE MODAL
+       HANDLE IMPORT SUBMIT
     ========================================================= */
-    function openDeleteModal(id, reqId) {
-        document.getElementById('deleteMappingForm').action = `/requirement-evidence-mappings/${id}`;
-        document.getElementById('deleteReqId').textContent = reqId;
-        openModal('deleteModal');
-    }
 
-    /* =========================================================
-       IMPORT LOADING STATE
-    ========================================================= */
-    function handleImportSubmit() {
+    function handleImportSubmit(event)
+    {
         const submitBtn = document.getElementById('importSubmitBtn');
         const cancelBtn = document.getElementById('importCancelBtn');
-        const loading = document.getElementById('importLoadingState');
+        const loadingState = document.getElementById('importLoadingState');
 
         if (submitBtn) {
             submitBtn.disabled = true;
-            submitBtn.style.opacity = '0.7';
+            submitBtn.style.opacity = '0.75';
             submitBtn.style.cursor = 'not-allowed';
             submitBtn.innerHTML = `
                 <svg style="animation: aspiaSpin 1s linear infinite; width: 14px; height: 14px; display: inline-block; vertical-align: middle; margin-right: 6px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
@@ -1438,16 +2119,19 @@
                 Importing...
             `;
         }
+
         if (cancelBtn) {
             cancelBtn.style.pointerEvents = 'none';
             cancelBtn.style.opacity = '0.5';
         }
-        if (loading) {
-            loading.style.display = 'block';
+
+        if (loadingState) {
+            loadingState.style.display = 'block';
         }
+
         return true;
     }
+
 </script>
 
 @endsection
-

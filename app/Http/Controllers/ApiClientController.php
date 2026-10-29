@@ -17,10 +17,11 @@ class ApiClientController extends Controller
      * Available modules in the UCL application.
      */
     public const AVAILABLE_MODULES = [
-        'frameworks'   => 'Frameworks',
-        'domains'      => 'Domains',
-        'controls'     => 'Controls',
-        'requirements' => 'Requirements',
+        'frameworks'                     => 'Frameworks',
+        'domains'                        => 'Domains',
+        'controls'                       => 'Controls',
+        'requirements'                   => 'Requirements',
+        'requirement-evidence-mappings'  => 'Requirement Evidence Mappings',
     ];
 
     /**
