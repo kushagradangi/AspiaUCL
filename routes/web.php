@@ -12,6 +12,7 @@ use App\Http\Controllers\ControlController;
 use App\Http\Controllers\ControlTemplateController;
 
 use App\Http\Controllers\RequirementController;
+use App\Http\Controllers\RequirementEvidenceMappingController;
 use App\Http\Controllers\RequirementTemplateController;
 use App\Http\Controllers\UclHomepageController;
 use App\Http\Controllers\ApiClientController;
@@ -229,11 +230,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
         $activities = \App\Models\Activity::latest()->take(10)->get();
 
         return view('dashboard', [
-            'frameworksCount'   => \App\Models\Framework::count(),
-            'domainsCount'      => \App\Models\Domain::count(),
-            'controlsCount'     => \App\Models\Control::count(),
-            'requirementsCount' => \App\Models\Requirement::count(),
-            'activities'        => $activities,
+            'frameworksCount'        => \App\Models\Framework::count(),
+            'domainsCount'           => \App\Models\Domain::count(),
+            'controlsCount'          => \App\Models\Control::count(),
+            'requirementsCount'      => \App\Models\Requirement::count(),
+            'evidenceMappingsCount'  => \App\Models\RequirementEvidenceMapping::count(),
+            'activities'             => $activities,
         ]);
     })->name('dashboard');
 
@@ -411,6 +413,38 @@ Route::middleware(['auth', 'verified'])->group(function () {
         '/requirements/template',
         [RequirementTemplateController::class, 'store']
     )->name('requirements.template.store');
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Requirement Evidence Mapping Management
+    |--------------------------------------------------------------------------
+    */
+
+    Route::get(
+        '/requirement-evidence-mappings',
+        [RequirementEvidenceMappingController::class, 'index']
+    )->name('requirement-evidence-mappings.index');
+
+    Route::post(
+        '/requirement-evidence-mappings',
+        [RequirementEvidenceMappingController::class, 'store']
+    )->name('requirement-evidence-mappings.store');
+
+    Route::put(
+        '/requirement-evidence-mappings/{requirementEvidenceMapping}',
+        [RequirementEvidenceMappingController::class, 'update']
+    )->name('requirement-evidence-mappings.update');
+
+    Route::delete(
+        '/requirement-evidence-mappings/{requirementEvidenceMapping}',
+        [RequirementEvidenceMappingController::class, 'destroy']
+    )->name('requirement-evidence-mappings.destroy');
+
+    Route::post(
+        '/requirement-evidence-mappings/import',
+        [RequirementEvidenceMappingController::class, 'import']
+    )->name('requirement-evidence-mappings.import');
 
 
     /*

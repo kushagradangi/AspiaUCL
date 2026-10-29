@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Traits\CapitalizesFirstLetter;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Requirement extends Model
 {
@@ -118,6 +119,18 @@ class Requirement extends Model
     {
         return $this->hasMany(
             RequirementFrameworkMapping::class,
+            'requirement_id',
+            'requirement_id'
+        );
+    }
+
+    /**
+     * Requirement has many Evidence Mappings.
+     */
+    public function evidenceMappings(): HasMany
+    {
+        return $this->hasMany(
+            RequirementEvidenceMapping::class,
             'requirement_id',
             'requirement_id'
         );
