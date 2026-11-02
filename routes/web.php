@@ -16,6 +16,7 @@ use App\Http\Controllers\RequirementEvidenceMappingController;
 use App\Http\Controllers\RequirementTemplateController;
 use App\Http\Controllers\UclHomepageController;
 use App\Http\Controllers\ApiClientController;
+use App\Http\Controllers\NotificationController;
 
 use Illuminate\Support\Facades\Route;
 
@@ -470,6 +471,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/api-clients/{apiClient}/ips', [ApiClientController::class, 'storeIp'])->name('api-clients.ips.store');
     Route::delete('/api-clients/{apiClient}/ips/{ip}', [ApiClientController::class, 'destroyIp'])->name('api-clients.ips.destroy');
     Route::patch('/api-clients/{apiClient}/ips/{ip}/toggle-status', [ApiClientController::class, 'toggleIpStatus'])->name('api-clients.ips.toggle-status');
+
+    /*
+    |--------------------------------------------------------------------------
+    | Notifications (In-App Bell & Background Toast)
+    |--------------------------------------------------------------------------
+    */
+    Route::get('/notifications', [NotificationController::class, 'getNotifications'])->name('notifications.index');
+    Route::post('/notifications/{id}/read', [NotificationController::class, 'markAsRead'])->name('notifications.read');
+    Route::post('/notifications/mark-all-read', [NotificationController::class, 'markAllAsRead'])->name('notifications.mark-all-read');
 
 });
 

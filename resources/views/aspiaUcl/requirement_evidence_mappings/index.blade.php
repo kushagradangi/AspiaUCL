@@ -132,6 +132,19 @@
         font-size: 13px;
     }
 
+    .alert-info {
+        background: rgba(22,196,244,.10);
+        border: 1px solid rgba(22,196,244,.25);
+        color: #16C4F4;
+
+        padding: 13px 16px;
+        border-radius: 9px;
+
+        margin-bottom: 20px;
+
+        font-size: 13px;
+    }
+
 
     /* =========================================================
        STATS CARDS ROW (DYNAMIC BOXES)
@@ -721,6 +734,16 @@
 </style>
 
 <div class="control-page">
+
+    {{-- =====================================================
+         INFO MESSAGE
+    ====================================================== --}}
+    @if(session('info'))
+        <div class="alert-info">
+            <svg style="width:16px;height:16px;vertical-align:-2px;margin-right:6px;display:inline-block;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-width="2"></circle><line x1="12" y1="16" x2="12" y2="12" stroke-width="2"></line><line x1="12" y1="8" x2="12.01" y2="8" stroke-width="2"></line></svg>
+            {{ session('info') }}
+        </div>
+    @endif
 
     {{-- =====================================================
          SUCCESS MESSAGE

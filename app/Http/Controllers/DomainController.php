@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Imports\DomainImport;
+use App\Jobs\ProcessExcelImportJob;
 use App\Models\Activity;
 use App\Models\Domain;
 use Illuminate\Http\Request;
@@ -597,33 +598,28 @@ class DomainController extends Controller
         ]);
 
         try {
-            $import = new DomainImport();
+            $file = $request->file('file');
+            $originalName = $file->getClientOriginalName();
 
-            Excel::import(
-                $import,
-                $request->file('file')
+            // Store file temporarily in local storage for queue worker
+            $storedPath = $file->store('imports', 'local');
+
+            // Dispatch background import job
+            ProcessExcelImportJob::dispatch(
+                'domain',
+                $storedPath,
+                $originalName,
+                auth()->id()
             );
-
-            $created = $import->getCreatedCount();
-            $updated = $import->getUpdatedCount();
-
-            Activity::create([
-                'user_id' => auth()->id(),
-                'module' => 'domain',
-                'action' => 'Imported',
-                'description' => "Imported domains: {$created} created, {$updated} updated.",
-            ]);
-
-            $message = "Domains imported successfully ({$created} new added, {$updated} existing updated).";
 
             return redirect()
                 ->route('domains.index')
-                ->with('success', $message);
+                ->with('info', "File \"{$originalName}\" has been uploaded and is processing in the background. You will receive an in-app notification when it is complete.");
 
         } catch (\Throwable $e) {
             return redirect()
                 ->route('domains.index')
-                ->with('error', 'Error occurred during domain import: ' . $e->getMessage());
+                ->with('error', 'Error scheduling domain import: ' . $e->getMessage());
         }
     }
 }

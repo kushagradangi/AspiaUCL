@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Imports\FrameworkImport;
+use App\Jobs\ProcessExcelImportJob;
 use App\Models\Activity;
 use App\Models\Framework;
 use Illuminate\Http\Request;
@@ -474,33 +475,28 @@ class FrameworkController extends Controller
         ]);
 
         try {
-            $import = new FrameworkImport();
+            $file = $request->file('file');
+            $originalName = $file->getClientOriginalName();
 
-            Excel::import(
-                $import,
-                $request->file('file')
+            // Store file temporarily in local storage for queue worker
+            $storedPath = $file->store('imports', 'local');
+
+            // Dispatch background import job
+            ProcessExcelImportJob::dispatch(
+                'framework',
+                $storedPath,
+                $originalName,
+                auth()->id()
             );
-
-            $created = $import->getCreatedCount();
-            $updated = $import->getUpdatedCount();
-
-            Activity::create([
-                'user_id' => auth()->id(),
-                'module' => 'framework',
-                'action' => 'Imported',
-                'description' => "Imported frameworks: {$created} created, {$updated} updated.",
-            ]);
-
-            $message = "Frameworks imported successfully ({$created} new added, {$updated} existing updated).";
 
             return redirect()
                 ->route('frameworks.index')
-                ->with('success', $message);
+                ->with('info', "File \"{$originalName}\" has been uploaded and is processing in the background. You will receive an in-app notification when it is complete.");
 
         } catch (\Throwable $e) {
             return redirect()
                 ->route('frameworks.index')
-                ->with('error', 'Error occurred during framework import: ' . $e->getMessage());
+                ->with('error', 'Error scheduling framework import: ' . $e->getMessage());
         }
     }
 

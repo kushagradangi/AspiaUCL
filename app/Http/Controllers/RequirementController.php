@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Imports\RequirementFrameworkMappingImport;
 use App\Imports\RequirementImport;
+use App\Jobs\ProcessExcelImportJob;
 use App\Models\Activity;
 use App\Models\Control;
 use App\Models\Requirement;
@@ -333,28 +334,23 @@ class RequirementController extends Controller
         ]);
 
         try {
-            $import = new RequirementImport();
+            $file = $request->file('file');
+            $originalName = $file->getClientOriginalName();
 
-            Excel::import(
-                $import,
-                $request->file('file')
+            // Store file temporarily in local storage for queue worker
+            $storedPath = $file->store('imports', 'local');
+
+            // Dispatch background import job
+            ProcessExcelImportJob::dispatch(
+                'requirement',
+                $storedPath,
+                $originalName,
+                auth()->id()
             );
-
-            $created = $import->getCreatedCount();
-            $updated = $import->getUpdatedCount();
-
-            Activity::create([
-                'user_id' => auth()->id(),
-                'module' => 'requirement',
-                'action' => 'Imported',
-                'description' => "Imported requirements: {$created} created, {$updated} updated.",
-            ]);
-
-            $message = "Requirements imported successfully ({$created} new added, {$updated} existing updated).";
 
             return redirect()
                 ->route('requirements.index')
-                ->with('success', $message);
+                ->with('info', "File \"{$originalName}\" has been uploaded and is processing in the background. You will receive an in-app notification when it is complete.");
 
         } catch (\Illuminate\Validation\ValidationException $e) {
             $allErrors = \Illuminate\Support\Arr::flatten($e->errors());
@@ -369,7 +365,7 @@ class RequirementController extends Controller
 
             return redirect()
                 ->route('requirements.index')
-                ->with('error', 'Error occurred during requirement import: ' . $e->getMessage());
+                ->with('error', 'Error scheduling requirement import: ' . $e->getMessage());
         }
     }
 
@@ -385,49 +381,24 @@ class RequirementController extends Controller
         ]);
 
         try {
-            $import = new RequirementFrameworkMappingImport();
+            $file = $request->file('file');
+            $originalName = $file->getClientOriginalName();
 
-            Excel::import(
-                $import,
-                $request->file('file')
+            // Store file temporarily in local storage for queue worker
+            $storedPath = $file->store('imports', 'local');
+
+            // Dispatch background import job
+            ProcessExcelImportJob::dispatch(
+                'requirement_framework_mapping',
+                $storedPath,
+                $originalName,
+                auth()->id()
             );
-
-            Activity::create([
-                'user_id' => auth()->id(),
-                'module' => 'requirement',
-                'action' => 'Imported framework mappings',
-                'description' => sprintf(
-                    'Imported framework mappings for %d requirements (%d framework mappings).',
-                    $import->getMappedRows(),
-                    $import->getMappedPairs()
-                ),
-            ]);
-
-            $message = sprintf(
-                'Framework mappings imported: %d requirements with mappings, %d framework mappings saved.',
-                $import->getMappedRows(),
-                $import->getMappedPairs()
-            );
-
-            if ($import->getMissingRequirementCount() > 0) {
-                $message .= sprintf(
-                    ' %d Requirement IDs were not found in the project (examples: %s).',
-                    $import->getMissingRequirementCount(),
-                    implode(', ', $import->getMissingRequirementIds())
-                );
-            }
-
-            if ($import->getTitleMismatchCount() > 0) {
-                $message .= sprintf(
-                    ' %d titles differ from the project; mappings were matched by Requirement ID (examples: %s).',
-                    $import->getTitleMismatchCount(),
-                    implode(', ', $import->getTitleMismatchIds())
-                );
-            }
 
             return redirect()
                 ->route('requirements.index')
-                ->with('success', $message);
+                ->with('info', "Mapping file \"{$originalName}\" has been uploaded and is processing in the background. You will receive an in-app notification when it is complete.");
+
         } catch (\Illuminate\Validation\ValidationException $e) {
             $allErrors = \Illuminate\Support\Arr::flatten($e->errors());
             return redirect()
@@ -437,7 +408,7 @@ class RequirementController extends Controller
         } catch (\Throwable $e) {
             return redirect()
                 ->route('requirements.index')
-                ->with('error', 'Error occurred during framework mapping import: ' . $e->getMessage());
+                ->with('error', 'Error scheduling framework mapping import: ' . $e->getMessage());
         }
     }
 }

@@ -10,6 +10,8 @@
         content="width=device-width, initial-scale=1.0"
     >
 
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
     <title>
         aspiaUCL
         @yield('title')
@@ -585,6 +587,360 @@
             font-size: 13.5px;
         }
 
+        /* ================= NOTIFICATIONS ================= */
+        .topbar-right-actions {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+        }
+
+        .notif-wrapper {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .notif-bell-btn {
+            background: #172540;
+            border: 1px solid rgba(22, 196, 244, 0.3);
+            border-radius: 50%;
+            width: 38px;
+            height: 38px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: #16C4F4;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+            padding: 0;
+            outline: none;
+        }
+
+        .notif-bell-btn:hover {
+            background: #1c355e;
+            border-color: #16C4F4;
+            color: #ffffff;
+            box-shadow: 0 0 12px rgba(22, 196, 244, 0.35);
+        }
+
+        .notif-bell-icon {
+            width: 19px;
+            height: 19px;
+        }
+
+        .notif-badge {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            background: #ef4444;
+            color: #ffffff;
+            font-size: 10px;
+            font-weight: 700;
+            min-width: 18px;
+            height: 18px;
+            border-radius: 9px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 4px;
+            box-shadow: 0 0 8px rgba(239, 68, 68, 0.7);
+            border: 2px solid #0f1c34;
+            line-height: 1;
+        }
+
+        .notif-dropdown {
+            position: absolute;
+            top: 48px;
+            right: 0;
+            width: 380px;
+            max-width: 90vw;
+            background: #13223f;
+            border: 1px solid #1c4266;
+            border-radius: 14px;
+            box-shadow: 0 18px 45px rgba(0, 0, 0, 0.65);
+            z-index: 10000;
+            display: none;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+
+        .notif-dropdown.show {
+            display: block;
+            animation: notifDropIn 0.2s ease-out forwards;
+        }
+
+        @keyframes notifDropIn {
+            from {
+                opacity: 0;
+                transform: translateY(-8px) scale(0.98);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .notif-header {
+            padding: 13px 18px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            background: #16284a;
+        }
+
+        .notif-header-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13.5px;
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        .notif-header-count {
+            font-size: 11px;
+            padding: 2px 7px;
+            background: rgba(22, 196, 244, 0.15);
+            color: #16C4F4;
+            border-radius: 10px;
+            font-weight: 600;
+        }
+
+        .notif-mark-all-btn {
+            background: transparent;
+            border: none;
+            color: #16C4F4;
+            font-size: 12px;
+            cursor: pointer;
+            padding: 2px 6px;
+            border-radius: 4px;
+            transition: color 0.15s ease;
+        }
+
+        .notif-mark-all-btn:hover {
+            color: #ffffff;
+            text-decoration: underline;
+        }
+
+        .notif-list {
+            max-height: 380px;
+            overflow-y: auto;
+        }
+
+        .notif-list::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .notif-list::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.12);
+            border-radius: 4px;
+        }
+
+        .notif-empty {
+            padding: 32px 20px;
+            text-align: center;
+            color: #71809a;
+            font-size: 13px;
+        }
+
+        .notif-item {
+            padding: 12px 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+            text-decoration: none;
+            color: inherit;
+            transition: background 0.15s ease;
+            position: relative;
+        }
+
+        .notif-item:hover {
+            background: rgba(255, 255, 255, 0.04);
+        }
+
+        .notif-item.unread {
+            background: rgba(22, 196, 244, 0.05);
+            border-left: 3px solid #16C4F4;
+        }
+
+        .notif-item-icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-size: 14px;
+        }
+
+        .notif-item-icon.success {
+            background: rgba(34, 197, 94, 0.15);
+            color: #22c55e;
+            border: 1px solid rgba(34, 197, 94, 0.3);
+        }
+
+        .notif-item-icon.error {
+            background: rgba(239, 68, 68, 0.15);
+            color: #ef4444;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .notif-item-body {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .notif-item-title {
+            font-size: 12.5px;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 3px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .notif-item-msg {
+            font-size: 12px;
+            color: #8f9db5;
+            line-height: 1.4;
+            word-break: break-word;
+        }
+
+        .notif-item-time {
+            font-size: 10.5px;
+            color: #64738d;
+            margin-top: 5px;
+        }
+
+        .notif-item-check-btn {
+            background: none;
+            border: none;
+            color: #64738d;
+            cursor: pointer;
+            padding: 2px 4px;
+            border-radius: 4px;
+            font-size: 11px;
+            transition: color 0.15s ease;
+        }
+
+        .notif-item-check-btn:hover {
+            color: #16C4F4;
+        }
+
+        /* ================= TOAST CONTAINER & CARDS ================= */
+        .toast-container {
+            position: fixed;
+            top: 24px;
+            right: 24px;
+            z-index: 999999;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            max-width: 400px;
+            width: calc(100% - 48px);
+            pointer-events: none;
+        }
+
+        .toast-card {
+            pointer-events: auto;
+            background: #13223f;
+            border: 1px solid #1c4266;
+            border-radius: 12px;
+            padding: 14px 16px;
+            box-shadow: 0 14px 40px rgba(0, 0, 0, 0.65);
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+            animation: toastSlideIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            transition: all 0.25s ease;
+            position: relative;
+        }
+
+        .toast-card.success {
+            border-left: 4px solid #22c55e;
+        }
+
+        .toast-card.error {
+            border-left: 4px solid #ef4444;
+        }
+
+        @keyframes toastSlideIn {
+            from {
+                opacity: 0;
+                transform: translateX(50px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0) scale(1);
+            }
+        }
+
+        .toast-card.fade-out {
+            opacity: 0;
+            transform: translateX(60px);
+        }
+
+        .toast-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .toast-icon.success {
+            background: rgba(34, 197, 94, 0.15);
+            color: #22c55e;
+            border: 1px solid rgba(34, 197, 94, 0.3);
+        }
+
+        .toast-icon.error {
+            background: rgba(239, 68, 68, 0.15);
+            color: #ef4444;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .toast-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .toast-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 3px;
+        }
+
+        .toast-desc {
+            font-size: 12px;
+            color: #aebbd0;
+            line-height: 1.4;
+            word-break: break-word;
+        }
+
+        .toast-close-btn {
+            background: none;
+            border: none;
+            color: #71809a;
+            cursor: pointer;
+            padding: 2px;
+            font-size: 14px;
+            line-height: 1;
+            transition: color 0.15s ease;
+        }
+
+        .toast-close-btn:hover {
+            color: #ffffff;
+        }
+
     </style>
 
 </head>
@@ -780,31 +1136,47 @@
         </div>
 
 
-        <!-- ADMIN -->
+        <!-- TOPBAR RIGHT ACTIONS -->
+        <div class="topbar-right-actions">
 
-        <div class="admin">
+            <!-- NOTIFICATION BELL & DROPDOWN -->
+            <div class="notif-wrapper" id="notifWrapper">
+                <button type="button" class="notif-bell-btn" id="notifBellBtn" aria-label="Notifications" title="Notifications">
+                    <svg class="notif-bell-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/>
+                        <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>
+                    </svg>
+                    <span class="notif-badge" id="notifBadge" style="display:none;">0</span>
+                </button>
 
-            <div class="admin-avatar">
-
-                {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
-
+                <!-- DROPDOWN MENU -->
+                <div class="notif-dropdown" id="notifDropdown">
+                    <div class="notif-header">
+                        <div class="notif-header-title">
+                            <span>Notifications</span>
+                            <span class="notif-header-count" id="notifHeaderCount">0 unread</span>
+                        </div>
+                        <button type="button" class="notif-mark-all-btn" id="notifMarkAllBtn">Mark all read</button>
+                    </div>
+                    <div class="notif-list" id="notifList">
+                        <div class="notif-empty">No notifications yet</div>
+                    </div>
+                </div>
             </div>
 
-
-            <div class="admin-info">
-
-                <strong>
-
-                    {{ auth()->user()->name }}
-
-                </strong>
-
-                <span>
-
-                    Super Admin
-
-                </span>
-
+            <!-- ADMIN -->
+            <div class="admin">
+                <div class="admin-avatar">
+                    {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
+                </div>
+                <div class="admin-info">
+                    <strong>
+                        {{ auth()->user()->name }}
+                    </strong>
+                    <span>
+                        Super Admin
+                    </span>
+                </div>
             </div>
 
         </div>
@@ -821,6 +1193,9 @@
 
 </div>
 
+<!-- TOAST NOTIFICATION CONTAINER -->
+<div id="toastContainer" class="toast-container" aria-live="polite"></div>
+
 <script>
     function toggleSidebar() {
         const sidebar = document.getElementById('appSidebar');
@@ -830,6 +1205,225 @@
             backdrop.classList.toggle('show');
         }
     }
+
+    // ================= NOTIFICATION & TOAST POLLER =================
+    (function() {
+        const bellBtn = document.getElementById('notifBellBtn');
+        const notifDropdown = document.getElementById('notifDropdown');
+        const notifBadge = document.getElementById('notifBadge');
+        const notifList = document.getElementById('notifList');
+        const notifHeaderCount = document.getElementById('notifHeaderCount');
+        const markAllBtn = document.getElementById('notifMarkAllBtn');
+        const toastContainer = document.getElementById('toastContainer');
+        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
+
+        // Store IDs of notifications we have toasted to avoid repeating popups on every poll
+        const toastedIds = new Set(JSON.parse(sessionStorage.getItem('aspia_toasted_notifs') || '[]'));
+
+        function saveToastedIds() {
+            sessionStorage.setItem('aspia_toasted_notifs', JSON.stringify(Array.from(toastedIds)));
+        }
+
+        // Toggle dropdown
+        if (bellBtn && notifDropdown) {
+            bellBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                notifDropdown.classList.toggle('show');
+            });
+
+            document.addEventListener('click', function(e) {
+                if (!notifDropdown.contains(e.target) && e.target !== bellBtn) {
+                    notifDropdown.classList.remove('show');
+                }
+            });
+        }
+
+        // Mark all as read
+        if (markAllBtn) {
+            markAllBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                fetch("{{ route('notifications.mark-all-read') }}", {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': csrfToken,
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    }
+                }).then(() => fetchNotifications(false));
+            });
+        }
+
+        function markSingleAsRead(id, e) {
+            if (e) e.stopPropagation();
+            fetch(`/notifications/${id}/read`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': csrfToken,
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                }
+            }).then(() => fetchNotifications(false));
+        }
+
+        function showToast(notif) {
+            if (!toastContainer) return;
+
+            const isSuccess = notif.status === 'success';
+            const card = document.createElement('div');
+            card.className = `toast-card ${isSuccess ? 'success' : 'error'}`;
+
+            const iconHtml = isSuccess
+                ? `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`
+                : `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>`;
+
+            card.innerHTML = `
+                <div class="toast-icon ${isSuccess ? 'success' : 'error'}">
+                    ${iconHtml}
+                </div>
+                <div class="toast-content" style="${notif.url ? 'cursor:pointer;' : ''}">
+                    <div class="toast-title">${escapeHtml(notif.title)}</div>
+                    <div class="toast-desc">${escapeHtml(notif.message)}</div>
+                </div>
+                <button type="button" class="toast-close-btn" aria-label="Close">&times;</button>
+            `;
+
+            if (notif.url) {
+                card.querySelector('.toast-content').addEventListener('click', function() {
+                    markSingleAsRead(notif.id);
+                    window.location.href = notif.url;
+                });
+            }
+
+            card.querySelector('.toast-close-btn').addEventListener('click', function(e) {
+                e.stopPropagation();
+                dismissToast(card);
+            });
+
+            toastContainer.appendChild(card);
+
+            setTimeout(() => {
+                dismissToast(card);
+            }, 8000);
+        }
+
+        function dismissToast(card) {
+            if (!card) return;
+            card.classList.add('fade-out');
+            setTimeout(() => {
+                if (card && card.parentNode) {
+                    card.parentNode.removeChild(card);
+                }
+            }, 300);
+        }
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            const div = document.createElement('div');
+            div.textContent = str;
+            return div.innerHTML;
+        }
+
+        let isInitialLoad = true;
+
+        function fetchNotifications(triggerToast = true) {
+            fetch("{{ route('notifications.index') }}", {
+                headers: {
+                    'Accept': 'application/json'
+                }
+            })
+            .then(res => res.json())
+            .then(data => {
+                const unreadCount = data.unread_count || 0;
+                const notifs = data.notifications || [];
+
+                // Update bell badge
+                if (notifBadge) {
+                    if (unreadCount > 0) {
+                        notifBadge.textContent = unreadCount > 99 ? '99+' : unreadCount;
+                        notifBadge.style.display = 'inline-flex';
+                    } else {
+                        notifBadge.style.display = 'none';
+                    }
+                }
+
+                if (notifHeaderCount) {
+                    notifHeaderCount.textContent = `${unreadCount} unread`;
+                }
+
+                // Render notifications list
+                if (notifList) {
+                    if (notifs.length === 0) {
+                        notifList.innerHTML = `<div class="notif-empty">No notifications yet</div>`;
+                    } else {
+                        notifList.innerHTML = notifs.map(n => {
+                            const isSuccess = n.status === 'success';
+                            const icon = isSuccess
+                                ? `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>`
+                                : `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>`;
+
+                            return `
+                                <div class="notif-item ${!n.read ? 'unread' : ''}" data-id="${n.id}" data-url="${n.url || ''}">
+                                    <div class="notif-item-icon ${isSuccess ? 'success' : 'error'}">
+                                        ${icon}
+                                    </div>
+                                    <div class="notif-item-body">
+                                        <div class="notif-item-title">
+                                            <span>${escapeHtml(n.title)}</span>
+                                            ${!n.read ? `<button type="button" class="notif-item-check-btn" title="Mark as read" data-read-id="${n.id}">✓</button>` : ''}
+                                        </div>
+                                        <div class="notif-item-msg">${escapeHtml(n.message)}</div>
+                                        <div class="notif-item-time">${escapeHtml(n.created_at)}</div>
+                                    </div>
+                                </div>
+                            `;
+                        }).join('');
+
+                        notifList.querySelectorAll('.notif-item').forEach(el => {
+                            el.addEventListener('click', function(e) {
+                                if (e.target.closest('.notif-item-check-btn')) return;
+                                const id = this.getAttribute('data-id');
+                                const url = this.getAttribute('data-url');
+                                markSingleAsRead(id);
+                                if (url && url !== '#' && url !== '') {
+                                    window.location.href = url;
+                                }
+                            });
+                        });
+
+                        notifList.querySelectorAll('.notif-item-check-btn').forEach(btn => {
+                            btn.addEventListener('click', function(e) {
+                                e.stopPropagation();
+                                const id = this.getAttribute('data-read-id');
+                                markSingleAsRead(id, e);
+                            });
+                        });
+                    }
+                }
+
+                // If new unread notification arrived
+                if (triggerToast) {
+                    notifs.forEach(n => {
+                        if (!n.read && !toastedIds.has(n.id)) {
+                            toastedIds.add(n.id);
+                            saveToastedIds();
+                            showToast(n);
+                        }
+                    });
+                }
+
+                isInitialLoad = false;
+            })
+            .catch(() => {});
+        }
+
+        // Run on page load
+        fetchNotifications(true);
+
+        // Poll every 8 seconds
+        setInterval(() => {
+            fetchNotifications(true);
+        }, 8000);
+    })();
 </script>
 
 </body>

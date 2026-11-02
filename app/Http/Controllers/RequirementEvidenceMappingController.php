@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Imports\RequirementEvidenceMappingImport;
+use App\Jobs\ProcessExcelImportJob;
 use App\Models\Activity;
 use App\Models\Control;
 use App\Models\Requirement;
@@ -231,33 +232,28 @@ class RequirementEvidenceMappingController extends Controller
         ]);
 
         try {
-            $import = new RequirementEvidenceMappingImport();
+            $file = $request->file('file');
+            $originalName = $file->getClientOriginalName();
 
-            Excel::import($import, $request->file('file'));
+            // Store file temporarily in local storage for queue worker
+            $storedPath = $file->store('imports', 'local');
 
-            $created = $import->getCreatedCount();
-            $updated = $import->getUpdatedCount();
-            $skipped = $import->getSkippedCount();
-
-            Activity::create([
-                'user_id'     => auth()->id(),
-                'module'      => 'requirement_evidence_mapping',
-                'action'      => 'Imported',
-                'description' => "Imported Evidence Mappings ({$created} created, {$updated} updated, {$skipped} skipped)",
-            ]);
-
-            $message = "Import completed successfully! {$created} new mappings created, {$updated} updated.";
-            if ($skipped > 0) {
-                $message .= " ({$skipped} empty rows skipped).";
-            }
+            // Dispatch background import job
+            ProcessExcelImportJob::dispatch(
+                'requirement_evidence_mapping',
+                $storedPath,
+                $originalName,
+                auth()->id()
+            );
 
             return redirect()
                 ->route('requirement-evidence-mappings.index')
-                ->with('success', $message);
+                ->with('info', "File \"{$originalName}\" has been uploaded and is processing in the background. You will receive an in-app notification when it is complete.");
+
         } catch (\Throwable $e) {
             return redirect()
                 ->route('requirement-evidence-mappings.index')
-                ->with('error', 'Import Failed: ' . $e->getMessage());
+                ->with('error', 'Error scheduling evidence mapping import: ' . $e->getMessage());
         }
     }
 }

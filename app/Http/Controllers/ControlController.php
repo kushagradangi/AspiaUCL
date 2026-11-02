@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Imports\ControlImport;
+use App\Jobs\ProcessExcelImportJob;
 use App\Models\Activity;
 use App\Models\Control;
 use App\Models\Domain;
@@ -412,6 +413,7 @@ class ControlController extends Controller
 
         try {
             $file = $request->file('file');
+            $originalName = $file->getClientOriginalName();
             $ext = strtolower($file->getClientOriginalExtension());
             $readerType = null;
             if ($ext === 'xlxs' || $ext === 'xlsx') {
@@ -422,36 +424,21 @@ class ControlController extends Controller
                 $readerType = \Maatwebsite\Excel\Excel::CSV;
             }
 
-            $import = new ControlImport();
+            // Store file temporarily in private storage for the queue worker
+            $storedPath = $file->store('imports', 'local');
 
-            Excel::import(
-                $import,
-                $file,
-                null,
+            // Dispatch background import job
+            ProcessExcelImportJob::dispatch(
+                'control',
+                $storedPath,
+                $originalName,
+                auth()->id(),
                 $readerType
             );
 
-            $created = $import->getCreatedCount();
-            $updated = $import->getUpdatedCount();
-
-            if ($created === 0 && $updated === 0) {
-                return redirect()
-                    ->route('controls.index')
-                    ->with('error', 'No valid control rows were found in the uploaded file. Please make sure the Excel file contains Control ID and Control Name columns.');
-            }
-
-            Activity::create([
-                'user_id' => auth()->id(),
-                'module' => 'control',
-                'action' => 'Imported',
-                'description' => "Imported controls: {$created} created, {$updated} updated.",
-            ]);
-
-            $message = "Controls imported successfully ({$created} new added, {$updated} existing updated).";
-
             return redirect()
                 ->route('controls.index')
-                ->with('success', $message);
+                ->with('info', "File \"{$originalName}\" has been uploaded and is processing in the background. You will receive an in-app notification when it is complete.");
 
         } catch (\Illuminate\Validation\ValidationException $e) {
             $allErrors = \Illuminate\Support\Arr::flatten($e->errors());
@@ -466,7 +453,7 @@ class ControlController extends Controller
 
             return redirect()
                 ->route('controls.index')
-                ->with('error', 'Error occurred during control import: ' . $e->getMessage());
+                ->with('error', 'Error scheduling control import: ' . $e->getMessage());
         }
     }
 }
