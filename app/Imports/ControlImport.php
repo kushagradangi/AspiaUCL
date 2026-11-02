@@ -79,17 +79,19 @@ class ControlImport implements ToCollection, WithColumnLimit, WithReadFilter
         $domainByCode = [];
         $domainByName = [];
         $domainById   = [];
+        $domainByPk   = [];
 
         foreach ($domains as $d) {
             if (!empty($d->domain_code)) {
                 $domainByCode[strtoupper(trim((string)$d->domain_code))] = $d;
             }
             if (!empty($d->name)) {
-                $domainByName[strtolower(trim((string)$d->name))] = $d;
+                $domainByName[strtoupper(trim((string)$d->name))] = $d;
             }
             if (!empty($d->domain_id)) {
                 $domainById[strtoupper(trim((string)$d->domain_id))] = $d;
             }
+            $domainByPk[(string)$d->id] = $d;
         }
 
         // Preload existing controls by uppercase control_id
@@ -208,14 +210,18 @@ class ControlImport implements ToCollection, WithColumnLimit, WithReadFilter
             $headerMap,
             $defaultIndexes,
             $fieldSynonyms,
-            &$domainByCode,
-            &$domainByName,
-            &$domainById,
+            $domainByCode,
+            $domainByName,
+            $domainById,
+            $domainByPk,
             &$existingControls,
             &$usedSlugs,
             &$currentRow
         ) {
-            foreach ($dataRows as $row) {
+            $validationErrors = [];
+            $recordsToProcess = [];
+
+            foreach ($dataRows as $rowIndex => $row) {
                 $rowArray = $row instanceof Collection ? $row->toArray() : (array) $row;
                 $rowValues = array_values($rowArray);
 
@@ -290,65 +296,51 @@ class ControlImport implements ToCollection, WithColumnLimit, WithReadFilter
 
                 // Resolve domain
                 $domainVal = $getField('domain_code');
+                $rawDomain = $domainVal !== null ? trim((string)$domainVal) : '';
+                $upperDomain = strtoupper($rawDomain);
+
                 $domain = null;
-
-                if (!empty($domainVal)) {
-                    $upperVal = strtoupper(trim((string)$domainVal));
-                    $lowerVal = strtolower(trim((string)$domainVal));
-
-                    if (isset($domainByCode[$upperVal])) {
-                        $domain = $domainByCode[$upperVal];
-                    } elseif (isset($domainByName[$lowerVal])) {
-                        $domain = $domainByName[$lowerVal];
-                    } elseif (isset($domainById[$upperVal])) {
-                        $domain = $domainById[$upperVal];
+                if ($upperDomain !== '') {
+                    if (isset($domainByCode[$upperDomain])) {
+                        $domain = $domainByCode[$upperDomain];
+                    } elseif (isset($domainById[$upperDomain])) {
+                        $domain = $domainById[$upperDomain];
+                    } elseif (isset($domainByName[$upperDomain])) {
+                        $domain = $domainByName[$upperDomain];
+                    } elseif (isset($domainByPk[$upperDomain])) {
+                        $domain = $domainByPk[$upperDomain];
                     }
                 }
 
-                // If domain not found, try extracting domain prefix from control_id (e.g. GOV from GOV-001)
-                $prefix = null;
                 if (!$domain) {
-                    if (preg_match('/^([A-Za-z0-9]+)[-_]/', $controlId, $m)) {
-                        $prefix = strtoupper($m[1]);
-                        if (isset($domainByCode[$prefix])) {
-                            $domain = $domainByCode[$prefix];
-                        }
-                    }
+                    $excelRow = $rowIndex + 1;
+                    $validationErrors[] = "Row {$excelRow}: Control \"{$name}\" ({$controlId}) references non-existent Domain \"{$rawDomain}\".";
+                    continue;
                 }
 
-                // If still not found, check partial name match
-                if (!$domain && !empty($domainVal)) {
-                    foreach ($domainByName as $n => $d) {
-                        if (str_contains($n, strtolower(trim($domainVal))) || str_contains(strtolower(trim($domainVal)), $n)) {
-                            $domain = $d;
-                            break;
-                        }
-                    }
-                }
+                $recordsToProcess[] = [
+                    'domain'    => $domain,
+                    'controlId' => $controlId,
+                    'name'      => $name,
+                    'rawDomain' => $rawDomain,
+                    'getField'  => $getField,
+                ];
+            }
 
-                // Fallback: create domain or find/use fallback
-                if (!$domain) {
-                    $codeToUse = $prefix ?: (!empty($domainVal) ? strtoupper(substr(preg_replace('/[^A-Za-z0-9]/', '', $domainVal), 0, 8)) : 'GEN');
-                    if (empty($codeToUse)) $codeToUse = 'GEN';
+            if (!empty($validationErrors)) {
+                throw \Illuminate\Validation\ValidationException::withMessages([
+                    'import' => $validationErrors,
+                ]);
+            }
 
-                    $nameToUse = !empty($domainVal) ? trim((string)$domainVal) : ($prefix ?: 'General');
+            foreach ($recordsToProcess as $record) {
+                $domain    = $record['domain'];
+                $controlId = $record['controlId'];
+                $name      = $record['name'];
+                $rawDomain = $record['rawDomain'];
+                $getField  = $record['getField'];
 
-                    // Check if domain code exists in DB
-                    $domain = Domain::where('domain_code', $codeToUse)->first();
-                    if (!$domain) {
-                        $domain = Domain::create([
-                            'domain_code' => $codeToUse,
-                            'domain_id'   => 'DOM-' . $codeToUse,
-                            'name'        => $nameToUse,
-                            'slug'        => Str::slug($nameToUse ?: $codeToUse),
-                        ]);
-                        $domainByCode[strtoupper($codeToUse)] = $domain;
-                        $domainByName[strtolower($nameToUse)] = $domain;
-                    }
-                }
-
-                $domainCode = $domain->domain_code ?? ($domainVal ?: ($prefix ?: 'GEN'));
-
+                $domainCode = $domain->domain_code ?? $rawDomain;
                 $currentRow++;
 
                 // Slug generation

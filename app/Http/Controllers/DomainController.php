@@ -116,7 +116,7 @@ class DomainController extends Controller
         return [
 
             'framework_id' =>
-                'nullable|exists:frameworks,id',
+                'nullable',
 
             /*
             |------------------------------------------------------------------
@@ -430,6 +430,14 @@ class DomainController extends Controller
             $this->validationRules($existing ? $existing->id : null)
         );
 
+        if (!empty($validated['framework_id'])) {
+            if (!\App\Models\Framework::where('id', $validated['framework_id'])->exists()) {
+                $validated['framework_id'] = null;
+            }
+        } else {
+            $validated['framework_id'] = null;
+        }
+
         try {
             if ($existing) {
                 $validated['slug'] = $this->generateUniqueSlug($validated['name'], $existing->id);
@@ -506,6 +514,14 @@ class DomainController extends Controller
         $validated = $request->validate(
             $this->validationRules($domain->id)
         );
+
+        if (!empty($validated['framework_id'])) {
+            if (!\App\Models\Framework::where('id', $validated['framework_id'])->exists()) {
+                $validated['framework_id'] = null;
+            }
+        } else {
+            $validated['framework_id'] = null;
+        }
 
         try {
             $validated['slug'] = $this->generateUniqueSlug($validated['name'], $domain->id);

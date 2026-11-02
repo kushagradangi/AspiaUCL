@@ -2,6 +2,7 @@
 
 namespace App\Imports;
 
+use App\Models\Control;
 use App\Models\Framework;
 use App\Models\Requirement;
 use App\Models\RequirementFrameworkMapping;
@@ -91,6 +92,17 @@ class RequirementImport implements ToCollection, WithHeadingRow, WithColumnLimit
             }
         }
 
+        // 4. Preload all controls into memory for O(1) matching
+        $controls = Control::all();
+        $controlByCode = [];
+        $controlByPk   = [];
+        foreach ($controls as $c) {
+            if (!empty($c->control_id)) {
+                $controlByCode[strtoupper(trim((string)$c->control_id))] = $c;
+            }
+            $controlByPk[(string)$c->id] = $c;
+        }
+
         $standardKeys = [
             'requirement_id', 'req_id', 'id',
             'control_id', 'control',
@@ -135,13 +147,18 @@ class RequirementImport implements ToCollection, WithHeadingRow, WithColumnLimit
             &$usedSlugs,
             $fwByName,
             $fwByCode,
+            $controlByCode,
+            $controlByPk,
             $standardKeys,
             $knownFrameworks,
             $now,
             &$mappingsToInsert,
             &$currentRow
         ) {
-            foreach ($rows as $row) {
+            $validationErrors = [];
+            $recordsToProcess = [];
+
+            foreach ($rows as $index => $row) {
                 $rowArray = $row instanceof Collection ? $row->toArray() : (array) $row;
                 $rowNormalized = [];
                 foreach ($rowArray as $k => $v) {
@@ -162,22 +179,65 @@ class RequirementImport implements ToCollection, WithHeadingRow, WithColumnLimit
                     continue;
                 }
 
-                $currentRow++;
+                $excelRow = $index + 2;
 
                 // Determine or clean control ID
-                $controlId = $rowNormalized['control_id'] ?? $rowNormalized['control'] ?? null;
-                $controlId = $controlId ? trim((string)$controlId) : null;
-                if (empty($controlId) || str_starts_with($controlId, '=') || str_contains($controlId, 'LEFT(') || str_contains($controlId, 'FIND(')) {
-                    $controlId = preg_replace('/-R\d+$/i', '', $reqId);
+                $rawControlId = $rowNormalized['control_id'] ?? $rowNormalized['control'] ?? null;
+                $rawControlId = $rawControlId !== null ? trim((string)$rawControlId) : '';
+                if (empty($rawControlId) || str_starts_with($rawControlId, '=') || str_contains($rawControlId, 'LEFT(') || str_contains($rawControlId, 'FIND(')) {
+                    $derived = preg_replace('/-R\d+$/i', '', $reqId);
+                    if (!empty($derived) && isset($controlByCode[strtoupper($derived)])) {
+                        $rawControlId = $derived;
+                    }
                 }
 
-                $why = $rowNormalized['why_this_requirement_exists'] ?? $rowNormalized['why_requirement_exists'] ?? null;
-                $guidance = $rowNormalized['implementation_guidance'] ?? null;
-                $findings = $rowNormalized['common_audit_findings'] ?? null;
-                $mistakes = $rowNormalized['common_mistakes'] ?? null;
+                $normControlId = strtoupper($rawControlId);
+                $parentControl = null;
+                if ($normControlId !== '') {
+                    if (isset($controlByCode[$normControlId])) {
+                        $parentControl = $controlByCode[$normControlId];
+                    } elseif (isset($controlByPk[$normControlId])) {
+                        $parentControl = $controlByPk[$normControlId];
+                    }
+                }
+
+                if (!$parentControl) {
+                    $validationErrors[] = "Row {$excelRow}: Requirement \"{$title}\" ({$reqId}) references non-existent Control \"{$rawControlId}\".";
+                    continue;
+                }
+
+                $recordsToProcess[] = [
+                    'rowNormalized' => $rowNormalized,
+                    'reqId'         => $reqId,
+                    'title'         => $title,
+                    'statement'     => $statement,
+                    'control'       => $parentControl,
+                ];
+            }
+
+            if (!empty($validationErrors)) {
+                throw \Illuminate\Validation\ValidationException::withMessages([
+                    'import' => $validationErrors,
+                ]);
+            }
+
+            foreach ($recordsToProcess as $record) {
+                $rowNormalized = $record['rowNormalized'];
+                $reqId         = $record['reqId'];
+                $title         = $record['title'];
+                $statement     = $record['statement'];
+                $parentControl = $record['control'];
+                $controlId     = $parentControl->control_id;
+
+                $currentRow++;
+
+                $why           = $rowNormalized['why_this_requirement_exists'] ?? $rowNormalized['why_requirement_exists'] ?? null;
+                $guidance      = $rowNormalized['implementation_guidance'] ?? null;
+                $findings      = $rowNormalized['common_audit_findings'] ?? null;
+                $mistakes      = $rowNormalized['common_mistakes'] ?? null;
                 $bestPractices = $rowNormalized['best_practices'] ?? null;
                 $businessExamples = $rowNormalized['business_examples'] ?? null;
-                $typicalOwner = $rowNormalized['typical_owner'] ?? null;
+                $typicalOwner  = $rowNormalized['typical_owner'] ?? null;
 
                 $existingModel = $existing->get(strtoupper($reqId));
 
@@ -194,7 +254,7 @@ class RequirementImport implements ToCollection, WithHeadingRow, WithColumnLimit
                     }
 
                     $existingModel->update([
-                        'control_id' => $controlId ?: $existingModel->control_id,
+                        'control_id' => $controlId,
                         'requirement_title' => $title,
                         'requirement' => $statement,
                         'display_order' => $currentRow,
@@ -220,7 +280,7 @@ class RequirementImport implements ToCollection, WithHeadingRow, WithColumnLimit
 
                     $newReq = Requirement::create([
                         'requirement_id' => $reqId,
-                        'control_id' => $controlId ?? '',
+                        'control_id' => $controlId,
                         'requirement_title' => $title,
                         'requirement' => $statement,
                         'display_order' => $currentRow,

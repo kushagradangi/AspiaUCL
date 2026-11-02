@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Imports\RequirementFrameworkMappingImport;
 use App\Imports\RequirementImport;
 use App\Models\Activity;
+use App\Models\Control;
 use App\Models\Requirement;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
@@ -124,6 +125,28 @@ class RequirementController extends Controller
             'typical_owner' => 'nullable|string|max:255',
         ]);
 
+        $controlIdentifier = trim((string)($validated['control_id'] ?? ''));
+        $normControlId = strtoupper($controlIdentifier);
+
+        $control = Control::whereRaw('UPPER(TRIM(control_id)) = ?', [$normControlId])->first();
+
+        if (is_numeric($controlIdentifier) && !$control) {
+            $control = Control::find((int)$controlIdentifier);
+        }
+
+        if (!$control) {
+            $reqTitle = $validated['requirement_title'] ?? '';
+            $reqId = $validated['requirement_id'] ?? '';
+            $errorMessage = "Cannot save Requirement \"{$reqTitle}\" ({$reqId}): Parent Control \"{$controlIdentifier}\" does not exist.";
+
+            return back()
+                ->withErrors(['control_id' => $errorMessage])
+                ->with('error', $errorMessage)
+                ->withInput();
+        }
+
+        $validated['control_id'] = $control->control_id;
+
         // Check if matching requirement already exists
         $existing = Requirement::where('requirement_id', $validated['requirement_id'])->first();
 
@@ -203,6 +226,28 @@ class RequirementController extends Controller
             'business_examples' => 'nullable|string',
             'typical_owner' => 'nullable|string|max:255',
         ]);
+
+        $controlIdentifier = trim((string)($validated['control_id'] ?? ''));
+        $normControlId = strtoupper($controlIdentifier);
+
+        $control = Control::whereRaw('UPPER(TRIM(control_id)) = ?', [$normControlId])->first();
+
+        if (is_numeric($controlIdentifier) && !$control) {
+            $control = Control::find((int)$controlIdentifier);
+        }
+
+        if (!$control) {
+            $reqTitle = $validated['requirement_title'] ?? '';
+            $reqId = $validated['requirement_id'] ?? '';
+            $errorMessage = "Cannot save Requirement \"{$reqTitle}\" ({$reqId}): Parent Control \"{$controlIdentifier}\" does not exist.";
+
+            return back()
+                ->withErrors(['control_id' => $errorMessage])
+                ->with('error', $errorMessage)
+                ->withInput();
+        }
+
+        $validated['control_id'] = $control->control_id;
 
         try {
             $requirement->update($validated);
@@ -311,6 +356,12 @@ class RequirementController extends Controller
                 ->route('requirements.index')
                 ->with('success', $message);
 
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            $allErrors = \Illuminate\Support\Arr::flatten($e->errors());
+            return redirect()
+                ->route('requirements.index')
+                ->withErrors($e->errors())
+                ->with('error', 'Import rejected: ' . implode(' | ', $allErrors));
         } catch (\Throwable $e) {
             \Illuminate\Support\Facades\Log::error('Requirement Import Error: ' . $e->getMessage(), [
                 'trace' => $e->getTraceAsString()
@@ -377,6 +428,12 @@ class RequirementController extends Controller
             return redirect()
                 ->route('requirements.index')
                 ->with('success', $message);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            $allErrors = \Illuminate\Support\Arr::flatten($e->errors());
+            return redirect()
+                ->route('requirements.index')
+                ->withErrors($e->errors())
+                ->with('error', 'Import rejected: ' . implode(' | ', $allErrors));
         } catch (\Throwable $e) {
             return redirect()
                 ->route('requirements.index')

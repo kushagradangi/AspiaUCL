@@ -136,7 +136,7 @@ class ControlController extends Controller
                 ),
 
             'domain_code' =>
-                'required|string|max:255|exists:domains,domain_code',
+                'required|string|max:255',
 
             'name' =>
                 'required|string|max:255',
@@ -207,20 +207,32 @@ class ControlController extends Controller
             $this->validationRules($existing ? $existing->id : null)
         );
 
-        $domain = Domain::where(
-            'domain_code',
-            $validated['domain_code']
-        )->first();
+        $domainIdentifier = trim((string)($validated['domain_code'] ?? ''));
+        $normDomain = strtoupper($domainIdentifier);
+
+        $domain = Domain::whereRaw('UPPER(TRIM(domain_code)) = ?', [$normDomain])
+            ->orWhereRaw('UPPER(TRIM(domain_id)) = ?', [$normDomain])
+            ->first();
+
+        if (is_numeric($domainIdentifier) && !$domain) {
+            $domain = Domain::find((int)$domainIdentifier);
+        }
 
         if (!$domain) {
+            $controlName = $validated['name'] ?? '';
+            $controlId = $validated['control_id'] ?? '';
+            $errorMessage = "Cannot save Control \"{$controlName}\" ({$controlId}): Parent Domain \"{$domainIdentifier}\" does not exist.";
+
             return back()
                 ->withErrors([
-                    'domain_code' => 'The entered Domain Code does not exist.'
+                    'domain_code' => $errorMessage,
                 ])
+                ->with('error', $errorMessage)
                 ->withInput();
         }
 
         $validated['domain_id'] = $domain->id;
+        $validated['domain_code'] = $domain->domain_code ?? $domainIdentifier;
 
         try {
             if ($existing) {
@@ -289,20 +301,32 @@ class ControlController extends Controller
             $this->validationRules($control->id)
         );
 
-        $domain = Domain::where(
-            'domain_code',
-            $validated['domain_code']
-        )->first();
+        $domainIdentifier = trim((string)($validated['domain_code'] ?? ''));
+        $normDomain = strtoupper($domainIdentifier);
+
+        $domain = Domain::whereRaw('UPPER(TRIM(domain_code)) = ?', [$normDomain])
+            ->orWhereRaw('UPPER(TRIM(domain_id)) = ?', [$normDomain])
+            ->first();
+
+        if (is_numeric($domainIdentifier) && !$domain) {
+            $domain = Domain::find((int)$domainIdentifier);
+        }
 
         if (!$domain) {
+            $controlName = $validated['name'] ?? $control->name;
+            $controlId = $validated['control_id'] ?? $control->control_id;
+            $errorMessage = "Cannot save Control \"{$controlName}\" ({$controlId}): Parent Domain \"{$domainIdentifier}\" does not exist.";
+
             return back()
                 ->withErrors([
-                    'domain_code' => 'The entered Domain Code does not exist.'
+                    'domain_code' => $errorMessage,
                 ])
+                ->with('error', $errorMessage)
                 ->withInput();
         }
 
         $validated['domain_id'] = $domain->id;
+        $validated['domain_code'] = $domain->domain_code ?? $domainIdentifier;
 
         try {
             $control->update($validated);
@@ -429,6 +453,12 @@ class ControlController extends Controller
                 ->route('controls.index')
                 ->with('success', $message);
 
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            $allErrors = \Illuminate\Support\Arr::flatten($e->errors());
+            return redirect()
+                ->route('controls.index')
+                ->withErrors($e->errors())
+                ->with('error', 'Import rejected: ' . implode(' | ', $allErrors));
         } catch (\Throwable $e) {
             \Illuminate\Support\Facades\Log::error('Control import error: ' . $e->getMessage(), [
                 'exception' => $e,
