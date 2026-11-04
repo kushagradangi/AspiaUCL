@@ -6,36 +6,180 @@ use App\Models\Framework;
 use App\Models\Requirement;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use RuntimeException;
 
 class RequirementFrameworkMappingImport implements ToCollection, WithHeadingRow
 {
-    private const FRAMEWORK_COLUMNS = [
+    public const FRAMEWORK_COLUMNS = [
+        // ISO 27001
         'ISO 27001:2022 Section / Subsection & Title' => 'ISO27001',
-        'IRDAI Cyber Security Guidelines 2023' => 'IRDAI',
-        'RBI Cyber Security Framework 2016 Mapping' => 'RBI-CSF',
-        'SEBI CSCRF Section / Subsection' => 'SEBI-CSCRF',
-        'DORA Subsection' => 'DORA',
-        'HIPAA Security Rule 2025 NPRM Mapping' => 'HIPAA',
+
+        // ISO 27002
         'ISO/IEC 27002:2022 Section / Subsection Mapping' => 'ISO27002',
-        'NIS2 Titles' => 'NIS2',
-        'PCI DSS 4.0.1' => 'PCI-DSS',
-        'COBIT 2019' => 'COBIT2019',
+
+        // ISO 22301
         'ISO 22301:2019 Titles' => 'ISO22301',
-        'NIST CSF 2.0' => 'NIST-CSF',
-        'NIST SP 800-53 Rev.5 Section' => 'NIST80053',
-        'NIST SP 800-53 Rev.5 Subsection / Control' => 'NIST80053',
-        'DPDPA Section(s) and Section Title(s)' => 'DPDP',
-        'GDPR Mapping' => 'GDPR',
-        'CIS Controls v8 Mapping' => 'CIS-V8',
-        'CERT-In Directions 2022' => 'CERT-IN',
-        'UPI Framework Section(s)' => 'NPCI-ISR',
-        'UPI Framework Subsection(s)' => 'NPCI-ISR',
-        'SOC 2 Section / Subsection & Title' => 'SOC2',
+
+        // ISO 27701
         'ISO27701 (2019)' => 'ISO27701',
         'ISO27701 Titles (2019)' => 'ISO27701',
+
+        // ISO 27007
+        'ISO/IEC 27007:2020 Section / Subsection (Title)' => 'ISO27007',
+
+        // ISO 31000
+        'ISO 31000:2018 Mapping' => 'ISO31000',
+
+        // ISO 42001
+        'ISO/IEC 42001:2023 Clause Mapping' => 'ISO42001',
+        'ISO/IEC 42001:2023 Annex A Mapping' => 'ISO42001',
+
+        // ISO 23894
+        'ISO 23894:2023 Titles' => 'ISO23894',
+
+        // PCI DSS
+        'PCI DSS 4.0.1' => 'PCI-DSS',
+
+        // SEBI CSCRF
+        'SEBI CSCRF Section / Subsection' => 'SEBI-CSCRF',
+
+        // NIST CSF
+        'NIST CSF 2.0' => 'NIST-CSF',
+        'NIST CSF 2.0 ' => 'NIST-CSF',
+
+        // NIST SP 800-53
+        'NIST SP 800-53 Rev.5 Section' => 'NIST80053',
+        'NIST SP 800-53 Rev.5 Subsection / Control' => 'NIST80053',
+
+        // NIST SP 800-63-4
+        'NIST SP 800-63-4 Section / Subsection Mapping' => 'NIST80063',
+
+        // NIST SP 800-37
+        'NIST SP 800-37 Rev. 2 – Section / Task Mapping' => 'NIST80037',
+
+        // NPCI / UPI (both updated and legacy headers)
+        'UPI Consolidated Circular 2026 – Section/Subsection Mapping' => 'NPCI-ISR',
+        'NPCI Comprehensive Mobile Application Security Framework for UPI (2025)' => 'NPCI-ISR',
+        'UPI Framework Section(s)' => 'NPCI-ISR',
+        'UPI Framework Subsection(s)' => 'NPCI-ISR',
+
+        // RBI CSF & Directions (both updated and legacy headers)
+        'RBI Cyber Security Framework 2016 Mapping' => 'RBI-CSF',
+        'RBI (AIFIs – Cybersecurity, Technology: Risk, Resilience and Assurance Framework) Directions, 2026' => 'RBI-CSF',
+        'RBI Authentication Mechanisms for Digital Payment Transactions Directions, 2025' => 'RBI-CSF',
+
+        // CIS Controls
+        'CIS Controls v8 Mapping' => 'CIS-V8',
+
+        // DORA
+        'DORA Subsection' => 'DORA',
+
+        // IRDAI
+        'IRDAI Cyber Security Guidelines 2023' => 'IRDAI',
+
+        // HIPAA
+        'HIPAA Security Rule 2025 NPRM Mapping' => 'HIPAA',
+
+        // NIS2
+        'NIS2 Titles' => 'NIS2',
+
+        // COBIT
+        'COBIT 2019' => 'COBIT2019',
+        'COBIT 2019 ' => 'COBIT2019',
+
+        // DPDPA
+        'DPDPA Section(s) and Section Title(s)' => 'DPDP',
+
+        // GDPR
+        'GDPR Mapping' => 'GDPR',
+
+        // CERT-In
+        'CERT-In Directions 2022' => 'CERT-IN',
+
+        // SOC 2
+        'SOC 2 Section / Subsection & Title' => 'SOC2',
+    ];
+
+    public const KNOWN_FRAMEWORKS = [
+        'ISO27007' => [
+            'name' => 'ISO/IEC 27007',
+            'framework_code' => 'ISO27007',
+            'version' => '2020',
+            'framework_family' => 'ISO',
+            'category' => 'Information Security Audit',
+            'publisher' => 'ISO',
+            'region' => 'Global',
+            'industry' => 'All',
+            'framework_type' => 'Standard',
+        ],
+        'ISO31000' => [
+            'name' => 'ISO 31000',
+            'framework_code' => 'ISO31000',
+            'version' => '2018',
+            'framework_family' => 'ISO',
+            'category' => 'Risk Management',
+            'publisher' => 'ISO',
+            'region' => 'Global',
+            'industry' => 'All',
+            'framework_type' => 'Standard',
+        ],
+        'ISO42001' => [
+            'name' => 'ISO/IEC 42001',
+            'framework_code' => 'ISO42001',
+            'version' => '2023',
+            'framework_family' => 'ISO',
+            'category' => 'Artificial Intelligence',
+            'publisher' => 'ISO',
+            'region' => 'Global',
+            'industry' => 'All',
+            'framework_type' => 'Standard',
+        ],
+        'ISO23894' => [
+            'name' => 'ISO/IEC 23894',
+            'framework_code' => 'ISO23894',
+            'version' => '2023',
+            'framework_family' => 'ISO',
+            'category' => 'AI Risk Management',
+            'publisher' => 'ISO',
+            'region' => 'Global',
+            'industry' => 'All',
+            'framework_type' => 'Standard',
+        ],
+        'NIST80063' => [
+            'name' => 'NIST SP 800-63-4',
+            'framework_code' => 'NIST80063',
+            'version' => 'Rev. 4',
+            'framework_family' => 'NIST',
+            'category' => 'Digital Identity',
+            'publisher' => 'NIST',
+            'region' => 'United States',
+            'industry' => 'All',
+            'framework_type' => 'Standard',
+        ],
+        'NIST80037' => [
+            'name' => 'NIST SP 800-37',
+            'framework_code' => 'NIST80037',
+            'version' => 'Rev. 2',
+            'framework_family' => 'NIST',
+            'category' => 'Risk Management',
+            'publisher' => 'NIST',
+            'region' => 'United States',
+            'industry' => 'All',
+            'framework_type' => 'Standard',
+        ],
+    ];
+
+    public const IGNORED_COLUMNS = [
+        'requirementid',
+        'requirementtitle',
+        'mappingjustification',
+        'clausebyclausevalidationjustification',
+        'justification',
+        'validation',
+        'notes',
     ];
 
     private int $mappedRows = 0;
@@ -63,31 +207,32 @@ class RequirementFrameworkMappingImport implements ToCollection, WithHeadingRow
         }
 
         $columnsByFramework = [];
-        $expectedHeaders = [];
+        $allowedHeaders = array_fill_keys(self::IGNORED_COLUMNS, true);
+
         foreach (self::FRAMEWORK_COLUMNS as $label => $frameworkCode) {
             $key = $this->normalizeHeader($label);
-            $expectedHeaders[$key] = $label;
-            $columnsByFramework[$frameworkCode] ??= [];
+            $allowedHeaders[$key] = true;
             if (isset($headers[$key])) {
-                $columnsByFramework[$frameworkCode][] = $key;
+                $columnsByFramework[$frameworkCode] ??= [];
+                if (!in_array($key, $columnsByFramework[$frameworkCode], true)) {
+                    $columnsByFramework[$frameworkCode][] = $key;
+                }
             }
         }
 
-        $missingHeaders = array_diff_key($expectedHeaders, $headers);
-        if ($missingHeaders !== []) {
-            throw new RuntimeException(
-                'The mapping workbook is missing expected columns: '
-                . implode(', ', array_values($missingHeaders))
-            );
+        if ($columnsByFramework === []) {
+            throw new RuntimeException('The mapping workbook must contain at least one valid framework column.');
         }
 
-        $allowedHeaders = array_fill_keys(
-            array_merge(array_keys($expectedHeaders), ['requirementid', 'requirementtitle']),
-            true
-        );
+        // Validate that no unrecognized populated columns exist in the rows
         foreach ($rows as $row) {
             foreach ($row as $header => $value) {
-                $key = $this->normalizeHeader((string) $header);
+                $headerStr = trim((string) $header);
+                // Ignore numeric headers from blank trailing columns in spreadsheet (e.g. column 36)
+                if (is_numeric($headerStr)) {
+                    continue;
+                }
+                $key = $this->normalizeHeader($headerStr);
                 if (!isset($allowedHeaders[$key]) && trim((string) $value) !== '') {
                     throw new RuntimeException(
                         "The mapping workbook has an unrecognized populated column: \"{$header}\"."
@@ -97,20 +242,11 @@ class RequirementFrameworkMappingImport implements ToCollection, WithHeadingRow
         }
 
         $frameworkCodes = array_keys($columnsByFramework);
-        $frameworks = Framework::query()
-            ->whereIn('framework_code', $frameworkCodes)
-            ->get()
-            ->groupBy(fn (Framework $framework) => strtoupper(trim((string) $framework->framework_code)));
-
+        $allFrameworks = Framework::all();
         $frameworksByCode = [];
+
         foreach ($frameworkCodes as $code) {
-            $matches = $frameworks->get(strtoupper($code), collect());
-            if ($matches->count() !== 1) {
-                throw new RuntimeException(
-                    "Expected exactly one project framework with code \"{$code}\"; found {$matches->count()}."
-                );
-            }
-            $frameworksByCode[$code] = $matches->first();
+            $frameworksByCode[$code] = $this->findOrCreateFramework($code, $allFrameworks);
         }
 
         $requirementIds = [];
@@ -218,6 +354,7 @@ class RequirementFrameworkMappingImport implements ToCollection, WithHeadingRow
         }
 
         $frameworkIds = array_map(fn (Framework $framework) => $framework->id, $frameworksByCode);
+        $frameworkCodes = array_map(fn (Framework $framework) => $framework->framework_code, $frameworksByCode);
         $frameworkNames = array_map(fn (Framework $framework) => $framework->name, $frameworksByCode);
         $frameworkNames = array_values(array_unique(array_merge(
             $frameworkNames,
@@ -256,6 +393,77 @@ class RequirementFrameworkMappingImport implements ToCollection, WithHeadingRow
                 DB::table('requirement_framework_mappings')->insert($recordChunk);
             }
         });
+    }
+
+    private function findOrCreateFramework(string $code, Collection &$allFrameworks): Framework
+    {
+        $normCode = $this->normalizeCode($code);
+
+        // 1. Check existing in-memory frameworks by code or name
+        foreach ($allFrameworks as $existing) {
+            if ($this->normalizeCode((string) $existing->framework_code) === $normCode
+                || $this->normalizeCode((string) $existing->name) === $normCode) {
+                return $existing;
+            }
+        }
+
+        // 2. Query DB directly if not found in in-memory collection
+        $dbMatch = Framework::query()
+            ->where('framework_code', $code)
+            ->orWhereRaw('REPLACE(REPLACE(UPPER(framework_code), "-", ""), " ", "") = ?', [$normCode])
+            ->first();
+
+        if ($dbMatch) {
+            $allFrameworks->push($dbMatch);
+            return $dbMatch;
+        }
+
+        // 3. Known framework fallback: auto-create
+        $known = self::KNOWN_FRAMEWORKS[$code] ?? null;
+        $name = $known['name'] ?? $code;
+        $baseSlug = Str::slug($name);
+        $slug = $baseSlug;
+        $counter = 1;
+        while (Framework::where('slug', $slug)->exists()) {
+            $slug = $baseSlug . '-' . $counter;
+            $counter++;
+        }
+
+        // Determine next framework_id (FW-xxx)
+        $maxNum = 0;
+        foreach (Framework::pluck('framework_id') as $fwId) {
+            if (preg_match('/FW-(\d+)/i', (string) $fwId, $m)) {
+                $num = (int) $m[1];
+                if ($num > $maxNum) {
+                    $maxNum = $num;
+                }
+            }
+        }
+        $nextFrameworkId = 'FW-' . str_pad((string) ($maxNum + 1), 3, '0', STR_PAD_LEFT);
+        $nextDisplayOrder = (Framework::max('display_order') ?? 0) + 1;
+
+        $created = Framework::create([
+            'framework_id' => $nextFrameworkId,
+            'framework_code' => $code,
+            'name' => $name,
+            'slug' => $slug,
+            'version' => $known['version'] ?? null,
+            'framework_family' => $known['framework_family'] ?? null,
+            'category' => $known['category'] ?? null,
+            'publisher' => $known['publisher'] ?? null,
+            'region' => $known['region'] ?? null,
+            'industry' => $known['industry'] ?? null,
+            'framework_type' => $known['framework_type'] ?? 'Standard',
+            'display_order' => $nextDisplayOrder,
+        ]);
+
+        $allFrameworks->push($created);
+        return $created;
+    }
+
+    private function normalizeCode(string $code): string
+    {
+        return strtoupper((string) preg_replace('/[^a-z0-9]+/i', '', $code));
     }
 
     public function getMappedRows(): int

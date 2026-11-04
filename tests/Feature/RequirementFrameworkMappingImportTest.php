@@ -168,3 +168,44 @@ it('rejects populated columns it cannot map before changing mappings', function 
 
     expect(RequirementFrameworkMapping::count())->toBe(0);
 });
+
+
+it('imports updated UPI and RBI circular mappings while ignoring justification columns', function () {
+    $frameworks = seedRequirementMappingFrameworks();
+
+    Requirement::create([
+        'requirement_id' => 'REQ-UPI-001',
+        'control_id' => 'REQ-001',
+        'requirement_title' => 'UPI Security',
+        'requirement' => 'A requirement statement.',
+    ]);
+
+    $import = new RequirementFrameworkMappingImport();
+    $import->collection(new Collection([
+        [
+            'requirement_id' => 'REQ-UPI-001',
+            'requirement_title' => 'UPI Security',
+            'upi_consolidated_circular_2026_sectionsubsection_mapping' => '§1.3 – Scope',
+            'npci_comprehensive_mobile_application_security_framework_for_upi_2025' => 'B. Protect | 3. Encryption',
+            'rbi_aifis_cybersecurity_technology_risk_resilience_and_assurance_framework_directions_2026' => 'Chapter III - Para 11',
+            'mapping_justification' => 'Directly addresses UPI and RBI cybersecurity.',
+        ],
+    ]));
+
+    $npciMapping = RequirementFrameworkMapping::where('requirement_id', 'REQ-UPI-001')
+        ->where('framework_code', 'NPCI-ISR')
+        ->first();
+
+    $rbiMapping = RequirementFrameworkMapping::where('requirement_id', 'REQ-UPI-001')
+        ->where('framework_code', 'RBI-CSF')
+        ->first();
+
+    expect($npciMapping)->not->toBeNull()
+        ->and($npciMapping->framework_id)->toBe($frameworks['NPCI-ISR']->id)
+        ->and($npciMapping->clause_reference)->toBe('§1.3 – Scope; B. Protect | 3. Encryption')
+        ->and($rbiMapping)->not->toBeNull()
+        ->and($rbiMapping->framework_id)->toBe($frameworks['RBI-CSF']->id)
+        ->and($rbiMapping->clause_reference)->toBe('Chapter III - Para 11')
+        ->and($import->getMappedRows())->toBe(1)
+        ->and($import->getMappedPairs())->toBe(2);
+});

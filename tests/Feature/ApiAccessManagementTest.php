@@ -503,29 +503,29 @@ test('admin can generate and revoke tokens with proper audit logging', function 
     expect($client->tokens()->where('name', 'production-sync')->exists())->toBeFalse();
 });
 
-test('api rate limit of 3 hits per minute is enforced with 429 response', function () {
+test('api rate limit of 60 hits per minute is enforced with 429 response', function () {
     $data = createClientWithToken(
         permissions: ['controls'],
         ips: ['203.0.113.10'],
         abilities: ['*']
     );
 
-    // Hits 1 to 3 should succeed (HTTP 200)
-    for ($i = 0; $i < 3; $i++) {
+    // Hits 1 to 60 should succeed (HTTP 200)
+    for ($i = 0; $i < 60; $i++) {
         $resp = $this->withServerVariables(['REMOTE_ADDR' => '203.0.113.10'])
             ->withHeader('Authorization', 'Bearer ' . $data['token'])
             ->getJson('/api/v1/controls');
         $resp->assertStatus(200);
     }
 
-    // 4th hit within 1 minute must return HTTP 429
-    $fourthResp = $this->withServerVariables(['REMOTE_ADDR' => '203.0.113.10'])
+    // 61st hit within 1 minute must return HTTP 429
+    $sixtyFirstResp = $this->withServerVariables(['REMOTE_ADDR' => '203.0.113.10'])
         ->withHeader('Authorization', 'Bearer ' . $data['token'])
         ->getJson('/api/v1/controls');
-    $fourthResp->assertStatus(429);
-    $fourthResp->assertJson([
+    $sixtyFirstResp->assertStatus(429);
+    $sixtyFirstResp->assertJson([
         'status' => 'error',
-        'message' => 'Too many requests. You are allowed 3 requests per minute.',
+        'message' => 'Too many requests. You are allowed 60 requests per minute.',
     ]);
 });
 
