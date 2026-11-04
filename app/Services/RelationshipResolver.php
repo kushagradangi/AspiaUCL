@@ -140,16 +140,85 @@ class RelationshipResolver
             }
         }
 
-        $normalized = $this->normalize($raw);
+        $cleanAlphaNum = function (string $s): string {
+            return strtolower(trim(preg_replace('/[^a-z0-9]/i', '', $s)));
+        };
 
-        return Framework::query()
-            ->where(function ($query) use ($raw, $normalized) {
-                $query->whereRaw('LOWER(TRIM(framework_id)) = ?', [strtolower($raw)])
-                    ->orWhereRaw('LOWER(TRIM(framework_code)) = ?', [strtolower($raw)])
-                    ->orWhereRaw('LOWER(TRIM(name)) = ?', [$normalized])
-                    ->orWhereRaw('LOWER(TRIM(slug)) = ?', [$normalized]);
-            })
-            ->first();
+        $candidates = [
+            $raw,
+            trim(preg_replace('/\s*\(.*?\)/', '', $raw)),
+            trim(preg_replace('/:\d{4}/', '', $raw)),
+            trim(preg_replace('/iso\s*\/?\s*iec/i', 'iso', $raw)),
+        ];
+
+        $allFrameworks = Framework::all();
+
+        $aliases = [
+            'nistcsf'       => 'NIST-CSF',
+            'nistsp80053'   => 'NIST80053',
+            'nist80053'     => 'NIST80053',
+            'iso27001'      => 'ISO27001',
+            'iso27002'      => 'ISO27002',
+            'iso27701'      => 'ISO27701',
+            'iso22301'      => 'ISO22301',
+            'cis'           => 'CIS-V8',
+            'cisv8'         => 'CIS-V8',
+            'ciscontrols'   => 'CIS-V8',
+            'ciscontrolsv8' => 'CIS-V8',
+            'pcidss'        => 'PCI-DSS',
+            'pci'           => 'PCI-DSS',
+            'soc2'          => 'SOC2',
+            'cobit'         => 'COBIT2019',
+            'dpdpa'         => 'DPDP',
+            'hipaa'         => 'HIPAA',
+            'gdpr'          => 'GDPR',
+            'dora'          => 'DORA',
+            'nis2'          => 'NIS2',
+        ];
+
+        foreach ($candidates as $cand) {
+            $clean = $cleanAlphaNum($cand);
+            if ($clean === '') continue;
+
+            if (isset($aliases[$clean])) {
+                $aliasCode = $aliases[$clean];
+                $fw = $allFrameworks->first(fn($f) => strtoupper($f->framework_code) === $aliasCode);
+                if ($fw) return $fw;
+            }
+
+            foreach ($allFrameworks as $fw) {
+                if ($cleanAlphaNum($fw->framework_code) === $clean || $cleanAlphaNum($fw->framework_id) === $clean) {
+                    return $fw;
+                }
+                $noParens = trim(preg_replace('/\s*\(.*?\)/', '', (string)$fw->name));
+                if ($cleanAlphaNum($fw->name) === $clean || $cleanAlphaNum($noParens) === $clean) {
+                    return $fw;
+                }
+            }
+
+            foreach ($allFrameworks as $fw) {
+                $codeClean = $cleanAlphaNum($fw->framework_code);
+                if (strlen($clean) >= 3 && strlen($codeClean) >= 3) {
+                    if (str_starts_with($clean, $codeClean) || str_starts_with($codeClean, $clean)) {
+                        return $fw;
+                    }
+                }
+            }
+        }
+
+        // Fuzzy check against framework name
+        foreach ($candidates as $cand) {
+            $clean = $cleanAlphaNum($cand);
+            if (strlen($clean) < 4) continue;
+            foreach ($allFrameworks as $fw) {
+                $nameClean = $cleanAlphaNum($fw->name);
+                if (str_contains($clean, $nameClean) || str_contains($nameClean, $clean)) {
+                    return $fw;
+                }
+            }
+        }
+
+        return null;
     }
 
     private function normalize(string $value): string

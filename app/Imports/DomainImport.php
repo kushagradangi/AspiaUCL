@@ -53,54 +53,99 @@ class DomainImport implements ToCollection, WithEvents
         }
         @ini_set('memory_limit', '512M');
 
-        // Preload all frameworks into memory for fast O(1) matching
+        // Preload all frameworks into memory for fast matching
         $allFrameworks = Framework::all();
-        $fwByCode = [];
-        $fwByName = [];
-        $fwById   = [];
-        $fwByPk   = [];
-        $fwBySlug = [];
+        $cleanAlphaNum = function (string $s): string {
+            return strtolower(trim(preg_replace('/[^a-z0-9]/i', '', $s)));
+        };
 
+        $fwMap = [];
         foreach ($allFrameworks as $fw) {
             if (!empty($fw->framework_code)) {
-                $fwByCode[strtoupper(trim((string)$fw->framework_code))] = $fw;
+                $fwMap[$cleanAlphaNum($fw->framework_code)] = $fw;
             }
             if (!empty($fw->framework_id)) {
-                $fwById[strtoupper(trim((string)$fw->framework_id))] = $fw;
+                $fwMap[$cleanAlphaNum($fw->framework_id)] = $fw;
             }
             if (!empty($fw->name)) {
-                $fwByName[strtoupper(trim((string)$fw->name))] = $fw;
-                $normN = strtolower(trim(preg_replace('/[^a-z0-9]+/i', ' ', (string)$fw->name)));
-                $fwByName[$normN] = $fw;
+                $fwMap[$cleanAlphaNum($fw->name)] = $fw;
+                $noParens = trim(preg_replace('/\s*\(.*?\)/', '', (string)$fw->name));
+                $fwMap[$cleanAlphaNum($noParens)] = $fw;
             }
             if (!empty($fw->slug)) {
-                $fwBySlug[strtoupper(trim((string)$fw->slug))] = $fw;
-                $normS = strtolower(trim(preg_replace('/[^a-z0-9]+/i', ' ', (string)$fw->slug)));
-                $fwBySlug[$normS] = $fw;
+                $fwMap[$cleanAlphaNum($fw->slug)] = $fw;
             }
-            $fwByPk[(string)$fw->id] = $fw;
+            $fwMap[(string)$fw->id] = $fw;
         }
 
-        $findFramework = function (string $reference) use ($fwByCode, $fwById, $fwByName, $fwByPk, $fwBySlug): ?Framework {
+        $aliases = [
+            'nistcsf'       => 'NIST-CSF',
+            'nistsp80053'   => 'NIST80053',
+            'nist80053'     => 'NIST80053',
+            'iso27001'      => 'ISO27001',
+            'iso27002'      => 'ISO27002',
+            'iso27701'      => 'ISO27701',
+            'iso22301'      => 'ISO22301',
+            'cis'           => 'CIS-V8',
+            'cisv8'         => 'CIS-V8',
+            'ciscontrols'   => 'CIS-V8',
+            'ciscontrolsv8' => 'CIS-V8',
+            'pcidss'        => 'PCI-DSS',
+            'pci'           => 'PCI-DSS',
+            'soc2'          => 'SOC2',
+            'cobit'         => 'COBIT2019',
+            'dpdpa'         => 'DPDP',
+            'hipaa'         => 'HIPAA',
+            'gdpr'          => 'GDPR',
+            'dora'          => 'DORA',
+            'nis2'          => 'NIS2',
+        ];
+
+        foreach ($aliases as $alias => $code) {
+            $matchedFw = $allFrameworks->first(fn($f) => strtoupper($f->framework_code) === $code);
+            if ($matchedFw) {
+                $fwMap[$alias] = $matchedFw;
+            }
+        }
+
+        $findFramework = function (string $reference) use ($allFrameworks, $fwMap, $cleanAlphaNum): ?Framework {
             $trimmed = trim($reference);
-            if ($trimmed === '') {
-                return null;
+            if ($trimmed === '') return null;
+
+            $candidates = [
+                $trimmed,
+                trim(preg_replace('/\s*\(.*?\)/', '', $trimmed)),
+                trim(preg_replace('/:\d{4}/', '', $trimmed)),
+                trim(preg_replace('/iso\s*\/?\s*iec/i', 'iso', $trimmed)),
+            ];
+
+            foreach ($candidates as $cand) {
+                if ($cand === '') continue;
+                $clean = $cleanAlphaNum($cand);
+                if ($clean === '') continue;
+
+                if (isset($fwMap[$clean])) {
+                    return $fwMap[$clean];
+                }
+
+                foreach ($allFrameworks as $fw) {
+                    $codeClean = $cleanAlphaNum($fw->framework_code);
+                    if (strlen($clean) >= 3 && strlen($codeClean) >= 3) {
+                        if ($clean === $codeClean || str_starts_with($clean, $codeClean) || str_starts_with($codeClean, $clean)) {
+                            return $fw;
+                        }
+                    }
+                }
             }
 
-            $upper = strtoupper($trimmed);
-            if (isset($fwByCode[$upper])) return $fwByCode[$upper];
-            if (isset($fwById[$upper]))   return $fwById[$upper];
-            if (isset($fwByPk[$upper]))   return $fwByPk[$upper];
-            if (isset($fwByName[$upper])) return $fwByName[$upper];
-            if (isset($fwBySlug[$upper])) return $fwBySlug[$upper];
-
-            $norm = strtolower(trim(preg_replace('/[^a-z0-9]+/i', ' ', $trimmed)));
-            if (isset($fwByName[$norm])) return $fwByName[$norm];
-            if (isset($fwBySlug[$norm])) return $fwBySlug[$norm];
-
-            foreach ($fwByName as $key => $fw) {
-                if (strlen($norm) >= 3 && (str_contains($key, $norm) || str_contains($norm, $key))) {
-                    return $fw;
+            foreach ($candidates as $cand) {
+                $clean = $cleanAlphaNum($cand);
+                if (strlen($clean) < 4) continue;
+                foreach ($allFrameworks as $fw) {
+                    $nameClean = $cleanAlphaNum($fw->name);
+                    if (str_contains($clean, $nameClean) || str_contains($nameClean, $clean)) {
+                        return $fw;
+                    }
                 }
             }
 
