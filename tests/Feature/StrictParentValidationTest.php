@@ -2,12 +2,14 @@
 
 use App\Imports\ControlImport;
 use App\Imports\DomainImport;
+use App\Imports\RequirementEvidenceMappingImport;
 use App\Imports\RequirementFrameworkMappingImport;
 use App\Imports\RequirementImport;
 use App\Models\Control;
 use App\Models\Domain;
 use App\Models\Framework;
 use App\Models\Requirement;
+use App\Models\RequirementEvidenceMapping;
 use App\Models\RequirementFrameworkMapping;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -801,5 +803,159 @@ it('rejects framework mapping import and prevents insertion when requirement doe
     expect(RequirementFrameworkMapping::where('requirement_id', 'REQ-VALID-EXISTS')->exists())->toBeFalse();
     expect(RequirementFrameworkMapping::count())->toBe(0);
 });
+
+/*
+|--------------------------------------------------------------------------
+| RequirementEvidenceMapping Module: Requirement Existence Validation & Safety
+|--------------------------------------------------------------------------
+*/
+
+it('allows evidence mapping creation when referenced requirement exists', function () {
+    $user = User::factory()->create();
+    Requirement::create([
+        'requirement_id'    => 'REQ-EVID-001',
+        'control_id'        => 'CTRL-001',
+        'requirement_title' => 'Logging Policy',
+        'requirement'       => 'Must maintain system logs.',
+    ]);
+
+    $response = $this->actingAs($user)->post(route('requirement-evidence-mappings.store'), [
+        'requirement_id'    => 'REQ-EVID-001',
+        'requirement_title' => 'Logging Policy',
+        'evidence_type'     => 'System Logs',
+    ]);
+
+    $response->assertRedirect(route('requirement-evidence-mappings.index'));
+    $response->assertSessionHas('success');
+
+    $mapping = RequirementEvidenceMapping::where('requirement_id', 'REQ-EVID-001')->first();
+    expect($mapping)->not->toBeNull()
+        ->and($mapping->evidence_type)->toBe('System Logs');
+});
+
+it('blocks evidence mapping creation when referenced requirement does not exist', function () {
+    $user = User::factory()->create();
+
+    $response = $this->actingAs($user)->post(route('requirement-evidence-mappings.store'), [
+        'requirement_id'    => 'REQ-NOTFOUND-001',
+        'requirement_title' => 'Unsaved Policy',
+        'evidence_type'     => 'Policy Document',
+    ]);
+
+    $response->assertSessionHasErrors('requirement_id');
+    expect(RequirementEvidenceMapping::where('requirement_id', 'REQ-NOTFOUND-001')->exists())->toBeFalse();
+});
+
+it('blocks evidence mapping update when referenced requirement does not exist', function () {
+    $user = User::factory()->create();
+    Requirement::create([
+        'requirement_id'    => 'REQ-EVID-INIT',
+        'control_id'        => 'CTRL-001',
+        'requirement_title' => 'Initial Title',
+        'requirement'       => 'Initial statement.',
+    ]);
+
+    $mapping = RequirementEvidenceMapping::create([
+        'requirement_id'    => 'REQ-EVID-INIT',
+        'control_id'        => 'CTRL-001',
+        'requirement_title' => 'Initial Title',
+    ]);
+
+    $response = $this->actingAs($user)->put(route('requirement-evidence-mappings.update', $mapping), [
+        'requirement_id'    => 'REQ-GHOST-999',
+        'requirement_title' => 'Initial Title',
+    ]);
+
+    $response->assertSessionHasErrors('requirement_id');
+    $mapping->refresh();
+    expect($mapping->requirement_id)->toBe('REQ-EVID-INIT');
+});
+
+it('imports evidence mappings when requirements exist in requirements', function () {
+    Requirement::create([
+        'requirement_id'    => 'REQ-EVID-IMP-01',
+        'control_id'        => 'CTRL-001',
+        'requirement_title' => 'Audit Trails',
+        'requirement'       => 'Maintain audit trails.',
+    ]);
+
+    $rows = new Collection([
+        [
+            'requirement_id'    => 'REQ-EVID-IMP-01',
+            'requirement_title' => 'Audit Trails',
+            'evidence_type'     => 'Audit Log Export',
+        ],
+    ]);
+
+    $import = new RequirementEvidenceMappingImport();
+    $import->collection($rows);
+
+    expect(RequirementEvidenceMapping::where('requirement_id', 'REQ-EVID-IMP-01')->exists())->toBeTrue();
+});
+
+it('rejects evidence mapping import and prevents insertion when requirement does not exist in requirements', function () {
+    Requirement::create([
+        'requirement_id'    => 'REQ-VALID-IMP-02',
+        'control_id'        => 'CTRL-001',
+        'requirement_title' => 'Backup Policy',
+        'requirement'       => 'Maintain backups.',
+    ]);
+
+    $rows = new Collection([
+        [
+            'requirement_id'    => 'REQ-VALID-IMP-02',
+            'requirement_title' => 'Backup Policy',
+            'evidence_type'     => 'Backup Screenshot',
+        ],
+        [
+            'requirement_id'    => 'REQ-MISSING-IMP-02',
+            'requirement_title' => 'Missing Requirement',
+            'evidence_type'     => 'Database Dump',
+        ],
+    ]);
+
+    $import = new RequirementEvidenceMappingImport();
+
+    try {
+        $import->collection($rows);
+        $this->fail('Expected ValidationException was not thrown.');
+    } catch (ValidationException $e) {
+        $errors = $e->errors()['import'] ?? [];
+        expect($errors)->toContain('Row 3: Requirement "Missing Requirement" (REQ-MISSING-IMP-02) does not exist in requirements.');
+    }
+
+    // Verify rollback / zero insertion
+    expect(RequirementEvidenceMapping::where('requirement_id', 'REQ-VALID-IMP-02')->exists())->toBeFalse();
+    expect(RequirementEvidenceMapping::count())->toBe(0);
+});
+
+it('collects all missing requirement errors across rows in evidence mapping import', function () {
+    $rows = new Collection([
+        [
+            'requirement_id'    => 'REQ-ABSENT-1',
+            'requirement_title' => 'First Absent',
+            'evidence_type'     => 'Type A',
+        ],
+        [
+            'requirement_id'    => 'REQ-ABSENT-2',
+            'evidence_type'     => 'Type B',
+        ],
+    ]);
+
+    $import = new RequirementEvidenceMappingImport();
+
+    try {
+        $import->collection($rows);
+        $this->fail('Expected ValidationException was not thrown.');
+    } catch (ValidationException $e) {
+        $errors = $e->errors()['import'] ?? [];
+        expect(count($errors))->toBe(2);
+        expect($errors[0])->toContain('Row 2: Requirement "First Absent" (REQ-ABSENT-1) does not exist in requirements.');
+        expect($errors[1])->toContain('Row 3: Requirement "REQ-ABSENT-2" does not exist in requirements.');
+    }
+
+    expect(RequirementEvidenceMapping::count())->toBe(0);
+});
+
 
 

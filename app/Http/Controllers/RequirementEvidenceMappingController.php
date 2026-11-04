@@ -93,10 +93,23 @@ class RequirementEvidenceMappingController extends Controller
             'test_method'                => 'nullable|string|max:255',
         ]);
 
+        // Validate that requirement exists in requirements
+        $reqIdentifier = trim((string)($validated['requirement_id'] ?? ''));
+        $normReqId = strtoupper($reqIdentifier);
+        $req = Requirement::whereRaw('UPPER(TRIM(requirement_id)) = ?', [$normReqId])->first();
+
+        if (!$req) {
+            $errorMessage = "Cannot save Evidence Mapping: Requirement \"{$reqIdentifier}\" does not exist.";
+
+            return back()
+                ->withErrors(['requirement_id' => $errorMessage])
+                ->with('error', $errorMessage)
+                ->withInput();
+        }
+
         // Auto-resolve control_id from Requirement if not provided
         if (empty($validated['control_id'])) {
-            $req = Requirement::where('requirement_id', $validated['requirement_id'])->first();
-            $validated['control_id'] = $req?->control_id ?: preg_replace('/-R\d+$/i', '', $validated['requirement_id']);
+            $validated['control_id'] = $req->control_id ?: preg_replace('/-R\d+$/i', '', $validated['requirement_id']);
         }
 
         try {
@@ -150,9 +163,22 @@ class RequirementEvidenceMappingController extends Controller
             'test_method'                => 'nullable|string|max:255',
         ]);
 
+        // Validate that requirement exists in requirements
+        $reqIdentifier = trim((string)($validated['requirement_id'] ?? ''));
+        $normReqId = strtoupper($reqIdentifier);
+        $req = Requirement::whereRaw('UPPER(TRIM(requirement_id)) = ?', [$normReqId])->first();
+
+        if (!$req) {
+            $errorMessage = "Cannot save Evidence Mapping: Requirement \"{$reqIdentifier}\" does not exist.";
+
+            return back()
+                ->withErrors(['requirement_id' => $errorMessage])
+                ->with('error', $errorMessage)
+                ->withInput();
+        }
+
         if (empty($validated['control_id'])) {
-            $req = Requirement::where('requirement_id', $validated['requirement_id'])->first();
-            $validated['control_id'] = $req?->control_id ?: preg_replace('/-R\d+$/i', '', $validated['requirement_id']);
+            $validated['control_id'] = $req->control_id ?: preg_replace('/-R\d+$/i', '', $validated['requirement_id']);
         }
 
         try {

@@ -7,6 +7,7 @@ use App\Models\Requirement;
 use App\Models\RequirementEvidenceMapping;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\ValidationException;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithColumnLimit;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
@@ -87,6 +88,46 @@ class RequirementEvidenceMappingImport implements ToCollection, WithHeadingRow, 
         }
 
         $maxDisplayOrder = RequirementEvidenceMapping::max('display_order') ?? 0;
+
+        // Validate that all requirements referenced in the requirement evidence mapping strictly exist in requirements
+        $validationErrors = [];
+        foreach ($rows as $index => $row) {
+            $rowArray = $row instanceof Collection ? $row->toArray() : (array) $row;
+            $normalized = [];
+
+            foreach ($rowArray as $k => $v) {
+                $cleanKey = preg_replace('/[^a-z0-9]/', '', strtolower(trim((string)$k)));
+                $normalized[$cleanKey] = is_string($v) ? trim($v) : $v;
+            }
+
+            $reqId = $this->extractField($normalized, [
+                'requirementid', 'reqid', 'id', 'requirementcode'
+            ]);
+
+            if (empty($reqId)) {
+                continue;
+            }
+
+            $reqIdUpper = strtoupper(trim((string)$reqId));
+            if (!$requirementsMap->has($reqIdUpper)) {
+                $excelRow = $index + 2;
+                $title = $this->extractField($normalized, [
+                    'requirementtitle', 'title', 'requirementname', 'name'
+                ]);
+                $titleStr = $title ? trim($title) : '';
+                if ($titleStr !== '') {
+                    $validationErrors[] = "Row {$excelRow}: Requirement \"{$titleStr}\" ({$reqId}) does not exist in requirements.";
+                } else {
+                    $validationErrors[] = "Row {$excelRow}: Requirement \"{$reqId}\" does not exist in requirements.";
+                }
+            }
+        }
+
+        if (!empty($validationErrors)) {
+            throw ValidationException::withMessages([
+                'import' => $validationErrors,
+            ]);
+        }
 
         DB::transaction(function () use ($rows, $requirementsMap, &$existingGrouped, &$maxDisplayOrder) {
             foreach ($rows as $row) {
