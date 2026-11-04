@@ -3,18 +3,19 @@
 namespace App\Imports;
 
 use App\Models\Domain;
+use App\Models\Framework;
 use App\Services\RelationshipResolver;
-use Illuminate\Database\Eloquent\Model;
-use Maatwebsite\Excel\Concerns\ToModel;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
+use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithEvents;
-use Maatwebsite\Excel\Concerns\WithStartRow;
 use Maatwebsite\Excel\Events\AfterImport;
 
-class DomainImport implements ToModel, WithStartRow, WithEvents
+class DomainImport implements ToCollection, WithEvents
 {
     private int $createdCount = 0;
     private int $updatedCount = 0;
-    private int $currentRow = 0;
 
     public function getCreatedCount(): int
     {
@@ -39,358 +40,331 @@ class DomainImport implements ToModel, WithStartRow, WithEvents
     }
 
     /**
-     * Excel row 1 contains the headers.
-     * Start importing from row 2.
+     * Process the entire collection of rows.
      */
-    public function startRow(): int
+    public function collection(Collection $rows): void
     {
-        return 2;
-    }
-
-
-    /**
-     * Import one Excel row.
-     */
-    public function model(array $row): Model|array|null
-    {
-        // Skip completely empty rows
-        if (
-            empty($row[0]) &&
-            empty($row[1]) &&
-            empty($row[2])
-        ) {
-            return null;
+        if ($rows->isEmpty()) {
+            return;
         }
 
-        $this->currentRow++;
+        if (function_exists('set_time_limit')) {
+            @set_time_limit(600);
+        }
+        @ini_set('memory_limit', '512M');
 
-        $domainId = $this->value($row, 0);
-        $domainCode = $this->value($row, 1);
-        $name = $this->value($row, 2);
+        // Preload all frameworks into memory for fast O(1) matching
+        $allFrameworks = Framework::all();
+        $fwByCode = [];
+        $fwByName = [];
+        $fwById   = [];
+        $fwByPk   = [];
+        $fwBySlug = [];
 
-        if (empty($domainId) || empty($name)) {
-            return null;
+        foreach ($allFrameworks as $fw) {
+            if (!empty($fw->framework_code)) {
+                $fwByCode[strtoupper(trim((string)$fw->framework_code))] = $fw;
+            }
+            if (!empty($fw->framework_id)) {
+                $fwById[strtoupper(trim((string)$fw->framework_id))] = $fw;
+            }
+            if (!empty($fw->name)) {
+                $fwByName[strtoupper(trim((string)$fw->name))] = $fw;
+                $normN = strtolower(trim(preg_replace('/[^a-z0-9]+/i', ' ', (string)$fw->name)));
+                $fwByName[$normN] = $fw;
+            }
+            if (!empty($fw->slug)) {
+                $fwBySlug[strtoupper(trim((string)$fw->slug))] = $fw;
+                $normS = strtolower(trim(preg_replace('/[^a-z0-9]+/i', ' ', (string)$fw->slug)));
+                $fwBySlug[$normS] = $fw;
+            }
+            $fwByPk[(string)$fw->id] = $fw;
         }
 
-        $relatedFrameworks = $this->value($row, 23);
-        $frameworkId = null;
-        if ($relatedFrameworks) {
-            $firstFwName = trim(explode(',', $relatedFrameworks)[0]);
-            $matchedFw = \App\Models\Framework::where('name', 'like', "%{$firstFwName}%")
-                ->orWhere('framework_code', 'like', "%{$firstFwName}%")
-                ->first();
-            if ($matchedFw) {
-                $frameworkId = $matchedFw->id;
+        $findFramework = function (string $reference) use ($fwByCode, $fwById, $fwByName, $fwByPk, $fwBySlug): ?Framework {
+            $trimmed = trim($reference);
+            if ($trimmed === '') {
+                return null;
+            }
+
+            $upper = strtoupper($trimmed);
+            if (isset($fwByCode[$upper])) return $fwByCode[$upper];
+            if (isset($fwById[$upper]))   return $fwById[$upper];
+            if (isset($fwByPk[$upper]))   return $fwByPk[$upper];
+            if (isset($fwByName[$upper])) return $fwByName[$upper];
+            if (isset($fwBySlug[$upper])) return $fwBySlug[$upper];
+
+            $norm = strtolower(trim(preg_replace('/[^a-z0-9]+/i', ' ', $trimmed)));
+            if (isset($fwByName[$norm])) return $fwByName[$norm];
+            if (isset($fwBySlug[$norm])) return $fwBySlug[$norm];
+
+            foreach ($fwByName as $key => $fw) {
+                if (strlen($norm) >= 3 && (str_contains($key, $norm) || str_contains($norm, $key))) {
+                    return $fw;
+                }
+            }
+
+            return null;
+        };
+
+        // Existing domains for replace / update
+        $existingDomainsById = Domain::all()->keyBy(fn ($d) => strtoupper(trim((string)$d->domain_id)));
+        $existingDomainsByCode = Domain::whereNotNull('domain_code')->get()->keyBy(fn ($d) => strtoupper(trim((string)$d->domain_code)));
+        $usedSlugs = Domain::pluck('slug')->filter()->map(fn ($s) => strtolower($s))->flip()->toArray();
+
+        // Field synonyms mapping
+        $fieldSynonyms = [
+            'domain_id'               => ['domain_id', 'domainid', 'id'],
+            'domain_code'             => ['domain_code', 'domaincode', 'code'],
+            'name'                    => ['name', 'domain_name', 'domainname', 'title'],
+            'slug'                    => ['slug'],
+            'purpose'                 => ['purpose'],
+            'scope'                   => ['scope'],
+            'business_owner'          => ['business_owner', 'businessowner', 'owner'],
+            'description'             => ['description', 'desc'],
+            'display_order'           => ['display_order', 'displayorder', 'order'],
+            'status'                  => ['status', 'state'],
+            'version'                 => ['version', 'ver', 'v'],
+            'short_overview'          => ['short_overview', 'shortoverview', 'overview'],
+            'business_objectives'     => ['business_objectives', 'businessobjectives', 'objectives'],
+            'business_risks'          => ['business_risks', 'businessrisks', 'risks'],
+            'key_capabilities'        => ['key_capabilities', 'keycapabilities', 'capabilities'],
+            'typical_stakeholders'    => ['typical_stakeholders', 'typicalstakeholders', 'stakeholders'],
+            'applicable_industries'   => ['applicable_industries', 'applicableindustries', 'industries', 'industry'],
+            'applicable_technologies' => ['applicable_technologies', 'applicabletechnologies', 'technologies', 'technology'],
+            'keywords'                => ['keywords', 'keyword'],
+            'tags'                    => ['tags', 'tag'],
+            'why_domain_matters'      => ['why_domain_matters', 'whydomainmatters', 'why_it_matters'],
+            'common_challenges'       => ['common_challenges', 'commonchallenges', 'challenges'],
+            'related_domains'         => ['related_domains', 'relateddomains'],
+            'related_frameworks'      => ['related_frameworks', 'relatedframeworks', 'frameworks', 'framework', 'framework_id', 'mapped_frameworks', 'framework_code'],
+        ];
+
+        $defaultIndexes = [
+            'domain_id'               => 0,
+            'domain_code'             => 1,
+            'name'                    => 2,
+            'slug'                    => 3,
+            'purpose'                 => 4,
+            'scope'                   => 5,
+            'business_owner'          => 6,
+            'description'             => 7,
+            'display_order'           => 8,
+            'status'                  => 9,
+            'version'                 => 10,
+            'short_overview'          => 11,
+            'business_objectives'     => 12,
+            'business_risks'          => 13,
+            'key_capabilities'        => 14,
+            'typical_stakeholders'    => 15,
+            'applicable_industries'   => 16,
+            'applicable_technologies' => 17,
+            'keywords'                => 18,
+            'tags'                    => 19,
+            'why_domain_matters'      => 20,
+            'common_challenges'       => 21,
+            'related_domains'         => 22,
+            'related_frameworks'      => 23,
+        ];
+
+        $firstRow = $rows->first();
+        $firstRowArray = $firstRow instanceof Collection ? $firstRow->toArray() : (array) $firstRow;
+        $hasHeader = false;
+        $headerMap = [];
+
+        foreach ($firstRowArray as $idx => $val) {
+            $norm = strtolower(trim(preg_replace('/[^a-zA-Z0-9]+/', '_', (string) $val), '_'));
+            foreach ($fieldSynonyms as $field => $synonyms) {
+                if (in_array($norm, $synonyms, true)) {
+                    $headerMap[$idx] = $field;
+                    $hasHeader = true;
+                    break;
+                }
             }
         }
 
-        // Check if existing domain should be replaced / updated
-        $existing = Domain::where('domain_id', $domainId)
-            ->when($domainCode, function ($q) use ($domainCode) {
-                return $q->orWhere('domain_code', $domainCode);
-            })
-            ->first();
+        $dataRows = $hasHeader ? $rows->slice(1) : $rows;
 
-        if ($existing) {
-            $existing->update([
-                'framework_id' => $frameworkId ?? $existing->framework_id,
-                'domain_id' => $domainId,
-                'domain_code' => $domainCode ?? $existing->domain_code,
-                'name' => $name,
-                'slug' => $this->value($row, 3) ?? $existing->slug,
-                'purpose' => $this->value($row, 4) ?? $existing->purpose,
-                'scope' => $this->value($row, 5) ?? $existing->scope,
-                'business_owner' => $this->value($row, 6) ?? $existing->business_owner,
-                'description' => $this->value($row, 7) ?? $existing->description,
-                'display_order' => ($this->value($row, 8) !== null && $this->value($row, 8) !== '')
-                    ? (int) $this->value($row, 8)
-                    : $existing->display_order,
-                'status' => $this->value($row, 9) ?: ($existing->status ?: 'Active'),
-                'version' => $this->value($row, 10) ?? $existing->version,
-                'short_overview' => $this->value($row, 11) ?? $existing->short_overview,
-                'business_objectives' => $this->value($row, 12) ?? $existing->business_objectives,
-                'business_risks' => $this->value($row, 13) ?? $existing->business_risks,
-                'key_capabilities' => $this->value($row, 14) ?? $existing->key_capabilities,
-                'typical_stakeholders' => $this->value($row, 15) ?? $existing->typical_stakeholders,
-                'applicable_industries' => $this->value($row, 16) ?? $existing->applicable_industries,
-                'applicable_technologies' => $this->value($row, 17) ?? $existing->applicable_technologies,
-                'keywords' => $this->value($row, 18) ?? $existing->keywords,
-                'tags' => $this->value($row, 19) ?? $existing->tags,
-                'why_domain_matters' => $this->value($row, 20) ?? $existing->why_domain_matters,
-                'common_challenges' => $this->value($row, 21) ?? $existing->common_challenges,
-                'related_domains' => $this->value($row, 22) ?? $existing->related_domains,
-                'related_frameworks' => $this->value($row, 23) ?? $existing->related_frameworks,
+        $validationErrors = [];
+        $recordsToProcess = [];
+
+        foreach ($dataRows as $rowIndex => $row) {
+            $rowArray = $row instanceof Collection ? $row->toArray() : (array) $row;
+            $rowValues = array_values($rowArray);
+
+            $hasContent = false;
+            foreach ($rowValues as $v) {
+                if ($v !== null && trim((string)$v) !== '') {
+                    $hasContent = true;
+                    break;
+                }
+            }
+            if (!$hasContent) {
+                continue;
+            }
+
+            $getField = function ($fieldName) use ($rowArray, $rowValues, $hasHeader, $headerMap, $defaultIndexes, $fieldSynonyms) {
+                if ($hasHeader) {
+                    foreach ($headerMap as $cIndex => $mappedField) {
+                        if ($mappedField === $fieldName && isset($rowValues[$cIndex])) {
+                            $v = trim((string) $rowValues[$cIndex]);
+                            if ($v !== '') return $v;
+                        }
+                    }
+                }
+
+                $synonyms = $fieldSynonyms[$fieldName] ?? [$fieldName];
+                foreach ($rowArray as $k => $v) {
+                    $normK = strtolower(trim(preg_replace('/[^a-zA-Z0-9]+/', '_', (string) $k), '_'));
+                    if (in_array($normK, $synonyms, true)) {
+                        $val = trim((string) $v);
+                        if ($val !== '') return $val;
+                    }
+                }
+
+                $defIdx = $defaultIndexes[$fieldName] ?? null;
+                if ($defIdx !== null && isset($rowValues[$defIdx])) {
+                    $v = trim((string) $rowValues[$defIdx]);
+                    return $v !== '' ? $v : null;
+                }
+
+                return null;
+            };
+
+            $domainId   = $getField('domain_id');
+            $domainCode = $getField('domain_code');
+            $name       = $getField('name');
+
+            if (empty($domainId) || empty($name)) {
+                continue;
+            }
+
+            $excelRow = $rowIndex + 1;
+
+            $rawFrameworks = $getField('related_frameworks');
+            $matchedFrameworks = [];
+
+            if (!empty($rawFrameworks)) {
+                $tokens = preg_split('/[,;|\r\n]+/', (string) $rawFrameworks);
+                foreach ($tokens as $token) {
+                    $fw = $findFramework($token);
+                    if ($fw && !isset($matchedFrameworks[$fw->id])) {
+                        $matchedFrameworks[$fw->id] = $fw;
+                    }
+                }
+            }
+
+            if (empty($matchedFrameworks)) {
+                $refDisplay = $rawFrameworks !== null && trim((string)$rawFrameworks) !== ''
+                    ? "\"{$rawFrameworks}\""
+                    : 'None provided';
+                $validationErrors[] = "Row {$excelRow}: Domain \"{$name}\" ({$domainId}) references non-existent Framework(s) {$refDisplay}. At least 1 existing Framework is required.";
+                continue;
+            }
+
+            $recordsToProcess[] = [
+                'domainId'          => $domainId,
+                'domainCode'        => $domainCode,
+                'name'              => $name,
+                'matchedFrameworks' => array_values($matchedFrameworks),
+                'primaryFrameworkId'=> array_values($matchedFrameworks)[0]->id,
+                'getField'          => $getField,
+                'rawFrameworks'     => $rawFrameworks,
+            ];
+        }
+
+        if (!empty($validationErrors)) {
+            throw \Illuminate\Validation\ValidationException::withMessages([
+                'import' => $validationErrors,
             ]);
-
-            $this->updatedCount++;
-            return null;
         }
 
-        $this->createdCount++;
-
-        return new Domain([
-
-            'framework_id' => $frameworkId,
-
-            /*
-            |--------------------------------------------------------------------------
-            | 1. Domain ID
-            |--------------------------------------------------------------------------
-            */
-
-            'domain_id' =>
-                $this->value($row, 0),
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | 2. Domain Code
-            |--------------------------------------------------------------------------
-            */
-
-            'domain_code' =>
-                $this->value($row, 1),
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | 3. Domain Name
-            |--------------------------------------------------------------------------
-            */
-
-            'name' =>
-                $this->value($row, 2),
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | 4. Slug
-            |--------------------------------------------------------------------------
-            */
-
-            'slug' =>
-                $this->value($row, 3),
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | 5. Purpose
-            |--------------------------------------------------------------------------
-            */
-
-            'purpose' =>
-                $this->value($row, 4),
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | 6. Scope
-            |--------------------------------------------------------------------------
-            */
-
-            'scope' =>
-                $this->value($row, 5),
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | 7. Business Owner
-            |--------------------------------------------------------------------------
-            */
-
-            'business_owner' =>
-                $this->value($row, 6),
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | 8. Description
-            |--------------------------------------------------------------------------
-            */
-
-            'description' =>
-                $this->value($row, 7),
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | 9. Display Order
-            |--------------------------------------------------------------------------
-            */
-
-            'display_order' =>
-                $this->value($row, 8) !== null &&
-                $this->value($row, 8) !== ''
-                    ? (int) $this->value($row, 8)
-                    : $this->currentRow,
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | 10. Status
-            |--------------------------------------------------------------------------
-            */
-
-            'status' =>
-                $this->value($row, 9) ?: 'Active',
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | 11. Version
-            |--------------------------------------------------------------------------
-            */
-
-            'version' =>
-                $this->value($row, 10),
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | 12. Short Overview
-            |--------------------------------------------------------------------------
-            */
-
-            'short_overview' =>
-                $this->value($row, 11),
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | 13. Business Objectives
-            |--------------------------------------------------------------------------
-            */
-
-            'business_objectives' =>
-                $this->value($row, 12),
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | 14. Business Risks
-            |--------------------------------------------------------------------------
-            */
-
-            'business_risks' =>
-                $this->value($row, 13),
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | 15. Key Capabilities
-            |--------------------------------------------------------------------------
-            */
-
-            'key_capabilities' =>
-                $this->value($row, 14),
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | 16. Typical Stakeholders
-            |--------------------------------------------------------------------------
-            */
-
-            'typical_stakeholders' =>
-                $this->value($row, 15),
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | 17. Applicable Industries
-            |--------------------------------------------------------------------------
-            */
-
-            'applicable_industries' =>
-                $this->value($row, 16),
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | 18. Applicable Technologies
-            |--------------------------------------------------------------------------
-            */
-
-            'applicable_technologies' =>
-                $this->value($row, 17),
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | 19. Keywords
-            |--------------------------------------------------------------------------
-            */
-
-            'keywords' =>
-                $this->value($row, 18),
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | 20. Tags
-            |--------------------------------------------------------------------------
-            */
-
-            'tags' =>
-                $this->value($row, 19),
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | 21. Why This Domain Matters
-            |--------------------------------------------------------------------------
-            */
-
-            'why_domain_matters' =>
-                $this->value($row, 20),
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | 22. Common Challenges
-            |--------------------------------------------------------------------------
-            */
-
-            'common_challenges' =>
-                $this->value($row, 21),
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | 23. Related Domains
-            |--------------------------------------------------------------------------
-            */
-
-            'related_domains' =>
-                $this->value($row, 22),
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | 24. Related Frameworks
-            |--------------------------------------------------------------------------
-            */
-
-            'related_frameworks' =>
-                $this->value($row, 23),
-
-        ]);
-    }
-
-
-    /**
-     * Safely get an Excel column value.
-     */
-    private function value(array $row, int $index): ?string
-    {
-        if (!isset($row[$index])) {
-            return null;
-        }
-
-        $value = trim((string) $row[$index]);
-
-        return $value === ''
-            ? null
-            : $value;
+        DB::transaction(function () use (
+            $recordsToProcess,
+            &$existingDomainsById,
+            &$existingDomainsByCode,
+            &$usedSlugs
+        ) {
+            $currentRow = Domain::max('display_order') ?? 0;
+
+            foreach ($recordsToProcess as $rec) {
+                $domainId           = $rec['domainId'];
+                $domainCode         = $rec['domainCode'];
+                $name               = $rec['name'];
+                $matchedFrameworks  = $rec['matchedFrameworks'];
+                $primaryFrameworkId = $rec['primaryFrameworkId'];
+                $getField           = $rec['getField'];
+                $rawFrameworks      = $rec['rawFrameworks'];
+
+                $currentRow++;
+
+                // Slug generation
+                $customSlug = $getField('slug');
+                if (!empty($customSlug)) {
+                    $slug = Str::slug($customSlug);
+                } else {
+                    $baseSlug = Str::slug($name);
+                    $slug = $baseSlug;
+                    $counter = 1;
+                    while (isset($usedSlugs[$slug])) {
+                        $slug = $baseSlug . '-' . $counter;
+                        $counter++;
+                    }
+                }
+                $usedSlugs[$slug] = true;
+
+                $data = [
+                    'framework_id'            => $primaryFrameworkId,
+                    'domain_id'               => $domainId,
+                    'domain_code'             => $domainCode,
+                    'name'                    => $name,
+                    'slug'                    => $slug,
+                    'purpose'                 => $getField('purpose'),
+                    'scope'                   => $getField('scope'),
+                    'business_owner'          => $getField('business_owner'),
+                    'description'             => $getField('description'),
+                    'display_order'           => is_numeric($getField('display_order')) ? (int) $getField('display_order') : $currentRow,
+                    'status'                  => $getField('status') ?: 'Active',
+                    'version'                 => $getField('version'),
+                    'short_overview'          => $getField('short_overview'),
+                    'business_objectives'     => $getField('business_objectives'),
+                    'business_risks'          => $getField('business_risks'),
+                    'key_capabilities'        => $getField('key_capabilities'),
+                    'typical_stakeholders'    => $getField('typical_stakeholders'),
+                    'applicable_industries'   => $getField('applicable_industries'),
+                    'applicable_technologies' => $getField('applicable_technologies'),
+                    'keywords'                => $getField('keywords'),
+                    'tags'                    => $getField('tags'),
+                    'why_domain_matters'      => $getField('why_domain_matters'),
+                    'common_challenges'       => $getField('common_challenges'),
+                    'related_domains'         => $getField('related_domains'),
+                    'related_frameworks'      => $rawFrameworks,
+                ];
+
+                // Check existing
+                $existing = null;
+                $upperId = strtoupper(trim((string)$domainId));
+                if (isset($existingDomainsById[$upperId])) {
+                    $existing = $existingDomainsById[$upperId];
+                } elseif ($domainCode && isset($existingDomainsByCode[strtoupper(trim((string)$domainCode))])) {
+                    $existing = $existingDomainsByCode[strtoupper(trim((string)$domainCode))];
+                }
+
+                if ($existing) {
+                    $data['slug'] = $existing->slug ?: $data['slug'];
+                    $existing->update($data);
+                    $existing->frameworks()->syncWithoutDetaching(collect($matchedFrameworks)->pluck('id')->all());
+                    $this->updatedCount++;
+                } else {
+                    $domain = Domain::create($data);
+                    $domain->frameworks()->syncWithoutDetaching(collect($matchedFrameworks)->pluck('id')->all());
+                    $existingDomainsById[$upperId] = $domain;
+                    if ($domainCode) {
+                        $existingDomainsByCode[strtoupper(trim((string)$domainCode))] = $domain;
+                    }
+                    $this->createdCount++;
+                }
+            }
+        });
     }
 }

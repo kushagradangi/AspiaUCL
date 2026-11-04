@@ -5,6 +5,7 @@ use App\Imports\DomainImport;
 use App\Imports\RequirementImport;
 use App\Models\Control;
 use App\Models\Domain;
+use App\Models\Framework;
 use App\Models\Requirement;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -15,66 +16,176 @@ uses(RefreshDatabase::class);
 
 /*
 |--------------------------------------------------------------------------
-| Domains Module: Independent Creation & Updating
+| Domains Module: Mapped Frameworks Validation
 |--------------------------------------------------------------------------
 */
 
-it('allows domain creation independently without framework', function () {
+it('allows domain creation when mapped framework exists via framework_id', function () {
     $user = User::factory()->create();
-
-    $response = $this->actingAs($user)->post(route('domains.store'), [
-        'domain_id'   => 'DOM-INDEP-1',
-        'domain_code' => 'INDEP1',
-        'name'        => 'Independent Domain',
-        'status'      => 'Active',
+    $fw = Framework::create([
+        'framework_id'   => 'FW-ISO-01',
+        'framework_code' => 'ISO27001',
+        'name'           => 'ISO/IEC 27001',
+        'slug'           => 'iso-iec-27001',
     ]);
 
-    $response->assertRedirect(route('domains.index'));
-    $response->assertSessionHas('success');
-
-    expect(Domain::where('domain_id', 'DOM-INDEP-1')->exists())->toBeTrue();
-    $domain = Domain::where('domain_id', 'DOM-INDEP-1')->first();
-    expect($domain->framework_id)->toBeNull();
-});
-
-it('allows domain creation even if non-existent framework_id is passed', function () {
-    $user = User::factory()->create();
-
     $response = $this->actingAs($user)->post(route('domains.store'), [
-        'framework_id' => 99999, // non-existent framework
-        'domain_id'    => 'DOM-INDEP-2',
-        'domain_code'  => 'INDEP2',
-        'name'         => 'Independent Domain 2',
+        'framework_id' => $fw->id,
+        'domain_id'    => 'DOM-SEC-01',
+        'domain_code'  => 'SEC01',
+        'name'         => 'Security Domain',
         'status'       => 'Active',
     ]);
 
     $response->assertRedirect(route('domains.index'));
     $response->assertSessionHas('success');
 
-    $domain = Domain::where('domain_id', 'DOM-INDEP-2')->first();
+    $domain = Domain::where('domain_id', 'DOM-SEC-01')->first();
     expect($domain)->not->toBeNull();
-    expect($domain->framework_id)->toBeNull();
+    expect($domain->framework_id)->toBe($fw->id);
+    expect($domain->frameworks->contains($fw->id))->toBeTrue();
 });
 
-it('allows domain update independently without framework', function () {
+it('allows domain creation when mapped framework exists via related_frameworks', function () {
     $user = User::factory()->create();
-    $domain = Domain::create([
-        'domain_id'   => 'DOM-INDEP-3',
-        'domain_code' => 'INDEP3',
-        'name'        => 'Domain 3',
-        'status'      => 'Active',
+    $fw = Framework::create([
+        'framework_id'   => 'FW-NIST-01',
+        'framework_code' => 'NIST-CSF',
+        'name'           => 'NIST Cybersecurity Framework',
+        'slug'           => 'nist-csf',
     ]);
 
-    $response = $this->actingAs($user)->put(route('domains.update', $domain), [
-        'domain_id'   => 'DOM-INDEP-3',
-        'domain_code' => 'INDEP3',
-        'name'        => 'Updated Domain 3',
-        'status'      => 'Active',
+    $response = $this->actingAs($user)->post(route('domains.store'), [
+        'domain_id'          => 'DOM-NIST-01',
+        'domain_code'        => 'NIST01',
+        'name'               => 'NIST Domain',
+        'status'             => 'Active',
+        'related_frameworks' => 'NIST-CSF',
     ]);
 
     $response->assertRedirect(route('domains.index'));
     $response->assertSessionHas('success');
-    expect($domain->fresh()->name)->toBe('Updated Domain 3');
+
+    $domain = Domain::where('domain_id', 'DOM-NIST-01')->first();
+    expect($domain)->not->toBeNull();
+    expect($domain->framework_id)->toBe($fw->id);
+    expect($domain->frameworks->contains($fw->id))->toBeTrue();
+});
+
+it('allows domain creation when at least 1 mapped framework exists among multiple in related_frameworks', function () {
+    $user = User::factory()->create();
+    $fw = Framework::create([
+        'framework_id'   => 'FW-PCI-01',
+        'framework_code' => 'PCI-DSS',
+        'name'           => 'PCI Data Security Standard',
+        'slug'           => 'pci-dss',
+    ]);
+
+    $response = $this->actingAs($user)->post(route('domains.store'), [
+        'domain_id'          => 'DOM-MULTI-01',
+        'domain_code'        => 'MULTI01',
+        'name'               => 'Multi Framework Domain',
+        'status'             => 'Active',
+        'related_frameworks' => 'NON-EXISTENT-FW, PCI-DSS, ANOTHER-MISSING-FW',
+    ]);
+
+    $response->assertRedirect(route('domains.index'));
+    $response->assertSessionHas('success');
+
+    $domain = Domain::where('domain_id', 'DOM-MULTI-01')->first();
+    expect($domain)->not->toBeNull();
+    expect($domain->framework_id)->toBe($fw->id);
+    expect($domain->frameworks->contains($fw->id))->toBeTrue();
+});
+
+it('blocks domain creation when no mapped framework is provided', function () {
+    $user = User::factory()->create();
+
+    $response = $this->actingAs($user)->post(route('domains.store'), [
+        'domain_id'   => 'DOM-ERR-01',
+        'domain_code' => 'ERR01',
+        'name'        => 'No Framework Domain',
+        'status'      => 'Active',
+    ]);
+
+    $response->assertSessionHasErrors(['framework_id']);
+    expect(Domain::where('domain_id', 'DOM-ERR-01')->exists())->toBeFalse();
+});
+
+it('blocks domain creation when referenced frameworks do not exist', function () {
+    $user = User::factory()->create();
+
+    $response = $this->actingAs($user)->post(route('domains.store'), [
+        'framework_id'       => 99999,
+        'domain_id'          => 'DOM-ERR-02',
+        'domain_code'        => 'ERR02',
+        'name'               => 'Invalid Framework Domain',
+        'status'             => 'Active',
+        'related_frameworks' => 'NON-EXISTENT-FW-1, NON-EXISTENT-FW-2',
+    ]);
+
+    $response->assertSessionHasErrors(['framework_id']);
+    expect(Domain::where('domain_id', 'DOM-ERR-02')->exists())->toBeFalse();
+});
+
+it('allows domain update when mapped framework exists', function () {
+    $user = User::factory()->create();
+    $fw = Framework::create([
+        'framework_id'   => 'FW-CIS-01',
+        'framework_code' => 'CIS-V8',
+        'name'           => 'CIS Controls v8',
+        'slug'           => 'cis-controls-v8',
+    ]);
+
+    $domain = Domain::create([
+        'framework_id' => $fw->id,
+        'domain_id'    => 'DOM-UPD-01',
+        'domain_code'  => 'UPD01',
+        'name'         => 'Original Domain',
+        'status'       => 'Active',
+    ]);
+
+    $response = $this->actingAs($user)->put(route('domains.update', $domain), [
+        'framework_id' => $fw->id,
+        'domain_id'    => 'DOM-UPD-01',
+        'domain_code'  => 'UPD01',
+        'name'         => 'Updated Domain',
+        'status'       => 'Active',
+    ]);
+
+    $response->assertRedirect(route('domains.index'));
+    $response->assertSessionHas('success');
+    expect($domain->fresh()->name)->toBe('Updated Domain');
+});
+
+it('blocks domain update when no mapped framework exists in update payload', function () {
+    $user = User::factory()->create();
+    $fw = Framework::create([
+        'framework_id'   => 'FW-DORA-01',
+        'framework_code' => 'DORA',
+        'name'           => 'DORA Framework',
+        'slug'           => 'dora',
+    ]);
+
+    $domain = Domain::create([
+        'framework_id' => $fw->id,
+        'domain_id'    => 'DOM-UPD-02',
+        'domain_code'  => 'UPD02',
+        'name'         => 'DORA Domain',
+        'status'       => 'Active',
+    ]);
+
+    $response = $this->actingAs($user)->put(route('domains.update', $domain), [
+        'framework_id'       => null,
+        'domain_id'          => 'DOM-UPD-02',
+        'domain_code'        => 'UPD02',
+        'name'               => 'Attempted Blank Framework',
+        'status'             => 'Active',
+        'related_frameworks' => 'UNKNOWN-FW',
+    ]);
+
+    $response->assertSessionHasErrors(['framework_id']);
+    expect($domain->fresh()->name)->toBe('DORA Domain');
 });
 
 /*
@@ -502,5 +613,113 @@ it('collects all invalid control errors together in requirement import', functio
     }
 
     expect(Requirement::count())->toBe(0);
+});
+
+/*
+|--------------------------------------------------------------------------
+| DomainImport: Excel/CSV Import Validation & Transaction Safety
+|--------------------------------------------------------------------------
+*/
+
+it('imports domains successfully when mapped frameworks exist', function () {
+    $fw = Framework::create([
+        'framework_id'   => 'FW-IMP-01',
+        'framework_code' => 'IMP01',
+        'name'           => 'Import Test Framework',
+        'slug'           => 'import-test-framework',
+    ]);
+
+    $rows = new Collection([
+        // Header
+        ['Domain ID', 'Domain Code', 'Domain Name', 'Slug', 'Purpose', 'Scope', 'Business Owner', 'Description', 'Display Order', 'Status', 'Version', 'Short Overview', 'Business Objectives', 'Business Risks', 'Key Capabilities', 'Typical Stakeholders', 'Applicable Industries', 'Applicable Technologies', 'Keywords', 'Tags', 'Why Domain Matters', 'Common Challenges', 'Related Domains', 'Related Frameworks'],
+        // Data row
+        ['DOM-EXCEL-01', 'EXCEL01', 'Excel Imported Domain', '', '', '', '', '', '1', 'Active', '', '', '', '', '', '', '', '', '', '', '', '', '', 'IMP01'],
+    ]);
+
+    $import = new DomainImport();
+    $import->collection($rows);
+
+    expect($import->getCreatedCount())->toBe(1);
+    $domain = Domain::where('domain_id', 'DOM-EXCEL-01')->first();
+    expect($domain)->not->toBeNull();
+    expect($domain->framework_id)->toBe($fw->id);
+    expect($domain->frameworks->contains($fw->id))->toBeTrue();
+});
+
+it('allows domain import when at least 1 mapped framework exists among multiple in related_frameworks', function () {
+    $fw = Framework::create([
+        'framework_id'   => 'FW-IMP-02',
+        'framework_code' => 'MULTI-FW',
+        'name'           => 'Multi Framework Test',
+        'slug'           => 'multi-framework-test',
+    ]);
+
+    $rows = new Collection([
+        ['Domain ID', 'Domain Code', 'Domain Name', 'Slug', 'Purpose', 'Scope', 'Business Owner', 'Description', 'Display Order', 'Status', 'Version', 'Short Overview', 'Business Objectives', 'Business Risks', 'Key Capabilities', 'Typical Stakeholders', 'Applicable Industries', 'Applicable Technologies', 'Keywords', 'Tags', 'Why Domain Matters', 'Common Challenges', 'Related Domains', 'Related Frameworks'],
+        ['DOM-EXCEL-02', 'EXCEL02', 'Multi Framework Excel Domain', '', '', '', '', '', '2', 'Active', '', '', '', '', '', '', '', '', '', '', '', '', '', 'NON-EXISTENT, MULTI-FW, ANOTHER-MISSING'],
+    ]);
+
+    $import = new DomainImport();
+    $import->collection($rows);
+
+    expect($import->getCreatedCount())->toBe(1);
+    $domain = Domain::where('domain_id', 'DOM-EXCEL-02')->first();
+    expect($domain)->not->toBeNull();
+    expect($domain->framework_id)->toBe($fw->id);
+    expect($domain->frameworks->contains($fw->id))->toBeTrue();
+});
+
+it('rejects domain import and rolls back when mapped framework does not exist', function () {
+    $fw = Framework::create([
+        'framework_id'   => 'FW-IMP-03',
+        'framework_code' => 'VALID-FW',
+        'name'           => 'Valid Framework',
+        'slug'           => 'valid-framework',
+    ]);
+
+    $rows = new Collection([
+        // Header
+        ['Domain ID', 'Domain Code', 'Domain Name', 'Slug', 'Purpose', 'Scope', 'Business Owner', 'Description', 'Display Order', 'Status', 'Version', 'Short Overview', 'Business Objectives', 'Business Risks', 'Key Capabilities', 'Typical Stakeholders', 'Applicable Industries', 'Applicable Technologies', 'Keywords', 'Tags', 'Why Domain Matters', 'Common Challenges', 'Related Domains', 'Related Frameworks'],
+        // Row 2: Valid
+        ['DOM-VALID-01', 'VAL01', 'Valid Domain', '', '', '', '', '', '1', 'Active', '', '', '', '', '', '', '', '', '', '', '', '', '', 'VALID-FW'],
+        // Row 3: Invalid
+        ['DOM-INVALID-01', 'INV01', 'Invalid Domain', '', '', '', '', '', '2', 'Active', '', '', '', '', '', '', '', '', '', '', '', '', '', 'NON-EXISTENT-FRAMEWORK'],
+    ]);
+
+    $import = new DomainImport();
+
+    try {
+        $import->collection($rows);
+        $this->fail('Expected ValidationException was not thrown.');
+    } catch (ValidationException $e) {
+        $errors = $e->errors()['import'] ?? [];
+        expect($errors)->toContain('Row 3: Domain "Invalid Domain" (DOM-INVALID-01) references non-existent Framework(s) "NON-EXISTENT-FRAMEWORK". At least 1 existing Framework is required.');
+    }
+
+    // Ensure rollback: Row 2 was rolled back and NOT saved
+    expect(Domain::where('domain_id', 'DOM-VALID-01')->exists())->toBeFalse();
+    expect(Domain::where('domain_id', 'DOM-INVALID-01')->exists())->toBeFalse();
+});
+
+it('collects all invalid framework errors together in domain import', function () {
+    $rows = new Collection([
+        ['Domain ID', 'Domain Code', 'Domain Name', 'Slug', 'Purpose', 'Scope', 'Business Owner', 'Description', 'Display Order', 'Status', 'Version', 'Short Overview', 'Business Objectives', 'Business Risks', 'Key Capabilities', 'Typical Stakeholders', 'Applicable Industries', 'Applicable Technologies', 'Keywords', 'Tags', 'Why Domain Matters', 'Common Challenges', 'Related Domains', 'Related Frameworks'],
+        ['DOM-ERR-A', 'ERRA', 'Domain A', '', '', '', '', '', '1', 'Active', '', '', '', '', '', '', '', '', '', '', '', '', '', 'MISSING-FW-1'],
+        ['DOM-ERR-B', 'ERRB', 'Domain B', '', '', '', '', '', '2', 'Active', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
+    ]);
+
+    $import = new DomainImport();
+
+    try {
+        $import->collection($rows);
+        $this->fail('Expected ValidationException was not thrown.');
+    } catch (ValidationException $e) {
+        $errors = $e->errors()['import'] ?? [];
+        expect(count($errors))->toBe(2);
+        expect($errors[0])->toContain('Row 2: Domain "Domain A" (DOM-ERR-A) references non-existent Framework(s) "MISSING-FW-1".');
+        expect($errors[1])->toContain('Row 3: Domain "Domain B" (DOM-ERR-B) references non-existent Framework(s) None provided.');
+    }
+
+    expect(Domain::count())->toBe(0);
 });
 

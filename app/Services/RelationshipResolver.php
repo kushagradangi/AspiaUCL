@@ -32,6 +32,42 @@ class RelationshipResolver
             ->values();
     }
 
+    public function resolveFrameworks($references): Collection
+    {
+        if (is_string($references)) {
+            $references = $this->references($references);
+        } elseif (is_array($references)) {
+            $references = collect($references);
+        } elseif (!$references instanceof Collection) {
+            return collect();
+        }
+
+        return $references
+            ->map(fn ($reference) => $this->findFramework((string) $reference))
+            ->filter()
+            ->unique('id')
+            ->values();
+    }
+
+    public function getValidMappedFrameworks(?int $frameworkId = null, ?string $relatedFrameworks = null): Collection
+    {
+        $frameworks = collect();
+
+        if ($frameworkId) {
+            $fw = Framework::find($frameworkId);
+            if ($fw) {
+                $frameworks->push($fw);
+            }
+        }
+
+        if ($relatedFrameworks) {
+            $resolved = $this->resolveFrameworks($relatedFrameworks);
+            $frameworks = $frameworks->merge($resolved);
+        }
+
+        return $frameworks->unique('id')->values();
+    }
+
     public function syncDomainFrameworks(Domain $domain): Collection
     {
         $references = $this->references($domain->related_frameworks);
@@ -64,28 +100,52 @@ class RelationshipResolver
             ->values();
     }
 
-    private function findDomain(string $reference): ?Domain
+    public function findDomain(string|int $reference): ?Domain
     {
-        $normalized = $this->normalize($reference);
+        $raw = trim((string) $reference);
+        if ($raw === '') {
+            return null;
+        }
+
+        if (is_numeric($raw)) {
+            $byPk = Domain::find((int) $raw);
+            if ($byPk) {
+                return $byPk;
+            }
+        }
+
+        $normalized = $this->normalize($raw);
 
         return Domain::query()
-            ->where(function ($query) use ($reference, $normalized) {
-                $query->whereRaw('LOWER(TRIM(domain_id)) = ?', [strtolower(trim($reference))])
-                    ->orWhereRaw('LOWER(TRIM(domain_code)) = ?', [strtolower(trim($reference))])
+            ->where(function ($query) use ($raw, $normalized) {
+                $query->whereRaw('LOWER(TRIM(domain_id)) = ?', [strtolower($raw)])
+                    ->orWhereRaw('LOWER(TRIM(domain_code)) = ?', [strtolower($raw)])
                     ->orWhereRaw('LOWER(TRIM(name)) = ?', [$normalized])
                     ->orWhereRaw('LOWER(TRIM(slug)) = ?', [$normalized]);
             })
             ->first();
     }
 
-    private function findFramework(string $reference): ?Framework
+    public function findFramework(string|int $reference): ?Framework
     {
-        $normalized = $this->normalize($reference);
+        $raw = trim((string) $reference);
+        if ($raw === '') {
+            return null;
+        }
+
+        if (is_numeric($raw)) {
+            $byPk = Framework::find((int) $raw);
+            if ($byPk) {
+                return $byPk;
+            }
+        }
+
+        $normalized = $this->normalize($raw);
 
         return Framework::query()
-            ->where(function ($query) use ($reference, $normalized) {
-                $query->whereRaw('LOWER(TRIM(framework_id)) = ?', [strtolower(trim($reference))])
-                    ->orWhereRaw('LOWER(TRIM(framework_code)) = ?', [strtolower(trim($reference))])
+            ->where(function ($query) use ($raw, $normalized) {
+                $query->whereRaw('LOWER(TRIM(framework_id)) = ?', [strtolower($raw)])
+                    ->orWhereRaw('LOWER(TRIM(framework_code)) = ?', [strtolower($raw)])
                     ->orWhereRaw('LOWER(TRIM(name)) = ?', [$normalized])
                     ->orWhereRaw('LOWER(TRIM(slug)) = ?', [$normalized]);
             })

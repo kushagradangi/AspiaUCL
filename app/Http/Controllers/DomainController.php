@@ -431,18 +431,37 @@ class DomainController extends Controller
             $this->validationRules($existing ? $existing->id : null)
         );
 
-        if (!empty($validated['framework_id'])) {
-            if (!\App\Models\Framework::where('id', $validated['framework_id'])->exists()) {
-                $validated['framework_id'] = null;
-            }
-        } else {
-            $validated['framework_id'] = null;
+        $resolver = app(\App\Services\RelationshipResolver::class);
+        $frameworkIdInput = !empty($validated['framework_id']) ? (int) $validated['framework_id'] : null;
+        $relatedFwInput = $validated['related_frameworks'] ?? null;
+
+        $validFrameworks = $resolver->getValidMappedFrameworks($frameworkIdInput, $relatedFwInput);
+
+        if ($validFrameworks->isEmpty()) {
+            $domainName = $validated['name'] ?? '';
+            $domainId = $validated['domain_id'] ?? '';
+            $rawFw = trim(($relatedFwInput ?: '') . ' ' . ($request->input('framework_id') ?: ''));
+            $referenceText = $rawFw !== '' ? " \"{$rawFw}\"" : '';
+            $errorMessage = "Cannot save Domain \"{$domainName}\" ({$domainId}): At least 1 valid mapped Framework is required{$referenceText}.";
+
+            return back()
+                ->withErrors([
+                    'framework_id' => $errorMessage,
+                    'related_frameworks' => $errorMessage,
+                ])
+                ->with('error', $errorMessage)
+                ->withInput();
         }
+
+        $validated['framework_id'] = ($frameworkIdInput && $validFrameworks->contains('id', $frameworkIdInput))
+            ? $frameworkIdInput
+            : $validFrameworks->first()->id;
 
         try {
             if ($existing) {
                 $validated['slug'] = $this->generateUniqueSlug($validated['name'], $existing->id);
                 $existing->update($validated);
+                $existing->frameworks()->syncWithoutDetaching($validFrameworks->pluck('id')->all());
 
                 Activity::create([
                     'user_id' => auth()->id(),
@@ -460,6 +479,7 @@ class DomainController extends Controller
             $validated['display_order'] = (Domain::max('display_order') ?? 0) + 1;
 
             $domain = Domain::create($validated);
+            $domain->frameworks()->syncWithoutDetaching($validFrameworks->pluck('id')->all());
 
             Activity::create([
                 'user_id' => auth()->id(),
@@ -516,18 +536,37 @@ class DomainController extends Controller
             $this->validationRules($domain->id)
         );
 
-        if (!empty($validated['framework_id'])) {
-            if (!\App\Models\Framework::where('id', $validated['framework_id'])->exists()) {
-                $validated['framework_id'] = null;
-            }
-        } else {
-            $validated['framework_id'] = null;
+        $resolver = app(\App\Services\RelationshipResolver::class);
+        $frameworkIdInput = !empty($validated['framework_id']) ? (int) $validated['framework_id'] : null;
+        $relatedFwInput = $validated['related_frameworks'] ?? null;
+
+        $validFrameworks = $resolver->getValidMappedFrameworks($frameworkIdInput, $relatedFwInput);
+
+        if ($validFrameworks->isEmpty()) {
+            $domainName = $validated['name'] ?? $domain->name;
+            $domainId = $validated['domain_id'] ?? $domain->domain_id;
+            $rawFw = trim(($relatedFwInput ?: '') . ' ' . ($request->input('framework_id') ?: ''));
+            $referenceText = $rawFw !== '' ? " \"{$rawFw}\"" : '';
+            $errorMessage = "Cannot save Domain \"{$domainName}\" ({$domainId}): At least 1 valid mapped Framework is required{$referenceText}.";
+
+            return back()
+                ->withErrors([
+                    'framework_id' => $errorMessage,
+                    'related_frameworks' => $errorMessage,
+                ])
+                ->with('error', $errorMessage)
+                ->withInput();
         }
+
+        $validated['framework_id'] = ($frameworkIdInput && $validFrameworks->contains('id', $frameworkIdInput))
+            ? $frameworkIdInput
+            : $validFrameworks->first()->id;
 
         try {
             $validated['slug'] = $this->generateUniqueSlug($validated['name'], $domain->id);
 
             $domain->update($validated);
+            $domain->frameworks()->syncWithoutDetaching($validFrameworks->pluck('id')->all());
 
             Activity::create([
                 'user_id' => auth()->id(),
