@@ -321,13 +321,14 @@
 
                 <div class="checkbox-card-grid">
                     @php
-                        $selectedPermissions = old('permissions', ['frameworks', 'domains', 'controls', 'requirements', 'requirement-evidence-mappings']);
+                        $selectedPermissions = old('permissions', ['frameworks', 'domains', 'controls', 'requirements', 'requirement-evidence-mappings', 'requirement-framework-mappings']);
                         $moduleDescriptions = [
-                            'frameworks'                    => 'Access regulatory frameworks and compliance standards.',
-                            'domains'                       => 'Access categorized security and governance control domains.',
-                            'controls'                      => 'Access baseline and compensating controls specification.',
-                            'requirements'                  => 'Access audit requirements and framework mappings.',
-                            'requirement-evidence-mappings' => 'Access audit evidence specifications and testing procedures.',
+                            'frameworks'                     => 'Access regulatory frameworks and compliance standards.',
+                            'domains'                        => 'Access categorized security and governance control domains.',
+                            'controls'                       => 'Access baseline and compensating controls specification.',
+                            'requirements'                   => 'Access audit requirements and framework mappings.',
+                            'requirement-evidence-mappings'  => 'Access audit evidence specifications and testing procedures.',
+                            'requirement-framework-mappings' => 'Access requirement to regulatory framework mappings and clause references.',
                         ];
                     @endphp
 

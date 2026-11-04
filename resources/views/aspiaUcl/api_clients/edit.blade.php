@@ -269,11 +269,12 @@
                     @php
                         $currentPermissions = old('permissions', $client->permissions ?? []);
                         $moduleDescriptions = [
-                            'frameworks'                    => 'Access regulatory frameworks and compliance standards.',
-                            'domains'                       => 'Access categorized security and governance control domains.',
-                            'controls'                      => 'Access baseline and compensating controls specification.',
-                            'requirements'                  => 'Access audit requirements and framework mappings.',
-                            'requirement-evidence-mappings' => 'Access audit evidence specifications and testing procedures.',
+                            'frameworks'                     => 'Access regulatory frameworks and compliance standards.',
+                            'domains'                        => 'Access categorized security and governance control domains.',
+                            'controls'                       => 'Access baseline and compensating controls specification.',
+                            'requirements'                   => 'Access audit requirements and framework mappings.',
+                            'requirement-evidence-mappings'  => 'Access audit evidence specifications and testing procedures.',
+                            'requirement-framework-mappings' => 'Access requirement to regulatory framework mappings and clause references.',
                         ];
                     @endphp
 

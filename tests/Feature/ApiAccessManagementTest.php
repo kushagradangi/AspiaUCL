@@ -7,6 +7,7 @@ use App\Models\Domain;
 use App\Models\Framework;
 use App\Models\Requirement;
 use App\Models\RequirementEvidenceMapping;
+use App\Models\RequirementFrameworkMapping;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -69,11 +70,19 @@ beforeEach(function () {
         'test_method' => 'Manual Audit',
         'display_order' => 1,
     ]);
+
+    $this->frameworkMapping = RequirementFrameworkMapping::create([
+        'requirement_id' => 'REQ-AC-01-A',
+        'framework_name' => 'ISO/IEC 27001:2022',
+        'framework_code' => 'ISO27001',
+        'framework_id' => $this->framework->id,
+        'clause_reference' => 'A.9.2.1, A.9.2.2',
+    ]);
 });
 
 // Helper function to create an active client with whitelisted IP and Sanctum token
 function createClientWithToken(
-    array $permissions = ['frameworks', 'domains', 'controls', 'requirements', 'requirement-evidence-mappings'],
+    array $permissions = ['frameworks', 'domains', 'controls', 'requirements', 'requirement-evidence-mappings', 'requirement-framework-mappings'],
     array $ips = ['203.0.113.10'],
     bool $isActive = true,
     ?Carbon $expiresAt = null,
@@ -385,12 +394,12 @@ test('case 12b: duplicate IP is rejected when added via storeIp endpoint', funct
     $response->assertSessionHasErrors('ip_address');
 });
 
-// 13. Existing Frameworks, Domains, Controls, Requirements, and Requirement Evidence Mappings API response structures remain compatible.
-test('case 13: all five API modules return compatible JSON structures', function () {
+// 13. Existing Frameworks, Domains, Controls, Requirements, Requirement Evidence Mappings, and Requirement Framework Mappings API response structures remain compatible.
+test('case 13: all six API modules return compatible JSON structures', function () {
     $this->withoutMiddleware(\Illuminate\Routing\Middleware\ThrottleRequests::class);
 
     $data = createClientWithToken(
-        permissions: ['frameworks', 'domains', 'controls', 'requirements', 'requirement-evidence-mappings'],
+        permissions: ['frameworks', 'domains', 'controls', 'requirements', 'requirement-evidence-mappings', 'requirement-framework-mappings'],
         ips: ['203.0.113.10'],
         abilities: ['*']
     );
@@ -437,6 +446,16 @@ test('case 13: all five API modules return compatible JSON structures', function
     $mappingsResp->assertJsonPath('data.0.evidence_type', 'Process Documentation');
     $mappingsResp->assertJsonPath('data.0.evidence_owner', 'IT Security Lead');
     $mappingsResp->assertJsonPath('data.0.source_system', 'Jira Service Desk');
+
+    // 6. Requirement Framework Mappings
+    $fwMappingsResp = $this->withServerVariables(['REMOTE_ADDR' => '203.0.113.10'])
+        ->withHeader('Authorization', 'Bearer ' . $data['token'])
+        ->getJson('/api/v1/requirement-framework-mappings');
+    $fwMappingsResp->assertStatus(200);
+    $fwMappingsResp->assertJsonPath('data.0.requirement_id', 'REQ-AC-01-A');
+    $fwMappingsResp->assertJsonPath('data.0.framework_name', 'ISO/IEC 27001:2022');
+    $fwMappingsResp->assertJsonPath('data.0.framework_code', 'ISO27001');
+    $fwMappingsResp->assertJsonPath('data.0.clause_reference', 'A.9.2.1, A.9.2.2');
 });
 
 test('requirement-evidence-mappings endpoint requires specific module permission and ability', function () {
@@ -470,6 +489,42 @@ test('requirement-evidence-mappings endpoint requires specific module permission
 
     $resp->assertStatus(200);
     $resp->assertJsonPath('data.0.requirement_id', 'REQ-AC-01-A');
+});
+
+test('requirement-framework-mappings endpoint requires specific module permission and ability', function () {
+    $this->withoutMiddleware(\Illuminate\Routing\Middleware\ThrottleRequests::class);
+
+    // Client without requirement-framework-mappings permission
+    $dataUnauthorized = createClientWithToken(
+        permissions: ['controls'],
+        ips: ['203.0.113.10'],
+        abilities: ['controls:read']
+    );
+
+    $this->withServerVariables(['REMOTE_ADDR' => '203.0.113.10'])
+        ->withHeader('Authorization', 'Bearer ' . $dataUnauthorized['token'])
+        ->getJson('/api/v1/requirement-framework-mappings')
+        ->assertStatus(403);
+
+    // Reset auth guard between requests in the same test
+    $this->app['auth']->forgetGuards();
+
+    // Client with requirement-framework-mappings permission and ability
+    $dataAuthorized = createClientWithToken(
+        permissions: ['requirement-framework-mappings'],
+        ips: ['203.0.113.10'],
+        abilities: ['requirement-framework-mappings:read']
+    );
+
+    $resp = $this->withServerVariables(['REMOTE_ADDR' => '203.0.113.10'])
+        ->withHeader('Authorization', 'Bearer ' . $dataAuthorized['token'])
+        ->getJson('/api/v1/requirement-framework-mappings');
+
+    $resp->assertStatus(200);
+    $resp->assertJsonPath('data.0.requirement_id', 'REQ-AC-01-A');
+    $resp->assertJsonPath('data.0.framework_name', 'ISO/IEC 27001:2022');
+    $resp->assertJsonPath('data.0.framework_code', 'ISO27001');
+    $resp->assertJsonPath('data.0.clause_reference', 'A.9.2.1, A.9.2.2');
 });
 
 // Additional test: token generation and revocation via controller

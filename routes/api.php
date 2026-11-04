@@ -5,6 +5,7 @@ use App\Models\Domain;
 use App\Models\Framework;
 use App\Models\Requirement;
 use App\Models\RequirementEvidenceMapping;
+use App\Models\RequirementFrameworkMapping;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -195,5 +196,26 @@ Route::middleware(['auth:sanctum', 'throttle:api'])->group(function () {
             ->orderBy('id')
             ->paginate($perPage);
     })->middleware('api.client.whitelist:requirement-evidence-mappings');
+
+    Route::get('/v1/requirement-framework-mappings', function (Request $request) {
+        $perPage = min(
+            max((int) $request->query('per_page', 100), 1),
+            500
+        );
+
+        return RequirementFrameworkMapping::query()
+            ->select([
+                'id',
+                'requirement_id',
+                'framework_name',
+                'framework_code',
+                'framework_id',
+                'clause_reference',
+                'created_at',
+                'updated_at',
+            ])
+            ->orderBy('id')
+            ->paginate($perPage);
+    })->middleware('api.client.whitelist:requirement-framework-mappings');
 
 });
