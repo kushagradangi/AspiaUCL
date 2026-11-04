@@ -10,7 +10,6 @@
        PAGE
     ========================================================= */
 
-    .control-page,
     .mapping-page {
         width: 100%;
     }
@@ -580,7 +579,7 @@
     }
 
     .modal-footer {
-        padding: 18px 22px;
+        padding: 16px 22px;
         border-top: 1px solid rgba(255,255,255,.07);
         display: flex;
         justify-content: flex-end;
@@ -595,21 +594,6 @@
     /* =========================================================
        FORM
     ========================================================= */
-
-    .form-section-title {
-        color: #16C4F4;
-        font-size: 13px;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 0.8px;
-        margin: 22px 0 14px;
-        padding-bottom: 6px;
-        border-bottom: 1px solid rgba(22, 196, 244, 0.2);
-    }
-
-    .form-section-title:first-child {
-        margin-top: 0;
-    }
 
     .form-grid {
         display: grid;
@@ -729,9 +713,60 @@
         border-radius: 4px;
     }
 
+
+    /* =========================================================
+       RESPONSIVE
+    ========================================================= */
+
+    @media(max-width: 900px) {
+
+        .page-header {
+            align-items: flex-start;
+            flex-direction: column;
+        }
+
+        .form-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .full-width {
+            grid-column: auto;
+        }
+
+        .modal-box {
+            max-width: 650px;
+        }
+
+    }
+
+
+    @media(max-width: 600px) {
+
+        .search-form {
+            width: 100%;
+        }
+
+        .search-input {
+            width: 100%;
+        }
+
+        .header-actions {
+            width: 100%;
+        }
+
+        .header-actions .btn-aspia {
+            flex: 1;
+        }
+
+        .actions {
+            flex-direction: column;
+        }
+
+    }
+
 </style>
 
-<div class="control-page">
+<div class="mapping-page">
 
     
     <?php if(session('info')): ?>
@@ -807,7 +842,7 @@
                 class="btn-aspia btn-primary-aspia"
                 onclick="openModal('addModal')"
             >
-                + Add Mapping
+                + Add Requirement Evidence Mapping
             </button>
 
         </div>
@@ -1197,7 +1232,7 @@
 
             
             <div class="detail-section">
-                <div class="detail-section-title">1. Requirement Context (Columns A – D)</div>
+                <div class="detail-section-title">1. Requirement Context</div>
                 <div class="detail-row">
                     <div class="detail-label">Requirement ID:</div>
                     <div class="detail-value" id="viewReqId"></div>
@@ -1218,7 +1253,7 @@
 
             
             <div class="detail-section">
-                <div class="detail-section-title">2. Evidence Specifications (Columns E – K)</div>
+                <div class="detail-section-title">2. Evidence Specifications</div>
                 <div class="detail-row">
                     <div class="detail-label">Evidence Type:</div>
                     <div class="detail-value" id="viewEvidenceType"></div>
@@ -1251,7 +1286,7 @@
 
             
             <div class="detail-section">
-                <div class="detail-section-title">3. Audit & Testing Procedures (Columns L – S)</div>
+                <div class="detail-section-title">3. Audit & Testing Procedures</div>
                 <div class="detail-row">
                     <div class="detail-label">Auditor Validation Method:</div>
                     <div class="detail-value" id="viewValidationMethod" style="line-height: 1.6;"></div>
@@ -1337,222 +1372,258 @@
 
             <div class="modal-body">
 
-                
-                <div class="form-section-title">1. Requirement Context (Columns A – D)</div>
-
                 <div class="form-grid">
 
+                    
                     <div class="form-group">
                         <label class="form-label">
-                            Requirement ID <span class="required-star">*</span>
+                            Requirement ID
+                            <span class="required-star">*</span>
                         </label>
                         <input
                             type="text"
                             name="requirement_id"
                             class="form-control-aspia"
-                            placeholder="e.g. GOV-001-R001"
+                            placeholder="e.g. REQ-001"
                             value="<?php echo e(old('requirement_id')); ?>"
                             required
                         >
                     </div>
 
+                    
                     <div class="form-group">
-                        <label class="form-label">Control ID</label>
+                        <label class="form-label">
+                            Control ID
+                        </label>
                         <input
                             type="text"
                             name="control_id"
                             class="form-control-aspia"
-                            placeholder="e.g. GOV-001 (auto-resolves if blank)"
+                            placeholder="e.g. CTRL-001"
                             value="<?php echo e(old('control_id')); ?>"
                         >
                     </div>
 
+                    
                     <div class="form-group full-width">
                         <label class="form-label">
-                            Requirement Title <span class="required-star">*</span>
+                            Requirement Title
+                            <span class="required-star">*</span>
                         </label>
                         <input
                             type="text"
                             name="requirement_title"
                             class="form-control-aspia"
-                            placeholder="e.g. Governance Framework"
+                            placeholder="Enter Requirement Title"
                             value="<?php echo e(old('requirement_title')); ?>"
                             required
                         >
                     </div>
 
+                    
                     <div class="form-group full-width">
-                        <label class="form-label">Requirement Statement</label>
+                        <label class="form-label">
+                            Requirement Statement
+                        </label>
                         <textarea
                             name="requirement"
                             class="form-control-aspia"
-                            placeholder="Detailed requirement statement..."
+                            placeholder="Enter Requirement Statement text"
                         ><?php echo e(old('requirement')); ?></textarea>
                     </div>
 
-                </div>
-
-                
-                <div class="form-section-title">2. Evidence Specifications (Columns E – K)</div>
-
-                <div class="form-grid">
-
+                    
                     <div class="form-group">
-                        <label class="form-label">Evidence Type</label>
+                        <label class="form-label">
+                            Evidence Type
+                        </label>
                         <input
                             type="text"
                             name="evidence_type"
                             class="form-control-aspia"
-                            placeholder="e.g. Design / Documentation, Operating Evidence"
+                            placeholder="Enter Evidence Type"
                             value="<?php echo e(old('evidence_type')); ?>"
                         >
                     </div>
 
+                    
                     <div class="form-group">
-                        <label class="form-label">Evidence Owner</label>
+                        <label class="form-label">
+                            Evidence Owner
+                        </label>
                         <input
                             type="text"
                             name="evidence_owner"
                             class="form-control-aspia"
-                            placeholder="e.g. CISO / Information Security Governance"
+                            placeholder="Enter Evidence Owner"
                             value="<?php echo e(old('evidence_owner')); ?>"
                         >
                     </div>
 
+                    
                     <div class="form-group full-width">
-                        <label class="form-label">Evidence Reference / Link</label>
+                        <label class="form-label">
+                            Evidence Reference / Link
+                        </label>
                         <input
                             type="text"
                             name="evidence_reference_link"
                             class="form-control-aspia"
-                            placeholder="Repository path, document link, or record ID"
+                            placeholder="Enter Evidence Reference / Link"
                             value="<?php echo e(old('evidence_reference_link')); ?>"
                         >
                     </div>
 
+                    
                     <div class="form-group full-width">
-                        <label class="form-label">Evidence Description</label>
+                        <label class="form-label">
+                            Evidence Description
+                        </label>
                         <textarea
                             name="evidence_description"
                             class="form-control-aspia"
-                            placeholder="Demonstrate implementation and operation..."
+                            placeholder="Enter Evidence Description"
                         ><?php echo e(old('evidence_description')); ?></textarea>
                     </div>
 
+                    
                     <div class="form-group">
-                        <label class="form-label">Source / System</label>
+                        <label class="form-label">
+                            Source / System
+                        </label>
                         <input
                             type="text"
                             name="source_system"
                             class="form-control-aspia"
-                            placeholder="e.g. GRC platform / policy repository"
+                            placeholder="Enter Source / System"
                             value="<?php echo e(old('source_system')); ?>"
                         >
                     </div>
 
+                    
                     <div class="form-group">
-                        <label class="form-label">Frequency</label>
+                        <label class="form-label">
+                            Frequency
+                        </label>
                         <input
                             type="text"
                             name="frequency"
                             class="form-control-aspia"
-                            placeholder="e.g. At least annually and upon material change"
+                            placeholder="Enter Frequency"
                             value="<?php echo e(old('frequency')); ?>"
                         >
                     </div>
 
+                    
                     <div class="form-group full-width">
-                        <label class="form-label">Freshness Criteria</label>
+                        <label class="form-label">
+                            Freshness Criteria
+                        </label>
                         <input
                             type="text"
                             name="freshness"
                             class="form-control-aspia"
-                            placeholder="e.g. Current approved version; review evidence <= 12 months old"
+                            placeholder="Enter Freshness Criteria"
                             value="<?php echo e(old('freshness')); ?>"
                         >
                     </div>
 
-                </div>
-
-                
-                <div class="form-section-title">3. Audit & Testing Procedures (Columns L – S)</div>
-
-                <div class="form-grid">
-
+                    
                     <div class="form-group full-width">
-                        <label class="form-label">Auditor Validation Method</label>
+                        <label class="form-label">
+                            Auditor Validation Method
+                        </label>
                         <textarea
                             name="auditor_validation_method"
                             class="form-control-aspia"
-                            placeholder="Verify source authenticity and owner, confirm approved version..."
+                            placeholder="Enter Auditor Validation Method"
                         ><?php echo e(old('auditor_validation_method')); ?></textarea>
                     </div>
 
+                    
                     <div class="form-group full-width">
-                        <label class="form-label">Test Procedure</label>
+                        <label class="form-label">
+                            Test Procedure
+                        </label>
                         <textarea
                             name="test_procedure"
                             class="form-control-aspia"
-                            style="min-height: 120px;"
-                            placeholder="Step-by-step audit testing procedures..."
+                            placeholder="Enter Test Procedure"
                         ><?php echo e(old('test_procedure')); ?></textarea>
                     </div>
 
+                    
                     <div class="form-group full-width">
-                        <label class="form-label">Evidence Checklist</label>
+                        <label class="form-label">
+                            Evidence Checklist
+                        </label>
                         <textarea
                             name="evidence_checklist"
                             class="form-control-aspia"
-                            style="min-height: 120px;"
-                            placeholder="• Approved policy document...&#10;• Dated meeting minutes..."
+                            placeholder="Enter Evidence Checklist"
                         ><?php echo e(old('evidence_checklist')); ?></textarea>
                     </div>
 
+                    
                     <div class="form-group full-width">
-                        <label class="form-label">Expected Result</label>
+                        <label class="form-label">
+                            Expected Result
+                        </label>
                         <textarea
                             name="expected_result"
                             class="form-control-aspia"
-                            placeholder="The control is implemented as documented, operates at required frequency..."
+                            placeholder="Enter Expected Result"
                         ><?php echo e(old('expected_result')); ?></textarea>
                     </div>
 
+                    
                     <div class="form-group full-width">
-                        <label class="form-label">Pass Criteria</label>
+                        <label class="form-label">
+                            Pass Criteria
+                        </label>
                         <textarea
                             name="pass_criteria"
                             class="form-control-aspia"
-                            placeholder="Pass when the required control is documented and approved..."
+                            placeholder="Enter Pass Criteria"
                         ><?php echo e(old('pass_criteria')); ?></textarea>
                     </div>
 
+                    
                     <div class="form-group full-width">
-                        <label class="form-label">Fail Criteria</label>
+                        <label class="form-label">
+                            Fail Criteria
+                        </label>
                         <textarea
                             name="fail_criteria"
                             class="form-control-aspia"
-                            placeholder="Fail when required evidence is missing, unapproved, outdated..."
+                            placeholder="Enter Fail Criteria"
                         ><?php echo e(old('fail_criteria')); ?></textarea>
                     </div>
 
+                    
                     <div class="form-group">
-                        <label class="form-label">Test Frequency</label>
+                        <label class="form-label">
+                            Test Frequency
+                        </label>
                         <input
                             type="text"
                             name="test_frequency"
                             class="form-control-aspia"
-                            placeholder="e.g. At least annually and upon material change"
+                            placeholder="Enter Test Frequency"
                             value="<?php echo e(old('test_frequency')); ?>"
                         >
                     </div>
 
+                    
                     <div class="form-group">
-                        <label class="form-label">Test Method</label>
+                        <label class="form-label">
+                            Test Method
+                        </label>
                         <input
                             type="text"
                             name="test_method"
                             class="form-control-aspia"
-                            placeholder="e.g. Document inspection + sample testing"
+                            placeholder="Enter Test Method"
                             value="<?php echo e(old('test_method')); ?>"
                         >
                     </div>
@@ -1575,7 +1646,7 @@
                     type="submit"
                     class="btn-aspia btn-primary-aspia"
                 >
-                    Create Mapping
+                    Add Requirement Evidence Mapping
                 </button>
 
             </div>
@@ -1622,14 +1693,13 @@
 
             <div class="modal-body">
 
-                
-                <div class="form-section-title">1. Requirement Context (Columns A – D)</div>
-
                 <div class="form-grid">
 
+                    
                     <div class="form-group">
                         <label class="form-label">
-                            Requirement ID <span class="required-star">*</span>
+                            Requirement ID
+                            <span class="required-star">*</span>
                         </label>
                         <input
                             type="text"
@@ -1640,8 +1710,11 @@
                         >
                     </div>
 
+                    
                     <div class="form-group">
-                        <label class="form-label">Control ID</label>
+                        <label class="form-label">
+                            Control ID
+                        </label>
                         <input
                             type="text"
                             id="edit_control_id"
@@ -1650,9 +1723,11 @@
                         >
                     </div>
 
+                    
                     <div class="form-group full-width">
                         <label class="form-label">
-                            Requirement Title <span class="required-star">*</span>
+                            Requirement Title
+                            <span class="required-star">*</span>
                         </label>
                         <input
                             type="text"
@@ -1663,8 +1738,11 @@
                         >
                     </div>
 
+                    
                     <div class="form-group full-width">
-                        <label class="form-label">Requirement Statement</label>
+                        <label class="form-label">
+                            Requirement Statement
+                        </label>
                         <textarea
                             id="edit_requirement"
                             name="requirement"
@@ -1672,15 +1750,11 @@
                         ></textarea>
                     </div>
 
-                </div>
-
-                
-                <div class="form-section-title">2. Evidence Specifications (Columns E – K)</div>
-
-                <div class="form-grid">
-
+                    
                     <div class="form-group">
-                        <label class="form-label">Evidence Type</label>
+                        <label class="form-label">
+                            Evidence Type
+                        </label>
                         <input
                             type="text"
                             id="edit_evidence_type"
@@ -1689,8 +1763,11 @@
                         >
                     </div>
 
+                    
                     <div class="form-group">
-                        <label class="form-label">Evidence Owner</label>
+                        <label class="form-label">
+                            Evidence Owner
+                        </label>
                         <input
                             type="text"
                             id="edit_evidence_owner"
@@ -1699,8 +1776,11 @@
                         >
                     </div>
 
+                    
                     <div class="form-group full-width">
-                        <label class="form-label">Evidence Reference / Link</label>
+                        <label class="form-label">
+                            Evidence Reference / Link
+                        </label>
                         <input
                             type="text"
                             id="edit_evidence_reference_link"
@@ -1709,8 +1789,11 @@
                         >
                     </div>
 
+                    
                     <div class="form-group full-width">
-                        <label class="form-label">Evidence Description</label>
+                        <label class="form-label">
+                            Evidence Description
+                        </label>
                         <textarea
                             id="edit_evidence_description"
                             name="evidence_description"
@@ -1718,8 +1801,11 @@
                         ></textarea>
                     </div>
 
+                    
                     <div class="form-group">
-                        <label class="form-label">Source / System</label>
+                        <label class="form-label">
+                            Source / System
+                        </label>
                         <input
                             type="text"
                             id="edit_source_system"
@@ -1728,8 +1814,11 @@
                         >
                     </div>
 
+                    
                     <div class="form-group">
-                        <label class="form-label">Frequency</label>
+                        <label class="form-label">
+                            Frequency
+                        </label>
                         <input
                             type="text"
                             id="edit_frequency"
@@ -1738,8 +1827,11 @@
                         >
                     </div>
 
+                    
                     <div class="form-group full-width">
-                        <label class="form-label">Freshness Criteria</label>
+                        <label class="form-label">
+                            Freshness Criteria
+                        </label>
                         <input
                             type="text"
                             id="edit_freshness"
@@ -1748,15 +1840,11 @@
                         >
                     </div>
 
-                </div>
-
-                
-                <div class="form-section-title">3. Audit & Testing Procedures (Columns L – S)</div>
-
-                <div class="form-grid">
-
+                    
                     <div class="form-group full-width">
-                        <label class="form-label">Auditor Validation Method</label>
+                        <label class="form-label">
+                            Auditor Validation Method
+                        </label>
                         <textarea
                             id="edit_auditor_validation_method"
                             name="auditor_validation_method"
@@ -1764,28 +1852,35 @@
                         ></textarea>
                     </div>
 
+                    
                     <div class="form-group full-width">
-                        <label class="form-label">Test Procedure</label>
+                        <label class="form-label">
+                            Test Procedure
+                        </label>
                         <textarea
                             id="edit_test_procedure"
                             name="test_procedure"
                             class="form-control-aspia"
-                            style="min-height: 120px;"
                         ></textarea>
                     </div>
 
+                    
                     <div class="form-group full-width">
-                        <label class="form-label">Evidence Checklist</label>
+                        <label class="form-label">
+                            Evidence Checklist
+                        </label>
                         <textarea
                             id="edit_evidence_checklist"
                             name="evidence_checklist"
                             class="form-control-aspia"
-                            style="min-height: 120px;"
                         ></textarea>
                     </div>
 
+                    
                     <div class="form-group full-width">
-                        <label class="form-label">Expected Result</label>
+                        <label class="form-label">
+                            Expected Result
+                        </label>
                         <textarea
                             id="edit_expected_result"
                             name="expected_result"
@@ -1793,8 +1888,11 @@
                         ></textarea>
                     </div>
 
+                    
                     <div class="form-group full-width">
-                        <label class="form-label">Pass Criteria</label>
+                        <label class="form-label">
+                            Pass Criteria
+                        </label>
                         <textarea
                             id="edit_pass_criteria"
                             name="pass_criteria"
@@ -1802,8 +1900,11 @@
                         ></textarea>
                     </div>
 
+                    
                     <div class="form-group full-width">
-                        <label class="form-label">Fail Criteria</label>
+                        <label class="form-label">
+                            Fail Criteria
+                        </label>
                         <textarea
                             id="edit_fail_criteria"
                             name="fail_criteria"
@@ -1811,8 +1912,11 @@
                         ></textarea>
                     </div>
 
+                    
                     <div class="form-group">
-                        <label class="form-label">Test Frequency</label>
+                        <label class="form-label">
+                            Test Frequency
+                        </label>
                         <input
                             type="text"
                             id="edit_test_frequency"
@@ -1821,8 +1925,11 @@
                         >
                     </div>
 
+                    
                     <div class="form-group">
-                        <label class="form-label">Test Method</label>
+                        <label class="form-label">
+                            Test Method
+                        </label>
                         <input
                             type="text"
                             id="edit_test_method"
@@ -1849,7 +1956,7 @@
                     type="submit"
                     class="btn-aspia btn-primary-aspia"
                 >
-                    Update Mapping
+                    Save Changes
                 </button>
 
             </div>
