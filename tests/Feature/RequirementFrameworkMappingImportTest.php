@@ -120,10 +120,6 @@ it('imports clause mappings by requirement id and combines columns for one frame
             'requirement_id' => 'REQ-001-R002',
             'requirement_title' => 'A different title',
         ]),
-        requirementFrameworkMappingRow([
-            'requirement_id' => 'MISSING-R001',
-            'gdpr_mapping' => 'Article 5',
-        ]),
     ]));
 
     $nistMapping = RequirementFrameworkMapping::where('requirement_id', 'REQ-001-R001')->first();
@@ -142,10 +138,70 @@ it('imports clause mappings by requirement id and combines columns for one frame
             ->exists())->toBeFalse()
         ->and($import->getMappedRows())->toBe(1)
         ->and($import->getMappedPairs())->toBe(1)
-        ->and($import->getMissingRequirementCount())->toBe(1)
-        ->and($import->getMissingRequirementIds())->toBe(['MISSING-R001'])
         ->and($import->getTitleMismatchCount())->toBe(1)
         ->and($import->getTitleMismatchIds())->toBe(['REQ-001-R002']);
+});
+
+it('rejects framework mapping import and prevents insertion when requirement does not exist in requirements', function () {
+    seedRequirementMappingFrameworks();
+
+    Requirement::create([
+        'requirement_id' => 'REQ-VALID-001',
+        'control_id' => 'CTRL-001',
+        'requirement_title' => 'Valid Requirement',
+        'requirement' => 'A valid requirement.',
+    ]);
+
+    $import = new RequirementFrameworkMappingImport();
+
+    try {
+        $import->collection(new Collection([
+            requirementFrameworkMappingRow([
+                'requirement_id' => 'REQ-VALID-001',
+                'iso_27001_2022_section_subsection_title' => 'A.5.1',
+            ]),
+            requirementFrameworkMappingRow([
+                'requirement_id' => 'REQ-MISSING-001',
+                'requirement_title' => 'Missing Title',
+                'iso_27001_2022_section_subsection_title' => 'A.5.2',
+            ]),
+        ]));
+        $this->fail('Expected ValidationException was not thrown.');
+    } catch (\Illuminate\Validation\ValidationException $e) {
+        $errors = $e->errors()['import'] ?? [];
+        expect($errors)->toContain('Row 3: Requirement "Missing Title" (REQ-MISSING-001) does not exist in requirements.');
+    }
+
+    // Ensure rollback / zero insertion: REQ-VALID-001 mapping was NOT inserted
+    expect(RequirementFrameworkMapping::count())->toBe(0);
+});
+
+it('collects all missing requirement errors across rows in framework mapping import', function () {
+    seedRequirementMappingFrameworks();
+
+    $import = new RequirementFrameworkMappingImport();
+
+    try {
+        $import->collection(new Collection([
+            requirementFrameworkMappingRow([
+                'requirement_id' => 'REQ-NOTFOUND-1',
+                'requirement_title' => 'First Missing',
+                'gdpr_mapping' => 'Article 25',
+            ]),
+            requirementFrameworkMappingRow([
+                'requirement_id' => 'REQ-NOTFOUND-2',
+                'iso_27001_2022_section_subsection_title' => 'A.8.1',
+            ]),
+        ]));
+        $this->fail('Expected ValidationException was not thrown.');
+    } catch (\Illuminate\Validation\ValidationException $e) {
+        $errors = $e->errors()['import'] ?? [];
+        expect(count($errors))->toBe(2);
+        expect($errors[0])->toContain('Row 2: Requirement "First Missing" (REQ-NOTFOUND-1) does not exist in requirements.');
+        expect($errors[1])->toContain('Row 3: Requirement "REQ-NOTFOUND-2" does not exist in requirements.');
+    }
+
+    expect(RequirementFrameworkMapping::count())->toBe(0);
 });
 
 it('rejects populated columns it cannot map before changing mappings', function () {

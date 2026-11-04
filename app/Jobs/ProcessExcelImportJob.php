@@ -290,7 +290,13 @@ class ProcessExcelImportJob implements ShouldQueue
                     throw new \InvalidArgumentException("Unknown import type: {$this->importType}");
             }
         } catch (\Throwable $e) {
-            Log::error("Async Import Error [Type: {$this->importType}, File: {$this->originalFileName}]: " . $e->getMessage(), [
+            $errorMessage = $e->getMessage();
+            if ($e instanceof \Illuminate\Validation\ValidationException) {
+                $allErrors = \Illuminate\Support\Arr::flatten($e->errors());
+                $errorMessage = implode(' | ', $allErrors);
+            }
+
+            Log::error("Async Import Error [Type: {$this->importType}, File: {$this->originalFileName}]: " . $errorMessage, [
                 'exception' => $e,
             ]);
 
@@ -298,7 +304,7 @@ class ProcessExcelImportJob implements ShouldQueue
                 $user->notify(new ImportCompletedNotification(
                     status: 'error',
                     title: ucfirst(str_replace('_', ' ', $this->importType)) . ' Import Failed',
-                    message: 'Error during background import: ' . Str::limit($e->getMessage(), 300),
+                    message: 'Error during background import: ' . Str::limit($errorMessage, 300),
                     url: $url,
                     fileName: $this->originalFileName,
                     module: $this->importType

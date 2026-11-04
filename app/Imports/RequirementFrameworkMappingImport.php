@@ -7,6 +7,7 @@ use App\Models\Requirement;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use RuntimeException;
@@ -272,13 +273,45 @@ class RequirementFrameworkMappingImport implements ToCollection, WithHeadingRow
 
         $requirements = collect();
         foreach (array_chunk(array_values($requirementIds), 500) as $idChunk) {
+            $searchIds = array_values(array_unique(array_merge(
+                $idChunk,
+                array_map('strtoupper', $idChunk),
+                array_map('strtolower', $idChunk)
+            )));
             Requirement::query()
-                ->whereIn('requirement_id', $idChunk)
+                ->whereIn('requirement_id', $searchIds)
                 ->get(['requirement_id', 'requirement_title'])
                 ->each(fn (Requirement $requirement) => $requirements->put(
                     strtoupper(trim($requirement->requirement_id)),
                     $requirement
                 ));
+        }
+
+        // Validate that all requirements in the mapping strictly exist in requirements
+        $validationErrors = [];
+        foreach ($rows as $index => $row) {
+            $values = $this->normalizeRow($row);
+            $requirementId = trim((string) ($values['requirementid'] ?? ''));
+            if ($requirementId === '') {
+                continue;
+            }
+
+            $requirementKey = strtoupper($requirementId);
+            if (!$requirements->has($requirementKey)) {
+                $excelRow = $index + 2;
+                $sourceTitle = trim((string) ($values['requirementtitle'] ?? ''));
+                if ($sourceTitle !== '') {
+                    $validationErrors[] = "Row {$excelRow}: Requirement \"{$sourceTitle}\" ({$requirementId}) does not exist in requirements.";
+                } else {
+                    $validationErrors[] = "Row {$excelRow}: Requirement \"{$requirementId}\" does not exist in requirements.";
+                }
+            }
+        }
+
+        if (!empty($validationErrors)) {
+            throw ValidationException::withMessages([
+                'import' => $validationErrors,
+            ]);
         }
 
         $records = [];

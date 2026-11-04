@@ -2,11 +2,13 @@
 
 use App\Imports\ControlImport;
 use App\Imports\DomainImport;
+use App\Imports\RequirementFrameworkMappingImport;
 use App\Imports\RequirementImport;
 use App\Models\Control;
 use App\Models\Domain;
 use App\Models\Framework;
 use App\Models\Requirement;
+use App\Models\RequirementFrameworkMapping;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Collection;
@@ -722,4 +724,82 @@ it('collects all invalid framework errors together in domain import', function (
 
     expect(Domain::count())->toBe(0);
 });
+
+/*
+|--------------------------------------------------------------------------
+| RequirementFrameworkMappingImport: Requirement Existence Validation & Safety
+|--------------------------------------------------------------------------
+*/
+
+it('imports framework mappings when requirements exist in requirements', function () {
+    $fw = Framework::create([
+        'framework_id'   => 'FW-ISO-01',
+        'framework_code' => 'ISO27001',
+        'name'           => 'ISO/IEC 27001:2022',
+        'slug'           => 'iso-27001',
+    ]);
+
+    Requirement::create([
+        'requirement_id'    => 'REQ-STRICT-001',
+        'control_id'        => 'CTRL-001',
+        'requirement_title' => 'Access Control Policy',
+        'requirement'       => 'Establish policy.',
+    ]);
+
+    $rows = new Collection([
+        [
+            'requirement_id' => 'REQ-STRICT-001',
+            'requirement_title' => 'Access Control Policy',
+            'iso_27001_2022_section_subsection_title' => 'A.5.15',
+        ],
+    ]);
+
+    $import = new RequirementFrameworkMappingImport();
+    $import->collection($rows);
+
+    expect(RequirementFrameworkMapping::where('requirement_id', 'REQ-STRICT-001')->exists())->toBeTrue();
+});
+
+it('rejects framework mapping import and prevents insertion when requirement does not exist in requirements', function () {
+    Framework::create([
+        'framework_id'   => 'FW-ISO-02',
+        'framework_code' => 'ISO27001',
+        'name'           => 'ISO/IEC 27001:2022',
+        'slug'           => 'iso-27001-2',
+    ]);
+
+    Requirement::create([
+        'requirement_id'    => 'REQ-VALID-EXISTS',
+        'control_id'        => 'CTRL-001',
+        'requirement_title' => 'Existing Requirement',
+        'requirement'       => 'Valid requirement.',
+    ]);
+
+    $rows = new Collection([
+        [
+            'requirement_id' => 'REQ-VALID-EXISTS',
+            'iso_27001_2022_section_subsection_title' => 'A.5.1',
+        ],
+        [
+            'requirement_id' => 'REQ-NONEXISTENT-999',
+            'requirement_title' => 'Non Existent Req',
+            'iso_27001_2022_section_subsection_title' => 'A.5.2',
+        ],
+    ]);
+
+    $import = new RequirementFrameworkMappingImport();
+
+    try {
+        $import->collection($rows);
+        $this->fail('Expected ValidationException was not thrown.');
+    } catch (ValidationException $e) {
+        $errors = $e->errors()['import'] ?? [];
+        expect($errors)->toContain('Row 3: Requirement "Non Existent Req" (REQ-NONEXISTENT-999) does not exist in requirements.');
+    }
+
+    // Verify complete rollback / zero insertion: REQ-VALID-EXISTS was NOT inserted
+    expect(RequirementFrameworkMapping::where('requirement_id', 'REQ-VALID-EXISTS')->exists())->toBeFalse();
+    expect(RequirementFrameworkMapping::count())->toBe(0);
+});
+
 
