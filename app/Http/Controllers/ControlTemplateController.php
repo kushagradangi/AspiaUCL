@@ -55,10 +55,13 @@ class ControlTemplateController extends Controller
 
     public function publicIndex(Request $request)
     {
-        $controls = Control::with(['domain.framework', 'requirements'])
-            ->orderByRaw('CAST(SUBSTRING_INDEX(control_id, "-", -1) AS UNSIGNED) ASC, control_id ASC')
-            ->orderBy('id', 'asc')
-            ->get();
+        $controlsQuery = Control::with(['domain.framework', 'requirements']);
+        if (\Illuminate\Support\Facades\DB::connection()->getDriverName() === 'mysql') {
+            $controlsQuery->orderByRaw('CAST(SUBSTRING_INDEX(control_id, "-", -1) AS UNSIGNED) ASC, control_id ASC');
+        } else {
+            $controlsQuery->orderBy('control_id', 'asc');
+        }
+        $controls = $controlsQuery->orderBy('id', 'asc')->get();
 
         $totalFrameworks   = \App\Models\Framework::count();
         $totalDomains      = \App\Models\Domain::count();
@@ -71,6 +74,11 @@ class ControlTemplateController extends Controller
         } else {
             $html = $this->getDefaultTemplateHtml();
         }
+
+        // Render Blade directives (header, footer, etc.) on the static template BEFORE inserting dynamic entity content
+        // Mask {{ ... }} placeholders with @{{ ... }} so Blade outputs them verbatim instead of treating them as PHP expressions
+        $safeForBlade = preg_replace('/(?<!@)\{\{/', '@{{', $html);
+        $html = \Illuminate\Support\Facades\Blade::render($safeForBlade);
 
         $gridHtml = $this->renderControlCards($controls);
 
@@ -88,8 +96,6 @@ class ControlTemplateController extends Controller
         foreach ($placeholders as $placeholder => $value) {
             $html = str_ireplace($placeholder, (string) ($value ?? ''), $html);
         }
-
-        $html = \Illuminate\Support\Facades\Blade::render($html);
 
         return response($html);
     }
@@ -252,42 +258,42 @@ HTML;
         $frameworksTable = $this->renderRelatedFrameworkBadges($relatedFrameworksStr);
 
         $placeholders = [
-            '{{control_id}}'                => $control->control_id,
-            '{{control_name}}'              => $control->name,
-            '{{control_slug}}'              => $control->slug,
-            '{{slug}}'                      => $control->slug,
+            '{{control_id}}'                => e($control->control_id),
+            '{{control_name}}'              => e($control->name),
+            '{{control_slug}}'              => e($control->slug),
+            '{{slug}}'                      => e($control->slug),
             '{{control_url}}'               => route('controls.show', $control->slug ?: $control->control_id),
             '{{canonical_url}}'             => route('controls.show', $control->slug ?: $control->control_id),
-            '{{domain_id}}'                 => $domainId,
-            '{{domain_code}}'               => $domainCode,
-            '{{domain_name}}'               => $domainName,
-            '{{domain_purpose}}'            => $domainPurpose,
-            '{{domain_scope}}'              => $domainScope,
+            '{{domain_id}}'                 => e($domainId),
+            '{{domain_code}}'               => e($domainCode),
+            '{{domain_name}}'               => e($domainName),
+            '{{domain_purpose}}'            => e($domainPurpose),
+            '{{domain_scope}}'              => e($domainScope),
             '{{domain_url}}'                => $domainUrl,
             '{{domain_badge}}'              => $domainBadge,
             '{{domain_id_badge}}'           => $domainBadge,
-            '{{framework_id}}'              => $frameworkId,
-            '{{framework_name}}'            => $frameworkName,
-            '{{framework_code}}'            => $frameworkCode,
-            '{{framework_family}}'          => $frameworkFamily,
+            '{{framework_id}}'              => e($frameworkId),
+            '{{framework_name}}'            => e($frameworkName),
+            '{{framework_code}}'            => e($frameworkCode),
+            '{{framework_family}}'          => e($frameworkFamily),
             '{{framework_url}}'             => $frameworkUrl,
             '{{framework_badge}}'           => $frameworkBadge,
             '{{framework_id_badge}}'        => $frameworkBadge,
-            '{{business_description}}'      => $control->business_description,
-            '{{business_objective}}'        => $control->business_objective,
-            '{{business_owner}}'            => $control->business_owner,
-            '{{control_category}}'          => $control->control_category,
-            '{{criticality}}'               => $control->criticality,
-            '{{applicable_industries}}'     => $control->applicable_industries,
-            '{{applicable_technologies}}'   => $control->applicable_technologies,
-            '{{status}}'                    => $control->status,
-            '{{version}}'                   => $control->version,
-            '{{control_summary}}'           => $control->control_summary,
-            '{{business_benefits}}'         => $control->business_benefits,
-            '{{business_risks_if_missing}}' => $control->business_risks_if_missing,
-            '{{primary_stakeholders}}'      => $control->primary_stakeholders,
-            '{{control_nature}}'            => $control->control_nature,
-            '{{compensating_control}}'      => $control->compensating_control,
+            '{{business_description}}'      => e($control->business_description),
+            '{{business_objective}}'        => e($control->business_objective),
+            '{{business_owner}}'            => e($control->business_owner),
+            '{{control_category}}'          => e($control->control_category),
+            '{{criticality}}'               => e($control->criticality),
+            '{{applicable_industries}}'     => e($control->applicable_industries),
+            '{{applicable_technologies}}'   => e($control->applicable_technologies),
+            '{{status}}'                    => e($control->status),
+            '{{version}}'                   => e($control->version),
+            '{{control_summary}}'           => e($control->control_summary),
+            '{{business_benefits}}'         => e($control->business_benefits),
+            '{{business_risks_if_missing}}' => e($control->business_risks_if_missing),
+            '{{primary_stakeholders}}'      => e($control->primary_stakeholders),
+            '{{control_nature}}'            => e($control->control_nature),
+            '{{compensating_control}}'      => e($control->compensating_control),
             '{{requirements_count}}'        => $requirementsCount,
             '{{requirement_count}}'         => $requirementsCount,
             '{{total_requirements}}'        => $requirementsCount,

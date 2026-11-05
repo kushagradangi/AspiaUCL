@@ -59,10 +59,13 @@ class FrameworkTemplateController extends Controller
 
     public function publicIndex(Request $request)
     {
-        $frameworks = Framework::with(['domains.controls', 'controls'])
-            ->orderByRaw('CAST(SUBSTRING_INDEX(framework_id, "-", -1) AS UNSIGNED) ASC, framework_id ASC')
-            ->orderBy('id', 'asc')
-            ->get();
+        $frameworksQuery = Framework::with(['domains.controls', 'controls']);
+        if (\Illuminate\Support\Facades\DB::connection()->getDriverName() === 'mysql') {
+            $frameworksQuery->orderByRaw('CAST(SUBSTRING_INDEX(framework_id, "-", -1) AS UNSIGNED) ASC, framework_id ASC');
+        } else {
+            $frameworksQuery->orderBy('framework_id', 'asc');
+        }
+        $frameworks = $frameworksQuery->orderBy('id', 'asc')->get();
 
         $totalFrameworks   = $frameworks->count();
         $totalDomains      = \App\Models\Domain::count();
@@ -75,6 +78,11 @@ class FrameworkTemplateController extends Controller
         } else {
             $html = $this->getDefaultTemplateHtml();
         }
+
+        // Render Blade directives (header, footer, etc.) on the static template BEFORE inserting dynamic entity content
+        // Mask {{ ... }} placeholders with @{{ ... }} so Blade outputs them verbatim instead of treating them as PHP expressions
+        $safeForBlade = preg_replace('/(?<!@)\{\{/', '@{{', $html);
+        $html = \Illuminate\Support\Facades\Blade::render($safeForBlade);
 
         $gridHtml = $this->renderFrameworkCards($frameworks);
 
@@ -92,8 +100,6 @@ class FrameworkTemplateController extends Controller
         foreach ($placeholders as $placeholder => $value) {
             $html = str_ireplace($placeholder, (string) ($value ?? ''), $html);
         }
-
-        $html = \Illuminate\Support\Facades\Blade::render($html);
 
         return response($html);
     }
@@ -188,42 +194,45 @@ class FrameworkTemplateController extends Controller
 
         $typicalOwnerBadges = $this->renderTypicalOwnerBadges($requirements);
 
-        $nameVersion = "{$framework->name}:{$framework->version}";
+        $nameVersion = e("{$framework->name}:{$framework->version}");
         $canonicalUrl = route('frameworks.show', $framework->slug);
+        $safeOfficialUrl = filter_var($framework->official_source_url, FILTER_VALIDATE_URL) && preg_match('#^https?://#i', (string)$framework->official_source_url)
+            ? e($framework->official_source_url)
+            : '#';
 
         $placeholders = [
-            '{{framework_id}}'             => $framework->framework_id,
-            '{{framework_code}}'           => $framework->framework_code,
-            '{{framework_name}}'           => $framework->name,
-            '{{name}}'                     => $framework->name,
-            '{{version}}'                  => $framework->version,
+            '{{framework_id}}'             => e($framework->framework_id),
+            '{{framework_code}}'           => e($framework->framework_code),
+            '{{framework_name}}'           => e($framework->name),
+            '{{name}}'                     => e($framework->name),
+            '{{version}}'                  => e($framework->version),
             '{{framework_name_version}}'   => $nameVersion,
             '{{name_version}}'             => $nameVersion,
-            '{{slug}}'                     => $framework->slug,
+            '{{slug}}'                     => e($framework->slug),
             '{{canonical_url}}'            => $canonicalUrl,
-            '{{framework_family}}'         => $framework->framework_family,
-            '{{category}}'                 => $framework->category,
-            '{{publisher}}'                => $framework->publisher,
-            '{{region}}'                   => $framework->region,
-            '{{industry}}'                 => $framework->industry,
-            '{{framework_type}}'           => $framework->framework_type,
-            '{{related_domains}}'          => $framework->related_domains,
-            '{{purpose_objective}}'        => $framework->purpose_objective,
-            '{{purpose}}'                  => $framework->purpose_objective,
-            '{{objective}}'                => $framework->purpose_objective,
-            '{{description}}'              => $framework->description,
-            '{{overview_description}}'     => $framework->description,
-            '{{overview}}'                 => $framework->description,
-            '{{scope}}'                    => $framework->scope,
-            '{{key_focus_areas}}'          => $framework->key_focus_areas,
-            '{{structure_domains}}'        => $framework->structure_domains,
-            '{{structure}}'                => $framework->structure_domains,
-            '{{certification_assessment}}' => $framework->certification_assessment,
-            '{{certification}}'            => $framework->certification_assessment,
-            '{{related_frameworks}}'       => $framework->related_frameworks,
-            '{{official_source_url}}'      => $framework->official_source_url,
-            '{{official_source}}'          => $framework->official_source_url,
-            '{{url}}'                      => $framework->official_source_url,
+            '{{framework_family}}'         => e($framework->framework_family),
+            '{{category}}'                 => e($framework->category),
+            '{{publisher}}'                => e($framework->publisher),
+            '{{region}}'                   => e($framework->region),
+            '{{industry}}'                 => e($framework->industry),
+            '{{framework_type}}'           => e($framework->framework_type),
+            '{{related_domains}}'          => e($framework->related_domains),
+            '{{purpose_objective}}'        => e($framework->purpose_objective),
+            '{{purpose}}'                  => e($framework->purpose_objective),
+            '{{objective}}'                => e($framework->purpose_objective),
+            '{{description}}'              => e($framework->description),
+            '{{overview_description}}'     => e($framework->description),
+            '{{overview}}'                 => e($framework->description),
+            '{{scope}}'                    => e($framework->scope),
+            '{{key_focus_areas}}'          => e($framework->key_focus_areas),
+            '{{structure_domains}}'        => e($framework->structure_domains),
+            '{{structure}}'                => e($framework->structure_domains),
+            '{{certification_assessment}}' => e($framework->certification_assessment),
+            '{{certification}}'            => e($framework->certification_assessment),
+            '{{related_frameworks}}'       => e($framework->related_frameworks),
+            '{{official_source_url}}'      => $safeOfficialUrl,
+            '{{official_source}}'          => $safeOfficialUrl,
+            '{{url}}'                      => $safeOfficialUrl,
             '{{aspia_logo_url}}'          => asset('images/aspia.png'),
             '{{dashboard_url}}'           => route('dashboard'),
 

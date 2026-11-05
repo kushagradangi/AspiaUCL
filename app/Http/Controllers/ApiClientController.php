@@ -8,6 +8,7 @@ use App\Models\ApiClientIp;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
 
@@ -50,18 +51,21 @@ class ApiClientController extends Controller
         $inactiveClients = ApiClient::where('is_active', false)->count();
         $totalWhitelistedIps = ApiClientIp::count();
 
-        // Count tokens associated with ApiClient
-        $allTokens = DB::table('personal_access_tokens')
+        // Count tokens associated with ApiClient via SQL aggregate queries without in-memory model hydration
+        $now = now();
+        $activeTokens = DB::table('personal_access_tokens')
             ->where('tokenable_type', ApiClient::class)
-            ->get();
+            ->where(function ($q) use ($now) {
+                $q->whereNull('expires_at')
+                  ->orWhere('expires_at', '>', $now);
+            })
+            ->count();
 
-        $activeTokens = $allTokens->filter(function ($token) {
-            return is_null($token->expires_at) || Carbon::parse($token->expires_at)->isFuture();
-        })->count();
-
-        $revokedOrExpiredTokens = $allTokens->filter(function ($token) {
-            return ! is_null($token->expires_at) && Carbon::parse($token->expires_at)->isPast();
-        })->count();
+        $revokedOrExpiredTokens = DB::table('personal_access_tokens')
+            ->where('tokenable_type', ApiClient::class)
+            ->whereNotNull('expires_at')
+            ->where('expires_at', '<=', $now)
+            ->count();
 
         return view('aspiaUcl.api_clients.index', [
             'clients' => $clients,
@@ -167,6 +171,8 @@ class ApiClientController extends Controller
      */
     public function show(ApiClient $apiClient)
     {
+        Gate::authorize('view', $apiClient);
+
         $apiClient->load([
             'ips.token',
             'tokens' => function ($q) {
@@ -186,6 +192,8 @@ class ApiClientController extends Controller
      */
     public function edit(ApiClient $apiClient)
     {
+        Gate::authorize('update', $apiClient);
+
         return view('aspiaUcl.api_clients.edit', [
             'client' => $apiClient,
             'availableModules' => self::AVAILABLE_MODULES,
@@ -197,6 +205,8 @@ class ApiClientController extends Controller
      */
     public function update(Request $request, ApiClient $apiClient)
     {
+        Gate::authorize('update', $apiClient);
+
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string', 'max:1000'],
@@ -229,6 +239,8 @@ class ApiClientController extends Controller
      */
     public function destroy(ApiClient $apiClient)
     {
+        Gate::authorize('delete', $apiClient);
+
         $clientName = $apiClient->name;
 
         DB::transaction(function () use ($apiClient, $clientName) {
@@ -252,6 +264,8 @@ class ApiClientController extends Controller
      */
     public function toggleStatus(ApiClient $apiClient)
     {
+        Gate::authorize('update', $apiClient);
+
         $apiClient->is_active = ! $apiClient->is_active;
         $apiClient->save();
 
@@ -272,6 +286,8 @@ class ApiClientController extends Controller
      */
     public function generateToken(Request $request, ApiClient $apiClient)
     {
+        Gate::authorize('update', $apiClient);
+
         $validated = $request->validate([
             'token_name' => ['required', 'string', 'max:100'],
             'abilities' => ['nullable', 'array'],
@@ -333,6 +349,8 @@ class ApiClientController extends Controller
      */
     public function revokeToken(ApiClient $apiClient, $tokenId)
     {
+        Gate::authorize('update', $apiClient);
+
         $token = $apiClient->tokens()->where('id', $tokenId)->firstOrFail();
         $tokenName = $token->name;
 
@@ -353,6 +371,8 @@ class ApiClientController extends Controller
      */
     public function storeIp(Request $request, ApiClient $apiClient)
     {
+        Gate::authorize('update', $apiClient);
+
         $validated = $request->validate([
             'ip_address' => ['required', 'ip'],
             'label' => ['nullable', 'string', 'max:100'],
@@ -404,6 +424,8 @@ class ApiClientController extends Controller
      */
     public function destroyIp(ApiClient $apiClient, ApiClientIp $ip)
     {
+        Gate::authorize('update', $apiClient);
+
         if ($ip->api_client_id !== $apiClient->id) {
             abort(404);
         }
@@ -426,6 +448,8 @@ class ApiClientController extends Controller
      */
     public function toggleIpStatus(ApiClient $apiClient, ApiClientIp $ip)
     {
+        Gate::authorize('update', $apiClient);
+
         if ($ip->api_client_id !== $apiClient->id) {
             abort(404);
         }

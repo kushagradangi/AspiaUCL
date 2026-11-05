@@ -56,9 +56,13 @@ class DomainTemplateController extends Controller
 
     public function publicIndex(Request $request)
     {
-        $domains = Domain::orderByRaw('CAST(SUBSTRING_INDEX(domain_id, "-", -1) AS UNSIGNED) ASC, domain_id ASC')
-            ->orderBy('id', 'asc')
-            ->get();
+        $domainsQuery = Domain::query();
+        if (\Illuminate\Support\Facades\DB::connection()->getDriverName() === 'mysql') {
+            $domainsQuery->orderByRaw('CAST(SUBSTRING_INDEX(domain_id, "-", -1) AS UNSIGNED) ASC, domain_id ASC');
+        } else {
+            $domainsQuery->orderBy('domain_id', 'asc');
+        }
+        $domains = $domainsQuery->orderBy('id', 'asc')->get();
 
         $totalFrameworks   = \App\Models\Framework::count();
         $totalDomains      = $domains->count();
@@ -73,6 +77,11 @@ class DomainTemplateController extends Controller
                 ->back()
                 ->with('error', "HTML template file is missing for Domain Overview. Please insert or create the template first.");
         }
+
+        // Render Blade directives (header, footer, etc.) on the static template BEFORE inserting dynamic entity content
+        // Mask {{ ... }} placeholders with @{{ ... }} so Blade outputs them verbatim instead of treating them as PHP expressions
+        $safeForBlade = preg_replace('/(?<!@)\{\{/', '@{{', $html);
+        $html = \Illuminate\Support\Facades\Blade::render($safeForBlade);
 
         $gridHtml = $this->renderDomainCards($domains);
 
@@ -90,8 +99,6 @@ class DomainTemplateController extends Controller
         foreach ($placeholders as $placeholder => $value) {
             $html = str_ireplace($placeholder, (string) ($value ?? ''), $html);
         }
-
-        $html = \Illuminate\Support\Facades\Blade::render($html);
 
         return response($html);
     }
@@ -221,41 +228,41 @@ HTML : "<span class=\"badge badge-cyan\">Framework: {$frameworkName}</span>";
             : 0;
 
         $placeholders = [
-            '{{domain_id}}'               => $domain->domain_id,
-            '{{domain_code}}'             => $domain->domain_code,
-            '{{domain_name}}'             => $domain->name,
-            '{{slug}}'                    => $domain->slug,
-            '{{purpose}}'                 => $domain->purpose,
-            '{{scope}}'                   => $domain->scope,
-            '{{business_owner}}'          => $domain->business_owner,
-            '{{description}}'             => $domain->description,
+            '{{domain_id}}'               => e($domain->domain_id),
+            '{{domain_code}}'             => e($domain->domain_code),
+            '{{domain_name}}'             => e($domain->name),
+            '{{slug}}'                    => e($domain->slug),
+            '{{purpose}}'                 => e($domain->purpose),
+            '{{scope}}'                   => e($domain->scope),
+            '{{business_owner}}'          => e($domain->business_owner),
+            '{{description}}'             => e($domain->description),
             '{{display_order}}'           => $domain->display_order,
-            '{{status}}'                  => $domain->status,
-            '{{version}}'                 => $domain->version,
-            '{{short_overview}}'          => $domain->short_overview,
-            '{{business_objectives}}'     => $domain->business_objectives,
-            '{{business_risks}}'          => $domain->business_risks,
-            '{{key_capabilities}}'        => $domain->key_capabilities,
-            '{{typical_stakeholders}}'    => $domain->typical_stakeholders,
-            '{{applicable_industries}}'   => $domain->applicable_industries,
-            '{{applicable_technologies}}' => $domain->applicable_technologies,
-            '{{keywords}}'                => $domain->keywords,
-            '{{tags}}'                    => $domain->tags,
-            '{{why_domain_matters}}'        => $domain->why_domain_matters,
-            '{{common_challenges}}'         => $domain->common_challenges,
+            '{{status}}'                  => e($domain->status),
+            '{{version}}'                 => e($domain->version),
+            '{{short_overview}}'          => e($domain->short_overview),
+            '{{business_objectives}}'     => e($domain->business_objectives),
+            '{{business_risks}}'          => e($domain->business_risks),
+            '{{key_capabilities}}'        => e($domain->key_capabilities),
+            '{{typical_stakeholders}}'    => e($domain->typical_stakeholders),
+            '{{applicable_industries}}'   => e($domain->applicable_industries),
+            '{{applicable_technologies}}' => e($domain->applicable_technologies),
+            '{{keywords}}'                => e($domain->keywords),
+            '{{tags}}'                    => e($domain->tags),
+            '{{why_domain_matters}}'        => e($domain->why_domain_matters),
+            '{{common_challenges}}'         => e($domain->common_challenges),
             '{{related_domains}}'           => $this->renderPlainText($domain->related_domains),
             '{{related_domains_badges}}'    => $this->renderPlainText($domain->related_domains),
             '{{related_domains_chips}}'     => $this->renderPlainText($domain->related_domains),
-            '{{related_domains_raw}}'       => $domain->related_domains,
+            '{{related_domains_raw}}'       => e($domain->related_domains),
             '{{related_frameworks}}'        => $this->renderPlainText($domain->related_frameworks),
             '{{related_frameworks_badges}}' => $this->renderPlainText($domain->related_frameworks),
             '{{related_frameworks_cards}}'  => $this->renderRelatedFrameworkBadges($domain->related_frameworks),
             '{{framework_badges}}'          => $this->renderPlainText($domain->related_frameworks),
             '{{frameworks_chips}}'          => $this->renderPlainText($domain->related_frameworks),
-            '{{framework_id}}'            => $frameworkId,
-            '{{framework_name}}'          => $frameworkName,
-            '{{framework_code}}'          => $frameworkCode,
-            '{{framework_family}}'        => $frameworkFamily,
+            '{{framework_id}}'            => e($frameworkId),
+            '{{framework_name}}'          => e($frameworkName),
+            '{{framework_code}}'          => e($frameworkCode),
+            '{{framework_family}}'        => e($frameworkFamily),
             '{{framework_url}}'           => $frameworkUrl,
             '{{framework_badge}}'         => $frameworkBadge,
             '{{framework_id_badge}}'      => $frameworkBadge,

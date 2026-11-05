@@ -14,11 +14,19 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $trustedProxies = env('TRUSTED_PROXIES');
         if ($trustedProxies !== null && $trustedProxies !== '') {
-            $middleware->trustProxies(at: array_map('trim', explode(',', $trustedProxies)));
+            $middleware->trustProxies(
+                at: array_map('trim', explode(',', $trustedProxies)),
+                headers: \Illuminate\Http\Request::HEADER_X_FORWARDED_FOR |
+                         \Illuminate\Http\Request::HEADER_X_FORWARDED_HOST |
+                         \Illuminate\Http\Request::HEADER_X_FORWARDED_PORT |
+                         \Illuminate\Http\Request::HEADER_X_FORWARDED_PROTO |
+                         \Illuminate\Http\Request::HEADER_X_FORWARDED_AWS_ELB
+            );
         }
 
         $middleware->alias([
             'api.client.whitelist' => \App\Http\Middleware\EnsureApiClientIpIsWhitelisted::class,
+            'admin'                => \App\Http\Middleware\EnsureUserIsAdmin::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

@@ -8,64 +8,74 @@ use App\Models\Framework;
 use App\Models\Requirement;
 use App\Models\RequirementFrameworkMapping;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class UclHomepageController extends Controller
 {
     /**
-     * Display the public UCL Homepage with 100% live database data.
+     * Display the public UCL Homepage with optimized database queries and caching.
      */
     public function index(Request $request)
     {
-        // Pure live database counts
-        $frameworksCount         = Framework::count();
-        $domainsCount            = Domain::count();
-        $controlsCount           = Control::count();
-        $requirementsCount       = Requirement::count();
-        $mappedRequirementsCount = RequirementFrameworkMapping::count();
+        // Cached global metrics (5 minutes TTL, automatically refreshed)
+        $metrics = Cache::remember('ucl:homepage_metrics', 300, function () {
+            return [
+                'frameworksCount'         => Framework::count(),
+                'domainsCount'            => Domain::count(),
+                'controlsCount'           => Control::count(),
+                'requirementsCount'       => Requirement::count(),
+                'mappedRequirementsCount' => RequirementFrameworkMapping::count(),
+            ];
+        });
 
-        // Dynamic Domains with controls count from database
+        $frameworksCount         = $metrics['frameworksCount'];
+        $domainsCount            = $metrics['domainsCount'];
+        $controlsCount           = $metrics['controlsCount'];
+        $requirementsCount       = $metrics['requirementsCount'];
+        $mappedRequirementsCount = $metrics['mappedRequirementsCount'];
+
+        // Dynamic Domains with controls count from database in 1 query
         $domains = Domain::withCount('controls')
             ->orderBy('id', 'asc')
             ->get();
 
-        // Dynamic Controls: First control of each domain
-        $domainsForControls = Domain::orderBy('id', 'asc')->get();
-        $controls = collect();
+        // Dynamic Controls: Fetch all controls once with requirements count in 1 query to prevent N+1 queries
+        $allControls = Control::withCount('requirements')
+            ->orderBy('display_order', 'asc')
+            ->orderBy('id', 'asc')
+            ->get();
 
-        foreach ($domainsForControls as $domain) {
-            $firstControl = Control::with(['domain', 'requirements'])
-                ->withCount('requirements')
-                ->where(function($q) use ($domain) {
-                    $q->where('domain_id', $domain->id);
-                    if ($domain->domain_code || $domain->domain_id) {
-                        $q->orWhere('domain_code', $domain->domain_code ?: $domain->domain_id);
-                    }
-                })
-                ->orderBy('display_order', 'asc')
-                ->orderBy('id', 'asc')
-                ->first();
+        $controlsByDomainId = $allControls->groupBy('domain_id');
+        $controlsByDomainCode = $allControls->filter(fn ($c) => !empty($c->domain_code))->groupBy('domain_code');
+
+        $controls = collect();
+        foreach ($domains as $domain) {
+            $firstControl = $controlsByDomainId->get($domain->id)?->first();
+            if (!$firstControl && ($domain->domain_code || $domain->domain_id)) {
+                $firstControl = $controlsByDomainCode->get($domain->domain_code ?: $domain->domain_id)?->first();
+            }
 
             if ($firstControl) {
+                $firstControl->setRelation('domain', $domain);
                 $controls->push($firstControl);
             }
         }
 
-        // Dynamic Frameworks with mapping count from database
+        // Dynamic Frameworks with mapping count in 1 query
         $frameworks = Framework::withCount('mappings')
             ->orderBy('id', 'asc')
             ->get();
 
-        $frameworksWithDomains = $frameworks->map(function ($fw) {
-            return [
-                'framework' => $fw,
-                'domains'   => $fw->getMappedDomains(),
-            ];
-        });
+        $frameworksWithDomains = collect();
 
-        $domainsWithControls = $domains->map(function ($dom) {
+        $domainsWithControls = $domains->map(function ($dom) use ($controlsByDomainId, $controlsByDomainCode) {
+            $ctrls = $controlsByDomainId->get($dom->id);
+            if ((!$ctrls || $ctrls->isEmpty()) && ($dom->domain_code || $dom->domain_id)) {
+                $ctrls = $controlsByDomainCode->get($dom->domain_code ?: $dom->domain_id);
+            }
             return [
                 'domain'   => $dom,
-                'controls' => $dom->getControlsList(),
+                'controls' => $ctrls ?? collect(),
             ];
         });
 

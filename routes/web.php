@@ -30,10 +30,10 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [UclHomepageController::class, 'index'])->name('home');
 Route::get('/ucl', [UclHomepageController::class, 'index'])->name('ucl.homepage');
 
-// Public Unified Search API Endpoint (Grouped by Module)
+// Public Unified Search API Endpoint (Grouped by Module, Rate-Limited)
 Route::get('/api/ucl/search', function (\Illuminate\Http\Request $request) {
-    $q = trim($request->get('q', ''));
-    if (mb_strlen($q) < 1) {
+    $q = trim((string) $request->get('q', ''));
+    if (mb_strlen($q) < 2) {
         return response()->json([
             'domains' => [],
             'controls' => [],
@@ -42,11 +42,13 @@ Route::get('/api/ucl/search', function (\Illuminate\Http\Request $request) {
         ]);
     }
 
-    $frameworks = \App\Models\Framework::where(function($query) use ($q) {
-            $query->where('name', 'like', "%{$q}%")
-                  ->orWhere('slug', 'like', "%{$q}%")
-                  ->orWhere('framework_code', 'like', "%{$q}%")
-                  ->orWhere('framework_id', 'like', "%{$q}%");
+    $escapedQ = addcslashes($q, '%_\\');
+
+    $frameworks = \App\Models\Framework::where(function($query) use ($escapedQ) {
+            $query->where('name', 'like', "%{$escapedQ}%")
+                  ->orWhere('slug', 'like', "%{$escapedQ}%")
+                  ->orWhere('framework_code', 'like', "%{$escapedQ}%")
+                  ->orWhere('framework_id', 'like', "%{$escapedQ}%");
         })
         ->take(6)->get()->map(function($fw) {
             return [
@@ -58,11 +60,11 @@ Route::get('/api/ucl/search', function (\Illuminate\Http\Request $request) {
             ];
         });
 
-    $domains = \App\Models\Domain::where(function($query) use ($q) {
-            $query->where('name', 'like', "%{$q}%")
-                  ->orWhere('slug', 'like', "%{$q}%")
-                  ->orWhere('domain_code', 'like', "%{$q}%")
-                  ->orWhere('domain_id', 'like', "%{$q}%");
+    $domains = \App\Models\Domain::where(function($query) use ($escapedQ) {
+            $query->where('name', 'like', "%{$escapedQ}%")
+                  ->orWhere('slug', 'like', "%{$escapedQ}%")
+                  ->orWhere('domain_code', 'like', "%{$escapedQ}%")
+                  ->orWhere('domain_id', 'like', "%{$escapedQ}%");
         })
         ->take(6)->get()->map(function($d) {
             return [
@@ -74,10 +76,10 @@ Route::get('/api/ucl/search', function (\Illuminate\Http\Request $request) {
             ];
         });
 
-    $controls = \App\Models\Control::where(function($query) use ($q) {
-            $query->where('name', 'like', "%{$q}%")
-                  ->orWhere('slug', 'like', "%{$q}%")
-                  ->orWhere('control_id', 'like', "%{$q}%");
+    $controls = \App\Models\Control::where(function($query) use ($escapedQ) {
+            $query->where('name', 'like', "%{$escapedQ}%")
+                  ->orWhere('slug', 'like', "%{$escapedQ}%")
+                  ->orWhere('control_id', 'like', "%{$escapedQ}%");
         })
         ->take(6)->get()->map(function($c) {
             $slug = $c->slug ?: $c->control_id;
@@ -90,11 +92,11 @@ Route::get('/api/ucl/search', function (\Illuminate\Http\Request $request) {
             ];
         });
 
-    $requirements = \App\Models\Requirement::where(function($query) use ($q) {
-            $query->where('requirement_title', 'like', "%{$q}%")
-                  ->orWhere('slug', 'like', "%{$q}%")
-                  ->orWhere('requirement', 'like', "%{$q}%")
-                  ->orWhere('requirement_id', 'like', "%{$q}%");
+    $requirements = \App\Models\Requirement::where(function($query) use ($escapedQ) {
+            $query->where('requirement_title', 'like', "%{$escapedQ}%")
+                  ->orWhere('slug', 'like', "%{$escapedQ}%")
+                  ->orWhere('requirement', 'like', "%{$escapedQ}%")
+                  ->orWhere('requirement_id', 'like', "%{$escapedQ}%");
         })
         ->take(6)->get()->map(function($r) {
             $slug = $r->slug ?: $r->requirement_id;
@@ -113,7 +115,7 @@ Route::get('/api/ucl/search', function (\Illuminate\Http\Request $request) {
         'controls'     => $controls,
         'requirements' => $requirements,
     ]);
-})->name('api.ucl.search');
+})->middleware('throttle:60,1')->name('api.ucl.search');
 
 
 
@@ -262,6 +264,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
         [ProfileController::class, 'destroy']
     )->name('profile.destroy');
 
+
+    /*
+    |--------------------------------------------------------------------------
+    | Administrator Only Modules (Management, Imports, API Client Management)
+    |--------------------------------------------------------------------------
+    */
+    Route::middleware(['admin'])->group(function () {
 
     /*
     |--------------------------------------------------------------------------
@@ -471,6 +480,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/api-clients/{apiClient}/ips', [ApiClientController::class, 'storeIp'])->name('api-clients.ips.store');
     Route::delete('/api-clients/{apiClient}/ips/{ip}', [ApiClientController::class, 'destroyIp'])->name('api-clients.ips.destroy');
     Route::patch('/api-clients/{apiClient}/ips/{ip}/toggle-status', [ApiClientController::class, 'toggleIpStatus'])->name('api-clients.ips.toggle-status');
+
+    });
 
     /*
     |--------------------------------------------------------------------------

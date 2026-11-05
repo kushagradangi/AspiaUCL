@@ -102,12 +102,13 @@ class RequirementTemplateController extends Controller
         $controlStakeholders      = $control?->primary_stakeholders ?? '';
         $controlUrl               = $control ? route('controls.show', $control->slug ?: $control->control_id) : '#';
 
+        $safeControlId = e($controlId);
         $controlBadge = $control ? <<<HTML
-        <a href="{$controlUrl}" class="badge-chip chip-purple" title="View Control {$controlId}">
-            <span>Control: {$controlId}</span>
+        <a href="{$controlUrl}" class="badge-chip chip-purple" title="View Control {$safeControlId}">
+            <span>Control: {$safeControlId}</span>
             <span style="opacity: 0.7; font-size: 10px;">↗</span>
         </a>
-HTML : "<span class=\"badge-chip chip-purple\">Control: {$controlId}</span>";
+HTML : "<span class=\"badge-chip chip-purple\">Control: {$safeControlId}</span>";
 
         // Domain Info & Links
         $domain        = $requirement->domain;
@@ -118,12 +119,14 @@ HTML : "<span class=\"badge-chip chip-purple\">Control: {$controlId}</span>";
         $domainScope   = $domain?->scope ?? '';
         $domainUrl     = $domain ? route('domains.show', $domain->slug) : '#';
 
+        $safeDomainCode = e($domainCode);
+        $safeDomainName = e($domainName);
         $domainBadge = $domain ? <<<HTML
-        <a href="{$domainUrl}" class="badge-chip chip-cyan" title="View Domain {$domainCode}">
-            <span>Domain: {$domainCode}</span>
+        <a href="{$domainUrl}" class="badge-chip chip-cyan" title="View Domain {$safeDomainCode}">
+            <span>Domain: {$safeDomainCode}</span>
             <span style="opacity: 0.7; font-size: 10px;">↗</span>
         </a>
-HTML : ($domainName ? "<span class=\"badge-chip chip-cyan\">Domain: {$domainName}</span>" : '');
+HTML : ($domainName ? "<span class=\"badge-chip chip-cyan\">Domain: {$safeDomainName}</span>" : '');
 
         // Framework Info & Links
         $framework       = $requirement->framework;
@@ -133,12 +136,15 @@ HTML : ($domainName ? "<span class=\"badge-chip chip-cyan\">Domain: {$domainName
         $frameworkFamily = $framework?->framework_family ?? 'UCL';
         $frameworkUrl    = $framework ? route('frameworks.show', $framework->slug) : '#';
 
+        $safeFrameworkId = e($frameworkId);
+        $safeFrameworkCode = e($frameworkCode);
+        $safeFrameworkName = e($frameworkName);
         $parentFrameworkBadge = $framework ? <<<HTML
         <a href="{$frameworkUrl}" style="display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; background: rgba(16,188,232,0.15); border: 1px solid rgba(16,188,232,0.35); border-radius: 20px; color: #10bce8; text-decoration: none; font-size: 12px; font-weight: 700; transition: all 0.2s; letter-spacing: 0.5px;">
-            <span>Framework: {$frameworkId} ({$frameworkCode})</span>
+            <span>Framework: {$safeFrameworkId} ({$safeFrameworkCode})</span>
             <span style="opacity: 0.7; font-size: 10px;">↗</span>
         </a>
-HTML : "<span class=\"badge badge-cyan\">Framework: {$frameworkName}</span>";
+HTML : "<span class=\"badge badge-cyan\">Framework: {$safeFrameworkName}</span>";
 
         // Framework Mappings & Related Frameworks
         $mappings                = $requirement->frameworkMappings()->get();
@@ -176,53 +182,53 @@ HTML : "<span class=\"badge badge-cyan\">Framework: {$frameworkName}</span>";
         $canonicalUrl = route('requirements.show', $requirement->slug ?: $requirement->requirement_id);
 
         $placeholders = [
-            '{{requirement_id}}'             => $requirement->requirement_id,
-            '{{requirement_slug}}'           => $requirement->slug,
-            '{{slug}}'                       => $requirement->slug,
-            '{{requirement_url}}'            => $canonicalUrl,
-            '{{control_id}}'                 => $controlId,
-            '{{requirement_title}}'          => $requirement->requirement_title,
-            '{{requirement}}'                => $requirement->requirement,
-            '{{why_requirement_exists}}'     => $requirement->why_requirement_exists,
-            '{{implementation_guidance}}'    => $requirement->implementation_guidance,
-            '{{common_audit_findings}}'      => $requirement->common_audit_findings,
-            '{{common_mistakes}}'            => $requirement->common_mistakes,
-            '{{best_practices}}'             => $requirement->best_practices,
-            '{{business_examples}}'          => $requirement->business_examples,
-            '{{typical_owner}}'              => $requirement->typical_owner,
-            '{{canonical_url}}'              => $canonicalUrl,
-            '{{control_name}}'               => $controlName,
-            '{{control_category}}'           => $controlCategory,
-            '{{control_summary}}'            => $controlSummary,
-            '{{control_type}}'               => $controlNature,
-            '{{control_nature}}'             => $controlNature,
-            '{{business_description}}'      => $controlBusinessDesc,
-            '{{business_objective}}'        => $controlBusinessObj,
-            '{{business_owner}}'            => $controlBusinessOwner,
-            '{{criticality}}'               => $controlCriticality,
-            '{{applicable_industries}}'     => $controlIndustries,
-            '{{applicable_technologies}}'   => $controlTechnologies,
-            '{{status}}'                    => $controlStatus,
-            '{{version}}'                   => $controlVersion,
-            '{{business_benefits}}'         => $controlBenefits,
-            '{{business_risks_if_missing}}' => $controlRisksIfMissing,
-            '{{primary_stakeholders}}'      => $controlStakeholders,
-            '{{control_url}}'                => $controlUrl,
+            '{{requirement_id}}'             => e($requirement->requirement_id),
+            '{{requirement_slug}}'           => e($requirement->slug),
+            '{{slug}}'                       => e($requirement->slug),
+            '{{requirement_url}}'            => e($canonicalUrl),
+            '{{control_id}}'                 => e($controlId),
+            '{{requirement_title}}'          => e($requirement->requirement_title),
+            '{{requirement}}'                => e($requirement->requirement),
+            '{{why_requirement_exists}}'     => e($requirement->why_requirement_exists),
+            '{{implementation_guidance}}'    => e($requirement->implementation_guidance),
+            '{{common_audit_findings}}'      => e($requirement->common_audit_findings),
+            '{{common_mistakes}}'            => e($requirement->common_mistakes),
+            '{{best_practices}}'             => e($requirement->best_practices),
+            '{{business_examples}}'          => e($requirement->business_examples),
+            '{{typical_owner}}'              => e($requirement->typical_owner),
+            '{{canonical_url}}'              => e($canonicalUrl),
+            '{{control_name}}'               => e($controlName),
+            '{{control_category}}'           => e($controlCategory),
+            '{{control_summary}}'            => e($controlSummary),
+            '{{control_type}}'               => e($controlNature),
+            '{{control_nature}}'             => e($controlNature),
+            '{{business_description}}'      => e($controlBusinessDesc),
+            '{{business_objective}}'        => e($controlBusinessObj),
+            '{{business_owner}}'            => e($controlBusinessOwner),
+            '{{criticality}}'               => e($controlCriticality),
+            '{{applicable_industries}}'     => e($controlIndustries),
+            '{{applicable_technologies}}'   => e($controlTechnologies),
+            '{{status}}'                    => e($controlStatus),
+            '{{version}}'                   => e($controlVersion),
+            '{{business_benefits}}'         => e($controlBenefits),
+            '{{business_risks_if_missing}}' => e($controlRisksIfMissing),
+            '{{primary_stakeholders}}'      => e($controlStakeholders),
+            '{{control_url}}'                => e($controlUrl),
             '{{control_badge}}'              => $controlBadge,
             '{{control_id_badge}}'           => $controlBadge,
-            '{{domain_id}}'                  => $domainId,
-            '{{domain_name}}'                => $domainName,
-            '{{domain_code}}'                => $domainCode,
-            '{{domain_purpose}}'             => $domainPurpose,
-            '{{domain_scope}}'               => $domainScope,
-            '{{domain_url}}'                 => $domainUrl,
+            '{{domain_id}}'                  => e($domainId),
+            '{{domain_name}}'                => e($domainName),
+            '{{domain_code}}'                => e($domainCode),
+            '{{domain_purpose}}'             => e($domainPurpose),
+            '{{domain_scope}}'               => e($domainScope),
+            '{{domain_url}}'                 => e($domainUrl),
             '{{domain_badge}}'               => $domainBadge,
             '{{domain_id_badge}}'            => $domainBadge,
-            '{{framework_id}}'               => $frameworkId,
-            '{{framework_name}}'             => $frameworkName,
-            '{{framework_code}}'             => $frameworkCode,
-            '{{framework_family}}'           => $frameworkFamily,
-            '{{framework_url}}'              => $frameworkUrl,
+            '{{framework_id}}'               => e($frameworkId),
+            '{{framework_name}}'             => e($frameworkName),
+            '{{framework_code}}'             => e($frameworkCode),
+            '{{framework_family}}'           => e($frameworkFamily),
+            '{{framework_url}}'              => e($frameworkUrl),
             '{{framework_badge}}'            => $frameworkBadge,
             '{{framework_id_badge}}'         => $parentFrameworkBadge,
             '{{parent_framework_badge}}'     => $parentFrameworkBadge,
@@ -231,10 +237,10 @@ HTML : "<span class=\"badge badge-cyan\">Framework: {$frameworkName}</span>";
             '{{framework_mappings_table}}'   => $frameworkMappingsTable,
             '{{related_frameworks_cards}}'  => $frameworksTable,
             '{{frameworks_table}}'          => $frameworksTable,
-            '{{related_frameworks}}'        => $this->renderPlainText($relatedFrameworksStr),
-            '{{related_frameworks_badges}}' => $frameworkMappingsBadges ?: $this->renderPlainText($relatedFrameworksStr),
-            '{{framework_badges}}'          => $frameworkMappingsBadges ?: $this->renderPlainText($relatedFrameworksStr),
-            '{{frameworks_chips}}'          => $frameworkMappingsBadges ?: $this->renderPlainText($relatedFrameworksStr),
+            '{{related_frameworks}}'        => e($this->renderPlainText($relatedFrameworksStr)),
+            '{{related_frameworks_badges}}' => $frameworkMappingsBadges ?: e($this->renderPlainText($relatedFrameworksStr)),
+            '{{framework_badges}}'          => $frameworkMappingsBadges ?: e($this->renderPlainText($relatedFrameworksStr)),
+            '{{frameworks_chips}}'          => $frameworkMappingsBadges ?: e($this->renderPlainText($relatedFrameworksStr)),
             '{{frameworks_count}}'          => $frameworksCount,
             '{{framework_count}}'           => $frameworksCount,
             '{{mapped_frameworks_count}}'   => $frameworksCount,

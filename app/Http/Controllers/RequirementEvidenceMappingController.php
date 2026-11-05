@@ -242,18 +242,13 @@ class RequirementEvidenceMappingController extends Controller
             'file' => [
                 'required',
                 'file',
+                'mimes:xlsx,xls,csv',
                 'max:51200', // 50MB
-                function ($attribute, $value, $fail) {
-                    $ext = strtolower($value->getClientOriginalExtension());
-                    $validExts = ['xlsx', 'xls', 'csv'];
-                    if (!in_array($ext, $validExts)) {
-                        $fail('The uploaded file must be a valid Excel spreadsheet (.xlsx, .xls) or CSV file.');
-                    }
-                },
             ],
         ], [
-            'file.required' => 'Please select an Excel or CSV file to import.',
+            'file.required' => 'Please select an Excel (.xlsx, .xls) or CSV file to import.',
             'file.file'     => 'The uploaded item must be a valid file.',
+            'file.mimes'    => 'The uploaded file must be a valid Excel spreadsheet (.xlsx, .xls) or CSV file.',
             'file.max'      => 'The uploaded file exceeds the 50MB size limit.',
         ]);
 

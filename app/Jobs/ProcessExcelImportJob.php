@@ -16,6 +16,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -161,7 +162,9 @@ class ProcessExcelImportJob implements ShouldQueue
                 case 'framework':
                     $url = route('frameworks.index');
                     $import = new FrameworkImport();
-                    Excel::import($import, $fullPath);
+                    DB::transaction(function () use ($import, $fullPath) {
+                        Excel::import($import, $fullPath);
+                    });
 
                     $created = $import->getCreatedCount();
                     $updated = $import->getUpdatedCount();

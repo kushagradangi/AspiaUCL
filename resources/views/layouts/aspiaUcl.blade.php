@@ -1419,10 +1419,12 @@
         // Run on page load
         fetchNotifications(true);
 
-        // Poll every 8 seconds
+        // Poll every 15 seconds when tab is active/visible
         setInterval(() => {
-            fetchNotifications(true);
-        }, 8000);
+            if (document.visibilityState === 'visible') {
+                fetchNotifications(true);
+            }
+        }, 15000);
     })();
 </script>
 
