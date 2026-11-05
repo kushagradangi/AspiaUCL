@@ -76,8 +76,8 @@ class ControlTemplateController extends Controller
         }
 
         // Render Blade directives (header, footer, etc.) on the static template BEFORE inserting dynamic entity content
-        // Mask {{ ... }} placeholders with @{{ ... }} so Blade outputs them verbatim instead of treating them as PHP expressions
-        $safeForBlade = preg_replace('/(?<!@)\{\{/', '@{{', $html);
+        // Mask {{placeholder}} tokens (e.g. {{all_controls_grid}}) with @{{...}} so Blade outputs them verbatim instead of treating them as PHP expressions/constants
+        $safeForBlade = preg_replace('/(?<!@)\{\{\s*([a-zA-Z0-9_]+)\s*\}\}/', '@{{$1}}', $html);
         $html = \Illuminate\Support\Facades\Blade::render($safeForBlade);
 
         $gridHtml = $this->renderControlCards($controls);
@@ -91,6 +91,9 @@ class ControlTemplateController extends Controller
             '{{all_frameworks_dropdown_list}}' => $this->renderAllFrameworksDropdownList(),
             '{{all_domains_dropdown_list}}'    => $this->renderAllDomainsDropdownList(),
             '{{all_controls_dropdown_list}}'   => $this->renderAllControlsDropdownList(),
+            '{{controls_hero_graphic}}'        => asset('images/controls_hero_graphic.png'),
+            '{{hero_graphic}}'                 => asset('images/controls_hero_graphic.png'),
+            '{{hero_image}}'                   => asset('images/controls_hero_graphic.png'),
         ];
 
         foreach ($placeholders as $placeholder => $value) {

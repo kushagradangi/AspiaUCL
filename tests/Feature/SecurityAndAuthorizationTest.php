@@ -199,6 +199,29 @@ test('ssti prevention ensures blade directives in overview pages are not evaluat
     expect($content)->toContain('Evaluation Test {{ 7 * 7 }}');
 });
 
+test('hero section isometric images render valid asset urls on all overview pages', function () {
+    // Frameworks overview
+    $fwResponse = $this->get('/all-frameworks');
+    $fwResponse->assertOk();
+    $fwContent = $fwResponse->getContent();
+    expect($fwContent)->toContain('images/frameworks_hero_graphic.png');
+    expect($fwContent)->not->toContain("{{ asset('images/frameworks_hero_graphic.png') }}");
+
+    // Domains overview
+    $domResponse = $this->get('/all-domains');
+    $domResponse->assertOk();
+    $domContent = $domResponse->getContent();
+    expect($domContent)->toContain('images/domains_hero_graphic.png');
+    expect($domContent)->not->toContain("{{ asset('images/domains_hero_graphic.png') }}");
+
+    // Controls overview
+    $ctrlResponse = $this->get('/all-controls');
+    $ctrlResponse->assertOk();
+    $ctrlContent = $ctrlResponse->getContent();
+    expect($ctrlContent)->toContain('images/controls_hero_graphic.png');
+    expect($ctrlContent)->not->toContain("{{ asset('images/controls_hero_graphic.png') }}");
+});
+
 test('invalid file upload extensions are rejected on control import', function () {
     $file = UploadedFile::fake()->create('malicious.php', 100, 'application/x-php');
 
