@@ -242,3 +242,59 @@ test('public search api rejects queries with less than 2 characters and rate lim
     expect($data['frameworks'])->toBeEmpty();
     expect($data['requirements'])->toBeEmpty();
 });
+
+test('user isadmin fails closed when role is null or not admin', function () {
+    $userWithoutRole = new User();
+    $userWithoutRole->role = null;
+    expect($userWithoutRole->isAdmin())->toBeFalse();
+
+    $userViewer = new User();
+    $userViewer->role = 'viewer';
+    expect($userViewer->isAdmin())->toBeFalse();
+
+    $userAdmin = new User();
+    $userAdmin->role = 'admin';
+    expect($userAdmin->isAdmin())->toBeTrue();
+});
+
+test('role attribute is guarded against mass-assignment on user model', function () {
+    $user = new User([
+        'name' => 'Attacker',
+        'email' => 'attacker@example.com',
+        'password' => 'secret123',
+        'role' => 'admin',
+    ]);
+
+    // role must be ignored during mass assignment
+    expect($user->role)->toBeNull();
+});
+
+test('security headers middleware attaches csp x-frame-options and nosniff', function () {
+    $response = $this->get('/');
+    $response->assertOk();
+
+    $response->assertHeader('X-Frame-Options', 'SAMEORIGIN');
+    $response->assertHeader('X-Content-Type-Options', 'nosniff');
+    $response->assertHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+    expect($response->headers->get('Content-Security-Policy'))->toContain("default-src 'self'");
+});
+
+test('public search api caches results for subsequent requests', function () {
+    \Illuminate\Support\Facades\Cache::flush();
+
+    Framework::create([
+        'framework_id' => 'FWK-CACHE-TEST',
+        'framework_code' => 'FWK-C',
+        'name' => 'Cache Test Framework',
+        'slug' => 'cache-test-framework',
+    ]);
+
+    $firstResponse = $this->get('/api/ucl/search?q=Cache');
+    $firstResponse->assertOk();
+    $cacheKey = 'ucl:search:' . md5('cache');
+    expect(\Illuminate\Support\Facades\Cache::has($cacheKey))->toBeTrue();
+
+    $cachedResponse = $this->get('/api/ucl/search?q=Cache');
+    $cachedResponse->assertOk();
+    expect($cachedResponse->json('frameworks'))->toHaveCount(1);
+});

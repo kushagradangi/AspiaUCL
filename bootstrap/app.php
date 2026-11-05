@@ -24,6 +24,8 @@ return Application::configure(basePath: dirname(__DIR__))
             );
         }
 
+        $middleware->append(\App\Http\Middleware\SecurityHeaders::class);
+
         $middleware->alias([
             'api.client.whitelist' => \App\Http\Middleware\EnsureApiClientIpIsWhitelisted::class,
             'admin'                => \App\Http\Middleware\EnsureUserIsAdmin::class,
